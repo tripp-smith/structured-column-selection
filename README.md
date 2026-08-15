@@ -36,6 +36,11 @@ Phases completed:
   - `milestoneE_next_residual_ge`
   - `milestoneE_cpqr_volume_ge_binomial` (exponential / not polynomial)
 - Milestone E §8 census (witnesses only): `structselect/census.py`
+- Milestone E Wave 1 census (witnesses only): ETF / simplex / Paley,
+  clustered near-parallels, Haar `k ≤ 12` growth, block-diagonal ETF
+  copies (`experiments/census_wave1_*_seed1.json`). Worst recorded
+  `r_CPQR` is `√3/2` on the Mercedes-Benz / simplex `2×3`. No sample
+  had `r_CPQR > 1`.
 
 Not yet claimed:
 

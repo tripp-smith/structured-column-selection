@@ -30,6 +30,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone E residual energy | **PROVED** (not a bound) | `milestoneE_residual_energy`, `milestoneE_next_residual_ge` |
 | Milestone E binomial volume | **PROVED** (exponential / not polynomial) | `milestoneE_cpqr_volume_ge_binomial` |
 | Milestone E §8 census | **NUMERICALLY OBSERVED** | `structselect/census.py`, `experiments/census_seed0.json` |
+| Milestone E Wave 1 census | **NUMERICALLY OBSERVED** | ETF / clustered / Haar-growth / block; `experiments/census_wave1_*_seed1.json` |
 | Milestone E characterization | **OPEN** | still needs one of the three SPEC §16 outcomes |
 | Milestone F CSSP bridge | **UNTOUCHED** | do not start unless E is closed or the user asks |
 
@@ -267,6 +268,92 @@ bad behaviour in the census.
 This is a research lead, not a theorem, and not a novelty claim
 (SPEC §12: do not claim “random sketch + sRRQR works”).
 
+### 3.7 Wave 0 consults (INCOMPLETE — research lead only)
+
+Budgeted Claude Opus 5 consult did **not** return a usable reply.
+
+- Claude CLI: `claude --list-models` is not a valid flag on this
+  install. `claude --model opus -p` failed with
+  `OAuth session expired and could not be refreshed`.
+- Cursor Task `claude-opus-5-thinking-high`: launched, then stalled
+  / was interrupted (~40 min) with no consult text.
+- Recovery (2026-08-15): no leftover `claude` or Task processes to
+  kill. Did not retry the hung command in a loop. Did **not** spend
+  the Kimi K3 / Fable 5 oracle slot (that slot requires a usable
+  Claude reply that still needs a second opinion).
+- Wave 3 Claude re-consult was also skipped for the same reason.
+
+The notes below are campaign algebra plus Wave 1 evidence, **not**
+a consult theorem and **not** a SPEC §16 outcome.
+
+1. Constructions that keep `AAᵀ = I`. Mercedes-Benz / simplex ETF
+   survive and are well-defined Parseval frames. Clustered
+   near-parallels in orthogonal planes, then `row_orthonormalize`,
+   behave like orthonormalized Kahan: the adverse geometry dies.
+   Block-diagonal ETF copies stay well-conditioned (`r` falls as
+   more copies are added). Haar `k ≤ 12` showed no growth.
+2. Improving `σ_min` past `|det|`, or the volume product past
+   `1/C(n,k)`, cannot be done *universally*. The simplex ETF
+   saturates both equalities (see §3.8). Path 1 therefore needs an
+   argument that forbids that equality case when `C(n,k)` is
+   exponential (`n ≈ 2k`), not a better universal volume lemma.
+3. A joint `poly(n,k)` theorem is still the better bet than a
+   superpolynomial family *on present evidence*: every Wave 1
+   sample stayed below `r = 1` and far below the named polynomial
+   `max(n³, k³, (k(n-k+1))²)`. A superpolynomial disproof would
+   need a family with `n ≈ 2k` that is near volume-saturation
+   *and* unbalance `≈ 1`. That family was not found.
+
+Ranked lemma list (still to prove; none of these is claimed):
+
+1. `AAᵀ = I ⇒ A` is a contraction, hence `σ_max(A_J) ≤ 1`.
+2. Conditional prefix lemma: if the first `k−1` CPQR columns are
+   orthonormal, then `‖A_J⁻¹‖₂` is at most polynomial in `n`
+   (last residual `≥ 1/(n-k+1)`). Does **not** close E.
+3. Show that when `n ≈ 2k`, the CPQR set is far from the simplex
+   equality case (`vol · C(n,k) ≫ 1` or unbalance `≪ 1`).
+4. Only then a public `milestoneE_cpqr_inv_le_poly`.
+
+### 3.8 Wave 1 census (NUMERICALLY OBSERVED, 2026-08-15)
+
+Seed 1, revision `e302093`, JSON under `experiments/census_wave1_*`.
+Every recorded matrix had `AAᵀ ≈ I` (max entrywise error `< 10⁻¹⁵`).
+**No** sample had `r_CPQR > 1`. **No** sample met or exceeded the
+named polynomial. Tests do not assert a universal bound.
+
+| Track | Worst `r_CPQR` | Instance | `σ_min` | `|det|` | unbalance | `AAᵀ≈I` |
+| --- | --- | --- | --- | --- | --- | --- |
+| ETF / Paley | `√3/2 ≈ 0.866` | simplex / Mercedes-Benz `k=2,n=3` | `1/√3` | `1/√3` | `1` | yes |
+| Clustered | `≈ 0.323` | `k=4,n=8`, `eps=0.1`, 2 clusters | `0.692` | `0.336` | `0.485` | yes |
+| Haar growth | `≈ 0.442` | Haar `k=8,n=12` | `0.358` | `0.173` | `0.485` | yes |
+| Block ETF | `≈ 0.516` | block simplex `2+3` | `0.500` | `0.289` | `0.577` | yes |
+
+Simplex family (exact pattern, still a witness):
+`‖A_J⁻¹‖₂ = √(k+1)`, workshop scale `√(2k)`,
+`r_CPQR = √((k+1)/(2k)) → 1/√2`. Volume
+`det² · C(k+1,k) = 1` and unbalance `inv · |det| = 1`.
+So `1/C(n,k)` and `σ_min = |det|` are **sharp** on this family.
+That does **not** close E: `√(k+1)` is polynomial-scale and
+`r < 1`.
+
+Clustered near-parallels after `row_orthonormalize` stayed
+well-conditioned, including random-rotated planes. Same class of
+failure as orthonormalized Kahan.
+
+Haar `k ∈ {8,10,12}`, `n` up to 24: volume was *loose*
+(`det² · C(n,k)` from about 7 to several hundred) and `r`
+stayed below `0.45`. Exhaustive opt on `n ≤ 12` did not surface
+a growing gap.
+
+Mercedes-Benz / simplex `k=2,n=3` is algebraic (`√3/2`), not a
+`C = 1` counterexample, and was not sent through SPEC §9.
+
+Wave 2 branch: every sample bounded → do not certify a
+counterexample. Wave 3 Path 1 Lean poly theorem was **not**
+started this wave (Wave 0 lemma consult unavailable; simplex
+already shows the universal volume/`|det|` route cannot beat
+`√C(n,k)`). Milestone E remains **OPEN**.
+
 ---
 
 ## 4. How Milestone E can close
@@ -313,17 +400,19 @@ Constructions that did **not** work after `AAᵀ = I`:
 
 - classical Kahan (orthonormalization kills it);
 - leverage-skew and near-duplicate frames in the seed-0 sweep;
-- Haar up to `k = 8` in a later probe (worst seen `≈ 0.44`).
+- Haar up to `k = 12` in Wave 1 (worst seen `≈ 0.44` at `k=8,n=12`);
+- clustered near-parallels in orthogonal planes, then
+  `row_orthonormalize` (worst `r ≈ 0.32`; geometry dies);
+- Mercedes-Benz / simplex / Paley / icosahedral ETFs (`r ≤ √3/2`);
+- block-diagonal ETF copies (`r` falls as copies are added).
 
 Worth trying next, still as Python first:
 
-- Mercedes-Benz / simplex ETF (`k=2, n=3` has `r = √3/2 ≈ 0.866`,
-  closer to 1 than Hadamard `2/3`, not a counterexample);
-- other ETFs and conference/Paley frames;
-- two clusters of near-parallel columns in orthogonal planes,
-  *then* row-orthonormalize and check whether the adverse geometry
-  survives;
-- larger Haar (`k ≥ 10`) only as a growth probe, not a proof.
+- frames with `n ≈ 2k` that are near *both* volume-saturation
+  (`det² · C(n,k) ≈ 1`) *and* unbalance `≈ 1` (the simplex does
+  this only for `n = k+1`, where `C(n,k)` is linear);
+- other combinatorial ETFs / Steiner systems with `n ≫ k+1`;
+- larger Haar only as a growth probe, not a proof.
 
 ### Path 3 — counterexample plus a stronger static class
 
@@ -412,15 +501,17 @@ Do not weaken theorems to make any of this easier.
 
 Work the first item that is still open. Do not start F.
 
-1. **Deeper census, still Python.** Mercedes-Benz / ETFs; clustered
-   near-parallels that survive orthonormalization; larger `k` only
-   as a growth probe. Tests must not assert a universal bound. If
-   `r_CPQR > 1` appears on a rational matrix, switch to SPEC §9
-   immediately and only then add a Lean witness.
-2. **Improve the binomial analysis** toward a polynomial bound, or
-   find a certified superpolynomial family. The volume product is
-   now available; the remaining gap is controlling how unbalanced
-   the singular values of `A_J` can be.
+1. **Path 1 Lean, or a saturating `n ≈ 2k` family.** Wave 1 did
+   not produce `r_CPQR > 1`. Simplex saturates `1/C(n,k)` and
+   `σ_min = |det|` at `n = k+1`, so a better *universal* volume
+   lemma cannot close E. Next Lean target is the contraction
+   `σ_max(A_J) ≤ 1`, then an argument that forbids the simplex
+   equality case when `C(n,k)` is exponential. Do not announce a
+   polynomial theorem until that joint statement is proved.
+2. **If a later census finds `r_CPQR > 1`**, switch to SPEC §9.
+   Below the named polynomial, certify as a `C = 1` witness and
+   leave E open. At or above it, or on a certified growing family,
+   Path 2 can close E.
 3. **`AxiomAudit.lean` + GitHub Actions** reusing `scripts/verify.sh`.
    Cheap, matches playbook Phases 6–7, and prevents silent axiom
    drift.
@@ -448,6 +539,7 @@ Work the first item that is still open. Do not start F.
 | `SmallInstanceChecks.lean` | exact `ℚ` witnesses, `native_decide` allowed |
 | `structselect/census.py` | §8 generators; witnesses, not theorems |
 | `experiments/census_seed0.json` | recorded seed-0 sweep |
+| `experiments/census_wave1_*_seed1.json` | Wave 1 ETF / clustered / growth / block |
 | `scripts/verify.sh` | `lake build`, `sorry` scan, pytest |
 | `autonomous-implementation.md` | 16-phase engineering playbook |
 | `.cursor/skills/autonomous-implementation/SKILL.md` | agent loop |
@@ -464,9 +556,14 @@ first E discovery commit on `main`).
 Merged before this residual-energy phase: PRs #1–#6 (Milestones A–D,
 structural E, §8 census, `k = 1` volume).
 
-This phase: `cursor/phase-e-residual-energy-e353` — residual energy,
-next-residual average, binomial volume (exponential / not
-polynomial). Milestone E remains open.
+Residual-energy phase: `cursor/phase-e-residual-energy-e353` /
+draft PR #7 — residual energy, next-residual average, binomial
+volume (exponential / not polynomial).
+
+This Close-E wave: `cursor/phase-e-close-e353` — Wave 1 census
+(ETF, clustered, Haar growth, block). Wave 0 consult incomplete.
+No `r_CPQR > 1`. No new public Lean theorem. Milestone E remains
+open. Do not start F.
 
 Branch rule: `cursor/<descriptive-name>-e353`. Draft PR before
 official `scripts/verify.sh`; update the PR after any fix.

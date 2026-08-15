@@ -102,6 +102,18 @@ Kahan-like frames. On the seed-0 sweep the worst ratio is `2/3`
 (Hadamard `3×8`). That is a recorded witness, not a polynomial bound
 and not a counterexample.
 
+Wave 1 (`experiments/census_wave1_*_seed1.json`) adds Mercedes-Benz /
+simplex / Paley / icosahedral ETFs, clustered near-parallels after
+`row_orthonormalize`, Haar growth with `k ≤ 12`, and block-diagonal
+ETF copies. Every recorded matrix had `AAᵀ ≈ I`. The worst ratio is
+`√3/2` on the Mercedes-Benz / simplex `2×3`. No sample had
+`r_CPQR > 1`, and none reached the campaign's named polynomial
+yardstick. The simplex family saturates both `1/C(n,k)` and
+`σ_min = |det|` at `n = k+1` with inverse norm `√(k+1)`; that is a
+witness that those two universal estimates are sharp, not a
+`poly(n,k)` theorem and not a counterexample. Clustered
+near-parallels die after orthonormalization, like Kahan.
+
 The Fin-indexed Cauchy–Binet `powersetCard` form is now also named
 `cauchyBinet`, matching
 https://faabian.github.io/algebraic-combinatorics/docs/AlgebraicCombinatorics/CauchyBinet.html

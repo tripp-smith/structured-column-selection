@@ -742,7 +742,10 @@ Independent residuals sum to `k-#J`, and the CPQR volume is at least
 `1/C(n,k)`. That binomial factor is exponential in `k` when `n ≈ 2k`
 and is not a polynomial inverse-norm bound. The running `2×3` pivot
 set is `frame23_cpqr_set`. The Section 8 numerical census lives in
-`structselect/census.py` and `experiments/census_seed0.json`. None of
+`structselect/census.py` and `experiments/census_seed0.json`. Wave 1
+adds ETF / clustered / Haar-growth / block records in
+`experiments/census_wave1_*_seed1.json` (worst recorded `r_CPQR`
+is `√3/2` on the `2×3` simplex; no `r_CPQR > 1`). None of
 the three characterization outcomes for general `k` is claimed.
 
 ### Milestone F: CSSP perturbation bridge

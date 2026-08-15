@@ -65,7 +65,8 @@ The `k=1` volume bound is a determinant comparison, not a
 spectral-norm argument. The binomial volume bound is a product of
 Gram-determinant ratios and is not polynomial in `n` and `k`.
 
-The §8 census is Python-only and is not a mathlib candidate.
+The §8 census, including the Wave 1 ETF / clustered / Haar-growth
+tracks, is Python-only and is not a mathlib candidate.
 
 ## Later candidates
 

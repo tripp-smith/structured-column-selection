@@ -104,6 +104,15 @@ On the seed-0 sweep the worst recorded ratio is Hadamard `k=3,n=8`
 with `r_CPQR = 2/3 < 1`. Several Haar draws are slightly worse than
 the exhaustive optimum and still below the workshop scale.
 
+Wave 1 (seed 1): Mercedes-Benz / simplex / Paley / icosahedral ETFs,
+clustered near-parallels, Haar `k ≤ 12`, and block-diagonal ETF
+copies. Worst recorded `r_CPQR` is `√3/2` on the `2×3` simplex /
+Mercedes-Benz frame. No sample exceeded `r = 1` or the named
+polynomial yardstick. The simplex saturates `1/C(n,k)` and
+`σ_min = |det|` at `n = k+1`; clustered near-parallels do not
+survive `row_orthonormalize`. JSON:
+`experiments/census_wave1_*_seed1.json`.
+
 This is **not** a polynomial CPQR theorem and **not** a
 machine-checked counterexample. Milestone E remains open.
 
