@@ -1,0 +1,16 @@
+---
+description: Theorem-status and Problem 4.1 claim discipline
+alwaysApply: true
+---
+
+# Claim discipline
+
+- After Milestone D, the allowed status line is: machine-checked randomized quasi-optimal column selection for the orthogonal-row case of Simons Problem 4.1.
+- Do not say Problem 4.1 is solved.
+- Do not say CPQR has a polynomial inverse-norm bound unless that theorem is actually proved in `Theorems.lean`.
+- Do not present a Python census ratio as a theorem.
+- A CPQR counterexample is a first-class result only after it is certified: `AAᵀ = I`, every pivot, and the inverse-norm lower bound.
+- Public structural theorems must depend only on `propext`, `Classical.choice`, and `Quot.sound`. Do not export `native_decide` results as public theorems.
+- Milestone F (CSSP bridge) is separate from Milestone E.
+
+Canonical milestone language: `SPEC.md` §16 and §19.

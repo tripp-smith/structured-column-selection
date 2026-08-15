@@ -14,3 +14,6 @@ export PATH="$HOME/.elan/bin:$PATH"
 # Materialize pinned dependencies and build once to validate setup.
 lake exe cache get
 lake build
+
+# Application-layer tests (pytest + numpy census). Idempotent.
+python3 -m pip install --user -q -e ".[dev]" numpy
