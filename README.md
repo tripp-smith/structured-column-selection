@@ -5,18 +5,20 @@ under orthogonal-row structure (`A Aᵀ = I`) for Simons Workshop Problem 4.1.
 
 ## Status
 
-Phase 1 (Milestone A: structural foundations) is implemented.
+Investigating Simons Problem 4.1 for orthogonal-row matrices.
 
-- `milestoneA_transpose_correspondence`:
-  formalizes `A Aᵀ = I` for `A = Qᵀ` iff `Qᵀ Q = I`.
-- `milestoneA_selectedSquare_entry` and
-  `milestoneA_selectedGram_formula`:
-  establish core selected-column and Gram identities used by later
-  volume-sampling proofs.
+Phases completed:
+
+- Milestone A (structural foundations)
+  - `milestoneA_transpose_correspondence`
+  - `milestoneA_selectedSquare_entry`
+  - `milestoneA_selectedGram_formula`
+- Milestone B (volume normalisation)
+  - `milestoneB_cauchyBinet`
+  - `milestoneB_volume_normalization`
 
 Not yet claimed:
 
-- Milestone B (`∑ det(A_J)^2 = 1`)
 - Milestone C (exact inverse-Gram expectation identity)
 - Milestone D randomized high-probability RRQR bound
 - CPQR theorem/counterexample outcomes
@@ -29,8 +31,14 @@ Not yet claimed:
   selected-column square/Gram definitions and foundational identities.
 - `StructuredColumnSelection/OrthogonalRows.lean`:
   transpose correspondence theorems.
+- `StructuredColumnSelection/CauchyBinet.lean`:
+  finite Cauchy–Binet for rectangular products.
+- `StructuredColumnSelection/VolumeWeights.lean`:
+  squared-minor weights and their normalisation.
+- `StructuredColumnSelection/SmallInstanceChecks.lean`:
+  exact rational enumerations used as independent witnesses.
 - `StructuredColumnSelection/Theorems.lean`:
-  public Phase 1 theorem exports.
+  public theorem exports.
 
 ## Cloud Agent environment
 

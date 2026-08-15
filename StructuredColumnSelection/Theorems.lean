@@ -1,9 +1,10 @@
 import StructuredColumnSelection.OrthogonalRows
 import StructuredColumnSelection.PrincipalColumns
+import StructuredColumnSelection.VolumeWeights
 
 namespace StructuredColumnSelection
 
-open Matrix
+open Matrix Finset
 
 /-- Milestone A theorem: transpose correspondence of orthogonality structure. -/
 theorem milestoneA_transpose_correspondence {n k : ℕ}
@@ -22,5 +23,19 @@ theorem milestoneA_selectedGram_formula {k n : ℕ}
     (A : Matrix (Fin k) (Fin n) ℝ) (J : Fin k → Fin n) :
     SelectedGram A J = SelectedSquare A J * ((SelectedSquare A J)ᵀ) :=
   selectedGram_eq A J
+
+/-- Milestone B: size-`k` volume weights of an orthogonal-row matrix sum to `1`. -/
+theorem milestoneB_volume_normalization {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, volumeWeight A J = 1 :=
+  volumeWeights_sum_eq_one A hA
+
+/-- Finite Cauchy–Binet identity used by Milestone B. -/
+theorem milestoneB_cauchyBinet {k n : ℕ} {R : Type*} [CommRing R]
+    (A : Matrix (Fin k) (Fin n) R) (B : Matrix (Fin n) (Fin k) R) :
+    (A * B).det =
+      ∑ S : { s : Finset (Fin n) // s.card = k },
+        (colsSubmatrix A S.1 S.2).det * (rowsSubmatrix B S.1 S.2).det :=
+  det_mul_cauchyBinet A B
 
 end StructuredColumnSelection

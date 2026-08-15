@@ -676,6 +676,11 @@ Lean proves:
 \sum_{|J|=k}\det(A_J)^2=1.
 ]
 
+Status note (Phase 2): implemented in Lean as
+`milestoneB_cauchyBinet` and `milestoneB_volume_normalization`,
+with independent rational enumerations in
+`StructuredColumnSelection/SmallInstanceChecks.lean`.
+
 ### Milestone C: exact inverse expectation
 
 Lean proves:
