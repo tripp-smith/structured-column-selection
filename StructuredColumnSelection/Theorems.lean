@@ -6,6 +6,7 @@ import StructuredColumnSelection.InverseNormBounds
 
 namespace StructuredColumnSelection
 
+open Classical
 open Matrix Finset
 
 /-- Milestone A theorem: transpose correspondence of orthogonality structure. -/

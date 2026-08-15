@@ -17,6 +17,7 @@ therefore also the spectral norm on the invertible locus.
 
 namespace StructuredColumnSelection
 
+open Classical
 open Finset
 open scoped Matrix
 
@@ -68,7 +69,7 @@ theorem invFrobWeights_sum {k n : ℕ} (A : Matrix (Fin k) (Fin n) R) :
     ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, invFrobWeight A J =
       ((n + 1 - k : ℕ) : R) * (Matrix.adjugate (A * (Aᵀ))).trace := by
   simp [invFrobWeight, ← Matrix.trace_sum, volumeWeightedInvGrams_sum,
-    Matrix.trace_smul, nsmul_eq_mul, mul_comm]
+    Matrix.trace_smul, mul_comm]
 
 /-- Milestone D: volume-weighted inverse-Frobenius energy equals
 `k(n-k+1)` when `A Aᵀ = I`. -/
@@ -76,11 +77,9 @@ theorem expectedInvFrobSq {k n : ℕ}
     (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
     ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, invFrobWeight A J =
       (k : ℝ) * ((n + 1 - k : ℕ) : ℝ) := by
-  rw [← Matrix.trace_sum]
-  change (∑ J ∈ (univ : Finset (Fin n)).powersetCard k,
-      volumeWeightedInvGram A J).trace = _
-  rw [inverseGramExpectation A hA, Matrix.trace_smul, Matrix.trace_one,
-    Fintype.card_fin, nsmul_eq_mul, mul_comm]
+  simp [invFrobWeight, ← Matrix.trace_sum]
+  rw [inverseGramExpectation A hA, Matrix.trace_smul, Matrix.trace_one]
+  simp [Fintype.card_fin, mul_comm]
 
 /-- Finite Markov inequality: the weighted mass of coordinates with
 `w i * t < x i` is at most `t⁻¹ ∑ x`. -/
@@ -96,7 +95,7 @@ lemma weightedMarkov {ι : Type*} (s : Finset ι) (w x : ι → ℝ)
     rw [mul_sum]
     refine sum_le_sum fun i hi => ?_
     have hxlt : w i * t < x i := (mem_filter.mp hi).2
-    exact (le_inv_mul_iff₀ ht).mpr hxlt.le
+    exact (le_inv_mul_iff₀ ht).mpr (by rw [mul_comm]; exact hxlt.le)
   refine hfilter.trans ?_
   have hxsum :
       ∑ i ∈ s.filter (fun i => w i * t < x i), x i ≤ ∑ i ∈ s, x i :=
@@ -139,11 +138,15 @@ theorem markovInvFrob {k n : ℕ}
     refine this.trans ?_
     have : t⁻¹ * ∑ J ∈ (univ : Finset (Fin n)).powersetCard k,
         invFrobWeight A J = δ := by
-      rw [hsum, show t⁻¹ = δ / E from inv_div, div_mul_cancel₀ _ (ne_of_gt hE)]
+      have htinv : t⁻¹ = δ / E := by
+        dsimp [t]
+        exact inv_div E δ
+      rw [hsum, htinv, div_mul_cancel₀ _ (ne_of_gt hE)]
     exact this.le
   · have hEnonneg : 0 ≤ E := by
-      simpa [hsum] using
-        sum_nonneg fun J hJ => invFrobWeight_nonneg (k := k) (n := n) A J
+      dsimp [E]
+      rw [← hsum]
+      exact sum_nonneg fun J _ => invFrobWeight_nonneg A J
     have hE0 : E = 0 := le_antisymm (le_of_not_gt hE) hEnonneg
     have hx0 : ∀ J ∈ (univ : Finset (Fin n)).powersetCard k,
         invFrobWeight A J = 0 := by
@@ -155,8 +158,6 @@ theorem markovInvFrob {k n : ℕ}
       (mem_filter.mp hJ).1
     have hxlt : volumeWeight A J * t < invFrobWeight A J :=
       (mem_filter.mp hJ).2
-    have : (0 : ℝ) < 0 := by
-      simpa [hx0 J hJuniv, hE0, t] using hxlt
-    exact (lt_irrefl (0 : ℝ) this).elim
+    simp [hx0 J hJuniv, hE0, t] at hxlt
 
 end StructuredColumnSelection

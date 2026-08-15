@@ -133,14 +133,13 @@ theorem frame12_inverse_gram_sum :
 theorem frame23_expected_inv_frob :
     ∑ J ∈ (univ : Finset (Fin 3)).powersetCard 2, invFrobWeight frame23 J = 4 := by
   simp [invFrobWeight, ← Matrix.trace_sum, frame23_inverse_gram_sum,
-    Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin]
+    Matrix.trace_smul, Matrix.trace_one]
   norm_num
 
 theorem frame12_expected_inv_frob :
     ∑ J ∈ (univ : Finset (Fin 2)).powersetCard 1, invFrobWeight frame12 J = 2 := by
   simp [invFrobWeight, ← Matrix.trace_sum, frame12_inverse_gram_sum,
-    Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin]
-  norm_num
+    Matrix.trace_smul, Matrix.trace_one]
 
 end SmallInstance
 end StructuredColumnSelection
