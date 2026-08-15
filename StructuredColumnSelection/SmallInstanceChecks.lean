@@ -1,6 +1,7 @@
 import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
 import StructuredColumnSelection.InverseNormBounds
+import StructuredColumnSelection.ColumnPivotedQR
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.NormNum
@@ -9,8 +10,9 @@ import Mathlib.Tactic.NormNum
 # Small exact volume-weight checks
 
 Rational orthogonal-row frames used as independent witnesses of
-Milestones B–D. The sums below are evaluated by enumerating subsets;
-they do not invoke the general Cauchy–Binet or inverse-Gram theorems.
+Milestones B–E. The sums and CPQR runs below are evaluated by
+enumerating subsets or executing the greedy residual rule; they do
+not invoke the general Cauchy–Binet or inverse-Gram theorems.
 -/
 
 namespace StructuredColumnSelection
@@ -140,6 +142,17 @@ theorem frame12_expected_inv_frob :
     ∑ J ∈ (univ : Finset (Fin 2)).powersetCard 1, invFrobWeight frame12 J = 2 := by
   simp [invFrobWeight, ← Matrix.trace_sum, frame12_inverse_gram_sum,
     Matrix.trace_smul, Matrix.trace_one]
+
+/-- CPQR on `frame23` selects columns `{0,2}` (largest leverage, then
+largest residual). -/
+theorem frame23_cpqr_set :
+    cpqrSet frame23 = ({0, 2} : Finset (Fin 3)) := by
+  native_decide
+
+/-- CPQR on `frame12` selects the larger column. -/
+theorem frame12_cpqr_set :
+    cpqrSet frame12 = ({1} : Finset (Fin 2)) := by
+  native_decide
 
 end SmallInstance
 end StructuredColumnSelection

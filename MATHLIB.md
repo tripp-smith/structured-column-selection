@@ -20,6 +20,16 @@ type-generic Cauchy–Binet version would match the in-flight mathlib PR
 https://github.com/leanprover-community/mathlib4/pull/40473 more
 closely. This repository does not open that PR.
 
+The `powersetCard` statement is now also exported as `cauchyBinet`,
+together with `det_mul_eq_zero_of_rank_deficient`, so it can be
+compared line-for-line with
+[AlgebraicCombinatorics.CauchyBinet](https://faabian.github.io/algebraic-combinatorics/docs/AlgebraicCombinatorics/CauchyBinet.html)
+(`faabian/algebraic-combinatorics`). That file uses the same
+`colsSubmatrix` / `rowsSubmatrix` constructors
+(`A.submatrix id (S.orderEmbOfFin h)` and the row dual) and the same
+vacuous `dite` on cardinality. This repository does not import that
+project.
+
 Phase 1 wrappers remain:
 
 - orthogonal-row / orthogonal-column structural predicates;

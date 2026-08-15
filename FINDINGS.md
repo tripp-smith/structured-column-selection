@@ -70,8 +70,27 @@ measure-theoretic random variable.
 Independent check: the `2×3` traces are `34/25`, `41/25` and `1`,
 summing to `4 = 2·(3-2+1)`.
 
+## Phase 5 (Milestone E discovery) delivered
+
+Ordinary CPQR is defined by repeatedly inserting the unused column of
+largest Gram-determinant residual, breaking ties by the smallest
+index. The algorithm returns at most `k` columns. On the running
+`2×3` frame it selects `{0,2}`, with
+
+```text
+‖A_J⁻¹‖₂ = 5/4,    √(k(n-k+1)) = 2,    r_CPQR = 5/8.
+```
+
+This is a certified pivot census, not a polynomial bound.
+
+The Fin-indexed Cauchy–Binet `powersetCard` form is now also named
+`cauchyBinet`, matching
+https://faabian.github.io/algebraic-combinatorics/docs/AlgebraicCombinatorics/CauchyBinet.html
+including the empty-sum case `n < k → det(AB) = 0`.
+
 ## What remains open
 
-CPQR characterization (Milestone E) and the CSSP perturbation bridge
-(Milestone F). This repository does not claim to have solved all of
-Problem 4.1.
+Milestone E still requires one of: a polynomial CPQR theorem, a
+machine-checked counterexample, or a counterexample plus a stronger
+static class. Milestone F (CSSP bridge) is untouched. This repository
+does not claim to have solved all of Problem 4.1.

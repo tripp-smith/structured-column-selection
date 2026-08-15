@@ -3,6 +3,8 @@ import StructuredColumnSelection.PrincipalColumns
 import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
 import StructuredColumnSelection.InverseNormBounds
+import StructuredColumnSelection.ColumnPivotedQR
+import StructuredColumnSelection.SmallInstanceChecks
 
 namespace StructuredColumnSelection
 
@@ -71,5 +73,24 @@ theorem milestoneD_markov_inv_frob {k n : ℕ}
           (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ)),
       volumeWeight A J ≤ δ :=
   markovInvFrob A hA hδ
+
+/-- Milestone E helper: empty-set residuals are column Euclidean energies. -/
+theorem milestoneE_residual_empty {k n : ℕ} {R : Type*}
+    [Field R] [DecidableEq R] [LinearOrder R] [DecidableLE R]
+    (A : Matrix (Fin k) (Fin n) R) (j : Fin n) :
+    residualSq A ∅ j = ∑ i, A i j ^ 2 :=
+  residualSq_empty A j
+
+/-- Milestone E helper: CPQR returns at most `k` columns. -/
+theorem milestoneE_cpqr_card_le {k n : ℕ} {R : Type*}
+    [Field R] [DecidableEq R] [LinearOrder R] [DecidableLE R]
+    (A : Matrix (Fin k) (Fin n) R) :
+    (cpqrSet A).card ≤ k :=
+  cpqrSet_card_le A
+
+/-- Milestone E witness: CPQR on the running `2×3` frame selects `{0,2}`. -/
+theorem milestoneE_cpqr_frame23 :
+    cpqrSet SmallInstance.frame23 = ({0, 2} : Finset (Fin 3)) :=
+  SmallInstance.frame23_cpqr_set
 
 end StructuredColumnSelection

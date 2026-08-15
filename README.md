@@ -24,9 +24,14 @@ Phases completed:
   - `milestoneD_expected_inv_frob_sq`
   - `milestoneD_markov_inv_frob`
 
+- Milestone E discovery layer (CPQR algorithm, not a bound)
+  - `milestoneE_residual_empty`
+  - `milestoneE_cpqr_card_le`
+  - `milestoneE_cpqr_frame23`
+
 Not yet claimed:
 
-- CPQR theorem/counterexample outcomes
+- a polynomial CPQR theorem, counterexample, or refined structural class
 - CSSP perturbation bridge
 - a solution of all of Problem 4.1
 
@@ -52,6 +57,8 @@ drop.
   adjugate form of the inverse-Gram sum.
 - `StructuredColumnSelection/InverseNormBounds.lean`:
   volume-weighted inverse-Frobenius energy and a finite Markov tail.
+- `StructuredColumnSelection/ColumnPivotedQR.lean`:
+  greedy CPQR residuals, pivots, and selected sets.
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
   exact rational enumerations used as independent witnesses.
 - `StructuredColumnSelection/Theorems.lean`:

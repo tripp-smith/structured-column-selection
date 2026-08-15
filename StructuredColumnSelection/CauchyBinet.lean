@@ -8,6 +8,15 @@ The proof expands `det (A * B)` over all index maps `g : Fin k → Fin n`,
 discards non-injective maps (repeated columns), and groups the rest by
 image. A linear order on `Fin n` is used only to name each minor via
 `orderEmbOfFin`.
+
+The public `powersetCard` form `cauchyBinet` matches the statement and
+`colsSubmatrix` / `rowsSubmatrix` constructors in
+[AlgebraicCombinatorics.CauchyBinet](https://faabian.github.io/algebraic-combinatorics/docs/AlgebraicCombinatorics/CauchyBinet.html)
+(`faabian/algebraic-combinatorics`). That development also records the
+empty-sum case `n < k → det(AB) = 0`, exported here as
+`det_mul_eq_zero_of_rank_deficient`. This repository does not import
+that project; the names are aligned so the two Fin-indexed proofs can
+be compared directly.
 -/
 
 namespace StructuredColumnSelection
@@ -182,5 +191,26 @@ theorem det_mul_cauchyBinet_powersetCard {k n : ℕ}
       (fun _ _ => rfl)
       (fun _ _ => rfl)
       (fun S _ => by rw [dif_pos S.2])
+
+/-- Alias matching the AlgebraicCombinatorics `cauchyBinet` statement:
+`det(AB) = ∑_{#S=k} det(cols_S A) det(rows_S B)`. -/
+theorem cauchyBinet {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) R) (B : Matrix (Fin n) (Fin k) R) :
+    (A * B).det =
+      ∑ J ∈ (univ : Finset (Fin n)).powersetCard k,
+        if h : J.card = k then
+          (colsSubmatrix A J h).det * (rowsSubmatrix B J h).det
+        else 0 :=
+  det_mul_cauchyBinet_powersetCard A B
+
+/-- When `n < k` there are no `k`-subsets of `Fin n`, so `det(AB) = 0`. -/
+theorem det_mul_eq_zero_of_rank_deficient {k n : ℕ} (h : n < k)
+    (A : Matrix (Fin k) (Fin n) R) (B : Matrix (Fin n) (Fin k) R) :
+    (A * B).det = 0 := by
+  rw [cauchyBinet]
+  have hempty : (univ : Finset (Fin n)).powersetCard k = ∅ := by
+    rw [powersetCard_eq_empty]
+    simpa [card_univ, Fintype.card_fin] using h
+  simp [hempty]
 
 end StructuredColumnSelection
