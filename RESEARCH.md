@@ -64,21 +64,52 @@ Non-claims (intentional):
 - no claim that Problem 4.1 is solved
 - Python is a witness, not a source of truth
 
-## Thread 5 — Milestone E discovery (in progress)
+## Thread 5 — Milestone E structural CPQR (completed)
 
-Delivery so far:
+Delivery:
 
 | Name | Statement | File | Independent check |
 | --- | --- | --- | --- |
 | `milestoneE_residual_empty` | empty residual is column energy `∑_i A_{ij}²` | `ColumnPivotedQR.lean` | `tests/test_cpqr.py` leverages |
 | `milestoneE_cpqr_card_le` | `#(cpqrSet A) ≤ k` | `ColumnPivotedQR.lean` | frame23 / frame12 cardinalities |
+| `milestoneE_leverage_sum` | `AAᵀ = I ⇒ ∑_j residualSq A ∅ j = k` | `ColumnPivotedQR.lean` | frame23 energies `1 + 9/25 + 16/25 = 2` |
+| `milestoneE_first_pivot_is_max` | a first pivot maximises empty residual | `ColumnPivotedQR.lean` | frame23 first pivot is column `0` |
+| `milestoneE_first_leverage_ge` | a first pivot has leverage `≥ k/n` | `CPQRVolume.lean` | frame23 first leverage `1 ≥ 2/3` |
+| `milestoneE_cpqr_card_eq` | `AAᵀ = I ⇒ #(cpqrSet A) = k` | `ColumnPivotedQR.lean` | frame23 / frame12 cardinalities |
+| `milestoneE_k1_volume_ge` | `k=1 ⇒ volumeWeight(cpqrSet) ≥ n⁻¹` | `CPQRVolume.lean` | `frame12` volume `16/25 ≥ 1/2` |
 
 Independent computational witness: `frame23_cpqr_set` selects `{0,2}` with `r_CPQR = 5/8`.
 
+The card identity is a full-rank stopping theorem: CPQR on an
+orthogonal-row matrix cannot halt before `k` columns. The `k = 1`
+volume bound is a workshop-scale inverse-magnitude theorem for a
+single orthonormal row. Neither is a bound on `‖A_J⁻¹‖₂` for
+general `k`.
+
+## Thread 5b — Milestone E characterization census (in progress)
+
+SPEC §8 census contract (not a characterization outcome):
+
+| Artifact | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `run_census` | Haar, Hadamard, Fourier, leverage-skew, near-duplicate, Kahan-like frames | `structselect/census.py` | `tests/test_census.py` |
+| `experiments/census_seed0.json` | recorded `r_CPQR`, `σ_min`, pivots, optional exhaustive opt | `experiments/` | regenerate with seed 0 |
+
+On the seed-0 sweep the worst recorded ratio is Hadamard `k=3,n=8`
+with `r_CPQR = 2/3 < 1`. Several Haar draws are slightly worse than
+the exhaustive optimum and still below the workshop scale.
+
+This is **not** a polynomial CPQR theorem and **not** a
+machine-checked counterexample. Milestone E remains open.
+
+The dated reasoning log, stalled residual-energy attempt, census
+labels, and ordered next-work queue are in `CHECKPOINT.md`.
+
 Non-claims (intentional):
 
-- no polynomial CPQR inverse-norm bound
+- no polynomial CPQR inverse-norm bound for general `k`
 - no CPQR counterexample
 - no extra static hypothesis (leverage ratio, coherence, …)
 - no claim that Problem 4.1 is solved
 - Python census is a witness, not a source of truth
+- `milestoneE_k1_volume_ge` does not close Milestone E

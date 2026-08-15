@@ -24,13 +24,19 @@ Phases completed:
   - `milestoneD_expected_inv_frob_sq`
   - `milestoneD_markov_inv_frob`
 
-- Milestone E discovery layer (CPQR algorithm, not a bound)
+- Milestone E structural CPQR layer (algorithm and full-rank card, not a bound)
   - `milestoneE_residual_empty`
+  - `milestoneE_leverage_sum`
+  - `milestoneE_first_pivot_is_max`
+  - `milestoneE_first_leverage_ge`
   - `milestoneE_cpqr_card_le`
+  - `milestoneE_cpqr_card_eq`
+  - `milestoneE_k1_volume_ge` (`k = 1` only; workshop scale, not general `k`)
+- Milestone E §8 census (witnesses only): `structselect/census.py`
 
 Not yet claimed:
 
-- a polynomial CPQR theorem, counterexample, or refined structural class
+- a polynomial CPQR theorem for general `k`, a counterexample, or a refined class
 - CSSP perturbation bridge
 - a solution of all of Problem 4.1
 
@@ -58,6 +64,8 @@ drop.
   volume-weighted inverse-Frobenius energy and a finite Markov tail.
 - `StructuredColumnSelection/ColumnPivotedQR.lean`:
   greedy CPQR residuals, pivots, and selected sets.
+- `StructuredColumnSelection/CPQRVolume.lean`:
+  first-pivot leverage lower bound and the `k = 1` volume bound.
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
   exact rational enumerations used as independent witnesses.
 - `StructuredColumnSelection/Theorems.lean`:
@@ -73,7 +81,15 @@ Lean tooling idempotently, fetches mathlib cache, and builds the project.
 
 Phase execution cadence is defined in:
 
+- `.cursor/skills/autonomous-implementation/SKILL.md`
 - `.cursor/skills/phase-cadence/SKILL.md`
+- `.cursor/skills/e-characterization/SKILL.md`
+- `.cursor/skills/verify-public-theorems/SKILL.md`
+- `.cursor/rules/claim-discipline.mdc`
 
 It covers specify → implement → verify → document → ship, with explicit
-claim discipline.
+claim discipline. Verify with `bash scripts/verify.sh`.
+
+A detailed reasoning log, failed attempts, and the next-work queue
+live in `CHECKPOINT.md`. The engineering playbook is
+`autonomous-implementation.md`.

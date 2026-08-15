@@ -2,6 +2,7 @@ import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
 import StructuredColumnSelection.InverseNormBounds
 import StructuredColumnSelection.ColumnPivotedQR
+import StructuredColumnSelection.CPQRVolume
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.NormNum
@@ -153,6 +154,31 @@ theorem frame23_cpqr_set :
 theorem frame12_cpqr_set :
     cpqrSet frame12 = ({1} : Finset (Fin 2)) := by
   native_decide
+
+/-- Direct leverage sum: `1 + 9/25 + 16/25 = 2`. -/
+theorem frame23_leverage_sum :
+    ∑ j : Fin 3, residualSq frame23 ∅ j = 2 := by
+  native_decide
+
+/-- First pivot is the unique maximal-leverage column. -/
+theorem frame23_first_pivot :
+    cpqrPivot frame23 ∅ = some 0 := by
+  native_decide
+
+theorem frame23_cpqr_card :
+    (cpqrSet frame23).card = 2 := by
+  rw [frame23_cpqr_set]
+  native_decide
+
+theorem frame12_cpqr_card :
+    (cpqrSet frame12).card = 1 := by
+  rw [frame12_cpqr_set]
+  native_decide
+
+/-- Direct volume: CPQR on `frame12` selects `(4/5)² = 16/25 ≥ 1/2`. -/
+theorem frame12_k1_volume :
+    volumeWeight frame12 (cpqrSet frame12) = (16 : ℚ) / 25 := by
+  rw [frame12_cpqr_set, volumeWeight_frame12_1]
 
 end SmallInstance
 end StructuredColumnSelection

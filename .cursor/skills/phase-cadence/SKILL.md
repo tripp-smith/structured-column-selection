@@ -20,6 +20,11 @@ over-claiming theorem status.
 
 Do not reopen completed milestones unless the user asks to extend them.
 
+For Milestone E characterization (polynomial bound, counterexample,
+or refined class), also follow `.cursor/skills/e-characterization/SKILL.md`
+and `.cursor/skills/autonomous-implementation/SKILL.md`.
+Do not start Milestone F until E is closed or the user asks for F.
+
 ## 1. Specify
 
 Write the contract before implementation.
@@ -63,14 +68,18 @@ lake build
 rg sorry --glob '*.lean'
 ```
 
-For structural public theorems, print axioms:
+For structural public theorems, print axioms with `--stdin`
+and the fully qualified name:
 
 ```bash
-lake env lean --run <<'LEAN'
+export PATH="$HOME/.elan/bin:$PATH"
+lake env lean --stdin <<'LEAN'
 import StructuredColumnSelection.Theorems
-#print axioms <theorem_name>
+#print axioms StructuredColumnSelection.<theorem_name>
 LEAN
 ```
+
+Do not use `lake env lean --run` for `#print axioms`.
 
 Allowed defaults: `propext`, `Classical.choice`, `Quot.sound`.
 

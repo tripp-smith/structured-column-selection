@@ -70,18 +70,32 @@ measure-theoretic random variable.
 Independent check: the `2×3` traces are `34/25`, `41/25` and `1`,
 summing to `4 = 2·(3-2+1)`.
 
-## Phase 5 (Milestone E discovery) delivered
+## Phase 5 (Milestone E structural CPQR) delivered
 
 Ordinary CPQR is defined by repeatedly inserting the unused column of
 largest Gram-determinant residual, breaking ties by the smallest
-index. The algorithm returns at most `k` columns. On the running
-`2×3` frame it selects `{0,2}`, with
+index. Empty residuals are leverage scores and sum to `k` when
+`A Aᵀ = I`. A first pivot maximises that empty residual and therefore
+has leverage at least `k / n`. On an orthogonal-row matrix the
+algorithm cannot stop early: it returns exactly `k` columns.
+
+For `k = 1` the first-pivot average is already the selected volume:
+`volumeWeight A (cpqrSet A) ≥ n⁻¹`. The corresponding 1×1 inverse
+magnitude is at most `√n`, matching the workshop scale. This is not a
+polynomial inverse-norm bound for general `k`.
+
+On the running `2×3` frame it selects `{0,2}`, with
 
 ```text
 ‖A_J⁻¹‖₂ = 5/4,    √(k(n-k+1)) = 2,    r_CPQR = 5/8.
 ```
 
-This is a certified pivot census, not a polynomial bound.
+A Python census (`structselect/census.py`,
+`experiments/census_seed0.json`) records `r_CPQR` on Haar/Stiefel,
+Hadamard, Fourier, leverage-skew, near-duplicate, and orthogonalized
+Kahan-like frames. On the seed-0 sweep the worst ratio is `2/3`
+(Hadamard `3×8`). That is a recorded witness, not a polynomial bound
+and not a counterexample.
 
 The Fin-indexed Cauchy–Binet `powersetCard` form is now also named
 `cauchyBinet`, matching
@@ -90,7 +104,10 @@ including the empty-sum case `n < k → det(AB) = 0`.
 
 ## What remains open
 
-Milestone E still requires one of: a polynomial CPQR theorem, a
-machine-checked counterexample, or a counterexample plus a stronger
-static class. Milestone F (CSSP bridge) is untouched. This repository
-does not claim to have solved all of Problem 4.1.
+Milestone E still requires one of: a polynomial CPQR theorem for
+general `k`, a machine-checked counterexample, or a counterexample
+plus a stronger static class. The `k = 1` volume bound is a genuine
+special case and does not close E. Milestone F (CSSP bridge) is
+untouched. This repository does not claim to have solved all of
+Problem 4.1. See `CHECKPOINT.md` for the reasoning log and the
+next-work queue.

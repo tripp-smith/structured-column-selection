@@ -60,6 +60,34 @@ def residual_sq(A: Matrix, J: Sequence[int], j: int) -> Fraction:
     return det(G2) / gdet
 
 
+def leverage_scores(A: Matrix) -> list[Fraction]:
+    """Empty-set residuals `∑_i A_{ij}²`."""
+    cols = len(A[0])
+    return [residual_sq(A, [], j) for j in range(cols)]
+
+
+def first_pivot(A: Matrix) -> int | None:
+    """Unused column of maximal empty residual, ties by smallest index."""
+    scores = leverage_scores(A)
+    best = max(scores)
+    if best <= 0:
+        return None
+    return min(j for j, s in enumerate(scores) if s == best)
+
+
+def r_cpqr_2x2(A: Matrix) -> Fraction:
+    """`‖A_J⁻¹‖₂ / √(k(n-k+1))` for a 2-row rational frame."""
+    J = cpqr_set(A)
+    if len(J) != 2:
+        raise ValueError(f"expected two columns, got {J}")
+    AJ = [[A[0][J[0]], A[0][J[1]]], [A[1][J[0]], A[1][J[1]]]]
+    inv_op = op_norm_2x2_inverse(AJ)
+    k, n = 2, len(A[0])
+    # √(k(n-k+1)); keep the exact ratio when the bound is an integer square
+    bound_sq = k * (n - k + 1)
+    return inv_op / _sqrt_fraction(Fraction(bound_sq))
+
+
 def cpqr_set(A: Matrix, k: int | None = None) -> list[int]:
     """Greedy CPQR column indices, ties broken by smallest index."""
     rows = len(A)
@@ -94,9 +122,7 @@ def op_norm_2x2_inverse(AJ: Matrix) -> Fraction:
     # disc is a square for the witness; return sqrt of larger eigenvalue
     # by evaluating the exact diagonal case when off-diagonals vanish.
     if G[0][1] == 0 and G[1][0] == 0:
-        return max(G[0][0], G[1][1]) ** Fraction(1, 2) if False else max(
-            abs(inv[0][0]), abs(inv[1][1])
-        )
+        return _sqrt_fraction(max(G[0][0], G[1][1]))
     # fallback: larger eigenvalue of G is ‖inv‖₂²
     lam = (tr + _sqrt_fraction(disc)) / 2
     return _sqrt_fraction(lam)

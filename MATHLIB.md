@@ -46,6 +46,22 @@ of the inverse-Gram identity:
 
 These stay on `Finset` sums and do not introduce measure theory.
 
+Phase 5 adds structural CPQR lemmas that stay on finite Gram
+determinants and matrix rank:
+
+- `leverageSum`
+- `firstPivot_is_max`
+- `firstLeverage_ge`
+- `cpqrSet_card_eq`
+- `cpqr_k1_volume_ge`
+- residual nonnegativity and unused-column span control
+
+These use mathlib `Matrix.rank`, `rank_transpose_mul_self`, and
+`rank_of_det_ne_zero`. The `k=1` volume bound is a determinant
+comparison, not a spectral-norm argument.
+
+The §8 census is Python-only and is not a mathlib candidate.
+
 ## Later candidates
 
 - a type-generic version of `weightedMarkov` for mathlib;

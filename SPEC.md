@@ -727,12 +727,18 @@ One of the following must be delivered:
 2. an explicit machine-checked counterexample;
 3. a counterexample plus a meaningful stronger structural class with a polynomial CPQR theorem.
 
-Status note (Phase 5 discovery): the greedy algorithm is defined in
-`ColumnPivotedQR.lean` as `cpqrSet`, with public names
-`milestoneE_residual_empty` and `milestoneE_cpqr_card_le`.
-The running `2×3` pivot set is the computational witness
-`frame23_cpqr_set`. This is the Section 8 census foundation,
-not one of the three characterization outcomes.
+Status note (Phase 5 structural CPQR + §8 census + `k=1` volume):
+the greedy algorithm is defined in `ColumnPivotedQR.lean` as
+`cpqrSet`, with public names `milestoneE_residual_empty`,
+`milestoneE_leverage_sum`, `milestoneE_first_pivot_is_max`,
+`milestoneE_first_leverage_ge`, `milestoneE_cpqr_card_le`,
+`milestoneE_cpqr_card_eq`, and `milestoneE_k1_volume_ge`.
+Orthogonal-row CPQR returns exactly `k` columns. A first pivot has
+leverage at least `k/n`. For `k=1` the selected volume is at least
+`n⁻¹` (workshop scale). The running `2×3` pivot set is
+`frame23_cpqr_set`. The Section 8 numerical census lives in
+`structselect/census.py` and `experiments/census_seed0.json`. None of
+the three characterization outcomes for general `k` is claimed.
 
 ### Milestone F: CSSP perturbation bridge
 
@@ -786,6 +792,8 @@ FINDINGS.md
 RESEARCH.md
 APPLICATION.md
 MATHLIB.md
+CHECKPOINT.md
+autonomous-implementation.md
 ```
 
 `README.md` should lead with the theorem status, not the research ambition.
@@ -797,6 +805,10 @@ MATHLIB.md
 `APPLICATION.md` should document the Python selector and explicitly distinguish rigorous guarantees from heuristics.
 
 `MATHLIB.md` should identify reusable determinant, volume-sampling and finite-expectation lemmas that could plausibly move upstream.
+
+Status note: `CHECKPOINT.md` is the dated reasoning log and next-work
+queue. `autonomous-implementation.md` is the engineering playbook.
+Neither is a theorem.
 
 ## 19. Claim discipline
 
