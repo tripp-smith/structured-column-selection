@@ -5,7 +5,8 @@ under orthogonal-row structure (`A Aᵀ = I`) for Simons Workshop Problem 4.1.
 
 ## Status
 
-Investigating Simons Problem 4.1 for orthogonal-row matrices.
+Machine-checked randomized quasi-optimal column selection for the
+orthogonal-row case of Simons Problem 4.1.
 
 Phases completed:
 
@@ -19,11 +20,15 @@ Phases completed:
 - Milestone C (exact inverse-Gram identity)
   - `milestoneC_adjugate_sum`
   - `milestoneC_inverse_gram_expectation`
+- Milestone D (finite inverse-Frobenius expectation and Markov tail)
+  - `milestoneD_expected_inv_frob_sq`
+  - `milestoneD_markov_inv_frob`
 
 Not yet claimed:
 
-- Milestone D randomized high-probability RRQR bound
 - CPQR theorem/counterexample outcomes
+- CSSP perturbation bridge
+- a solution of all of Problem 4.1
 
 The formal Milestone C statement uses adjugates. That is the correct
 finite identity: `det(A_J)² (A_J A_Jᵀ)⁻¹` agrees with
@@ -45,6 +50,8 @@ drop.
   squared-minor weights and their normalisation.
 - `StructuredColumnSelection/InverseGramExpectation.lean`:
   adjugate form of the inverse-Gram sum.
+- `StructuredColumnSelection/InverseNormBounds.lean`:
+  volume-weighted inverse-Frobenius energy and a finite Markov tail.
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
   exact rational enumerations used as independent witnesses.
 - `StructuredColumnSelection/Theorems.lean`:

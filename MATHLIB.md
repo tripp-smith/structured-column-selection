@@ -26,7 +26,17 @@ Phase 1 wrappers remain:
 - selected square column submatrices via `submatrix`;
 - selected Gram matrix product forms.
 
+Phase 4 adds a finite weighted Markov inequality and the trace form
+of the inverse-Gram identity:
+
+- `invFrobWeight`
+- `expectedInvFrobSq`
+- `weightedMarkov`
+- `markovInvFrob`
+
+These stay on `Finset` sums and do not introduce measure theory.
+
 ## Later candidates
 
-- matrix expectation identities over explicit finite distributions;
-- Markov / high-probability wrappers that stay on finite weighted sums.
+- a type-generic version of `weightedMarkov` for mathlib;
+- operator-norm comparisons packaged with the existing Frobenius proxy.

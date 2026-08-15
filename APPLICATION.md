@@ -1,6 +1,6 @@
 # Application layer status
 
-Phase 3 adds an independent inverse-Gram adjugate check. The full
+Phase 4 adds an independent inverse-Frobenius trace check. The full
 `structselect` selector API from `SPEC.md` is still not implemented.
 
 `tests/test_volume_normalization.py` enumerates squared maximal minors
@@ -10,6 +10,11 @@ for two rational orthogonal-row frames.
 `2×3` frame and checks that the matrices sum to `2 I`. That calculation
 is a diagnostic witness for Milestone C; the source of truth is
 `milestoneC_inverse_gram_expectation`.
+
+`tests/test_inverse_norm.py` enumerates `tr(adj(A_J A_Jᵀ))` on the
+same `2×3` frame and checks that the traces sum to `4 = 2·(3-2+1)`.
+That calculation is a diagnostic witness for Milestone D; the source
+of truth is `milestoneD_expected_inv_frob_sq`.
 
 When selectors are added, this document will separate:
 

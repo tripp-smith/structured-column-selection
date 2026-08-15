@@ -2,6 +2,7 @@ import StructuredColumnSelection.OrthogonalRows
 import StructuredColumnSelection.PrincipalColumns
 import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
+import StructuredColumnSelection.InverseNormBounds
 
 namespace StructuredColumnSelection
 
@@ -52,5 +53,22 @@ theorem milestoneC_adjugate_sum {k n : ℕ} {R : Type*} [CommRing R]
     ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, volumeWeightedInvGram A J =
       ((n + 1 - k : ℕ) : R) • Matrix.adjugate (A * Aᵀ) :=
   volumeWeightedInvGrams_sum A
+
+/-- Milestone D: volume-weighted inverse-Frobenius energy is `k(n-k+1)`. -/
+theorem milestoneD_expected_inv_frob_sq {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, invFrobWeight A J =
+      (k : ℝ) * ((n + 1 - k : ℕ) : ℝ) :=
+  expectedInvFrobSq A hA
+
+/-- Milestone D: finite Markov tail for the inverse-Frobenius proxy. -/
+theorem milestoneD_markov_inv_frob {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) {δ : ℝ}
+    (hδ : 0 < δ) :
+    ∑ J ∈ ((univ : Finset (Fin n)).powersetCard k).filter
+        (invFrobExceeds A
+          (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ)),
+      volumeWeight A J ≤ δ :=
+  markovInvFrob A hA hδ
 
 end StructuredColumnSelection

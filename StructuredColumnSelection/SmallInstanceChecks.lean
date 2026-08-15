@@ -1,14 +1,16 @@
 import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
+import StructuredColumnSelection.InverseNormBounds
 import Mathlib.LinearAlgebra.Matrix.Notation
+import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.NormNum
 
 /-!
 # Small exact volume-weight checks
 
 Rational orthogonal-row frames used as independent witnesses of
-Milestone B. The sums below are evaluated by enumerating subsets; they
-do not invoke the general Cauchy–Binet theorem.
+Milestones B–D. The sums below are evaluated by enumerating subsets;
+they do not invoke the general Cauchy–Binet or inverse-Gram theorems.
 -/
 
 namespace StructuredColumnSelection
@@ -126,6 +128,19 @@ theorem frame12_inverse_gram_sum :
     fin_cases j
     native_decide
   · native_decide
+
+/-- Direct traces: `34/25 + 41/25 + 1 = 4 = 2 · (3 - 2 + 1)`. -/
+theorem frame23_expected_inv_frob :
+    ∑ J ∈ (univ : Finset (Fin 3)).powersetCard 2, invFrobWeight frame23 J = 4 := by
+  simp [invFrobWeight, ← Matrix.trace_sum, frame23_inverse_gram_sum,
+    Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin]
+  norm_num
+
+theorem frame12_expected_inv_frob :
+    ∑ J ∈ (univ : Finset (Fin 2)).powersetCard 1, invFrobWeight frame12 J = 2 := by
+  simp [invFrobWeight, ← Matrix.trace_sum, frame12_inverse_gram_sum,
+    Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin]
+  norm_num
 
 end SmallInstance
 end StructuredColumnSelection

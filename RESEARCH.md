@@ -37,17 +37,29 @@ summands.
 
 Non-claims (intentional):
 
-- no high-probability RRQR bound
+- no high-probability RRQR bound in Phase 3
 - no CPQR statement
 - no claim that Problem 4.1 is solved
 - Python is a witness, not a source of truth
 
-## Thread 4 — Milestone D (open)
+## Thread 4 — Milestone D (completed)
 
-Target:
+Delivery:
 
-- `E ‖A_J⁻¹‖_F² = k(n-k+1)` as a thin wrapper around Milestone C
-- Markov high-probability bound
-  `Pr[ ‖A_J⁻¹‖_2 ≤ √(k(n-k+1)/δ) ] ≥ 1-δ`
+| Name | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `milestoneD_expected_inv_frob_sq` | `AAᵀ = I ⇒ ∑ tr(adj(A_J A_Jᵀ)) = k(n-k+1)` | `InverseNormBounds.lean` | `frame23_expected_inv_frob` |
+| `milestoneD_markov_inv_frob` | volume mass of `{δ tr(adj) > k(n-k+1) w}` is `≤ δ` | `InverseNormBounds.lean` | same, plus `tests/test_inverse_norm.py` |
 
-Keep the probability layer finite (weighted sums over `Finset (Fin n)`).
+The expectation is the trace of the Milestone C identity. The tail is a
+finite Markov inequality on those traces; it is the Theorem R1
+high-probability bound with `‖·‖_F` in place of `‖·‖_2` (which is
+stronger on the invertible locus).
+
+Non-claims (intentional):
+
+- no measure-theoretic probability space
+- no CPQR statement
+- no CSSP bridge
+- no claim that Problem 4.1 is solved
+- Python is a witness, not a source of truth

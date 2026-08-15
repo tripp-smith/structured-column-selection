@@ -50,7 +50,28 @@ the three adjugates are `[[9/25,0],[0,1]]`, `[[16/25,0],[0,1]]` and
 `[[1,0],[0,0]]`, summing to `2 I`. The same arithmetic is repeated in
 `tests/test_inverse_gram.py`.
 
+## Phase 4 (Milestone D) delivered
+
+Taking traces in the Milestone C identity gives the finite expectation
+
+```text
+∑_{|J|=k} tr(adj(A_J A_Jᵀ)) = k(n - k + 1)
+```
+
+when `A Aᵀ = I`. On an invertible block this summand is
+`det(A_J)² ‖A_J⁻¹‖_F²`. A finitary Markov inequality then bounds the
+volume mass of sets whose inverse-Frobenius energy exceeds
+`k(n-k+1)/δ` by `δ`. Because `‖·‖_2 ≤ ‖·‖_F`, the same tail controls
+the spectral quantity in Theorem R1 on the invertible locus.
+
+The probability layer is a weighted sum over `Finset (Fin n)`, not a
+measure-theoretic random variable.
+
+Independent check: the `2×3` traces are `34/25`, `41/25` and `1`,
+summing to `4 = 2·(3-2+1)`.
+
 ## What remains open
 
-The randomized high-probability inverse-norm bound (Milestone D) and
-all CPQR statements.
+CPQR characterization (Milestone E) and the CSSP perturbation bridge
+(Milestone F). This repository does not claim to have solved all of
+Problem 4.1.

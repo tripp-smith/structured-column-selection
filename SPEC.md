@@ -710,6 +710,15 @@ Lean proves the expectation and high-probability inverse-norm bounds.
 
 At this point the repository has completed its minimum answer to Problem 4.1.
 
+Status note (Phase 4): implemented in Lean as
+`milestoneD_expected_inv_frob_sq` and
+`milestoneD_markov_inv_frob`. The expectation is
+`∑ tr(adj(A_J A_Jᵀ)) = k(n-k+1)`. The tail is a finite Markov bound
+on that adjugate-trace proxy for `‖A_J⁻¹‖_F²`, which implies the
+spectral bound of Theorem R1 on invertible blocks. Independent
+rational enumerations are in
+`StructuredColumnSelection/SmallInstanceChecks.lean`.
+
 ### Milestone E: CPQR characterization
 
 One of the following must be delivered:
