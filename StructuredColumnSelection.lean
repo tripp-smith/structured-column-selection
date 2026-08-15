@@ -6,6 +6,7 @@ import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
 import StructuredColumnSelection.InverseNormBounds
 import StructuredColumnSelection.ColumnPivotedQR
+import StructuredColumnSelection.CPQRVolume
 import StructuredColumnSelection.SmallInstanceChecks
 import StructuredColumnSelection.Theorems
 
@@ -14,6 +15,6 @@ import StructuredColumnSelection.Theorems
 
 Root module for the Lean 4 / mathlib4 formalization plan in `SPEC.md`.
 Current status executes Milestones A–D and the Milestone E structural
-CPQR layer: leverage scores, first-pivot maximality, and the full-rank
-card identity `#(cpqrSet A) = k`. No polynomial CPQR bound is claimed.
+CPQR layer, plus residual energy and the `k = 1` volume bound. No
+polynomial CPQR bound for general `k` is claimed.
 -/

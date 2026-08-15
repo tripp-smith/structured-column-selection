@@ -74,13 +74,17 @@ Delivery:
 | `milestoneE_cpqr_card_le` | `#(cpqrSet A) ≤ k` | `ColumnPivotedQR.lean` | frame23 / frame12 cardinalities |
 | `milestoneE_leverage_sum` | `AAᵀ = I ⇒ ∑_j residualSq A ∅ j = k` | `ColumnPivotedQR.lean` | frame23 energies `1 + 9/25 + 16/25 = 2` |
 | `milestoneE_first_pivot_is_max` | a first pivot maximises empty residual | `ColumnPivotedQR.lean` | frame23 first pivot is column `0` |
+| `milestoneE_first_leverage_ge` | a first pivot has leverage `≥ k/n` | `CPQRVolume.lean` | frame23 first leverage `1 ≥ 2/3` |
 | `milestoneE_cpqr_card_eq` | `AAᵀ = I ⇒ #(cpqrSet A) = k` | `ColumnPivotedQR.lean` | frame23 / frame12 cardinalities |
+| `milestoneE_k1_volume_ge` | `k=1 ⇒ volumeWeight(cpqrSet) ≥ n⁻¹` | `CPQRVolume.lean` | `frame12` volume `16/25 ≥ 1/2` |
 
 Independent computational witness: `frame23_cpqr_set` selects `{0,2}` with `r_CPQR = 5/8`.
 
 The card identity is a full-rank stopping theorem: CPQR on an
-orthogonal-row matrix cannot halt before `k` columns. It is not a
-bound on `‖A_J⁻¹‖₂`.
+orthogonal-row matrix cannot halt before `k` columns. The `k = 1`
+volume bound is a workshop-scale inverse-magnitude theorem for a
+single orthonormal row. Neither is a bound on `‖A_J⁻¹‖₂` for
+general `k`.
 
 ## Thread 5b — Milestone E characterization census (in progress)
 
@@ -100,8 +104,9 @@ machine-checked counterexample. Milestone E remains open.
 
 Non-claims (intentional):
 
-- no polynomial CPQR inverse-norm bound
+- no polynomial CPQR inverse-norm bound for general `k`
 - no CPQR counterexample
 - no extra static hypothesis (leverage ratio, coherence, …)
 - no claim that Problem 4.1 is solved
 - Python census is a witness, not a source of truth
+- `milestoneE_k1_volume_ge` does not close Milestone E

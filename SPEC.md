@@ -727,15 +727,18 @@ One of the following must be delivered:
 2. an explicit machine-checked counterexample;
 3. a counterexample plus a meaningful stronger structural class with a polynomial CPQR theorem.
 
-Status note (Phase 5 structural CPQR + §8 census): the greedy
-algorithm is defined in `ColumnPivotedQR.lean` as `cpqrSet`, with
-public names `milestoneE_residual_empty`, `milestoneE_leverage_sum`,
-`milestoneE_first_pivot_is_max`, `milestoneE_cpqr_card_le`, and
-`milestoneE_cpqr_card_eq`. Orthogonal-row CPQR returns exactly `k`
-columns. The running `2×3` pivot set is `frame23_cpqr_set`. The
-Section 8 numerical census lives in `structselect/census.py` and
-`experiments/census_seed0.json`. None of the three characterization
-outcomes is claimed.
+Status note (Phase 5 structural CPQR + §8 census + `k=1` volume):
+the greedy algorithm is defined in `ColumnPivotedQR.lean` as
+`cpqrSet`, with public names `milestoneE_residual_empty`,
+`milestoneE_leverage_sum`, `milestoneE_first_pivot_is_max`,
+`milestoneE_first_leverage_ge`, `milestoneE_cpqr_card_le`,
+`milestoneE_cpqr_card_eq`, and `milestoneE_k1_volume_ge`.
+Orthogonal-row CPQR returns exactly `k` columns. A first pivot has
+leverage at least `k/n`. For `k=1` the selected volume is at least
+`n⁻¹` (workshop scale). The running `2×3` pivot set is
+`frame23_cpqr_set`. The Section 8 numerical census lives in
+`structselect/census.py` and `experiments/census_seed0.json`. None of
+the three characterization outcomes for general `k` is claimed.
 
 ### Milestone F: CSSP perturbation bridge
 

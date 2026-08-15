@@ -54,8 +54,27 @@ The research question is whether `r_CPQR` stays bounded or grows.
   exceeds every reasonable polynomial the project named. Do not blur
   these.
 
+## Formal path that still leaves E open
+
+After the §8 census, prefer Lean identities that constrain CPQR
+without claiming `poly(n,k)`:
+
+1. Residual energy: if `J` is independent, `∑_j residualSq A J j = k-#J`.
+   Then the next unused residual is at least `(k-#J)/(n-#J)`.
+2. Volume product: successive pivot residuals multiply to
+   `volumeWeight A (cpqrSet A)`, hence
+   `volumeWeight ≥ 1 / C(n,k)`. That is exponential in `k` for
+   `n ≈ 2k`, so it is **not** outcome 1.
+3. The `k = 1` case is a genuine workshop-scale inverse bound
+   (`|A_{0j}|⁻¹ ≤ √n`). It does **not** close E for general `k`.
+
+Do not treat “every census sample had `r_CPQR < 1`” as evidence of a
+universal `C = 1` theorem.
+
 ## Implementation targets
 
 - Python generators and JSON census: `structselect/census.py`
 - Tests must not assert a universal bound
-- Lean formalization only after SPEC §9 certification steps
+- Lean residual-energy / `k = 1` theorems may ship without a
+  counterexample
+- A Lean counterexample is allowed only after SPEC §9 certification

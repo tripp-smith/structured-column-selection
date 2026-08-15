@@ -77,6 +77,24 @@ def test_frame12_cpqr_selects_larger_column() -> None:
     assert cpqr_set(frame12()) == [1]
 
 
+def test_frame12_k1_volume_at_least_one_over_n() -> None:
+    """Independent check of milestoneE_k1_volume_ge on frame12."""
+    A = frame12()
+    J = cpqr_set(A)
+    assert J == [1]
+    vol = A[0][1] ** 2
+    assert vol == Fraction(16, 25)
+    assert vol >= Fraction(1, 2)
+
+
+def test_first_leverage_at_least_k_over_n() -> None:
+    A = frame23()
+    scores = leverage_scores(A)
+    j = first_pivot(A)
+    assert j is not None
+    assert scores[j] >= Fraction(2, 3)
+
+
 def test_orthogonal_frames_have_card_k() -> None:
     assert len(cpqr_set(frame23())) == 2
     assert len(cpqr_set(frame12())) == 1

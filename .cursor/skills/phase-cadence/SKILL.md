@@ -21,7 +21,8 @@ over-claiming theorem status.
 Do not reopen completed milestones unless the user asks to extend them.
 
 For Milestone E characterization (polynomial bound, counterexample,
-or refined class), also follow `.cursor/skills/e-characterization/SKILL.md`.
+or refined class), also follow `.cursor/skills/e-characterization/SKILL.md`
+and `.cursor/skills/autonomous-implementation/SKILL.md`.
 Do not start Milestone F until E is closed or the user asks for F.
 
 ## 1. Specify

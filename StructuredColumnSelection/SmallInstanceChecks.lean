@@ -2,6 +2,7 @@ import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
 import StructuredColumnSelection.InverseNormBounds
 import StructuredColumnSelection.ColumnPivotedQR
+import StructuredColumnSelection.CPQRVolume
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.NormNum
@@ -173,6 +174,11 @@ theorem frame12_cpqr_card :
     (cpqrSet frame12).card = 1 := by
   rw [frame12_cpqr_set]
   native_decide
+
+/-- Direct volume: CPQR on `frame12` selects `(4/5)² = 16/25 ≥ 1/2`. -/
+theorem frame12_k1_volume :
+    volumeWeight frame12 (cpqrSet frame12) = (16 : ℚ) / 25 := by
+  rw [frame12_cpqr_set, volumeWeight_frame12_1]
 
 end SmallInstance
 end StructuredColumnSelection

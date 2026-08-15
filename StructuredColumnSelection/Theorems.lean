@@ -4,6 +4,7 @@ import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
 import StructuredColumnSelection.InverseNormBounds
 import StructuredColumnSelection.ColumnPivotedQR
+import StructuredColumnSelection.CPQRVolume
 
 namespace StructuredColumnSelection
 
@@ -106,5 +107,21 @@ theorem milestoneE_cpqr_card_eq {k n : ℕ}
     (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
     (cpqrSet A).card = k :=
   cpqrSet_card_eq A hA
+
+/-- Milestone E: a first CPQR pivot has leverage at least `k / n`. -/
+theorem milestoneE_first_leverage_ge {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    {j : Fin n} (hj : cpqrPivot A ∅ = some j) :
+    (k : ℝ) / n ≤ residualSq A ∅ j :=
+  firstLeverage_ge A hA hj
+
+/-- Milestone E, `k = 1` only: CPQR volume is at least `n⁻¹`.
+
+This matches the workshop scale `√n` for a single orthonormal row.
+It is not a polynomial inverse-norm bound for general `k`. -/
+theorem milestoneE_k1_volume_ge {n : ℕ}
+    (A : Matrix (Fin 1) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    (n : ℝ)⁻¹ ≤ volumeWeight A (cpqrSet A) :=
+  cpqr_k1_volume_ge A hA
 
 end StructuredColumnSelection

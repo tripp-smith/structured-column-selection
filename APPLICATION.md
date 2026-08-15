@@ -20,10 +20,13 @@ That calculation is a diagnostic witness for Milestone D; the source
 of truth is `milestoneD_expected_inv_frob_sq`.
 
 `tests/test_cpqr.py` checks that CPQR on the `2×3` frame selects
-`{0,2}` with `r_CPQR = 5/8`, that leverages sum to `2`, and that
-orthogonal-row samples return `k` columns. The source of truth for
-the selected set is `frame23_cpqr_set`; the source of truth for the
-card identity is `milestoneE_cpqr_card_eq`.
+`{0,2}` with `r_CPQR = 5/8`, that leverages sum to `2`, that the
+first leverage is at least `k/n`, that `frame12` has volume
+`16/25 ≥ 1/2`, and that orthogonal-row samples return `k` columns.
+The source of truth for the selected set is `frame23_cpqr_set`; the
+source of truth for the card identity is `milestoneE_cpqr_card_eq`;
+the source of truth for the `k=1` volume bound is
+`milestoneE_k1_volume_ge`.
 
 When selectors are added, this document will separate:
 

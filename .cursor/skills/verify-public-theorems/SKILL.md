@@ -26,7 +26,7 @@ Axioms (use `--stdin`, full constant names):
 ```bash
 lake env lean --stdin <<'LEAN'
 import StructuredColumnSelection.Theorems
-#print axioms StructuredColumnSelection.milestoneE_cpqr_card_eq
+#print axioms StructuredColumnSelection.milestoneE_k1_volume_ge
 LEAN
 ```
 
