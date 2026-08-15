@@ -727,15 +727,15 @@ One of the following must be delivered:
 2. an explicit machine-checked counterexample;
 3. a counterexample plus a meaningful stronger structural class with a polynomial CPQR theorem.
 
-Status note (Phase 5 structural CPQR): the greedy algorithm is defined
-in `ColumnPivotedQR.lean` as `cpqrSet`, with public names
-`milestoneE_residual_empty`, `milestoneE_leverage_sum`,
+Status note (Phase 5 structural CPQR + §8 census): the greedy
+algorithm is defined in `ColumnPivotedQR.lean` as `cpqrSet`, with
+public names `milestoneE_residual_empty`, `milestoneE_leverage_sum`,
 `milestoneE_first_pivot_is_max`, `milestoneE_cpqr_card_le`, and
 `milestoneE_cpqr_card_eq`. Orthogonal-row CPQR returns exactly `k`
-columns. The running `2×3` pivot set is the computational witness
-`frame23_cpqr_set`. This is the Section 8 census foundation plus a
-full-rank stopping theorem, not one of the three characterization
-outcomes.
+columns. The running `2×3` pivot set is `frame23_cpqr_set`. The
+Section 8 numerical census lives in `structselect/census.py` and
+`experiments/census_seed0.json`. None of the three characterization
+outcomes is claimed.
 
 ### Milestone F: CSSP perturbation bridge
 

@@ -82,6 +82,22 @@ The card identity is a full-rank stopping theorem: CPQR on an
 orthogonal-row matrix cannot halt before `k` columns. It is not a
 bound on `‖A_J⁻¹‖₂`.
 
+## Thread 5b — Milestone E characterization census (in progress)
+
+SPEC §8 census contract (not a characterization outcome):
+
+| Artifact | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `run_census` | Haar, Hadamard, Fourier, leverage-skew, near-duplicate, Kahan-like frames | `structselect/census.py` | `tests/test_census.py` |
+| `experiments/census_seed0.json` | recorded `r_CPQR`, `σ_min`, pivots, optional exhaustive opt | `experiments/` | regenerate with seed 0 |
+
+On the seed-0 sweep the worst recorded ratio is Hadamard `k=3,n=8`
+with `r_CPQR = 2/3 < 1`. Several Haar draws are slightly worse than
+the exhaustive optimum and still below the workshop scale.
+
+This is **not** a polynomial CPQR theorem and **not** a
+machine-checked counterexample. Milestone E remains open.
+
 Non-claims (intentional):
 
 - no polynomial CPQR inverse-norm bound

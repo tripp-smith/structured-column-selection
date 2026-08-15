@@ -57,6 +57,8 @@ determinants and matrix rank:
 These use mathlib `Matrix.rank`, `rank_transpose_mul_self`, and
 `rank_of_det_ne_zero`. They do not introduce a spectral-norm bound.
 
+The §8 census is Python-only and is not a mathlib candidate.
+
 ## Later candidates
 
 - a type-generic version of `weightedMarkov` for mathlib;

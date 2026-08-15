@@ -1,10 +1,10 @@
 # Application layer status
 
-Phase 5 adds a Python CPQR selector in `structselect/cpqr.py` that
-uses the same Gram-determinant residual as Lean. It records leverage
-sums, first-pivot maximality, cardinality `k`, and `r_CPQR` on
-rational frames plus a Haar/Stiefel float census. It is a discovery
-witness, not a certified polynomial bound.
+Phase 5 adds a Python CPQR selector in `structselect/cpqr.py` and a
+SPEC §8 census in `structselect/census.py`. The census writes
+machine-readable records (`experiments/census_seed0.json`) with
+`r_CPQR`, singular values, and optional exhaustive optima. It is a
+discovery witness, not a certified polynomial bound.
 
 `tests/test_volume_normalization.py` enumerates squared maximal minors
 for two rational orthogonal-row frames.

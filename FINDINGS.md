@@ -85,9 +85,12 @@ On the running `2×3` frame it selects `{0,2}`, with
 ‖A_J⁻¹‖₂ = 5/4,    √(k(n-k+1)) = 2,    r_CPQR = 5/8.
 ```
 
-A Python census records the same ratio on Hadamard-type, padded, and
-Haar/Stiefel frames. This is a full-rank stopping theorem plus a
-pivot census, not a polynomial inverse-norm bound.
+A Python census (`structselect/census.py`,
+`experiments/census_seed0.json`) records `r_CPQR` on Haar/Stiefel,
+Hadamard, Fourier, leverage-skew, near-duplicate, and orthogonalized
+Kahan-like frames. On the seed-0 sweep the worst ratio is `2/3`
+(Hadamard `3×8`). That is a recorded witness, not a polynomial bound
+and not a counterexample.
 
 The Fin-indexed Cauchy–Binet `powersetCard` form is now also named
 `cauchyBinet`, matching

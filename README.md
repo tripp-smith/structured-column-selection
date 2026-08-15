@@ -30,6 +30,7 @@ Phases completed:
   - `milestoneE_first_pivot_is_max`
   - `milestoneE_cpqr_card_le`
   - `milestoneE_cpqr_card_eq`
+- Milestone E §8 census (witnesses only): `structselect/census.py`
 
 Not yet claimed:
 
@@ -77,6 +78,9 @@ Lean tooling idempotently, fetches mathlib cache, and builds the project.
 Phase execution cadence is defined in:
 
 - `.cursor/skills/phase-cadence/SKILL.md`
+- `.cursor/skills/e-characterization/SKILL.md`
+- `.cursor/skills/verify-public-theorems/SKILL.md`
+- `.cursor/rules/claim-discipline.mdc`
 
 It covers specify → implement → verify → document → ship, with explicit
-claim discipline.
+claim discipline. Verify with `bash scripts/verify.sh`.
