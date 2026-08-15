@@ -43,14 +43,14 @@ theorem milestoneB_cauchyBinet {k n : ℕ} {R : Type*} [CommRing R]
 theorem milestoneC_inverse_gram_expectation {k n : ℕ}
     (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
     ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, volumeWeightedInvGram A J =
-      (n + 1 - k : ℝ) • (1 : Matrix (Fin k) (Fin k) ℝ) :=
+      ((n + 1 - k : ℕ) : ℝ) • (1 : Matrix (Fin k) (Fin k) ℝ) :=
   inverseGramExpectation A hA
 
 /-- Milestone C helper: the same identity without orthogonality. -/
 theorem milestoneC_adjugate_sum {k n : ℕ} {R : Type*} [CommRing R]
     (A : Matrix (Fin k) (Fin n) R) :
     ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, volumeWeightedInvGram A J =
-      (n + 1 - k : R) • (A * Aᵀ).adjugate :=
+      ((n + 1 - k : ℕ) : R) • Matrix.adjugate (A * Aᵀ) :=
   volumeWeightedInvGrams_sum A
 
 end StructuredColumnSelection

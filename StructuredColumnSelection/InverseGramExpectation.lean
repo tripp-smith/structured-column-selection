@@ -1,7 +1,6 @@
 import StructuredColumnSelection.CauchyBinet
 import StructuredColumnSelection.OrthogonalRows
 import Mathlib.LinearAlgebra.Matrix.Adjugate
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
 # Inverse-Gram expectation
@@ -20,6 +19,7 @@ Orthogonal rows specialise the right-hand side to `(n + 1 - k) • I`.
 namespace StructuredColumnSelection
 
 open Equiv Finset Function
+open scoped Matrix
 
 variable {R : Type*} [CommRing R]
 
@@ -27,14 +27,14 @@ variable {R : Type*} [CommRing R]
 def volumeWeightedInvGram {k n : ℕ} (A : Matrix (Fin k) (Fin n) R)
     (J : Finset (Fin n)) : Matrix (Fin k) (Fin k) R :=
   if h : J.card = k then
-    Matrix.adjugate (colsSubmatrix A J h * (colsSubmatrix A J h)ᵀ)
+    Matrix.adjugate (colsSubmatrix A J h * ((colsSubmatrix A J h)ᵀ))
   else
     0
 
 theorem volumeWeightedInvGram_eq {k n : ℕ} (A : Matrix (Fin k) (Fin n) R)
     {J : Finset (Fin n)} (h : J.card = k) :
     volumeWeightedInvGram A J =
-      Matrix.adjugate (colsSubmatrix A J h * (colsSubmatrix A J h)ᵀ) :=
+      Matrix.adjugate (colsSubmatrix A J h * ((colsSubmatrix A J h)ᵀ)) :=
   dif_pos h
 
 /-- Complementary `(k-1)`-minor, or `0` unless `#T = k-1`. -/
@@ -58,7 +58,7 @@ lemma submatrix_mul {l n m ι κ : Type*} [Fintype n] [DecidableEq n]
 
 lemma submatrix_mul_transpose {l n ι κ : Type*} [Fintype n] [DecidableEq n]
     (X : Matrix l n R) (f : ι → l) (g : κ → l) :
-    (X * Xᵀ).submatrix f g = X.submatrix f id * (X.submatrix g id)ᵀ := by
+    (X * (Xᵀ)).submatrix f g = X.submatrix f id * ((X.submatrix g id)ᵀ) := by
   rw [submatrix_mul]
   ext a b
   simp [Matrix.submatrix_apply, Matrix.transpose_apply, Matrix.mul_apply]
@@ -66,10 +66,10 @@ lemma submatrix_mul_transpose {l n ι κ : Type*} [Fintype n] [DecidableEq n]
 lemma selectedGram_submatrix_succAbove {m n : ℕ}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (J : Finset (Fin n))
     (hJ : J.card = m + 1) (α β : Fin (m + 1)) :
-    ((colsSubmatrix A J hJ * (colsSubmatrix A J hJ)ᵀ).submatrix
+    ((colsSubmatrix A J hJ * ((colsSubmatrix A J hJ)ᵀ)).submatrix
         β.succAbove α.succAbove) =
       A.submatrix β.succAbove (J.orderEmbOfFin hJ) *
-        (A.submatrix α.succAbove (J.orderEmbOfFin hJ))ᵀ := by
+        ((A.submatrix α.succAbove (J.orderEmbOfFin hJ))ᵀ) := by
   rw [submatrix_mul_transpose]
   ext a b
   simp [colsSubmatrix, Matrix.submatrix_apply, Matrix.mul_apply,
@@ -100,7 +100,7 @@ lemma orderEmb_embedSubset {m n : ℕ} (J : Finset (Fin n))
       (embedSubset J hJ S).orderEmbOfFin (by rw [embedSubset_card, hS]) := by
   refine orderEmbOfFin_unique (by rw [embedSubset_card, hS]) ?_ ?_
   · intro i
-    exact embedSubset_subset J hJ S (orderEmbOfFin_mem _ _ _)
+    exact mem_map.mpr ⟨S.orderEmbOfFin hS i, orderEmbOfFin_mem _ _ _, rfl⟩
   · exact (J.orderEmbOfFin hJ).strictMono.comp (S.orderEmbOfFin hS).strictMono
 
 lemma complementaryMinor_embed {m n : ℕ}
@@ -113,7 +113,8 @@ lemma complementaryMinor_embed {m n : ℕ}
   rw [complementaryMinor_eq A i (by rw [embedSubset_card, hS]),
     ← orderEmb_embedSubset J hJ S hS]
 
-lemma colsSubmatrix_comp_orderEmb {m n : ℕ}
+omit [CommRing R] in
+lemma colsSubmatrix_comp_orderEmb {m n : ℕ} {R : Type*}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (J : Finset (Fin n))
     (hJ : J.card = m + 1) (S : Finset (Fin (m + 1))) (hS : S.card = m)
     (β : Fin (m + 1)) :
@@ -123,30 +124,31 @@ lemma colsSubmatrix_comp_orderEmb {m n : ℕ}
   ext a b
   simp [colsSubmatrix, Matrix.submatrix_apply]
 
-lemma rowsSubmatrix_transpose_comp {m n : ℕ}
+omit [CommRing R] in
+lemma rowsSubmatrix_transpose_comp {m n : ℕ} {R : Type*}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (J : Finset (Fin n))
     (hJ : J.card = m + 1) (S : Finset (Fin (m + 1))) (hS : S.card = m)
     (α : Fin (m + 1)) :
     rowsSubmatrix ((A.submatrix α.succAbove (J.orderEmbOfFin hJ))ᵀ) S hS =
-      (A.submatrix α.succAbove fun j =>
-        J.orderEmbOfFin hJ (S.orderEmbOfFin hS j))ᵀ := by
+      ((A.submatrix α.succAbove fun j =>
+        J.orderEmbOfFin hJ (S.orderEmbOfFin hS j))ᵀ) := by
   ext a b
   simp [rowsSubmatrix, Matrix.submatrix_apply, Matrix.transpose_apply]
 
 lemma det_selectedGram_rowDeleted {m n : ℕ}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (J : Finset (Fin n))
     (hJ : J.card = m + 1) (α β : Fin (m + 1)) :
-    ((colsSubmatrix A J hJ * (colsSubmatrix A J hJ)ᵀ).submatrix
+    ((colsSubmatrix A J hJ * ((colsSubmatrix A J hJ)ᵀ)).submatrix
         β.succAbove α.succAbove).det =
       ∑ S : { s : Finset (Fin (m + 1)) // s.card = m },
         complementaryMinor A β (embedSubset J hJ S.1) *
           complementaryMinor A α (embedSubset J hJ S.1) := by
   rw [selectedGram_submatrix_succAbove, det_mul_cauchyBinet]
   refine Fintype.sum_congr _ _ fun S => ?_
-  rw [complementaryMinor_embed A J hJ S.1 S.2,
+  rw [colsSubmatrix_comp_orderEmb A J hJ S.1 S.2,
+    rowsSubmatrix_transpose_comp A J hJ S.1 S.2, Matrix.det_transpose,
+    complementaryMinor_embed A J hJ S.1 S.2,
     complementaryMinor_embed A J hJ S.1 S.2]
-  simp [colsSubmatrix_comp_orderEmb, rowsSubmatrix_transpose_comp,
-    Matrix.det_transpose]
 
 def unembedSubset {m n : ℕ} (J : Finset (Fin n)) (hJ : J.card = m + 1)
     (T : Finset (Fin n)) : Finset (Fin (m + 1)) :=
@@ -186,10 +188,6 @@ lemma sum_local_minors {m n : ℕ} (A : Matrix (Fin (m + 1)) (Fin n) R)
           complementaryMinor A α (embedSubset J hJ S.1) =
       ∑ T ∈ J.powersetCard m,
         complementaryMinor A β T * complementaryMinor A α T := by
-  change
-      ∑ S ∈ (univ : Finset { s : Finset (Fin (m + 1)) // s.card = m }),
-        complementaryMinor A β (embedSubset J hJ S.1) *
-          complementaryMinor A α (embedSubset J hJ S.1) = _
   refine Finset.sum_bij'
       (fun S _ => embedSubset J hJ S.1)
       (fun T hT =>
@@ -209,7 +207,6 @@ lemma card_extensions {m n : ℕ} (T : Finset (Fin n)) (hT : T.card = m) :
   have hle : T.card ≤ m + 1 := by omega
   rw [card_filter_powersetCard_subset T univ (m + 1) (subset_univ T) hle]
   simp [hT, Fintype.card_fin, Nat.choose_one_right]
-  omega
 
 lemma sum_nested_minors {m n : ℕ} (A : Matrix (Fin (m + 1)) (Fin n) R)
     (α β : Fin (m + 1)) :
@@ -217,7 +214,7 @@ lemma sum_nested_minors {m n : ℕ} (A : Matrix (Fin (m + 1)) (Fin n) R)
         ∑ T ∈ J.powersetCard m,
           complementaryMinor A β T * complementaryMinor A α T =
       ∑ T ∈ (univ : Finset (Fin n)).powersetCard m,
-        ∑ J ∈ ((univ : Finset (Fin n)).powersetCard (m + 1)).filter (T ⊆ ·),
+        ∑ _J ∈ ((univ : Finset (Fin n)).powersetCard (m + 1)).filter (T ⊆ ·),
           complementaryMinor A β T * complementaryMinor A α T := by
   rw [sum_sigma', sum_sigma']
   refine sum_bij'
@@ -239,35 +236,53 @@ lemma sum_nested_minors {m n : ℕ} (A : Matrix (Fin (m + 1)) (Fin n) R)
 lemma sum_extensions_const {m n : ℕ} (A : Matrix (Fin (m + 1)) (Fin n) R)
     (α β : Fin (m + 1)) :
     ∑ T ∈ (univ : Finset (Fin n)).powersetCard m,
-        ∑ J ∈ ((univ : Finset (Fin n)).powersetCard (m + 1)).filter (T ⊆ ·),
+        ∑ _J ∈ ((univ : Finset (Fin n)).powersetCard (m + 1)).filter (T ⊆ ·),
           complementaryMinor A β T * complementaryMinor A α T =
       ∑ T ∈ (univ : Finset (Fin n)).powersetCard m,
-        (n + 1 - (m + 1) : R) *
+        ((n + 1 - (m + 1) : ℕ) : R) *
           (complementaryMinor A β T * complementaryMinor A α T) := by
   refine sum_congr rfl fun T hT => ?_
   have hTcard : T.card = m := (mem_powersetCard.mp hT).2
   rw [sum_const, card_extensions T hTcard, nsmul_eq_mul]
 
+lemma colsSubmatrix_rowDeleted {m n : ℕ}
+    (A : Matrix (Fin (m + 1)) (Fin n) R) (β : Fin (m + 1))
+    (T : Finset (Fin n)) (h : T.card = m) :
+    colsSubmatrix (A.submatrix β.succAbove id) T h =
+      A.submatrix β.succAbove (T.orderEmbOfFin h) := by
+  ext a b
+  simp [colsSubmatrix, Matrix.submatrix_apply]
+
+lemma rowsSubmatrix_rowDeleted_transpose {m n : ℕ}
+    (A : Matrix (Fin (m + 1)) (Fin n) R) (α : Fin (m + 1))
+    (T : Finset (Fin n)) (h : T.card = m) :
+    rowsSubmatrix ((A.submatrix α.succAbove id)ᵀ) T h =
+      (A.submatrix α.succAbove (T.orderEmbOfFin h))ᵀ := by
+  ext a b
+  simp [rowsSubmatrix, Matrix.submatrix_apply, Matrix.transpose_apply]
+
 lemma det_rowDeleted_cauchyBinet {m n : ℕ}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (α β : Fin (m + 1)) :
-    (A.submatrix β.succAbove id * (A.submatrix α.succAbove id)ᵀ).det =
+    (A.submatrix β.succAbove id * ((A.submatrix α.succAbove id)ᵀ)).det =
       ∑ T ∈ (univ : Finset (Fin n)).powersetCard m,
         complementaryMinor A β T * complementaryMinor A α T := by
   rw [det_mul_cauchyBinet_powersetCard]
   refine sum_congr rfl fun T hT => ?_
   have h : T.card = m := (mem_powersetCard.mp hT).2
-  simp [complementaryMinor, colsSubmatrix, rowsSubmatrix, h, Matrix.det_transpose]
+  simp only [complementaryMinor, h, ↓reduceDIte]
+  rw [colsSubmatrix_rowDeleted, rowsSubmatrix_rowDeleted_transpose,
+    Matrix.det_transpose]
 
 lemma det_rowDeleted_eq_adjugate_minor {m n : ℕ}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (α β : Fin (m + 1)) :
-    (A.submatrix β.succAbove id * (A.submatrix α.succAbove id)ᵀ).det =
-      ((A * Aᵀ).submatrix β.succAbove α.succAbove).det := by
+    (A.submatrix β.succAbove id * ((A.submatrix α.succAbove id)ᵀ)).det =
+      ((A * (Aᵀ)).submatrix β.succAbove α.succAbove).det := by
   rw [submatrix_mul_transpose]
 
 lemma adjugate_selectedGram_apply {m n : ℕ}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (J : Finset (Fin n))
     (hJ : J.card = m + 1) (α β : Fin (m + 1)) :
-    Matrix.adjugate (colsSubmatrix A J hJ * (colsSubmatrix A J hJ)ᵀ) α β =
+    Matrix.adjugate (colsSubmatrix A J hJ * ((colsSubmatrix A J hJ)ᵀ)) α β =
       (-1) ^ (β + α : ℕ) *
         ∑ S : { s : Finset (Fin (m + 1)) // s.card = m },
           complementaryMinor A β (embedSubset J hJ S.1) *
@@ -276,9 +291,10 @@ lemma adjugate_selectedGram_apply {m n : ℕ}
 
 lemma volumeWeightedInvGrams_sum_succ_apply {m n : ℕ}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (α β : Fin (m + 1)) :
-    ∑ J ∈ (univ : Finset (Fin n)).powersetCard (m + 1),
-        volumeWeightedInvGram A J α β =
-      (n + 1 - (m + 1) : R) * Matrix.adjugate (A * Aᵀ) α β := by
+    (∑ J ∈ (univ : Finset (Fin n)).powersetCard (m + 1),
+        volumeWeightedInvGram A J) α β =
+      ((n + 1 - (m + 1) : ℕ) : R) * Matrix.adjugate (A * (Aᵀ)) α β := by
+  rw [Matrix.sum_apply]
   have hexpand :
       ∑ J ∈ (univ : Finset (Fin n)).powersetCard (m + 1),
           volumeWeightedInvGram A J α β =
@@ -292,27 +308,27 @@ lemma volumeWeightedInvGrams_sum_succ_apply {m n : ℕ}
     rw [volumeWeightedInvGram_eq A hcard, adjugate_selectedGram_apply A J hcard,
       sum_local_minors A J hcard]
   rw [hexpand, sum_nested_minors, sum_extensions_const, ← mul_sum,
-    ← det_rowDeleted_cauchyBinet, det_rowDeleted_eq_adjugate_minor,
-    ← Matrix.adjugate_fin_succ_eq_det_submatrix]
+    ← det_rowDeleted_cauchyBinet, det_rowDeleted_eq_adjugate_minor]
+  simp only [Matrix.adjugate_fin_succ_eq_det_submatrix]
   ring
 
 lemma volumeWeightedInvGrams_sum_succ {m n : ℕ}
     (A : Matrix (Fin (m + 1)) (Fin n) R) :
     ∑ J ∈ (univ : Finset (Fin n)).powersetCard (m + 1), volumeWeightedInvGram A J =
-      (n + 1 - (m + 1) : R) • (A * Aᵀ).adjugate := by
+      ((n + 1 - (m + 1) : ℕ) : R) • Matrix.adjugate (A * (Aᵀ)) := by
   ext α β
   simpa [Matrix.smul_apply] using volumeWeightedInvGrams_sum_succ_apply A α β
 
 lemma volumeWeightedInvGrams_sum_zero {n : ℕ}
     (A : Matrix (Fin 0) (Fin n) R) :
     ∑ J ∈ (univ : Finset (Fin n)).powersetCard 0, volumeWeightedInvGram A J =
-      (n + 1 - 0 : R) • (A * Aᵀ).adjugate :=
+      ((n + 1 - 0 : ℕ) : R) • Matrix.adjugate (A * (Aᵀ)) :=
   Subsingleton.elim _ _
 
 /-- Finite inverse-Gram identity, without an orthogonality hypothesis. -/
 theorem volumeWeightedInvGrams_sum {k n : ℕ} (A : Matrix (Fin k) (Fin n) R) :
     ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, volumeWeightedInvGram A J =
-      (n + 1 - k : R) • (A * Aᵀ).adjugate := by
+      ((n + 1 - k : ℕ) : R) • Matrix.adjugate (A * (Aᵀ)) := by
   cases k with
   | zero => exact volumeWeightedInvGrams_sum_zero A
   | succ m => exact volumeWeightedInvGrams_sum_succ A
@@ -321,7 +337,7 @@ theorem volumeWeightedInvGrams_sum {k n : ℕ} (A : Matrix (Fin k) (Fin n) R) :
 theorem inverseGramExpectation {k n : ℕ}
     (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
     ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, volumeWeightedInvGram A J =
-      (n + 1 - k : ℝ) • (1 : Matrix (Fin k) (Fin k) ℝ) := by
+      ((n + 1 - k : ℕ) : ℝ) • (1 : Matrix (Fin k) (Fin k) ℝ) := by
   rw [volumeWeightedInvGrams_sum, hA, Matrix.adjugate_one]
 
 end StructuredColumnSelection
