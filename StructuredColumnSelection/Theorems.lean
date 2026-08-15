@@ -1,6 +1,7 @@
 import StructuredColumnSelection.OrthogonalRows
 import StructuredColumnSelection.PrincipalColumns
 import StructuredColumnSelection.VolumeWeights
+import StructuredColumnSelection.InverseGramExpectation
 
 namespace StructuredColumnSelection
 
@@ -37,5 +38,19 @@ theorem milestoneB_cauchyBinet {k n : ℕ} {R : Type*} [CommRing R]
       ∑ S : { s : Finset (Fin n) // s.card = k },
         (colsSubmatrix A S.1 S.2).det * (rowsSubmatrix B S.1 S.2).det :=
   det_mul_cauchyBinet A B
+
+/-- Milestone C: the finite inverse-Gram identity, via adjugates. -/
+theorem milestoneC_inverse_gram_expectation {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, volumeWeightedInvGram A J =
+      (n + 1 - k : ℝ) • (1 : Matrix (Fin k) (Fin k) ℝ) :=
+  inverseGramExpectation A hA
+
+/-- Milestone C helper: the same identity without orthogonality. -/
+theorem milestoneC_adjugate_sum {k n : ℕ} {R : Type*} [CommRing R]
+    (A : Matrix (Fin k) (Fin n) R) :
+    ∑ J ∈ (univ : Finset (Fin n)).powersetCard k, volumeWeightedInvGram A J =
+      (n + 1 - k : R) • (A * Aᵀ).adjugate :=
+  volumeWeightedInvGrams_sum A
 
 end StructuredColumnSelection

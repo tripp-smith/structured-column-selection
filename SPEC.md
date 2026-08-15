@@ -696,6 +696,14 @@ Lean proves:
 
 This is the central formal milestone.
 
+Status note (Phase 3): implemented in Lean as
+`milestoneC_adjugate_sum` and
+`milestoneC_inverse_gram_expectation`.
+The formal summand is `adj(A_J A_Jᵀ)`, which equals
+`det(A_J)² (A_J A_Jᵀ)⁻¹` on invertible blocks and retains the
+correct singular contribution. Independent rational enumerations are
+in `StructuredColumnSelection/SmallInstanceChecks.lean`.
+
 ### Milestone D: randomized RRQR guarantee
 
 Lean proves the expectation and high-probability inverse-norm bounds.

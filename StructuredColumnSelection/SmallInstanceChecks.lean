@@ -1,4 +1,5 @@
 import StructuredColumnSelection.VolumeWeights
+import StructuredColumnSelection.InverseGramExpectation
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Tactic.NormNum
 
@@ -79,6 +80,51 @@ theorem frame12_volume_sum :
   rw [powersetCard_fin2, sum_insert, sum_singleton,
     volumeWeight_frame12_0, volumeWeight_frame12_1]
   · norm_num
+  · native_decide
+
+private lemma invGram_frame23_01 :
+    volumeWeightedInvGram frame23 ({0, 1} : Finset (Fin 3)) =
+      !![((9 : ℚ) / 25), 0; 0, 1] := by
+  native_decide
+
+private lemma invGram_frame23_02 :
+    volumeWeightedInvGram frame23 ({0, 2} : Finset (Fin 3)) =
+      !![((16 : ℚ) / 25), 0; 0, 1] := by
+  native_decide
+
+private lemma invGram_frame23_12 :
+    volumeWeightedInvGram frame23 ({1, 2} : Finset (Fin 3)) =
+      !![1, 0; 0, 0] := by
+  native_decide
+
+/-- Direct enumeration: the three adjugates sum to `2 • I`. -/
+theorem frame23_inverse_gram_sum :
+    ∑ J ∈ (univ : Finset (Fin 3)).powersetCard 2, volumeWeightedInvGram frame23 J =
+      (2 : ℚ) • (1 : Matrix (Fin 2) (Fin 2) ℚ) := by
+  rw [powersetCard_fin3, sum_insert, sum_insert, sum_singleton,
+    invGram_frame23_01, invGram_frame23_02, invGram_frame23_12]
+  · ext i j
+    fin_cases i <;> fin_cases j <;> native_decide
+  · native_decide
+  · native_decide
+
+private lemma invGram_frame12_0 :
+    volumeWeightedInvGram frame12 ({0} : Finset (Fin 2)) = 1 := by
+  native_decide
+
+private lemma invGram_frame12_1 :
+    volumeWeightedInvGram frame12 ({1} : Finset (Fin 2)) = 1 := by
+  native_decide
+
+theorem frame12_inverse_gram_sum :
+    ∑ J ∈ (univ : Finset (Fin 2)).powersetCard 1, volumeWeightedInvGram frame12 J =
+      (2 : ℚ) • (1 : Matrix (Fin 1) (Fin 1) ℚ) := by
+  rw [powersetCard_fin2, sum_insert, sum_singleton,
+    invGram_frame12_0, invGram_frame12_1]
+  · ext i j
+    fin_cases i
+    fin_cases j
+    native_decide
   · native_decide
 
 end SmallInstance

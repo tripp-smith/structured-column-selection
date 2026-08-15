@@ -22,20 +22,32 @@ Delivery:
 | `milestoneB_cauchyBinet` | `det(AB) = ∑_{#S=k} det(A_S) det(B^S)` | `CauchyBinet.lean` | `frame23` / `frame12` enumerations |
 | `milestoneB_volume_normalization` | `AAᵀ = I ⇒ ∑_{#J=k} det(A_J)² = 1` | `VolumeWeights.lean` | same, plus Python `tests/test_volume_normalization.py` |
 
+## Thread 3 — Milestone C (completed)
+
+Delivery:
+
+| Name | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `milestoneC_adjugate_sum` | `∑_{#J=k} adj(A_J A_Jᵀ) = (n+1-k) adj(AAᵀ)` | `InverseGramExpectation.lean` | `frame23_inverse_gram_sum` |
+| `milestoneC_inverse_gram_expectation` | `AAᵀ = I ⇒ ∑ adj(A_J A_Jᵀ) = (n+1-k) I` | `InverseGramExpectation.lean` | same, plus `tests/test_inverse_gram.py` |
+
+The boxed SPEC formula is formalized with adjugates. That matches
+`det² • inverse` on invertible column sets and keeps the singular
+summands.
+
 Non-claims (intentional):
 
-- no inverse-Gram expectation
 - no high-probability RRQR bound
 - no CPQR statement
 - no claim that Problem 4.1 is solved
+- Python is a witness, not a source of truth
 
-## Thread 3 — Milestone C (open)
+## Thread 4 — Milestone D (open)
 
 Target:
 
-- finite matrix identity
-  `∑_{|J|=k} det(A_J)² (A_J A_Jᵀ)⁻¹ = (n-k+1) I`
+- `E ‖A_J⁻¹‖_F² = k(n-k+1)` as a thin wrapper around Milestone C
+- Markov high-probability bound
+  `Pr[ ‖A_J⁻¹‖_2 ≤ √(k(n-k+1)/δ) ] ≥ 1-δ`
 
-This remains the central formal milestone. Keep the argument algebraic
-(adjugates, complementary minors) before introducing probability
-abstractions.
+Keep the probability layer finite (weighted sums over `Finset (Fin n)`).
