@@ -32,6 +32,9 @@ Phases completed:
   - `milestoneE_cpqr_card_le`
   - `milestoneE_cpqr_card_eq`
   - `milestoneE_k1_volume_ge` (`k = 1` only; workshop scale, not general `k`)
+  - `milestoneE_residual_energy`
+  - `milestoneE_next_residual_ge`
+  - `milestoneE_cpqr_volume_ge_binomial` (exponential / not polynomial)
 - Milestone E §8 census (witnesses only): `structselect/census.py`
 
 Not yet claimed:
@@ -64,8 +67,11 @@ drop.
   volume-weighted inverse-Frobenius energy and a finite Markov tail.
 - `StructuredColumnSelection/ColumnPivotedQR.lean`:
   greedy CPQR residuals, pivots, and selected sets.
+- `StructuredColumnSelection/ResidualEnergy.lean`:
+  Gram-projector residual energy and the next-residual average.
 - `StructuredColumnSelection/CPQRVolume.lean`:
-  first-pivot leverage lower bound and the `k = 1` volume bound.
+  first-pivot leverage, the `k = 1` volume bound, and the binomial
+  volume lower bound (exponential, not polynomial).
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
   exact rational enumerations used as independent witnesses.
 - `StructuredColumnSelection/Theorems.lean`:

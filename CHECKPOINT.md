@@ -27,6 +27,8 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone D | **PROVED** | `milestoneD_expected_inv_frob_sq`, `milestoneD_markov_inv_frob` |
 | Milestone E structural CPQR | **PROVED** (not a bound) | `milestoneE_leverage_sum`, `milestoneE_first_pivot_is_max`, `milestoneE_first_leverage_ge`, `milestoneE_cpqr_card_eq` |
 | Milestone E, `k = 1` volume | **PROVED** (special case) | `milestoneE_k1_volume_ge` |
+| Milestone E residual energy | **PROVED** (not a bound) | `milestoneE_residual_energy`, `milestoneE_next_residual_ge` |
+| Milestone E binomial volume | **PROVED** (exponential / not polynomial) | `milestoneE_cpqr_volume_ge_binomial` |
 | Milestone E §8 census | **NUMERICALLY OBSERVED** | `structselect/census.py`, `experiments/census_seed0.json` |
 | Milestone E characterization | **OPEN** | still needs one of the three SPEC §16 outcomes |
 | Milestone F CSSP bridge | **UNTOUCHED** | do not start unless E is closed or the user asks |
@@ -45,7 +47,10 @@ first leverage 1 ≥ 2/3
 
 frame12 = [[3/5, 4/5]]
 CPQR selects {1}
-volumeWeight = 16/25 ≥ 1/2
+volumeWeight = 16/25 ≥ 1/2 = 1/C(2,1)
+
+frame23 after {0}: residuals 0 + 9/25 + 16/25 = 1
+volumeWeight({0,2}) = 16/25 ≥ 1/3 = 1/C(3,2)
 ```
 
 ---
@@ -202,7 +207,7 @@ already exceeds every polynomial the project named (SPEC §9).
 
 Do not treat “every sample had `r < 1`” as evidence of a theorem.
 
-### 3.5 Residual-energy / binomial-volume attempt (stalled)
+### 3.5 Residual energy and binomial volume (proved, not polynomial)
 
 The natural next identity is
 
@@ -231,30 +236,23 @@ not polynomial in `n` and `k` jointly.** `C(2k,k) ∼ 4^k / √(πk)`.
 For `k = 1` it recovers `√n` (already proved). For `k = 2` it only
 gives `r ≤ √n / 2`, which is loose compared with the census.
 
-The Lean attempt lived briefly in `CPQRVolume.lean` (Schur complement
-of `appendColumn` Gram via `Matrix.fromBlocks` + `finSumFinEquiv`).
-It stalled on mathlib Matrix notation:
+Shipped in `ResidualEnergy.lean` and `CPQRVolume.lean`. Public names:
+`milestoneE_residual_energy`, `milestoneE_next_residual_ge`,
+`milestoneE_cpqr_volume_ge_binomial`.
 
-- `open Matrix` makes `M i j` fail; `open scoped Matrix` is required;
-- `rw [Matrix.mul_apply]` on a transpose product becomes
-  “function expected `(appendColumn B v)ᵀ p.castSucc`”;
-- `⬝ᵥ` / `*ᵥ` / `ᵥ*` precedence silently reassociates
-  `v ⬝ᵥ G⁻¹ *ᵥ x` as `(v ⬝ᵥ G⁻¹) *ᵥ x`;
-- `Write` of `ᵀ` / `⬝ᵥ` near other glyphs corrupted source.
+The Schur / `fromBlocks` path compiled after:
 
-The `k = 1` theorems were extracted and shipped without Schur. The
-residual-energy identity is still the right next formal lemma. When
-retrying:
+- `open scoped Matrix`, never `open Matrix`, if writing `M i j`;
+- no `rw` on an `M i j` goal; use `Matrix.ext` / `simp only` / `rfl`;
+- parenthesize every `⬝ᵥ` / `*ᵥ`;
+- give `fromBlocks` blocks explicit `Matrix _ _ ℝ` ascriptions;
+- name `⅟G` as a local `Ginv` matrix before writing entries;
+- relate `appendColumn` to `selectedCols (insert j J)` by an
+  enumeration equivalence (`appendEnum` / `appendToInsertEquiv`),
+  then `det_submatrix_equiv_self`.
 
-1. prove `∑_j a_j ⬝ᵥ (M *ᵥ a_j) = (M * A * Aᵀ).trace` with
-   `Matrix.ext_iff` / `simp [mul_apply, transpose_apply]`, never
-   `rw` on `M i j`;
-2. parenthesize every `⬝ᵥ` / `*ᵥ`;
-3. give `fromBlocks` blocks explicit `Matrix _ _ ℝ` ascriptions;
-4. mark `selectedProjector` `noncomputable`;
-5. compile after each lemma.
-
-Even after it lands, **do not announce a polynomial CPQR theorem.**
+**Do not announce a polynomial CPQR theorem.** The binomial bound is
+the non-polynomial theorem named in Path 1 step 4.
 
 ### 3.6 Literature lead (not a claim)
 
@@ -282,11 +280,11 @@ axioms.
 
 Promising formal steps, in order:
 
-1. Residual energy `∑ residual = k − #J` on independent `J`.
-2. Each CPQR pivot residual `≥ (k−t)/(n−t)`.
-3. Product of residuals `= volumeWeight A (cpqrSet A)`.
-4. That gives the binomial bound (exponential; ship it as a
-   **non-polynomial** theorem with an explicit non-claim).
+1. Residual energy `∑ residual = k − #J` on independent `J`. **Done.**
+2. Each CPQR pivot residual `≥ (k−t)/(n−t)`. **Done.**
+3. Product of residuals `= volumeWeight A (cpqrSet A)`. **Done.**
+4. Binomial bound (exponential; shipped as a **non-polynomial**
+   theorem with an explicit non-claim). **Done.**
 5. Improve the analysis: `σ_min ≥ |det| / σ_max^{k−1}` is the
    pessimistic step. A polynomial bound needs to stop one singular
    value from eating the whole volume, or show residuals cannot
@@ -414,22 +412,23 @@ Do not weaken theorems to make any of this easier.
 
 Work the first item that is still open. Do not start F.
 
-1. **Residual energy in Lean** (`∑ residual = k − #J` on independent
-   `J`), then the binomial volume lower bound, labelled as
-   exponential / not outcome 1. This is the highest-leverage formal
-   step that does not require a new idea.
-2. **Deeper census, still Python.** Mercedes-Benz / ETFs; clustered
+1. **Deeper census, still Python.** Mercedes-Benz / ETFs; clustered
    near-parallels that survive orthonormalization; larger `k` only
    as a growth probe. Tests must not assert a universal bound. If
    `r_CPQR > 1` appears on a rational matrix, switch to SPEC §9
    immediately and only then add a Lean witness.
+2. **Improve the binomial analysis** toward a polynomial bound, or
+   find a certified superpolynomial family. The volume product is
+   now available; the remaining gap is controlling how unbalanced
+   the singular values of `A_J` can be.
 3. **`AxiomAudit.lean` + GitHub Actions** reusing `scripts/verify.sh`.
    Cheap, matches playbook Phases 6–7, and prevents silent axiom
    drift.
 4. **`CONTRIBUTING.md`** with the search-first proof workflow
    (playbook Phases 3, 4, 14). Do not create `AGENTS.md`.
 5. **leanblueprint** (playbook Phase 2) once public theorem names
-   are stable. Nodes: A–D, E structural, E `k=1`, E open, F open.
+   are stable. Nodes: A–D, E structural, E `k=1`, E residual /
+   binomial, E open, F open.
 6. **Only if a counterexample exists:** isolate the weakest static
    extra hypothesis (leverage ratio / coherence) and prove a poly
    bound on that class.
@@ -444,7 +443,8 @@ Work the first item that is still open. Do not start F.
 | `SPEC.md` | mathematical contract; edit status notes only |
 | `Theorems.lean` | public names only |
 | `ColumnPivotedQR.lean` | CPQR definition and structural proofs |
-| `CPQRVolume.lean` | first leverage and `k = 1` volume |
+| `ResidualEnergy.lean` | residual energy and next-residual average |
+| `CPQRVolume.lean` | first leverage, `k = 1` volume, binomial volume |
 | `SmallInstanceChecks.lean` | exact `ℚ` witnesses, `native_decide` allowed |
 | `structselect/census.py` | §8 generators; witnesses, not theorems |
 | `experiments/census_seed0.json` | recorded seed-0 sweep |
@@ -461,10 +461,12 @@ Work the first item that is still open. Do not start F.
 Merged before this document: PRs #1–#5 (Milestones A–D and the
 first E discovery commit on `main`).
 
-Open at writing: PR #6
-`cursor/phase-e-cpqr-cadence-e353` — structural E, §8 census,
-`k = 1` volume, agent skills. Intended to land on `main` together
-with this file.
+Merged before this residual-energy phase: PRs #1–#6 (Milestones A–D,
+structural E, §8 census, `k = 1` volume).
+
+This phase: `cursor/phase-e-residual-energy-e353` — residual energy,
+next-residual average, binomial volume (exponential / not
+polynomial). Milestone E remains open.
 
 Branch rule: `cursor/<descriptive-name>-e353`. Draft PR before
 official `scripts/verify.sh`; update the PR after any fix.

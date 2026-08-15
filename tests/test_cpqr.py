@@ -121,6 +121,28 @@ def test_frame23_second_residuals() -> None:
     assert residual_sq(A, [0], 2) == Fraction(16, 25)
 
 
+def test_frame23_residual_energy_after_first_pivot() -> None:
+    """Independent check of milestoneE_residual_energy on frame23 after {0}."""
+    A = frame23()
+    residuals = [residual_sq(A, [0], j) for j in range(3)]
+    assert residuals == [0, Fraction(9, 25), Fraction(16, 25)]
+    assert sum(residuals) == 1
+
+
+def test_frame23_binomial_volume_at_least_one_over_choose() -> None:
+    """Independent check of milestoneE_cpqr_volume_ge_binomial on frame23.
+
+    16/25 ≥ 1/C(3,2) = 1/3. This is not a polynomial bound.
+    """
+    A = frame23()
+    J = cpqr_set(A)
+    assert J == [0, 2]
+    vol = A[0][0] * A[1][2] - A[0][2] * A[1][0]
+    vol = vol ** 2
+    assert vol == Fraction(16, 25)
+    assert vol >= Fraction(1, 3)
+
+
 def _inv_op_2row(A) -> Fraction:
     J = cpqr_set(A)
     AJ = [[A[0][J[0]], A[0][J[1]]], [A[1][J[0]], A[1][J[1]]]]

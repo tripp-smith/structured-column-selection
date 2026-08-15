@@ -4,6 +4,7 @@ import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
 import StructuredColumnSelection.InverseNormBounds
 import StructuredColumnSelection.ColumnPivotedQR
+import StructuredColumnSelection.ResidualEnergy
 import StructuredColumnSelection.CPQRVolume
 
 namespace StructuredColumnSelection
@@ -123,5 +124,32 @@ theorem milestoneE_k1_volume_ge {n : ℕ}
     (A : Matrix (Fin 1) (Fin n) ℝ) (hA : OrthogonalRows A) :
     (n : ℝ)⁻¹ ≤ volumeWeight A (cpqrSet A) :=
   cpqr_k1_volume_ge A hA
+
+/-- Residual energy on an independent column set.
+
+This is a Gram-projector identity, not a CPQR inverse-norm bound. -/
+theorem milestoneE_residual_energy {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (J : Finset (Fin n)) (hG : (selectedColGram A J).det ≠ 0) :
+    ∑ j : Fin n, residualSq A J j = (k : ℝ) - (J.card : ℝ) :=
+  residualEnergy A hA J hG
+
+/-- The next unused residual is at least the complementary-rank average. -/
+theorem milestoneE_next_residual_ge {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (J : Finset (Fin n)) (hG : (selectedColGram A J).det ≠ 0)
+    (hcard : J.card < n) :
+    ((k : ℝ) - (J.card : ℝ)) / ((n : ℝ) - (J.card : ℝ)) ≤
+      maxResidual A J :=
+  nextResidual_ge A hA J hG hcard
+
+/-- CPQR volume is at least `1 / C(n,k)`.
+
+This is exponential in `k` when `n ≈ 2k` and is not a polynomial
+inverse-norm bound. It does not close Milestone E. -/
+theorem milestoneE_cpqr_volume_ge_binomial {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    (n.choose k : ℝ)⁻¹ ≤ volumeWeight A (cpqrSet A) :=
+  cpqr_volume_ge_binomial A hA
 
 end StructuredColumnSelection

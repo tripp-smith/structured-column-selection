@@ -727,16 +727,21 @@ One of the following must be delivered:
 2. an explicit machine-checked counterexample;
 3. a counterexample plus a meaningful stronger structural class with a polynomial CPQR theorem.
 
-Status note (Phase 5 structural CPQR + §8 census + `k=1` volume):
-the greedy algorithm is defined in `ColumnPivotedQR.lean` as
-`cpqrSet`, with public names `milestoneE_residual_empty`,
-`milestoneE_leverage_sum`, `milestoneE_first_pivot_is_max`,
-`milestoneE_first_leverage_ge`, `milestoneE_cpqr_card_le`,
-`milestoneE_cpqr_card_eq`, and `milestoneE_k1_volume_ge`.
-Orthogonal-row CPQR returns exactly `k` columns. A first pivot has
-leverage at least `k/n`. For `k=1` the selected volume is at least
-`n⁻¹` (workshop scale). The running `2×3` pivot set is
-`frame23_cpqr_set`. The Section 8 numerical census lives in
+Status note (Phase 5 structural CPQR + §8 census + residual energy +
+binomial volume): the greedy algorithm is defined in
+`ColumnPivotedQR.lean` as `cpqrSet`, with public names
+`milestoneE_residual_empty`, `milestoneE_leverage_sum`,
+`milestoneE_first_pivot_is_max`, `milestoneE_first_leverage_ge`,
+`milestoneE_cpqr_card_le`, `milestoneE_cpqr_card_eq`,
+`milestoneE_k1_volume_ge`, `milestoneE_residual_energy`,
+`milestoneE_next_residual_ge`, and
+`milestoneE_cpqr_volume_ge_binomial`. Orthogonal-row CPQR returns
+exactly `k` columns. A first pivot has leverage at least `k/n`. For
+`k=1` the selected volume is at least `n⁻¹` (workshop scale).
+Independent residuals sum to `k-#J`, and the CPQR volume is at least
+`1/C(n,k)`. That binomial factor is exponential in `k` when `n ≈ 2k`
+and is not a polynomial inverse-norm bound. The running `2×3` pivot
+set is `frame23_cpqr_set`. The Section 8 numerical census lives in
 `structselect/census.py` and `experiments/census_seed0.json`. None of
 the three characterization outcomes for general `k` is claimed.
 

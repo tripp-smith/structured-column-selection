@@ -81,8 +81,13 @@ algorithm cannot stop early: it returns exactly `k` columns.
 
 For `k = 1` the first-pivot average is already the selected volume:
 `volumeWeight A (cpqrSet A) ≥ n⁻¹`. The corresponding 1×1 inverse
-magnitude is at most `√n`, matching the workshop scale. This is not a
-polynomial inverse-norm bound for general `k`.
+magnitude is at most `√n`, matching the workshop scale.
+
+Independent residuals after a full-rank set `J` sum to `k - #J`. The
+next unused residual is therefore at least `(k-#J)/(n-#J)`, and the
+product of CPQR pivot residuals gives
+`volumeWeight A (cpqrSet A) ≥ 1 / C(n,k)`. That factor is exponential
+in `k` when `n ≈ 2k` and is not a polynomial inverse-norm bound.
 
 On the running `2×3` frame it selects `{0,2}`, with
 
@@ -106,8 +111,9 @@ including the empty-sum case `n < k → det(AB) = 0`.
 
 Milestone E still requires one of: a polynomial CPQR theorem for
 general `k`, a machine-checked counterexample, or a counterexample
-plus a stronger static class. The `k = 1` volume bound is a genuine
-special case and does not close E. Milestone F (CSSP bridge) is
-untouched. This repository does not claim to have solved all of
-Problem 4.1. See `CHECKPOINT.md` for the reasoning log and the
-next-work queue.
+plus a stronger static class. Residual energy and the binomial volume
+bound are proved; they are exponential and do not close E. The `k = 1`
+volume bound is a genuine special case and also does not close E.
+Milestone F (CSSP bridge) is untouched. This repository does not claim
+to have solved all of Problem 4.1. See `CHECKPOINT.md` for the
+reasoning log and the next-work queue.

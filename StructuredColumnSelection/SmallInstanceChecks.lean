@@ -180,5 +180,27 @@ theorem frame12_k1_volume :
     volumeWeight frame12 (cpqrSet frame12) = (16 : ℚ) / 25 := by
   rw [frame12_cpqr_set, volumeWeight_frame12_1]
 
+/-- After `{0}`, residuals are `0 + 9/25 + 16/25 = 1 = 2 - 1`. -/
+theorem frame23_residual_energy_after_0 :
+    ∑ j : Fin 3, residualSq frame23 ({0} : Finset (Fin 3)) j = 1 := by
+  native_decide
+
+/-- After `{0}`, the unused max residual is `16/25 ≥ 1/2`. -/
+theorem frame23_next_residual_after_0 :
+    (1 : ℚ) / 2 ≤ residualSq frame23 ({0} : Finset (Fin 3)) 2 := by
+  native_decide
+
+/-- Direct binomial comparison: `16/25 ≥ 1 / C(3,2) = 1/3`. -/
+theorem frame23_binomial_volume :
+    (1 : ℚ) / 3 ≤ volumeWeight frame23 (cpqrSet frame23) := by
+  rw [frame23_cpqr_set, volumeWeight_frame23_02]
+  native_decide
+
+/-- Direct binomial comparison: `16/25 ≥ 1 / C(2,1) = 1/2`. -/
+theorem frame12_binomial_volume :
+    (1 : ℚ) / 2 ≤ volumeWeight frame12 (cpqrSet frame12) := by
+  rw [frame12_k1_volume]
+  native_decide
+
 end SmallInstance
 end StructuredColumnSelection

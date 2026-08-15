@@ -54,11 +54,16 @@ determinants and matrix rank:
 - `firstLeverage_ge`
 - `cpqrSet_card_eq`
 - `cpqr_k1_volume_ge`
+- `residualEnergy`
+- `nextResidual_ge`
+- `cpqr_volume_ge_binomial`
 - residual nonnegativity and unused-column span control
 
-These use mathlib `Matrix.rank`, `rank_transpose_mul_self`, and
-`rank_of_det_ne_zero`. The `k=1` volume bound is a determinant
-comparison, not a spectral-norm argument.
+These use mathlib `Matrix.rank`, `rank_transpose_mul_self`,
+`rank_of_det_ne_zero`, `det_fromBlocks₁₁`, and `det_submatrix_equiv_self`.
+The `k=1` volume bound is a determinant comparison, not a
+spectral-norm argument. The binomial volume bound is a product of
+Gram-determinant ratios and is not polynomial in `n` and `k`.
 
 The §8 census is Python-only and is not a mathlib candidate.
 

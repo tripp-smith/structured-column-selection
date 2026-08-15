@@ -6,6 +6,7 @@ import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
 import StructuredColumnSelection.InverseNormBounds
 import StructuredColumnSelection.ColumnPivotedQR
+import StructuredColumnSelection.ResidualEnergy
 import StructuredColumnSelection.CPQRVolume
 import StructuredColumnSelection.SmallInstanceChecks
 import StructuredColumnSelection.Theorems
