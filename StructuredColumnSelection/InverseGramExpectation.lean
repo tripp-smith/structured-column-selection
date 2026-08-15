@@ -245,7 +245,8 @@ lemma sum_extensions_const {m n : ℕ} (A : Matrix (Fin (m + 1)) (Fin n) R)
   have hTcard : T.card = m := (mem_powersetCard.mp hT).2
   rw [sum_const, card_extensions T hTcard, nsmul_eq_mul]
 
-lemma colsSubmatrix_rowDeleted {m n : ℕ}
+omit [CommRing R] in
+lemma colsSubmatrix_rowDeleted {m n : ℕ} {R : Type*}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (β : Fin (m + 1))
     (T : Finset (Fin n)) (h : T.card = m) :
     colsSubmatrix (A.submatrix β.succAbove id) T h =
@@ -253,7 +254,8 @@ lemma colsSubmatrix_rowDeleted {m n : ℕ}
   ext a b
   simp [colsSubmatrix, Matrix.submatrix_apply]
 
-lemma rowsSubmatrix_rowDeleted_transpose {m n : ℕ}
+omit [CommRing R] in
+lemma rowsSubmatrix_rowDeleted_transpose {m n : ℕ} {R : Type*}
     (A : Matrix (Fin (m + 1)) (Fin n) R) (α : Fin (m + 1))
     (T : Finset (Fin n)) (h : T.card = m) :
     rowsSubmatrix ((A.submatrix α.succAbove id)ᵀ) T h =
@@ -294,7 +296,7 @@ lemma volumeWeightedInvGrams_sum_succ_apply {m n : ℕ}
     (∑ J ∈ (univ : Finset (Fin n)).powersetCard (m + 1),
         volumeWeightedInvGram A J) α β =
       ((n + 1 - (m + 1) : ℕ) : R) * Matrix.adjugate (A * (Aᵀ)) α β := by
-  rw [Matrix.sum_apply]
+  -- Avoid `rw` on `M i j` goals: `Matrix` does not unfold at implicit transparency.
   have hexpand :
       ∑ J ∈ (univ : Finset (Fin n)).powersetCard (m + 1),
           volumeWeightedInvGram A J α β =
@@ -302,15 +304,23 @@ lemma volumeWeightedInvGrams_sum_succ_apply {m n : ℕ}
           ∑ J ∈ (univ : Finset (Fin n)).powersetCard (m + 1),
             ∑ T ∈ J.powersetCard m,
               complementaryMinor A β T * complementaryMinor A α T := by
-    rw [← mul_sum]
-    refine sum_congr rfl fun J hJ => ?_
+    refine (sum_congr rfl fun J hJ => ?_).trans (mul_sum _ _ _).symm
     have hcard : J.card = m + 1 := (mem_powersetCard.mp hJ).2
-    rw [volumeWeightedInvGram_eq A hcard, adjugate_selectedGram_apply A J hcard,
-      sum_local_minors A J hcard]
-  rw [hexpand, sum_nested_minors, sum_extensions_const, ← mul_sum,
-    ← det_rowDeleted_cauchyBinet, det_rowDeleted_eq_adjugate_minor]
-  simp only [Matrix.adjugate_fin_succ_eq_det_submatrix]
-  ring
+    exact
+      ((Matrix.ext_iff.mpr (volumeWeightedInvGram_eq A hcard) α β).trans
+        (adjugate_selectedGram_apply A J hcard α β)).trans
+        (by rw [sum_local_minors A J hcard])
+  have hrest :
+      (-1) ^ (β + α : ℕ) *
+          ∑ J ∈ (univ : Finset (Fin n)).powersetCard (m + 1),
+            ∑ T ∈ J.powersetCard m,
+              complementaryMinor A β T * complementaryMinor A α T =
+        ((n + 1 - (m + 1) : ℕ) : R) * Matrix.adjugate (A * (Aᵀ)) α β := by
+    rw [sum_nested_minors, sum_extensions_const, ← mul_sum,
+      ← det_rowDeleted_cauchyBinet, det_rowDeleted_eq_adjugate_minor]
+    simp only [Matrix.adjugate_fin_succ_eq_det_submatrix]
+    ring
+  exact (Matrix.sum_apply α β _ (volumeWeightedInvGram A)).trans (hexpand.trans hrest)
 
 lemma volumeWeightedInvGrams_sum_succ {m n : ℕ}
     (A : Matrix (Fin (m + 1)) (Fin n) R) :
