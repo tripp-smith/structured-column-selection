@@ -4,7 +4,6 @@ import StructuredColumnSelection.VolumeWeights
 import StructuredColumnSelection.InverseGramExpectation
 import StructuredColumnSelection.InverseNormBounds
 import StructuredColumnSelection.ColumnPivotedQR
-import StructuredColumnSelection.SmallInstanceChecks
 
 namespace StructuredColumnSelection
 
@@ -87,10 +86,5 @@ theorem milestoneE_cpqr_card_le {k n : ℕ} {R : Type*}
     (A : Matrix (Fin k) (Fin n) R) :
     (cpqrSet A).card ≤ k :=
   cpqrSet_card_le A
-
-/-- Milestone E witness: CPQR on the running `2×3` frame selects `{0,2}`. -/
-theorem milestoneE_cpqr_frame23 :
-    cpqrSet SmallInstance.frame23 = ({0, 2} : Finset (Fin 3)) :=
-  SmallInstance.frame23_cpqr_set
 
 end StructuredColumnSelection

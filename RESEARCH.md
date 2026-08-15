@@ -72,7 +72,8 @@ Delivery so far:
 | --- | --- | --- | --- |
 | `milestoneE_residual_empty` | empty residual is column energy `∑_i A_{ij}²` | `ColumnPivotedQR.lean` | `tests/test_cpqr.py` leverages |
 | `milestoneE_cpqr_card_le` | `#(cpqrSet A) ≤ k` | `ColumnPivotedQR.lean` | frame23 / frame12 cardinalities |
-| `milestoneE_cpqr_frame23` | CPQR on the `2×3` frame is `{0,2}` | `SmallInstanceChecks.lean` | same, plus `r_CPQR = 5/8` |
+
+Independent computational witness: `frame23_cpqr_set` selects `{0,2}` with `r_CPQR = 5/8`.
 
 Non-claims (intentional):
 

@@ -27,7 +27,6 @@ Phases completed:
 - Milestone E discovery layer (CPQR algorithm, not a bound)
   - `milestoneE_residual_empty`
   - `milestoneE_cpqr_card_le`
-  - `milestoneE_cpqr_frame23`
 
 Not yet claimed:
 

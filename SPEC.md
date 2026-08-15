@@ -729,8 +729,9 @@ One of the following must be delivered:
 
 Status note (Phase 5 discovery): the greedy algorithm is defined in
 `ColumnPivotedQR.lean` as `cpqrSet`, with public names
-`milestoneE_residual_empty`, `milestoneE_cpqr_card_le`, and
-`milestoneE_cpqr_frame23`. This is the Section 8 census foundation,
+`milestoneE_residual_empty` and `milestoneE_cpqr_card_le`.
+The running `2×3` pivot set is the computational witness
+`frame23_cpqr_set`. This is the Section 8 census foundation,
 not one of the three characterization outcomes.
 
 ### Milestone F: CSSP perturbation bridge

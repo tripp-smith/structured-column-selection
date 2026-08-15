@@ -41,30 +41,25 @@ def selectedColGram {k n : ℕ} (A : Matrix (Fin k) (Fin n) R)
     (J : Finset (Fin n)) : Matrix (Fin J.card) (Fin J.card) R :=
   (selectedCols A J)ᵀ * selectedCols A J
 
-/-- Squared residual of column `j` after projecting off `span(A_J)`. -/
+/-- Squared residual of column `j` after projecting off `span(A_J)`.
+The empty-set case is column energy, avoiding `Fin #∅` versus `Fin 0`. -/
 def residualSq {k n : ℕ} (A : Matrix (Fin k) (Fin n) R)
     (J : Finset (Fin n)) (j : Fin n) : R :=
-  let Gdet := (selectedColGram A J).det
-  if Gdet = 0 then
-    0
+  if _h : J.card = 0 then
+    ∑ i, A i j ^ 2
   else
-    let B' := appendColumn (selectedCols A J) (fun i => A i j)
-    ((B'ᵀ) * B').det / Gdet
+    let Gdet := (selectedColGram A J).det
+    if Gdet = 0 then
+      0
+    else
+      let B' := appendColumn (selectedCols A J) (fun i => A i j)
+      ((B'ᵀ) * B').det / Gdet
 
+omit [LinearOrder R] [DecidableLE R] in
 lemma residualSq_empty {k n : ℕ} (A : Matrix (Fin k) (Fin n) R)
     (j : Fin n) :
-    residualSq A ∅ j = ∑ i, A i j ^ 2 := by
-  have hdet : (selectedColGram (R := R) A ∅).det = 1 :=
-    Matrix.det_fin_zero
-  simp [residualSq, hdet]
-  have hB' :
-      appendColumn (selectedCols (R := R) A ∅) (fun i => A i j) =
-        fun i (_ : Fin 1) => A i j := by
-    ext i b
-    have : ¬(b : ℕ) < 0 := Nat.not_lt_zero _
-    simp [appendColumn, this]
-  rw [hB', Matrix.det_fin_one]
-  simp [Matrix.mul_apply, Matrix.transpose_apply, pow_two]
+    residualSq A ∅ j = ∑ i, A i j ^ 2 :=
+  dif_pos card_empty
 
 /-- Unused column indices. -/
 def unused {n : ℕ} (J : Finset (Fin n)) : Finset (Fin n) :=
@@ -86,17 +81,16 @@ def cpqrPivot {k n : ℕ} (A : Matrix (Fin k) (Fin n) R)
     residualSq A J j = maxResidual A J ∧ 0 < residualSq A J j
   if h : s.Nonempty then some (s.min' h) else none
 
-lemma cpqrPivot_not_mem {k n : ℕ} {A : Matrix (Fin k) (Fin n) R)
+omit [DecidableLE R] in
+lemma cpqrPivot_not_mem {k n : ℕ} {A : Matrix (Fin k) (Fin n) R}
     {J : Finset (Fin n)} {j : Fin n} (hj : cpqrPivot A J = some j) :
     j ∉ J := by
-  unfold cpqrPivot at hj
-  set s := (unused J).filter fun j =>
-      residualSq A J j = maxResidual A J ∧ 0 < residualSq A J j
+  simp only [cpqrPivot] at hj
   split_ifs at hj with hs
-  · have hj' : j = s.min' hs := Option.some.inj hj
-    have : j ∈ unused J := (mem_filter.mp (hj' ▸ min'_mem s hs)).1
-    exact not_mem_of_mem_sdiff this
-  · cases hj
+  · injection hj with hj
+    have hmem := min'_mem _ hs
+    rw [hj] at hmem
+    exact (mem_sdiff.mp (mem_filter.mp hmem).1).2
 
 /-- CPQR after `t` greedy steps. -/
 def cpqrIterate {k n : ℕ} (A : Matrix (Fin k) (Fin n) R) : ℕ → Finset (Fin n)
@@ -106,6 +100,7 @@ def cpqrIterate {k n : ℕ} (A : Matrix (Fin k) (Fin n) R) : ℕ → Finset (Fin
     | some j => insert j (cpqrIterate A t)
     | none => cpqrIterate A t
 
+omit [DecidableLE R] in
 lemma cpqrIterate_card_le {k n : ℕ} (A : Matrix (Fin k) (Fin n) R) (t : ℕ) :
     (cpqrIterate A t).card ≤ t := by
   induction t with
@@ -116,13 +111,14 @@ lemma cpqrIterate_card_le {k n : ℕ} (A : Matrix (Fin k) (Fin n) R) (t : ℕ) :
     | none => exact ih.trans (Nat.le_succ _)
     | some j =>
       have hj : j ∉ cpqrIterate A t := cpqrPivot_not_mem h
-      rw [card_insert_of_not_mem hj]
+      rw [card_insert_of_notMem hj]
       exact Nat.succ_le_succ ih
 
 /-- Size-`k` CPQR column set (at most `k` columns). -/
 def cpqrSet {k n : ℕ} (A : Matrix (Fin k) (Fin n) R) : Finset (Fin n) :=
   cpqrIterate A k
 
+omit [DecidableLE R] in
 theorem cpqrSet_card_le {k n : ℕ} (A : Matrix (Fin k) (Fin n) R) :
     (cpqrSet A).card ≤ k :=
   cpqrIterate_card_le A k
