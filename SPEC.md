@@ -792,6 +792,8 @@ FINDINGS.md
 RESEARCH.md
 APPLICATION.md
 MATHLIB.md
+CHECKPOINT.md
+autonomous-implementation.md
 ```
 
 `README.md` should lead with the theorem status, not the research ambition.
@@ -803,6 +805,10 @@ MATHLIB.md
 `APPLICATION.md` should document the Python selector and explicitly distinguish rigorous guarantees from heuristics.
 
 `MATHLIB.md` should identify reusable determinant, volume-sampling and finite-expectation lemmas that could plausibly move upstream.
+
+Status note: `CHECKPOINT.md` is the dated reasoning log and next-work
+queue. `autonomous-implementation.md` is the engineering playbook.
+Neither is a theorem.
 
 ## 19. Claim discipline
 

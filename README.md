@@ -89,3 +89,7 @@ Phase execution cadence is defined in:
 
 It covers specify → implement → verify → document → ship, with explicit
 claim discipline. Verify with `bash scripts/verify.sh`.
+
+A detailed reasoning log, failed attempts, and the next-work queue
+live in `CHECKPOINT.md`. The engineering playbook is
+`autonomous-implementation.md`.

@@ -102,6 +102,9 @@ the exhaustive optimum and still below the workshop scale.
 This is **not** a polynomial CPQR theorem and **not** a
 machine-checked counterexample. Milestone E remains open.
 
+The dated reasoning log, stalled residual-energy attempt, census
+labels, and ordered next-work queue are in `CHECKPOINT.md`.
+
 Non-claims (intentional):
 
 - no polynomial CPQR inverse-norm bound for general `k`

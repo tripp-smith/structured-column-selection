@@ -109,4 +109,5 @@ general `k`, a machine-checked counterexample, or a counterexample
 plus a stronger static class. The `k = 1` volume bound is a genuine
 special case and does not close E. Milestone F (CSSP bridge) is
 untouched. This repository does not claim to have solved all of
-Problem 4.1.
+Problem 4.1. See `CHECKPOINT.md` for the reasoning log and the
+next-work queue.
