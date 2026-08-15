@@ -24,9 +24,12 @@ Phases completed:
   - `milestoneD_expected_inv_frob_sq`
   - `milestoneD_markov_inv_frob`
 
-- Milestone E discovery layer (CPQR algorithm, not a bound)
+- Milestone E structural CPQR layer (algorithm and full-rank card, not a bound)
   - `milestoneE_residual_empty`
+  - `milestoneE_leverage_sum`
+  - `milestoneE_first_pivot_is_max`
   - `milestoneE_cpqr_card_le`
+  - `milestoneE_cpqr_card_eq`
 
 Not yet claimed:
 

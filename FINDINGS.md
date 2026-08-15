@@ -70,18 +70,24 @@ measure-theoretic random variable.
 Independent check: the `2×3` traces are `34/25`, `41/25` and `1`,
 summing to `4 = 2·(3-2+1)`.
 
-## Phase 5 (Milestone E discovery) delivered
+## Phase 5 (Milestone E structural CPQR) delivered
 
 Ordinary CPQR is defined by repeatedly inserting the unused column of
 largest Gram-determinant residual, breaking ties by the smallest
-index. The algorithm returns at most `k` columns. On the running
-`2×3` frame it selects `{0,2}`, with
+index. Empty residuals are leverage scores and sum to `k` when
+`A Aᵀ = I`. A first pivot maximises that empty residual. On an
+orthogonal-row matrix the algorithm cannot stop early: it returns
+exactly `k` columns.
+
+On the running `2×3` frame it selects `{0,2}`, with
 
 ```text
 ‖A_J⁻¹‖₂ = 5/4,    √(k(n-k+1)) = 2,    r_CPQR = 5/8.
 ```
 
-This is a certified pivot census, not a polynomial bound.
+A Python census records the same ratio on Hadamard-type, padded, and
+Haar/Stiefel frames. This is a full-rank stopping theorem plus a
+pivot census, not a polynomial inverse-norm bound.
 
 The Fin-indexed Cauchy–Binet `powersetCard` form is now also named
 `cauchyBinet`, matching

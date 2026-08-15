@@ -87,4 +87,24 @@ theorem milestoneE_cpqr_card_le {k n : ℕ} {R : Type*}
     (cpqrSet A).card ≤ k :=
   cpqrSet_card_le A
 
+/-- Milestone E: empty residuals are leverage scores and sum to `k`. -/
+theorem milestoneE_leverage_sum {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ∑ j, residualSq A ∅ j = (k : ℝ) :=
+  leverageSum A hA
+
+/-- Milestone E: a first CPQR pivot maximises empty residual. -/
+theorem milestoneE_first_pivot_is_max {k n : ℕ} {R : Type*}
+    [Field R] [DecidableEq R] [LinearOrder R] [DecidableLE R]
+    (A : Matrix (Fin k) (Fin n) R) {j : Fin n}
+    (hj : cpqrPivot A ∅ = some j) (j' : Fin n) :
+    residualSq A ∅ j' ≤ residualSq A ∅ j :=
+  firstPivot_is_max A hj j'
+
+/-- Milestone E: orthogonal-row CPQR returns exactly `k` columns. -/
+theorem milestoneE_cpqr_card_eq {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    (cpqrSet A).card = k :=
+  cpqrSet_card_eq A hA
+
 end StructuredColumnSelection

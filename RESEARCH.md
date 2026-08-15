@@ -64,16 +64,23 @@ Non-claims (intentional):
 - no claim that Problem 4.1 is solved
 - Python is a witness, not a source of truth
 
-## Thread 5 — Milestone E discovery (in progress)
+## Thread 5 — Milestone E structural CPQR (completed)
 
-Delivery so far:
+Delivery:
 
 | Name | Statement | File | Independent check |
 | --- | --- | --- | --- |
 | `milestoneE_residual_empty` | empty residual is column energy `∑_i A_{ij}²` | `ColumnPivotedQR.lean` | `tests/test_cpqr.py` leverages |
 | `milestoneE_cpqr_card_le` | `#(cpqrSet A) ≤ k` | `ColumnPivotedQR.lean` | frame23 / frame12 cardinalities |
+| `milestoneE_leverage_sum` | `AAᵀ = I ⇒ ∑_j residualSq A ∅ j = k` | `ColumnPivotedQR.lean` | frame23 energies `1 + 9/25 + 16/25 = 2` |
+| `milestoneE_first_pivot_is_max` | a first pivot maximises empty residual | `ColumnPivotedQR.lean` | frame23 first pivot is column `0` |
+| `milestoneE_cpqr_card_eq` | `AAᵀ = I ⇒ #(cpqrSet A) = k` | `ColumnPivotedQR.lean` | frame23 / frame12 cardinalities |
 
 Independent computational witness: `frame23_cpqr_set` selects `{0,2}` with `r_CPQR = 5/8`.
+
+The card identity is a full-rank stopping theorem: CPQR on an
+orthogonal-row matrix cannot halt before `k` columns. It is not a
+bound on `‖A_J⁻¹‖₂`.
 
 Non-claims (intentional):
 

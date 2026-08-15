@@ -154,5 +154,25 @@ theorem frame12_cpqr_set :
     cpqrSet frame12 = ({1} : Finset (Fin 2)) := by
   native_decide
 
+/-- Direct leverage sum: `1 + 9/25 + 16/25 = 2`. -/
+theorem frame23_leverage_sum :
+    ∑ j : Fin 3, residualSq frame23 ∅ j = 2 := by
+  native_decide
+
+/-- First pivot is the unique maximal-leverage column. -/
+theorem frame23_first_pivot :
+    cpqrPivot frame23 ∅ = some 0 := by
+  native_decide
+
+theorem frame23_cpqr_card :
+    (cpqrSet frame23).card = 2 := by
+  rw [frame23_cpqr_set]
+  native_decide
+
+theorem frame12_cpqr_card :
+    (cpqrSet frame12).card = 1 := by
+  rw [frame12_cpqr_set]
+  native_decide
+
 end SmallInstance
 end StructuredColumnSelection
