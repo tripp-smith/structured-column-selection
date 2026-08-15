@@ -12,7 +12,7 @@ image. A linear order on `Fin n` is used only to name each minor via
 
 namespace StructuredColumnSelection
 
-open Matrix Equiv Equiv.Perm Finset Function
+open Equiv Equiv.Perm Finset Function
 
 variable {R : Type*} [CommRing R]
 
@@ -36,13 +36,13 @@ theorem colsSubmatrix_eq_selectedSquare {k n : ℕ}
 theorem det_mul_eq_sum_det_submatrix_mul_prod {k n : ℕ}
     (A : Matrix (Fin k) (Fin n) R) (B : Matrix (Fin n) (Fin k) R) :
     (A * B).det = ∑ g : Fin k → Fin n, (A.submatrix id g).det * ∏ i, B (g i) i := by
-  conv_lhs => rw [det_apply']
-  simp_rw [mul_apply, prod_univ_sum, mul_sum, Fintype.piFinset_univ]
+  conv_lhs => rw [Matrix.det_apply']
+  simp_rw [Matrix.mul_apply, prod_univ_sum, mul_sum, Fintype.piFinset_univ]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun g _ => ?_
-  rw [det_apply', Finset.sum_mul]
+  rw [Matrix.det_apply', Finset.sum_mul]
   refine Finset.sum_congr rfl fun σ _ => ?_
-  simp only [submatrix_apply, id_eq, Finset.prod_mul_distrib]
+  simp only [Matrix.submatrix_apply, id_eq, Finset.prod_mul_distrib]
   ring
 
 /-- Relabelling a fixed column list `φ` by permutations reconstructs the
@@ -55,15 +55,15 @@ theorem fiberSum {k n : ℕ}
       (A.submatrix id φ).det * (B.submatrix φ id).det := by
   have hA : ∀ π : Perm (Fin k),
       (A.submatrix id fun j => φ (π j)).det =
-        (A.submatrix id φ).submatrix id π |>.det := by
+        ((A.submatrix id φ).submatrix id π).det := by
     intro π
-    congr
+    apply congrArg Matrix.det
     ext i j
-    simp [submatrix_apply]
-  simp_rw [hA, det_permute']
-  rw [det_apply' (B.submatrix φ id), Finset.mul_sum]
+    simp [Matrix.submatrix_apply]
+  simp_rw [hA, Matrix.det_permute']
+  rw [Matrix.det_apply' (B.submatrix φ id), Finset.mul_sum]
   refine Finset.sum_congr rfl fun π _ => ?_
-  simp only [submatrix_apply, id_eq]
+  simp only [Matrix.submatrix_apply, id_eq]
   ring
 
 lemma card_image_univ {k n : ℕ} {g : Fin k → Fin n} (hg : Injective g) :
@@ -119,7 +119,7 @@ theorem det_mul_cauchyBinet {k n : ℕ}
     intro g hg
     rw [not_injective_iff] at hg
     obtain ⟨a, b, hab, hne⟩ := hg
-    rw [det_zero_of_column_eq hne (fun _ => by simp [submatrix_apply, hab]),
+    rw [Matrix.det_zero_of_column_eq hne (fun _ => by simp [Matrix.submatrix_apply, hab]),
       zero_mul]
   have hfilter :
       ∑ g : Fin k → Fin n, (A.submatrix id g).det * ∏ i, B (g i) i =
@@ -181,6 +181,6 @@ theorem det_mul_cauchyBinet_powersetCard {k n : ℕ}
       (fun _ _ => mem_univ _)
       (fun _ _ => rfl)
       (fun _ _ => rfl)
-      (fun S _ => dif_pos S.2)
+      (fun S _ => by rw [dif_pos S.2])
 
 end StructuredColumnSelection

@@ -44,9 +44,11 @@ private lemma volumeWeight_frame23_12 :
 /-- Direct enumeration: `(3/5)² + (4/5)² + 0 = 1`. -/
 theorem frame23_volume_sum :
     ∑ J ∈ (univ : Finset (Fin 3)).powersetCard 2, volumeWeight frame23 J = 1 := by
-  rw [powersetCard_fin3]
-  simp [volumeWeight_frame23_01, volumeWeight_frame23_02, volumeWeight_frame23_12]
-  norm_num
+  rw [powersetCard_fin3, sum_insert, sum_insert, sum_singleton,
+    volumeWeight_frame23_01, volumeWeight_frame23_02, volumeWeight_frame23_12]
+  · norm_num
+  · native_decide
+  · native_decide
 
 /-- A `1×2` Parseval frame. -/
 def frame12 : Matrix (Fin 1) (Fin 2) ℚ :=
@@ -55,7 +57,9 @@ def frame12 : Matrix (Fin 1) (Fin 2) ℚ :=
 theorem frame12_mul_transpose :
     frame12 * frame12ᵀ = 1 := by
   ext i j
-  fin_cases i <;> fin_cases j <;> native_decide
+  fin_cases i
+  fin_cases j
+  native_decide
 
 private lemma powersetCard_fin2 :
     (univ : Finset (Fin 2)).powersetCard 1 =
@@ -72,9 +76,10 @@ private lemma volumeWeight_frame12_1 :
 
 theorem frame12_volume_sum :
     ∑ J ∈ (univ : Finset (Fin 2)).powersetCard 1, volumeWeight frame12 J = 1 := by
-  rw [powersetCard_fin2]
-  simp [volumeWeight_frame12_0, volumeWeight_frame12_1]
-  norm_num
+  rw [powersetCard_fin2, sum_insert, sum_singleton,
+    volumeWeight_frame12_0, volumeWeight_frame12_1]
+  · norm_num
+  · native_decide
 
 end SmallInstance
 end StructuredColumnSelection
