@@ -663,6 +663,11 @@ Q^TQ=I
 
 under the transpose correspondence, plus the needed identities for selected columns, Gram matrices and determinants.
 
+Status note (Phase 1): implemented in Lean as
+`milestoneA_transpose_correspondence`,
+`milestoneA_selectedSquare_entry`, and
+`milestoneA_selectedGram_formula`.
+
 ### Milestone B: volume normalization
 
 Lean proves:
