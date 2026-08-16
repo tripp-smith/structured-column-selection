@@ -189,11 +189,41 @@ polynomial-looking through `k = 8`. The worst recorded instance is
 (`≈ 0.17%` of the named polynomial). `C = 1` witnesses exist;
 no superpolynomial family was found.
 
+## Phase 8 (Path 3 complementary-dimension class) delivered
+
+After the certified `C = 1` witness `frame38`, the weakest extra
+static hypothesis that turns the binomial volume bound into a
+polynomial inverse-energy bound is dimensional: `min(k, n-k) ≤ d`.
+No geometry is added. The class includes matrices with singular
+`k`-sets.
+
+Proved (default axioms only):
+
+- `milestoneE_cpqr_inv_energy_le_choose`:
+  `‖x‖² ≤ k · C(n,k) · ‖A_J x‖²` on the CPQR set. Exponential in
+  `k` when `n ≈ 2k`; not a joint `poly(n,k)` bound.
+- `milestoneE_cpqr_inv_energy_le_of_minDim`: on `min(k, n-k) ≤ d`,
+  `‖x‖² ≤ k · n^d · ‖A_J x‖²`. Polynomial in `n` of degree `d`.
+  Not Path 1.
+
+Independent checks: frame23 has inverse `5/4` and `25/16 ≤ 6 =
+2 · C(3,2) = 2 · 3^1`; frame12 has `25/16 ≤ 2`. A deeper ETF /
+clustered census with these diagnostics is
+`experiments/census_static_class_seed1.json` (worst recorded
+`r_CPQR` still `√3/2` on the `2×3` simplex; no new `r > 1`).
+
+Column incoherence and a leverage floor are recorded as static
+predicates. They are narrower than `MinDimLe` and are not claimed
+to be weakest. Milestone E remains **OPEN**: Path 1 is still the
+unrestricted polynomial theorem.
+
 ## What remains open
 
 Milestone E still requires one of: a polynomial CPQR theorem for
 general `k`, a machine-checked counterexample past the named
-polynomial, or a counterexample plus a stronger static class. The
+polynomial, or a counterexample plus a stronger static class that
+the project accepts as closing E. The complementary-dimension
+class is a Path 3 theorem; it does not close Path 1. The
 certified `frame38` witness kills only the ideal `C = 1` bound.
 `R Rᵀ = I` is proved; a polynomial inverse-trace bound is proved
 only under a bidiagonal hypothesis on `U`. Residual energy, the

@@ -96,9 +96,21 @@ These stay on finite Gram projectors and are not a joint
 `pivotGram_inv_trace_le_of_bidiagonal` is a hypothesis on the
 coefficient pattern of `U`, not a class of `A`.
 
+Phase 8 adds the binomial inverse-energy comparison and the Path 3
+complementary-dimension class:
+
+- `selectedColGram_inv_trace_le_card_div_det`
+- `cpqr_inv_energy_le_choose`
+- `cpqr_inv_energy_le_of_minDim`
+
+The first two are finite Gram / binomial identities. The third
+restricts the shape of `A` (`min(k, n-k) ≤ d`) and is not a
+universal `poly(n,k)` theorem.
+
 The §8 census, including the Wave 1 ETF / clustered / Haar-growth
-tracks and the Path 2 adverse ladder, is Python-only and is not a
-mathlib candidate.
+tracks, the Path 2 adverse ladder, and the static-class diagnostics
+in `experiments/census_static_class_seed1.json`, is Python-only and
+is not a mathlib candidate.
 
 ## Later candidates
 

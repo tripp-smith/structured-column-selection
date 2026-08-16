@@ -11,6 +11,7 @@ import StructuredColumnSelection.TriangularBound
 import StructuredColumnSelection.ResidualMono
 import StructuredColumnSelection.SigmaMinBounds
 import StructuredColumnSelection.RowOrthoConstraints
+import StructuredColumnSelection.StaticClass
 
 namespace StructuredColumnSelection
 
@@ -270,5 +271,31 @@ theorem milestoneE_bidiagonal_U_inv_trace_le {k n : ℕ}
     ((pivotGram A hA)⁻¹).trace ≤
       ((k : ℝ) * (k + 1) / 2) * ((n : ℝ) - k + 1) :=
   pivotGram_inv_trace_le_of_bidiagonal A hA hbi
+
+/-- CPQR inverse energy is at most `k · C(n,k)`.
+
+This is exponential in `k` when `n ≈ 2k` and is **not** a joint
+`poly(n,k)` inverse-norm bound. It does not close Milestone E. -/
+theorem milestoneE_cpqr_inv_energy_le_choose {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (x : Fin (cpqrSet A).card → ℝ) :
+    vecEnergy x ≤
+      (k : ℝ) * (n.choose k : ℝ) *
+        vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) :=
+  cpqr_inv_energy_le_choose A hA x
+
+/-- Path 3: on the static class `min(k, n-k) ≤ d`, CPQR inverse
+energy is at most `k · n^d`.
+
+The extra hypothesis is the shape of `A` alone. It is **not** a
+`poly(n,k)` theorem for every orthogonal-row matrix and does not
+close Path 1. Milestone E remains open. -/
+theorem milestoneE_cpqr_inv_energy_le_of_minDim {k n d : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hd : MinDimLe k n d) (x : Fin (cpqrSet A).card → ℝ) :
+    vecEnergy x ≤
+      (k : ℝ) * (n : ℝ) ^ d *
+        vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) :=
+  cpqr_inv_energy_le_of_minDim A hA hd x
 
 end StructuredColumnSelection
