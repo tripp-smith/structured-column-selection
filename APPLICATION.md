@@ -50,6 +50,17 @@ the named polynomial `512`, so Milestone E remains open. The `4×12`
 record `experiments/cpqr_r_gt_1_numeric_4_12.json`
 (`r_CPQR ≈ 1.236`) is a float observation and is not certified.
 
+`structselect/certify.py` automates the SPEC §9 pipeline: Cayley
+transform of a rational skew-symmetric matrix (coefficient
+denominator `D`) and/or rational Givens rotations from Pythagorean
+triples, then exact `AAᵀ = I`, unique CPQR pivot margins, and an
+explicit rational test vector for `c · ‖A_J x‖² < ‖x‖²`. Tests in
+`tests/test_certify.py` re-certify `frame38` both from the published
+rationals and after Cayley re-parametrization of the float matrix.
+The automation does not close Milestone E: `C = 1` witnesses stay
+below the named polynomial, and Cayley rounding of the `4×12` float
+record does not preserve `r_CPQR > 1`.
+
 When selectors are added, this document will separate:
 
 - rigorously certified quantities linked to Lean statements; and

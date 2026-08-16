@@ -52,6 +52,8 @@ Phases completed:
   (`experiments/cpqr_r_gt_1_numeric_4_12.json`) is numeric only and
   not certified.
 - Milestone E §8 census (witnesses only): `structselect/census.py`
+- Milestone E §9 certificate automation: `structselect/certify.py`
+  (Cayley / Givens; re-certifies `frame38`; does not close E)
 - Milestone E Wave 1 census (witnesses only): ETF / simplex / Paley,
   clustered near-parallels, Haar `k ≤ 12` growth, block-diagonal ETF
   copies (`experiments/census_wave1_*_seed1.json`). Worst recorded

@@ -584,13 +584,16 @@ Work the first item that is still open. Do not start F.
    statement is proved.
 2. **Certify the `4×12` record (SPEC §9).** The `C = 1` case is now
    certified on `frame38` (`3×8`, `r_lb ≈ 1.030`, Lean
-   `native_decide` in `SmallInstanceChecks.lean`). The `4×12`
-   numeric record (`r_CPQR ≈ 1.236`,
-   `experiments/cpqr_r_gt_1_numeric_4_12.json`) is the next
-   certification target: exact rational recovery, `AAᵀ = I`, pivot
-   margins, inverse-norm lower bound. It still sits below the named
-   polynomial, so it leaves E open; a Path 2 close needs a certified
-   family growing past every named polynomial.
+   `native_decide` in `SmallInstanceChecks.lean`). The rational
+   pipeline is automated in `structselect/certify.py` (Cayley / Givens
+   re-parametrization, pivot margins, inverse-norm test vector) and
+   re-certifies `frame38`. The `4×12` numeric record (`r_CPQR ≈ 1.236`,
+   `experiments/cpqr_r_gt_1_numeric_4_12.json`) is still the next
+   certification target: Cayley rounding so far yields an exact
+   Parseval frame but drops below `r = 1`. It still sits below the
+   named polynomial, so even a successful certificate would leave E
+   open; a Path 2 close needs a certified family growing past every
+   named polynomial.
 3. **`AxiomAudit.lean` + GitHub Actions** reusing `scripts/verify.sh`.
    Cheap, matches playbook Phases 6–7, and prevents silent axiom
    drift.
@@ -618,6 +621,7 @@ Work the first item that is still open. Do not start F.
 | `PrefixInverse.lean` | contraction, column energy `≤ 1`, last residual |
 | `SmallInstanceChecks.lean` | exact `ℚ` witnesses, `native_decide` allowed |
 | `structselect/census.py` | §8 generators; witnesses, not theorems |
+| `structselect/certify.py` | §9 Cayley/Givens rational certificates; does not close E |
 | `experiments/census_seed0.json` | recorded seed-0 sweep |
 | `experiments/census_wave1_*_seed1.json` | Wave 1 ETF / clustered / growth / block |
 | `scripts/verify.sh` | `lake build`, `sorry` scan, pytest |

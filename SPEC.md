@@ -403,6 +403,10 @@ from
 
 Only the first would have been shown.
 
+Python automation for steps 2–5 (and Lean snippet emission for step 6)
+lives in `structselect.certify`. A `C = 1` certificate is not a
+polynomial-bound disproof.
+
 ## 10. Conditional structural refinement
 
 If orthogonal rows alone are insufficient, search for the weakest useful additional static condition.

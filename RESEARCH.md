@@ -144,7 +144,9 @@ This is a SPEC §9 certification of the `C = 1` case only
 (`r_lb ≈ 1.030`, inverse norm `≈ 4.37 ≪ 512 = max(n³, k³,
 (k(n-k+1))²)`), so it is **not** outcome 2. The `4×12` record
 (`r_CPQR ≈ 1.236`, `experiments/cpqr_r_gt_1_numeric_4_12.json`) is a
-float observation and is **not** certified. Milestone E remains open.
+float observation and is **not** certified. The Python pipeline that
+produced and re-checks these certificates is `structselect.certify`
+(`tests/test_certify.py`). Milestone E remains open.
 
 The dated reasoning log, census labels, and ordered next-work queue
 are in `CHECKPOINT.md`. Residual energy and the binomial volume bound
