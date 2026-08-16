@@ -27,6 +27,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone D | **PROVED** | `milestoneD_expected_inv_frob_sq`, `milestoneD_markov_inv_frob` |
 | Milestone E structural CPQR | **PROVED** (not a bound) | `milestoneE_leverage_sum`, `milestoneE_first_pivot_is_max`, `milestoneE_first_leverage_ge`, `milestoneE_cpqr_card_eq` |
 | Milestone E, `k = 1` volume | **PROVED** (special case) | `milestoneE_k1_volume_ge` |
+| Milestone E, `k = 2` inverse-trace | **PROVED** (special case) | `milestoneE_k2_inv_trace_le` |
 | Milestone E residual energy | **PROVED** (not a bound) | `milestoneE_residual_energy`, `milestoneE_next_residual_ge` |
 | Milestone E binomial volume | **PROVED** (exponential / not polynomial) | `milestoneE_cpqr_volume_ge_binomial` |
 | Milestone E contraction / last residual | **PROVED** (not a joint poly bound) | `milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, `milestoneE_last_residual_ge` |
@@ -460,6 +461,28 @@ superpolynomial family. `structselect/certify.py` re-certifies
 None of the five tracks proved a joint `poly(n,k)` inverse-norm
 bound. Milestone E remains **OPEN**. Milestone F untouched.
 
+### 3.12 Path 1 `k = 2` slice and hygiene (2026-08-16)
+
+Shipped `milestoneE_k2_inv_trace_le`: for every orthogonal-row
+`2 × n` matrix, `tr((G')⁻¹) ≤ 3(n-1)`. The off-bidiagonal condition
+on `U` is vacuous on `Fin 2`, so `gsUBidiagonal_of_le_two` holds
+with no extra hypothesis, and the existing nearest-neighbor bound
+specializes. Axioms: `propext`, `Classical.choice`, `Quot.sound`.
+This is a joint polynomial bound for two orthonormal rows. It does
+**not** close Path 1 or Milestone E.
+
+Also proved, not exported as public Path 1 theorems:
+
+- leftover unselected energy of `R` is at most `k`;
+- `∑_{i,j} N_{ij}² ≤ k(n-k+1)` for `N = 1-U`;
+- bandwidth-`w` is `gsUBandwidth`; `w = 1` is bidiagonal; `w ≥ 2`
+  still permits exponential-in-`k` growth of `S`.
+
+Hygiene (CHECKPOINT §8 items 3–5): `AxiomAudit.lean` plus
+`scripts/verify.sh`, GitHub Actions `.github/workflows/verify.yml`,
+`CONTRIBUTING.md` (search-first; no `AGENTS.md`), and
+`blueprint/src/` wired to public names. Milestone F untouched.
+
 ---
 
 ## 4. How Milestone E can close
@@ -478,10 +501,14 @@ Promising formal steps, in order:
 3. Product of residuals `= volumeWeight A (cpqrSet A)`. **Done.**
 4. Binomial bound (exponential; shipped as a **non-polynomial**
    theorem with an explicit non-claim). **Done.**
-5. Improve the analysis: `σ_min ≥ |det| / σ_max^{k−1}` is the
+5. `k = 1` volume and `k = 2` inverse-trace slices. **Done** as
+   special cases, not a general-`k` Path 1 close.
+6. Improve the analysis: `σ_min ≥ |det| / σ_max^{k−1}` is the
    pessimistic step. A polynomial bound needs to stop one singular
    value from eating the whole volume, or show residuals cannot
-   unbalance that badly. Census suggests they do not.
+   unbalance that badly, or forbid worst-case multi-neighbor `U`.
+   Census suggests they do not unbalance that badly. The `k = 2`
+   slice does not lift to general `k`.
 
 Do not start this Lean bound before the census (already done).
 
@@ -561,21 +588,21 @@ infrastructure pass:
 | Phase | Intent | Current state | Next move |
 | --- | --- | --- | --- |
 | 1 Audit | read the tree | this checkpoint | keep `CHECKPOINT.md` current |
-| 2 Blueprint | leanblueprint graph | **missing** | add `blueprint/` wired to public theorem names |
-| 3 Proof discovery | search mathlib first | partial, in skills | add `CONTRIBUTING.md` (do **not** create `AGENTS.md`; env-setup forbids inventing it) |
-| 4 Automation | `grind?` / `simp?` then explicit | not standardised | document; do not churn working proofs |
+| 2 Blueprint | leanblueprint graph | **shipped** (`blueprint/src/`) | optional PDF/web build; not in CI |
+| 3 Proof discovery | search mathlib first | **shipped** in `CONTRIBUTING.md` | keep using it |
+| 4 Automation | `grind?` / `simp?` then explicit | **documented** in `CONTRIBUTING.md` | do not churn working proofs |
 | 5 API | one abstraction above the theorem | mixed | residual energy should be stated for general Gram projectors, not only CPQR |
-| 6 CI | more than `lake build` | `scripts/verify.sh` exists; no GitHub Actions on PR #6 | add `.github/workflows` with build / `sorry` / pytest / axiom audit |
-| 7 Axiom audit | `#print axioms` in-tree | manual `--stdin` | add `AxiomAudit.lean` and invoke it from `verify.sh` |
+| 6 CI | more than `lake build` | **shipped** (`scripts/verify.sh` + `.github/workflows/verify.yml`) | keep the axiom audit in the script |
+| 7 Axiom audit | `#print axioms` in-tree | **shipped** (`AxiomAudit.lean`, `--stdin`) | add new public names to the audit file |
 | 8 Computational loop | float → exact → Lean | census + `SmallInstanceChecks` | label every RESEARCH claim with the five statuses |
 | 9 Property tests | seeded random identities | some Haar loops | add permutation/sign invariance and residual-vs-norm checks |
 | 10 Exact checkers | `ℚ` / `native_decide` | `frame12` / `frame23` | keep `native_decide` out of `Theorems.lean` |
 | 11 Mathlib-readiness | classify lemmas | `MATHLIB.md` started | refresh after residual energy |
 | 12 Maturity docs | README status table | README leads with the allowed status line | add a compact table; do not overclaim |
 | 13 Organisation | roles of docs | this file added | keep roles; do not reshuffle |
-| 14 Agent rules | search-first Lean | `.cursor/skills/*`, claim-discipline | fold playbook Phase 14 into `CONTRIBUTING.md` and skills |
+| 14 Agent rules | search-first Lean | **shipped** in `CONTRIBUTING.md` and `.cursor/skills/*` | do not create `AGENTS.md` |
 | 15 No custom tactics | prefer lemmas | followed | keep |
-| 16 Final verify | `scripts/verify.sh` | exists; no `lake lint` / blueprint check | extend the script when those tools exist |
+| 16 Final verify | `scripts/verify.sh` | **shipped** (build, `sorry`, axiom audit, pytest); no `lake lint` / blueprint web | optional blueprint `checkdecls` |
 
 Do not weaken theorems to make any of this easier.
 
@@ -609,15 +636,19 @@ Do not weaken theorems to make any of this easier.
 Work the first item that is still open. Do not start F.
 
 1. **Beat the `4^k` in the triangular trace bound, or a
-   non-universal Path 1 argument.** `R Rᵀ = I` is now proved
-   (`milestoneE_gsR_mul_transpose`). A polynomial inverse-trace
-   bound holds only under a bidiagonal hypothesis on `U`
-   (`milestoneE_bidiagonal_U_inv_trace_le`); that is not a class of
-   `A` and is not Path 1. The Businger–Golub entry bound
-   `|S i j| ≤ 2^{j-i-1}` is sharp for worst-case triangular
-   matrices, so closing Path 1 still needs an argument that CPQR's
-   greedy pivoting forbids the worst-case `U`. Do not announce a
-   polynomial theorem until the joint statement is proved.
+   non-universal Path 1 argument.** `R Rᵀ = I` is proved
+   (`milestoneE_gsR_mul_transpose`). The `k = 2` inverse-trace bound
+   is proved (`milestoneE_k2_inv_trace_le`) because bidiagonal `U`
+   is automatic on `Fin 2`. For general `k` a polynomial
+   inverse-trace bound still holds only under a bidiagonal
+   hypothesis on `U` (`milestoneE_bidiagonal_U_inv_trace_le`); that
+   is not a class of `A` and is not Path 1. Off-diagonal energy of
+   `N` is polynomial; products of `N` are not. The Businger–Golub
+   entry bound `|S i j| ≤ 2^{j-i-1}` is sharp for worst-case
+   triangular matrices, so closing Path 1 still needs an argument
+   that CPQR's greedy pivoting forbids the worst-case `U`. Do not
+   announce a polynomial theorem until the joint statement is
+   proved for every `k`.
 2. **Certify a Path 2 instance past the named polynomial, or a
    superpolynomial family (SPEC §9).** The `C = 1` case is certified
    on `frame38`. Path 2 search through `k = 8` is polynomial-looking
@@ -626,14 +657,13 @@ Work the first item that is still open. Do not start F.
    target; Cayley rounding so far drops below `r = 1`. A Path 2
    close needs a certified family growing past every named
    polynomial.
-3. **`AxiomAudit.lean` + GitHub Actions** reusing `scripts/verify.sh`.
-   Cheap, matches playbook Phases 6–7, and prevents silent axiom
-   drift.
-4. **`CONTRIBUTING.md`** with the search-first proof workflow
-   (playbook Phases 3, 4, 14). Do not create `AGENTS.md`.
-5. **leanblueprint** (playbook Phase 2) once public theorem names
-   are stable. Nodes: A–D, E structural, E `k=1`, E residual /
-   binomial, E open, F open.
+3. **Axiom audit + GitHub Actions.** **Done** (`AxiomAudit.lean`,
+   `scripts/verify.sh`, `.github/workflows/verify.yml`).
+4. **`CONTRIBUTING.md`.** **Done** (search-first workflow; no
+   `AGENTS.md`).
+5. **leanblueprint.** **Done** (`blueprint/src/` wired to public
+   names, including the `k = 2` node). Optional web/PDF build is
+   not in CI.
 6. **Only if a counterexample exists:** isolate the weakest static
    extra hypothesis (leverage ratio / coherence) and prove a poly
    bound on that class.
@@ -654,7 +684,8 @@ Work the first item that is still open. Do not start F.
 | `TriangularBound.lean` | pivot-Gram inverse-trace bound (poly in `n`, exp in `k`) |
 | `ResidualMono.lean` | residual antitone / rank-1 downdate (source of truth) |
 | `SigmaMinBounds.lean` | Gram inverse-trace = sum inv LOO residual; `σ_min ≥ 1/√tr` |
-| `RowOrthoConstraints.lean` | `R Rᵀ = I`; poly bound only under bidiagonal `U` |
+| `RowOrthoConstraints.lean` | `R Rᵀ = I`; leftover `R` energy; `N` Frobenius; poly bound under bidiagonal `U`; `k = 2` inverse-trace |
+| `AxiomAudit.lean` | `#print axioms` of every public theorem; invoked by `scripts/verify.sh` |
 | `SmallInstanceChecks.lean` | exact `ℚ` witnesses, `native_decide` allowed |
 | `structselect/census.py` | §8 generators; witnesses, not theorems |
 | `structselect/certify.py` | §9 Cayley/Givens rational certificates; does not close E |
@@ -662,7 +693,10 @@ Work the first item that is still open. Do not start F.
 | `experiments/census_seed0.json` | recorded seed-0 sweep |
 | `experiments/census_wave1_*_seed1.json` | Wave 1 ETF / clustered / growth / block |
 | `experiments/cpqr_adverse_ladder_seed20260816.json` | Path 2 ladder through `k=8` |
-| `scripts/verify.sh` | `lake build`, `sorry` scan, pytest |
+| `scripts/verify.sh` | `lake build`, `sorry` scan, axiom audit, pytest |
+| `CONTRIBUTING.md` | search-first Lean workflow; claim discipline |
+| `blueprint/src/` | leanblueprint graph wired to public theorem names |
+| `.github/workflows/verify.yml` | CI wrapping `scripts/verify.sh` |
 | `autonomous-implementation.md` | 16-phase engineering playbook |
 | `.cursor/skills/autonomous-implementation/SKILL.md` | agent loop |
 | `.cursor/skills/e-characterization/SKILL.md` | E protocol |
@@ -689,12 +723,17 @@ triangular trace bound and certified `C = 1` witness.
 Parallel merge (this checkpoint): `cursor/phase-e-parallel-merge-e353`
 integrates tracks A–E (residual mono, sigma-min, row-ortho, Path 2
 ladder, rational certify) onto that campaign and updates PR #8.
-`R Rᵀ = I` proved. Poly bound only under bidiagonal `U`. Path 2
-search polynomial-looking through `k = 8`. No joint `poly(n,k)`
-theorem. Milestone E remains **OPEN**. Do not start F.
+`R Rᵀ = I` proved. Poly bound only under bidiagonal `U` for general
+`k`. Path 2 search polynomial-looking through `k = 8`. No joint
+`poly(n,k)` theorem. Milestone E remains **OPEN**. Do not start F.
 
 PRs #9 (`cursor/phase-e-rational-certify-e353`) and #10
 (`cursor/row-ortho-constraints-e353`) are absorbed by this merge.
+
+Path 1 `k = 2` + hygiene: `cursor/path1-k2-hygiene-e353` ships
+`milestoneE_k2_inv_trace_le`, axiom audit, GitHub Actions,
+`CONTRIBUTING.md`, and blueprint sources. Path 1 remains open for
+general `k`. Milestone E remains **OPEN**. Do not start F.
 
 Branch rule: `cursor/<descriptive-name>-e353`. Draft PR before
 official `scripts/verify.sh`; update the PR after any fix.

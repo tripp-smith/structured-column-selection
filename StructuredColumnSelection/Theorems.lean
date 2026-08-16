@@ -271,4 +271,17 @@ theorem milestoneE_bidiagonal_U_inv_trace_le {k n : ℕ}
       ((k : ℝ) * (k + 1) / 2) * ((n : ℝ) - k + 1) :=
   pivotGram_inv_trace_le_of_bidiagonal A hA hbi
 
+/-- Milestone E, `k = 2` only: the CPQR pivot-Gram inverse-trace is at
+most `3(n-1)`.
+
+This is the `k = 2` slice: Gram–Schmidt `U` is automatically bidiagonal
+on `Fin 2`, so the nearest-neighbor inverse-trace bound applies to every
+orthogonal-row `2 × n` matrix. It matches a joint polynomial bound for
+two orthonormal rows. It does **not** close Milestone E (SPEC §16
+outcome 1 needs all `k`). -/
+theorem milestoneE_k2_inv_trace_le {n : ℕ}
+    (A : Matrix (Fin 2) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ((pivotGram A hA)⁻¹).trace ≤ (3 : ℝ) * ((n : ℝ) - 1) :=
+  pivotGram_inv_trace_le_of_k_eq_two A hA
+
 end StructuredColumnSelection

@@ -45,7 +45,9 @@ leave-one-out identity is
 row-orthonormality of the implicit CPQR factor is
 `milestoneE_gsR_mul_transpose`; the bidiagonal-`U` inverse-trace
 bound is `milestoneE_bidiagonal_U_inv_trace_le` (hypothesis on `U`,
-not a class of `A`, not Path 1).
+not a class of `A`, not Path 1); the `k = 2` inverse-trace bound is
+`milestoneE_k2_inv_trace_le` (bidiagonal `U` is automatic; not
+general `k`).
 
 `tests/test_cpqr_r_gt_1.py` re-certifies the `3×8` witness
 `experiments/cpqr_r_gt_1_witness_3_8.json` in exact `Fraction`
