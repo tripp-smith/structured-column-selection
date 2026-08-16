@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 import numpy as np
+import pytest
 
 from structselect.census import (
     block_diagonal,
@@ -16,14 +17,17 @@ from structselect.census import (
     icosahedral_etf,
     kahan_like_frame,
     leverage_skew_frame,
+    max_abs_col_inner,
     max_r,
     mercedes_benz,
+    min_dim,
     named_poly_scale,
     near_duplicate_frame,
     paley_harmonic_frame,
     records_to_json,
     row_orthonormalize,
     run_census,
+    run_static_class_census,
     run_wave1_block,
     run_wave1_clustered,
     run_wave1_etf,
@@ -112,6 +116,48 @@ def test_wave1_block_records_are_finite() -> None:
     assert np.isfinite(worst.r_cpqr)
     for rec in records:
         assert rec.aat_err is not None and rec.aat_err < 1e-8
+
+
+def test_static_class_diagnostics_on_simplex() -> None:
+    """Simplex has min_dim = 1, so the Path 3 bound is k(k+1)."""
+    A = simplex_etf(3)
+    rec = evaluate(A, "simplex_etf", exhaustive=True)
+    assert rec.min_dim == 1
+    assert rec.choose_k == 4
+    assert rec.inv_energy_choose_bound == 3 * 4
+    assert rec.inv_energy_mindim_bound == 3 * (4 ** 1)
+    assert rec.inv_sq_over_choose is not None
+    assert rec.inv_sq_over_choose <= 1.0 + 1e-9
+    assert rec.inv_op ** 2 <= rec.inv_energy_mindim_bound + 1e-9
+
+
+def test_mercedes_incoherence_gap_is_positive() -> None:
+    """Witness: Mercedes-Benz satisfies μ > (k-1)ρ. Not a theorem."""
+    A = mercedes_benz()
+    rec = evaluate(A, "mercedes_benz", exhaustive=True)
+    assert rec.incoherent_gap is not None
+    assert rec.incoherent_gap > 0
+    assert rec.max_abs_inner is not None
+    assert rec.max_abs_inner == pytest.approx(1.0 / 3.0, rel=1e-6)
+
+
+def test_static_class_census_records_diagnostics() -> None:
+    records = run_static_class_census(seed=1)
+    assert len(records) >= 16
+    for rec in records:
+        assert rec.min_dim == min_dim(rec.k, rec.n)
+        assert rec.choose_k is not None and rec.choose_k >= 1
+        assert rec.inv_energy_choose_bound == rec.k * rec.choose_k
+        assert rec.inv_energy_mindim_bound == rec.k * (rec.n ** rec.min_dim)
+        assert rec.max_abs_inner is not None
+        assert rec.incoherent_gap is not None
+        assert rec.inv_sq_over_choose is not None
+        # Recorded comparison only; do not require r_CPQR ≤ 1.
+        assert rec.inv_op ** 2 <= rec.inv_energy_choose_bound + 1e-6
+        assert rec.aat_err is not None and rec.aat_err < 1e-8
+    worst = max_r(records)
+    assert worst.r_cpqr > 0
+    assert np.isfinite(worst.r_cpqr)
 
 
 def test_wave1_clustered_records_are_finite() -> None:

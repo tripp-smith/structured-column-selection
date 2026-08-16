@@ -35,6 +35,8 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone E Gram inverse-trace / `σ_min` | **PROVED** (not a joint poly bound) | `milestoneE_gram_inv_trace_eq_sum_inv_residual`, `milestoneE_sigma_min_ge_inv_sqrt_trace` |
 | Milestone E `R Rᵀ = I` | **PROVED** (not a bound) | `milestoneE_gsR_mul_transpose` |
 | Milestone E bidiagonal-`U` trace bound | **PROVED** (hypothesis on `U`, not a class of `A`, not Path 1) | `milestoneE_bidiagonal_U_inv_trace_le` |
+| Milestone E binomial inverse energy | **PROVED** (exponential / not polynomial) | `milestoneE_cpqr_inv_energy_le_choose` |
+| Milestone E Path 3 min-dim class | **PROVED** (not Path 1) | `milestoneE_cpqr_inv_energy_le_of_minDim` |
 | Milestone E `C = 1` witness `3×8` | **CERTIFIED** in Lean (kills only `C = 1`; `4.38 ≪ 512` named poly) | `frame38_mul_transpose`, `frame38_cpqr_set`, `frame38_inv_norm_lb` (`SmallInstanceChecks`, `native_decide`) |
 | Milestone E `4×12` `r_CPQR > 1` record | **NUMERIC ONLY** (float, not exact-certified) | `experiments/cpqr_r_gt_1_numeric_4_12.json` |
 | Milestone E §8 census | **NUMERICALLY OBSERVED** | `structselect/census.py`, `experiments/census_seed0.json` |
@@ -460,6 +462,34 @@ superpolynomial family. `structselect/certify.py` re-certifies
 None of the five tracks proved a joint `poly(n,k)` inverse-norm
 bound. Milestone E remains **OPEN**. Milestone F untouched.
 
+### 3.12 Path 3 complementary-dimension class (2026-08-16)
+
+After `frame38`, the weakest extra static hypothesis that turns
+the binomial volume bound into a polynomial inverse-energy bound
+is dimensional: `min(k, n-k) ≤ d`. No geometry is added. The
+class includes matrices with singular `k`-sets.
+
+Shipped in `StaticClass.lean`:
+
+- `milestoneE_cpqr_inv_energy_le_choose`:
+  `‖x‖² ≤ k · C(n,k) · ‖A_J x‖²`. Exponential when `n ≈ 2k`.
+  Explicit non-claim: not a joint `poly(n,k)` bound.
+- `milestoneE_cpqr_inv_energy_le_of_minDim`:
+  `min(k, n-k) ≤ d ⇒ ‖x‖² ≤ k · n^d · ‖A_J x‖²`.
+
+Proof idea: independent Gram dets are `≤ 1` (leave-one-out
+residuals `≤ 1`), so `tr(G⁻¹) ≤ #J / det(G)`. Volume
+`det(G) ≥ 1/C(n,k)` then gives the binomial inverse-energy
+bound. `C(n,k) ≤ n^{min(k,n-k)}`.
+
+ETF / clustered census with these diagnostics:
+`experiments/census_static_class_seed1.json`. Worst recorded
+`r_CPQR` is still `√3/2` on the `2×3` simplex. No new rational
+`r > 1`, so no additional §9 witness. Column incoherence and a
+leverage floor are recorded as predicates; they are narrower
+than `MinDimLe`. Path 1 remains open. Milestone E remains
+**OPEN**.
+
 ---
 
 ## 4. How Milestone E can close
@@ -634,9 +664,12 @@ Work the first item that is still open. Do not start F.
 5. **leanblueprint** (playbook Phase 2) once public theorem names
    are stable. Nodes: A–D, E structural, E `k=1`, E residual /
    binomial, E open, F open.
-6. **Only if a counterexample exists:** isolate the weakest static
-   extra hypothesis (leverage ratio / coherence) and prove a poly
-   bound on that class.
+6. **Path 3 complementary-dimension class is delivered.**
+   `milestoneE_cpqr_inv_energy_le_of_minDim` is the weakest extra
+   static hypothesis that makes the binomial bound polynomial:
+   `min(k, n-k) ≤ d`. Coherence / leverage-floor predicates are
+   recorded but narrower (they well-condition every `k`-set).
+   Do not treat this as Path 1.
 7. **Milestone F** after E is closed, or if the user asks.
 
 ---
@@ -655,12 +688,14 @@ Work the first item that is still open. Do not start F.
 | `ResidualMono.lean` | residual antitone / rank-1 downdate (source of truth) |
 | `SigmaMinBounds.lean` | Gram inverse-trace = sum inv LOO residual; `σ_min ≥ 1/√tr` |
 | `RowOrthoConstraints.lean` | `R Rᵀ = I`; poly bound only under bidiagonal `U` |
+| `StaticClass.lean` | binomial inverse energy; Path 3 `min(k,n-k)≤d` |
 | `SmallInstanceChecks.lean` | exact `ℚ` witnesses, `native_decide` allowed |
 | `structselect/census.py` | §8 generators; witnesses, not theorems |
 | `structselect/certify.py` | §9 Cayley/Givens rational certificates; does not close E |
 | `structselect/adverse.py` | Path 2 trapezoidal search; witnesses, not theorems |
 | `experiments/census_seed0.json` | recorded seed-0 sweep |
 | `experiments/census_wave1_*_seed1.json` | Wave 1 ETF / clustered / growth / block |
+| `experiments/census_static_class_seed1.json` | Path 3 diagnostics on ETF / clustered / block |
 | `experiments/cpqr_adverse_ladder_seed20260816.json` | Path 2 ladder through `k=8` |
 | `scripts/verify.sh` | `lake build`, `sorry` scan, pytest |
 | `autonomous-implementation.md` | 16-phase engineering playbook |

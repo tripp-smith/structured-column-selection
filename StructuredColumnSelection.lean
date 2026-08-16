@@ -13,6 +13,7 @@ import StructuredColumnSelection.TriangularBound
 import StructuredColumnSelection.ResidualMono
 import StructuredColumnSelection.SigmaMinBounds
 import StructuredColumnSelection.RowOrthoConstraints
+import StructuredColumnSelection.StaticClass
 import StructuredColumnSelection.SmallInstanceChecks
 import StructuredColumnSelection.Theorems
 
@@ -26,6 +27,7 @@ volume bound, contraction / last-residual lemmas, the inverse-Frobenius
 / leave-one-out residual identity, and `R Rᵀ = I` for the implicit
 CPQR factor. A polynomial inverse-trace bound is proved only under a
 bidiagonal hypothesis on `U`, not for every orthogonal-row matrix.
-No joint `poly(n,k)` CPQR bound for general `k` is claimed.
-Milestone E remains open.
+A Path 3 inverse-energy bound holds on the static class
+`min(k, n-k) ≤ d`; that is not a joint `poly(n,k)` theorem for every
+orthogonal-row matrix. Milestone E remains open.
 -/

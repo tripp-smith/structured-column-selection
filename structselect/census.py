@@ -11,6 +11,25 @@ import numpy as np
 
 
 
+def min_dim(k: int, n: int) -> int:
+    """``min(k, n-k)``; the Path 3 complementary-dimension parameter."""
+    return min(k, n - k)
+
+
+def max_abs_col_inner(A: np.ndarray) -> float:
+    """Max absolute off-diagonal column inner product of ``A``."""
+    gram = A.T @ A
+    off = np.abs(gram - np.diag(np.diag(gram)))
+    return float(off.max()) if A.shape[1] > 1 else 0.0
+
+
+def leverage_ratio_of(leverages: Sequence[float]) -> float | None:
+    pos = [float(x) for x in leverages if x > 0]
+    if not pos:
+        return None
+    return max(pos) / min(pos)
+
+
 def named_poly_scale(k: int, n: int) -> float:
     """Named polynomial comparison from the Close-E campaign.
 
@@ -42,6 +61,14 @@ class CensusRecord:
     unbalance: float | None = None
     named_poly: float | None = None
     inv_over_named_poly: float | None = None
+    min_dim: int | None = None
+    choose_k: int | None = None
+    max_abs_inner: float | None = None
+    leverage_ratio: float | None = None
+    inv_energy_choose_bound: float | None = None
+    inv_energy_mindim_bound: float | None = None
+    inv_sq_over_choose: float | None = None
+    incoherent_gap: float | None = None
 
 
 def row_orthonormalize(B: np.ndarray) -> np.ndarray:
@@ -235,6 +262,11 @@ def evaluate(A: np.ndarray, family: str, seed: int | None = None,
     aat_err = float(np.max(np.abs(A @ A.T - np.eye(k))))
     unbalance = float(inv_op * abs_det)
     poly = named_poly_scale(k, n)
+    md = min_dim(k, n)
+    choose = math.comb(n, k)
+    max_inner = max_abs_col_inner(A)
+    lev_ratio = leverage_ratio_of(leverages)
+    min_lev = min(leverages) if leverages else 0.0
     return CensusRecord(
         family=family,
         k=k,
@@ -255,6 +287,14 @@ def evaluate(A: np.ndarray, family: str, seed: int | None = None,
         unbalance=unbalance,
         named_poly=poly,
         inv_over_named_poly=inv_op / poly,
+        min_dim=md,
+        choose_k=choose,
+        max_abs_inner=max_inner,
+        leverage_ratio=lev_ratio,
+        inv_energy_choose_bound=float(k * choose),
+        inv_energy_mindim_bound=float(k * (n ** md)),
+        inv_sq_over_choose=(inv_op ** 2) / (k * choose) if k * choose else None,
+        incoherent_gap=min_lev - (k - 1) * max_inner,
     )
 
 
@@ -403,6 +443,18 @@ def run_wave1_growth(seed: int = 1) -> list[CensusRecord]:
             records.append(
                 evaluate(A, "haar_growth", seed=seed + i, exhaustive=exhaustive)
             )
+    return records
+
+
+def run_static_class_census(seed: int = 1) -> list[CensusRecord]:
+    """ETF / clustered census with Path 3 static diagnostics.
+
+    Witnesses only. Does not assert a universal ``r_CPQR`` bound.
+    """
+    records: list[CensusRecord] = []
+    records.extend(run_wave1_etf())
+    records.extend(run_wave1_clustered(seed=seed))
+    records.extend(run_wave1_block())
     return records
 
 

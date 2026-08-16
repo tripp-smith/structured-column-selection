@@ -129,6 +129,42 @@ def test_frame23_residual_energy_after_first_pivot() -> None:
     assert sum(residuals) == 1
 
 
+def test_frame23_inv_energy_at_most_k_choose() -> None:
+    """Independent check of milestoneE_cpqr_inv_energy_le_choose on frame23.
+
+    ‖A_J⁻¹‖₂ = 5/4, so ‖x‖² ≤ (25/16) ‖A_J x‖², and k C(3,2) = 6.
+    25/16 ≤ 6. This is not a polynomial bound.
+    """
+    A = frame23()
+    inv_op = _inv_op_2row(A)
+    assert inv_op == Fraction(5, 4)
+    assert inv_op ** 2 <= 2 * 3
+
+
+def test_frame23_min_dim_energy_bound() -> None:
+    """Independent check of milestoneE_cpqr_inv_energy_le_of_minDim.
+
+    min(2, 3-2) = 1, so k n^d = 2 · 3 = 6 ≥ 25/16.
+    """
+    A = frame23()
+    inv_op = _inv_op_2row(A)
+    k, n = 2, 3
+    d = min(k, n - k)
+    assert d == 1
+    assert inv_op ** 2 <= k * (n ** d)
+
+
+def test_frame12_inv_energy_at_most_k_choose() -> None:
+    """k=1 case: C(2,1)=2 and min(1,1)=1, so both bounds are 2 ≥ 25/16."""
+    A = frame12()
+    J = cpqr_set(A)
+    assert J == [1]
+    inv = Fraction(5, 4)
+    assert A[0][1] == Fraction(4, 5)
+    assert (1 / A[0][1]) == inv
+    assert inv ** 2 <= 1 * 2
+
+
 def test_frame23_binomial_volume_at_least_one_over_choose() -> None:
     """Independent check of milestoneE_cpqr_volume_ge_binomial on frame23.
 
