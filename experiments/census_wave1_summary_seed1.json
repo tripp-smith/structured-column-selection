@@ -1,0 +1,101 @@
+{
+  "seed": 1,
+  "revision": "e302093",
+  "tracks": [
+    {
+      "track": "etf",
+      "n_records": 11,
+      "worst_r": 0.866025403784439,
+      "family": "simplex_etf",
+      "k": 2,
+      "n": 3,
+      "sigma_min": 0.5773502691896255,
+      "abs_det": 0.5773502691896255,
+      "inv_op": 1.732050807568878,
+      "unbalance": 1.0,
+      "aat_err": 4.440892098500626e-16,
+      "inv_over_named_poly": 0.06415002990995845,
+      "pivot_traj": [
+        0,
+        1
+      ],
+      "any_r_gt_1": false,
+      "any_above_named_poly": false,
+      "max_aat_err": 4.440892098500626e-16
+    },
+    {
+      "track": "clustered",
+      "n_records": 10,
+      "worst_r": 0.32326975484247295,
+      "family": "clustered_eps0.1_c2",
+      "k": 4,
+      "n": 8,
+      "sigma_min": 0.6917034284847988,
+      "abs_det": 0.3357238381764665,
+      "inv_op": 1.4457062937949228,
+      "unbalance": 0.4853580658287058,
+      "aat_err": 4.440892098500626e-16,
+      "inv_over_named_poly": 0.0028236451050682085,
+      "pivot_traj": [
+        1,
+        5,
+        3,
+        7
+      ],
+      "any_r_gt_1": false,
+      "any_above_named_poly": false,
+      "max_aat_err": 6.661338147750939e-16
+    },
+    {
+      "track": "growth",
+      "n_records": 36,
+      "worst_r": 0.44221523126238066,
+      "family": "haar_growth",
+      "k": 8,
+      "n": 12,
+      "sigma_min": 0.35754960894733345,
+      "abs_det": 0.17349582927068102,
+      "inv_op": 2.79681469361444,
+      "unbalance": 0.48523568458506294,
+      "aat_err": 6.661338147750939e-16,
+      "inv_over_named_poly": 0.0016185270217676157,
+      "pivot_traj": [
+        8,
+        3,
+        5,
+        7,
+        11,
+        10,
+        4,
+        6
+      ],
+      "any_r_gt_1": false,
+      "any_above_named_poly": false,
+      "max_aat_err": 8.881784197001252e-16
+    },
+    {
+      "track": "block",
+      "n_records": 7,
+      "worst_r": 0.5163977794943223,
+      "family": "block_simplex_2_3",
+      "k": 5,
+      "n": 7,
+      "sigma_min": 0.49999999999999983,
+      "abs_det": 0.28867513459481264,
+      "inv_op": 2.0000000000000004,
+      "unbalance": 0.5773502691896254,
+      "aat_err": 4.440892098500626e-16,
+      "inv_over_named_poly": 0.005830903790087465,
+      "pivot_traj": [
+        3,
+        0,
+        4,
+        1,
+        5
+      ],
+      "any_r_gt_1": false,
+      "any_above_named_poly": false,
+      "max_aat_err": 4.440892098500626e-16
+    }
+  ]
+}

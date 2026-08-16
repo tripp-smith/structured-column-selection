@@ -11,6 +11,16 @@ import numpy as np
 
 
 
+def named_poly_scale(k: int, n: int) -> float:
+    """Named polynomial comparison from the Close-E campaign.
+
+    ``‖A_J⁻¹‖₂ ≤ max(n³, k³, (k(n-k+1))²)`` is the threshold below
+    which a certified ``r_CPQR > 1`` stays a C=1 witness and does not
+    close Milestone E. This is a campaign yardstick, not a theorem.
+    """
+    return float(max(n**3, k**3, (k * (n - k + 1)) ** 2))
+
+
 @dataclass(frozen=True)
 class CensusRecord:
     family: str
@@ -27,10 +37,19 @@ class CensusRecord:
     r_cpqr: float
     r_opt: float | None
     leverages: list[float]
+    pivot_traj: list[int] | None = None
+    aat_err: float | None = None
+    unbalance: float | None = None
+    named_poly: float | None = None
+    inv_over_named_poly: float | None = None
 
 
 def row_orthonormalize(B: np.ndarray) -> np.ndarray:
-    """Return A (k×n) with A Aᵀ = I from a full-row-rank k×n matrix."""
+    """Return A (k×n) with A Aᵀ = I from a full-row-rank k×n matrix.
+
+    Floating-point QR. For an exact rational frame (``AAᵀ = I`` in ``ℚ``)
+    and the SPEC §9 CPQR certificate, use ``structselect.certify``.
+    """
     k, n = B.shape
     q, _ = np.linalg.qr(B.T, mode="reduced")
     A = q[:, :k].T
@@ -101,6 +120,74 @@ def kahan_like_frame(k: int, n: int, theta: float = 0.2) -> np.ndarray:
     return row_orthonormalize(B)
 
 
+def mercedes_benz() -> np.ndarray:
+    """2×3 Mercedes-Benz ETF (equiangular tight frame). Already Parseval."""
+    s = math.sqrt(2.0 / 3.0)
+    a = 0.5 * s
+    b = math.sqrt(0.5)
+    return np.array([[s, -a, -a], [0.0, b, -b]], dtype=float)
+
+
+def simplex_etf(k: int) -> np.ndarray:
+    """Simplex ETF: k × (k+1) from ``[I | -1]``, then row-orthonormalize."""
+    B = np.concatenate([np.eye(k), -np.ones((k, 1))], axis=1)
+    return row_orthonormalize(B)
+
+
+def icosahedral_etf() -> np.ndarray:
+    """3×6 icosahedral ETF axes, then row-orthonormalize."""
+    phi = (1.0 + math.sqrt(5.0)) / 2.0
+    B = np.array(
+        [
+            [0.0, 0.0, 1.0, 1.0, phi, phi],
+            [1.0, -1.0, phi, -phi, 0.0, 0.0],
+            [phi, phi, 0.0, 0.0, 1.0, -1.0],
+        ],
+        dtype=float,
+    )
+    return row_orthonormalize(B)
+
+
+def paley_harmonic_frame(p: int) -> np.ndarray:
+    """Real harmonic/Paley-type frame: k=(p-1)/2 rows, p columns."""
+    k = (p - 1) // 2
+    t = np.arange(p, dtype=float)
+    rows = np.arange(1, k + 1, dtype=float)[:, None]
+    B = np.cos(2.0 * math.pi * rows * t / p)
+    return row_orthonormalize(B)
+
+
+def clustered_near_parallels(
+    k: int,
+    n: int,
+    eps: float = 1e-2,
+    n_clusters: int | None = None,
+) -> np.ndarray:
+    """Tight column clusters in orthogonal coordinate planes, then QR.
+
+    Each cluster lives in a block of rows. Columns inside a cluster are
+    nearly parallel (spread ``eps``). This is the construction the
+    checkpoint listed as still untested after ``AAᵀ = I``.
+    """
+    if n_clusters is None:
+        n_clusters = max(2, k // 2)
+    n_clusters = min(n_clusters, k, n)
+    rows_per = max(1, k // n_clusters)
+    cols_per = max(1, n // n_clusters)
+    B = np.zeros((k, n))
+    for c in range(n_clusters):
+        r0 = c * rows_per
+        r1 = k if c == n_clusters - 1 else min(k, (c + 1) * rows_per)
+        j0 = c * cols_per
+        j1 = n if c == n_clusters - 1 else min(n, (c + 1) * cols_per)
+        dim = r1 - r0
+        for t, j in enumerate(range(j0, j1)):
+            B[r0, j] = 1.0
+            for s in range(1, dim):
+                B[r0 + s, j] = eps * math.sin((t + 1) * (s + 1.0))
+    return row_orthonormalize(B)
+
+
 def _inv_stats(AJ: np.ndarray) -> tuple[float, float, float, float]:
     s = np.linalg.svd(AJ, compute_uv=False)
     sigma_min = float(s[-1])
@@ -133,7 +220,8 @@ def _best_exhaustive(A: np.ndarray) -> tuple[list[int], float]:
 def evaluate(A: np.ndarray, family: str, seed: int | None = None,
              exhaustive: bool = False) -> CensusRecord:
     k, n = A.shape
-    J = _cpqr_numpy(A)
+    traj = _cpqr_numpy_traj(A)
+    J = sorted(traj)
     AJ = A[:, J]
     sigma_min, abs_det, inv_op, inv_frob = _inv_stats(AJ)
     scale = math.sqrt(k * (n - k + 1))
@@ -144,6 +232,9 @@ def evaluate(A: np.ndarray, family: str, seed: int | None = None,
         J_opt, inv_opt = _best_exhaustive(A)
         r_opt = inv_opt / scale
     leverages = [float(np.sum(A[:, j] ** 2)) for j in range(n)]
+    aat_err = float(np.max(np.abs(A @ A.T - np.eye(k))))
+    unbalance = float(inv_op * abs_det)
+    poly = named_poly_scale(k, n)
     return CensusRecord(
         family=family,
         k=k,
@@ -159,10 +250,15 @@ def evaluate(A: np.ndarray, family: str, seed: int | None = None,
         r_cpqr=r,
         r_opt=r_opt,
         leverages=leverages,
+        pivot_traj=traj,
+        aat_err=aat_err,
+        unbalance=unbalance,
+        named_poly=poly,
+        inv_over_named_poly=inv_op / poly,
     )
 
 
-def _cpqr_numpy(A: np.ndarray) -> list[int]:
+def _cpqr_numpy_traj(A: np.ndarray) -> list[int]:
     k, n = A.shape
     chosen: list[int] = []
     unused = set(range(n))
@@ -185,7 +281,11 @@ def _cpqr_numpy(A: np.ndarray) -> list[int]:
         j = min(idx for idx, s in scores.items() if abs(s - best) <= 1e-12 * max(1.0, abs(best)))
         chosen.append(j)
         unused.remove(j)
-    return sorted(chosen)
+    return chosen
+
+
+def _cpqr_numpy(A: np.ndarray) -> list[int]:
+    return sorted(_cpqr_numpy_traj(A))
 
 
 def run_census(seed: int = 0) -> list[CensusRecord]:
@@ -210,6 +310,118 @@ def records_to_json(records: Sequence[CensusRecord]) -> str:
 
 def max_r(records: Sequence[CensusRecord]) -> CensusRecord:
     return max(records, key=lambda r: r.r_cpqr)
+
+
+def block_diagonal(*blocks: np.ndarray) -> np.ndarray:
+    """Block-diagonal Parseval sum of already row-orthonormal blocks."""
+    ks = [B.shape[0] for B in blocks]
+    ns = [B.shape[1] for B in blocks]
+    A = np.zeros((sum(ks), sum(ns)))
+    r0 = c0 = 0
+    for B, k, n in zip(blocks, ks, ns):
+        A[r0 : r0 + k, c0 : c0 + n] = B
+        r0 += k
+        c0 += n
+    return A
+
+
+def run_wave1_etf() -> list[CensusRecord]:
+    """Track 1: Mercedes-Benz, simplex, icosahedral, Paley/harmonic ETFs."""
+    records: list[CensusRecord] = []
+    records.append(evaluate(mercedes_benz(), "mercedes_benz", exhaustive=True))
+    for k in (2, 3, 4, 5, 8):
+        records.append(evaluate(simplex_etf(k), "simplex_etf", exhaustive=k + 1 <= 12))
+    records.append(evaluate(icosahedral_etf(), "icosahedral_etf", exhaustive=True))
+    for p in (5, 13, 17, 29):
+        records.append(evaluate(paley_harmonic_frame(p), f"paley_harmonic_p{p}",
+                                exhaustive=p <= 12))
+    return records
+
+
+def run_wave1_block() -> list[CensusRecord]:
+    """Block-diagonal ETF copies. Witnesses only; not a bound."""
+    records: list[CensusRecord] = []
+    mb = mercedes_benz()
+    for m in (2, 3, 4):
+        records.append(
+            evaluate(block_diagonal(*([mb] * m)), f"block_mb_x{m}",
+                     exhaustive=3 * m <= 12)
+        )
+    for k1, k2 in ((2, 2), (3, 3), (4, 4), (2, 3)):
+        records.append(
+            evaluate(
+                block_diagonal(simplex_etf(k1), simplex_etf(k2)),
+                f"block_simplex_{k1}_{k2}",
+                exhaustive=(k1 + k2 + 2) <= 12,
+            )
+        )
+    return records
+
+
+def run_wave1_clustered(seed: int = 1) -> list[CensusRecord]:
+    """Track 2: clustered near-parallels that survive row_orthonormalize."""
+    records: list[CensusRecord] = []
+    configs = [
+        (4, 8, 1e-1, 2),
+        (4, 8, 1e-2, 2),
+        (4, 8, 1e-3, 2),
+        (4, 12, 1e-2, 2),
+        (6, 12, 1e-2, 2),
+        (6, 12, 1e-2, 3),
+        (6, 12, 1e-3, 3),
+        (8, 16, 1e-2, 2),
+        (8, 16, 1e-2, 4),
+        (8, 16, 5e-2, 4),
+    ]
+    for k, n, eps, ncl in configs:
+        A = clustered_near_parallels(k, n, eps=eps, n_clusters=ncl)
+        records.append(
+            evaluate(
+                A,
+                f"clustered_eps{eps}_c{ncl}",
+                seed=seed,
+                exhaustive=n <= 12,
+            )
+        )
+    return records
+
+
+def run_wave1_growth(seed: int = 1) -> list[CensusRecord]:
+    """Track 3: Haar k≥10 growth probe and n≤12 exhaustive unbalance."""
+    rng = np.random.default_rng(seed)
+    records: list[CensusRecord] = []
+    for k, n, draws, exhaustive in (
+        (8, 12, 8, True),
+        (10, 12, 8, True),
+        (10, 16, 6, False),
+        (10, 20, 6, False),
+        (12, 16, 4, False),
+        (12, 24, 4, False),
+    ):
+        for i in range(draws):
+            A = haar_stiefel(k, n, rng)
+            records.append(
+                evaluate(A, "haar_growth", seed=seed + i, exhaustive=exhaustive)
+            )
+    return records
+
+
+def wave1_payload(track: str, seed: int, revision: str,
+                  records: Sequence[CensusRecord]) -> dict:
+    worst = max_r(records)
+    return {
+        "seed": seed,
+        "revision": revision,
+        "track": track,
+        "n_records": len(records),
+        "worst": asdict(worst),
+        "any_r_gt_1": any(r.r_cpqr > 1 for r in records),
+        "any_above_named_poly": any(
+            (r.inv_over_named_poly or 0.0) >= 1.0 for r in records
+        ),
+        "max_aat_err": max((r.aat_err or 0.0) for r in records),
+        "records": [asdict(r) for r in records],
+    }
 
 
 if __name__ == "__main__":

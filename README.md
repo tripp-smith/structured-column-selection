@@ -32,11 +32,57 @@ Phases completed:
   - `milestoneE_cpqr_card_le`
   - `milestoneE_cpqr_card_eq`
   - `milestoneE_k1_volume_ge` (`k = 1` only; workshop scale, not general `k`)
+  - `milestoneE_residual_energy`
+  - `milestoneE_next_residual_ge`
+  - `milestoneE_cpqr_volume_ge_binomial` (exponential / not polynomial)
+  - `milestoneE_mulVec_energy_le` (contraction; not an inverse bound)
+  - `milestoneE_col_energy_le` (column leverage `≤ 1`; not an inverse bound)
+  - `milestoneE_last_residual_ge` (last residual `≥ 1/(n-k+1)`; not a joint poly bound)
+  - `milestoneE_pivot_gram_inv_trace_le` (pivot-Gram inverse trace
+    `≤ (n-k+1)(4^k+6k-1)/9`; polynomial in `n`, exponential in `k`;
+    not a joint `poly(n,k)` bound)
+  - `milestoneE_residual_antitone` (independent residuals decrease
+    when the column set grows; not an inverse-norm bound)
+  - `milestoneE_residual_insert_downdate` (rank-1 residual downdate;
+    not an inverse-norm bound)
+  - `milestoneE_gram_inv_trace_eq_sum_inv_residual`
+    (`tr(G_J⁻¹) = ∑ 1/` leave-one-out residual; not a joint poly bound)
+  - `milestoneE_sigma_min_ge_inv_sqrt_trace`
+    (`σ_min(A_J) ≥ 1/√tr(G⁻¹)`; not a joint poly bound)
+  - `milestoneE_gsR_mul_transpose` (implicit CPQR factor `R Rᵀ = I`;
+    not an inverse-norm bound)
+  - `milestoneE_bidiagonal_U_inv_trace_le` (poly inverse-trace bound
+    **only if** Gram–Schmidt `U` is bidiagonal; a hypothesis on `U`,
+    not a class of `A`, not Path 1, not a joint `poly(n,k)` theorem)
+- Milestone E `C = 1` counterexample witness (certified, kills only
+  `C = 1`): rational `3×8` `frame38` with `AAᵀ = I`, CPQR set
+  `{0,1,2}`, and `r_CPQR > 1` (`frame38_mul_transpose`,
+  `frame38_cpqr_set`, `frame38_inv_norm_lb` in
+  `SmallInstanceChecks.lean`, plus exact Python re-certification in
+  `tests/test_cpqr_r_gt_1.py`). The certified inverse norm `≈ 4.37`
+  is below the campaign's named polynomial `512`, so Milestone E
+  stays open. A `4×12` record with `r_CPQR ≈ 1.236`
+  (`experiments/cpqr_r_gt_1_numeric_4_12.json`) is numeric only and
+  not certified.
 - Milestone E §8 census (witnesses only): `structselect/census.py`
+- Milestone E §9 certificate automation: `structselect/certify.py`
+  (Cayley / Givens; re-certifies `frame38`; does not close E)
+- Milestone E Wave 1 census (witnesses only): ETF / simplex / Paley,
+  clustered near-parallels, Haar `k ≤ 12` growth, block-diagonal ETF
+  copies (`experiments/census_wave1_*_seed1.json`). Worst recorded
+  `r_CPQR` there is `√3/2` on the Mercedes-Benz / simplex `2×3`.
+- Milestone E Path 2 adverse ladder (witnesses only): trapezoidal
+  search in `structselect/adverse.py`, record
+  `experiments/cpqr_adverse_ladder_seed20260816.json`. Worst
+  recorded instance is `(k,n)=(8,24)` with inverse norm `≈ 30.98`,
+  `r_CPQR ≈ 2.66` (`≈ 0.17%` of the named polynomial). Growth looks
+  polynomial through `k = 8`; no superpolynomial family.
 
 Not yet claimed:
 
-- a polynomial CPQR theorem for general `k`, a counterexample, or a refined class
+- a polynomial CPQR theorem for general `k`, a counterexample past the
+  named polynomial (the certified `frame38` kills only `C = 1`), or a
+  refined class
 - CSSP perturbation bridge
 - a solution of all of Problem 4.1
 
@@ -64,10 +110,34 @@ drop.
   volume-weighted inverse-Frobenius energy and a finite Markov tail.
 - `StructuredColumnSelection/ColumnPivotedQR.lean`:
   greedy CPQR residuals, pivots, and selected sets.
+- `StructuredColumnSelection/ResidualEnergy.lean`:
+  Gram-projector residual energy and the next-residual average.
 - `StructuredColumnSelection/CPQRVolume.lean`:
-  first-pivot leverage lower bound and the `k = 1` volume bound.
+  first-pivot leverage, the `k = 1` volume bound, and the binomial
+  volume lower bound (exponential, not polynomial).
+- `StructuredColumnSelection/PrefixInverse.lean`:
+  orthogonal-row contraction, column energy `≤ 1`, and the last
+  CPQR residual average. Not a joint `poly(n,k)` inverse bound.
+- `StructuredColumnSelection/TriangularBound.lean`:
+  Gram–Schmidt factorization of the pivot-ordered CPQR Gram matrix,
+  its Neumann-series inverse, the Businger–Golub entry bound, and
+  the trace bound `tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9` (polynomial in
+  `n`, exponential in `k`; not a joint `poly(n,k)` bound).
+- `StructuredColumnSelection/ResidualMono.lean`:
+  residual monotonicity and rank-1 / CPQR residual downdate.
+  Not a joint `poly(n,k)` inverse bound.
+- `StructuredColumnSelection/SigmaMinBounds.lean`:
+  Gram inverse-trace as a sum of reciprocal leave-one-out residuals,
+  and the elementary `σ_min ≥ 1/√tr` bound. Not a joint `poly(n,k)`
+  inverse bound.
+- `StructuredColumnSelection/RowOrthoConstraints.lean`:
+  implicit CPQR factor `R Rᵀ = I`, and a polynomial inverse-trace
+  bound only under a bidiagonal hypothesis on `U` (not a class of
+  `A`, not Path 1).
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
-  exact rational enumerations used as independent witnesses.
+  exact rational enumerations used as independent witnesses,
+  including the certified `frame38` `C = 1` counterexample
+  (`native_decide`, not a public structural theorem).
 - `StructuredColumnSelection/Theorems.lean`:
   public theorem exports.
 

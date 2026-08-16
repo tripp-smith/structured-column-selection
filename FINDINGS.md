@@ -81,8 +81,13 @@ algorithm cannot stop early: it returns exactly `k` columns.
 
 For `k = 1` the first-pivot average is already the selected volume:
 `volumeWeight A (cpqrSet A) ≥ n⁻¹`. The corresponding 1×1 inverse
-magnitude is at most `√n`, matching the workshop scale. This is not a
-polynomial inverse-norm bound for general `k`.
+magnitude is at most `√n`, matching the workshop scale.
+
+Independent residuals after a full-rank set `J` sum to `k - #J`. The
+next unused residual is therefore at least `(k-#J)/(n-#J)`, and the
+product of CPQR pivot residuals gives
+`volumeWeight A (cpqrSet A) ≥ 1 / C(n,k)`. That factor is exponential
+in `k` when `n ≈ 2k` and is not a polynomial inverse-norm bound.
 
 On the running `2×3` frame it selects `{0,2}`, with
 
@@ -97,17 +102,105 @@ Kahan-like frames. On the seed-0 sweep the worst ratio is `2/3`
 (Hadamard `3×8`). That is a recorded witness, not a polynomial bound
 and not a counterexample.
 
+Wave 3 adds contraction and last-residual lemmas
+(`milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`,
+`milestoneE_last_residual_ge`). They constrain the residual-to-`σ_min`
+gap and are not a joint `poly(n,k)` inverse-norm bound.
+
+Wave 1 (`experiments/census_wave1_*_seed1.json`) adds Mercedes-Benz /
+simplex / Paley / icosahedral ETFs, clustered near-parallels after
+`row_orthonormalize`, Haar growth with `k ≤ 12`, and block-diagonal
+ETF copies. Every recorded matrix had `AAᵀ ≈ I`. The worst ratio is
+`√3/2` on the Mercedes-Benz / simplex `2×3`. No sample had
+`r_CPQR > 1`, and none reached the campaign's named polynomial
+yardstick. The simplex family saturates both `1/C(n,k)` and
+`σ_min = |det|` at `n = k+1` with inverse norm `√(k+1)`; that is a
+witness that those two universal estimates are sharp, not a
+`poly(n,k)` theorem and not a counterexample. Clustered
+near-parallels die after orthonormalization, like Kahan.
+
 The Fin-indexed Cauchy–Binet `powersetCard` form is now also named
 `cauchyBinet`, matching
 https://faabian.github.io/algebraic-combinatorics/docs/AlgebraicCombinatorics/CauchyBinet.html
 including the empty-sum case `n < k → det(AB) = 0`.
 
+## Phase 6 (triangular trace bound + certified `C = 1` witness) delivered
+
+The pivot-ordered CPQR Gram matrix factors as `G' = Uᵀ Δ U` with `U`
+unit upper triangular, `|U i j| ≤ 1` (greedy maximality), and
+`Δ = diag(δ)` the pivot residuals. Inverting `U` through the finite
+Neumann series gives the Businger–Golub entry bound
+`|S i j| ≤ 2^{j-i-1}` on `S = U⁻¹`, and the residual-energy ratio
+`1/δ_l ≤ (n-l)/(k-l)` assembles into
+
+```text
+tr((G')⁻¹) ≤ (n - k + 1)(4^k + 6k - 1) / 9
+```
+
+(`milestoneE_pivot_gram_inv_trace_le`; Drmač–Gugercin /
+Gu–Eisenstat style). This is polynomial in `n` but exponential in
+`k`, so it is not a joint `poly(n,k)` inverse-norm bound and does
+not close Milestone E.
+
+A certified `C = 1` counterexample now exists: the rational `3×8`
+frame `frame38` satisfies `AAᵀ = I` exactly, CPQR selects `{0,1,2}`
+with strictly positive pivot margins, and an explicit rational test
+vector certifies `‖A_J⁻¹‖₂ > √(k(n-k+1))`, i.e. `r_CPQR > 1`
+(certified lower bound `r ≈ 1.030`). All three facts are
+machine-checked in `SmallInstanceChecks.lean` (`native_decide`) and
+re-certified independently over `Fraction` in
+`tests/test_cpqr_r_gt_1.py`. This refutes only the ideal `C = 1`
+workshop-scale bound: the certified inverse norm `≈ 4.37` is far
+below the campaign's named polynomial `max(n³, k³, (k(n-k+1))²) =
+512`, so Milestone E remains open. A `4×12` float record with
+`r_CPQR ≈ 1.236` (`experiments/cpqr_r_gt_1_numeric_4_12.json`) is
+numeric only and not certified.
+
+SPEC §9 certification is automated in `structselect/certify.py`
+(Cayley transform / rational Givens, pivot margins, inverse-norm test
+vector). The published `frame38` rationals re-certify, as does a
+Cayley re-parametrization of the same float matrix. That pipeline
+does not close Milestone E.
+
+## Phase 7 (parallel Milestone E merge) delivered
+
+Five isolated tracks were merged. None of them is a joint
+`poly(n,k)` inverse-norm bound, and Milestone E stays **OPEN**.
+
+Proved (default axioms only; public names in `Theorems.lean`):
+
+- residual antitone / rank-1 downdate
+  (`milestoneE_residual_antitone`,
+  `milestoneE_residual_insert_downdate`);
+- Gram inverse-trace equals the sum of reciprocal leave-one-out
+  residuals (`milestoneE_gram_inv_trace_eq_sum_inv_residual`),
+  hence `σ_min(A_J) ≥ 1/√tr(G⁻¹)`
+  (`milestoneE_sigma_min_ge_inv_sqrt_trace`);
+- implicit CPQR factor `R Rᵀ = I`
+  (`milestoneE_gsR_mul_transpose`);
+- a polynomial inverse-trace bound **only if** Gram–Schmidt `U` is
+  bidiagonal (`milestoneE_bidiagonal_U_inv_trace_le`). That is a
+  hypothesis on `U`, not a class of matrices `A`, and not Path 1.
+
+Path 2 trapezoidal search (`structselect/adverse.py`,
+`experiments/cpqr_adverse_ladder_seed20260816.json`) is
+polynomial-looking through `k = 8`. The worst recorded instance is
+`(k,n)=(8,24)` with inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66`
+(`≈ 0.17%` of the named polynomial). `C = 1` witnesses exist;
+no superpolynomial family was found.
+
 ## What remains open
 
 Milestone E still requires one of: a polynomial CPQR theorem for
-general `k`, a machine-checked counterexample, or a counterexample
-plus a stronger static class. The `k = 1` volume bound is a genuine
-special case and does not close E. Milestone F (CSSP bridge) is
-untouched. This repository does not claim to have solved all of
-Problem 4.1. See `CHECKPOINT.md` for the reasoning log and the
-next-work queue.
+general `k`, a machine-checked counterexample past the named
+polynomial, or a counterexample plus a stronger static class. The
+certified `frame38` witness kills only the ideal `C = 1` bound.
+`R Rᵀ = I` is proved; a polynomial inverse-trace bound is proved
+only under a bidiagonal hypothesis on `U`. Residual energy, the
+binomial volume bound, and the triangular trace bound are proved;
+the latter two are exponential in `k` and none of them closes E.
+The Path 2 ladder through `k = 8` is a witness, not a theorem.
+The `k = 1` volume bound is a genuine special case and also does
+not close E. Milestone F (CSSP bridge) is untouched.
+This repository does not claim to have solved all of Problem 4.1.
+See `CHECKPOINT.md` for the reasoning log and the next-work queue.

@@ -7,17 +7,27 @@ import json
 import numpy as np
 
 from structselect.census import (
+    block_diagonal,
+    clustered_near_parallels,
     evaluate,
     fourier_frame,
     hadamard_frame,
     haar_stiefel,
+    icosahedral_etf,
     kahan_like_frame,
     leverage_skew_frame,
     max_r,
+    mercedes_benz,
+    named_poly_scale,
     near_duplicate_frame,
+    paley_harmonic_frame,
     records_to_json,
     row_orthonormalize,
     run_census,
+    run_wave1_block,
+    run_wave1_clustered,
+    run_wave1_etf,
+    simplex_etf,
 )
 
 
@@ -64,3 +74,51 @@ def test_evaluate_small_exhaustive_compares_opt() -> None:
     assert rec.J_opt is not None
     assert rec.r_opt is not None
     assert rec.r_opt <= rec.r_cpqr + 1e-9
+
+
+def test_wave1_etf_generators_are_parseval() -> None:
+    frames = [
+        mercedes_benz(),
+        simplex_etf(3),
+        icosahedral_etf(),
+        paley_harmonic_frame(5),
+        clustered_near_parallels(4, 8, eps=1e-2, n_clusters=2),
+        block_diagonal(mercedes_benz(), mercedes_benz()),
+    ]
+    for A in frames:
+        k = A.shape[0]
+        assert np.allclose(A @ A.T, np.eye(k), atol=1e-9)
+
+
+def test_wave1_etf_records_are_finite() -> None:
+    records = run_wave1_etf()
+    assert len(records) >= 8
+    for rec in records:
+        assert rec.k == len(rec.J_cpqr)
+        assert rec.inv_op > 0
+        assert rec.r_cpqr > 0
+        assert np.isfinite(rec.r_cpqr)
+        assert rec.aat_err is not None and rec.aat_err < 1e-8
+        assert rec.pivot_traj is not None and len(rec.pivot_traj) == rec.k
+        # Census only: record the ratio; do not require it to be ≤ 1.
+        assert rec.named_poly == named_poly_scale(rec.k, rec.n)
+
+
+def test_wave1_block_records_are_finite() -> None:
+    records = run_wave1_block()
+    assert len(records) >= 4
+    worst = max_r(records)
+    assert worst.r_cpqr > 0
+    assert np.isfinite(worst.r_cpqr)
+    for rec in records:
+        assert rec.aat_err is not None and rec.aat_err < 1e-8
+
+
+def test_wave1_clustered_records_are_finite() -> None:
+    records = run_wave1_clustered(seed=1)
+    assert len(records) >= 6
+    worst = max_r(records)
+    assert worst.r_cpqr > 0
+    assert np.isfinite(worst.r_cpqr)
+    for rec in records:
+        assert rec.aat_err is not None and rec.aat_err < 1e-8

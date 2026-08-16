@@ -403,6 +403,10 @@ from
 
 Only the first would have been shown.
 
+Python automation for steps 2–5 (and Lean snippet emission for step 6)
+lives in `structselect.certify`. A `C = 1` certificate is not a
+polynomial-bound disproof.
+
 ## 10. Conditional structural refinement
 
 If orthogonal rows alone are insufficient, search for the weakest useful additional static condition.
@@ -727,18 +731,55 @@ One of the following must be delivered:
 2. an explicit machine-checked counterexample;
 3. a counterexample plus a meaningful stronger structural class with a polynomial CPQR theorem.
 
-Status note (Phase 5 structural CPQR + §8 census + `k=1` volume):
-the greedy algorithm is defined in `ColumnPivotedQR.lean` as
-`cpqrSet`, with public names `milestoneE_residual_empty`,
-`milestoneE_leverage_sum`, `milestoneE_first_pivot_is_max`,
-`milestoneE_first_leverage_ge`, `milestoneE_cpqr_card_le`,
-`milestoneE_cpqr_card_eq`, and `milestoneE_k1_volume_ge`.
-Orthogonal-row CPQR returns exactly `k` columns. A first pivot has
-leverage at least `k/n`. For `k=1` the selected volume is at least
-`n⁻¹` (workshop scale). The running `2×3` pivot set is
-`frame23_cpqr_set`. The Section 8 numerical census lives in
-`structselect/census.py` and `experiments/census_seed0.json`. None of
-the three characterization outcomes for general `k` is claimed.
+Status note (Phase 5 structural CPQR + §8 census + residual energy +
+binomial volume): the greedy algorithm is defined in
+`ColumnPivotedQR.lean` as `cpqrSet`, with public names
+`milestoneE_residual_empty`, `milestoneE_leverage_sum`,
+`milestoneE_first_pivot_is_max`, `milestoneE_first_leverage_ge`,
+`milestoneE_cpqr_card_le`, `milestoneE_cpqr_card_eq`,
+`milestoneE_k1_volume_ge`, `milestoneE_residual_energy`,
+`milestoneE_next_residual_ge`, and
+`milestoneE_cpqr_volume_ge_binomial`,
+`milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, and
+`milestoneE_last_residual_ge`. Orthogonal-row CPQR returns
+exactly `k` columns. A first pivot has leverage at least `k/n`. For
+`k=1` the selected volume is at least `n⁻¹` (workshop scale).
+Independent residuals sum to `k-#J`, and the CPQR volume is at least
+`1/C(n,k)`. That binomial factor is exponential in `k` when `n ≈ 2k`
+and is not a polynomial inverse-norm bound. The running `2×3` pivot
+set is `frame23_cpqr_set`. The Section 8 numerical census lives in
+`structselect/census.py` and `experiments/census_seed0.json`. Wave 1
+adds ETF / clustered / Haar-growth / block records in
+`experiments/census_wave1_*_seed1.json` (worst recorded `r_CPQR`
+there is `√3/2` on the `2×3` simplex). Wave 3 proves
+a contraction and a last-residual average; those are not a joint
+`poly(n,k)` inverse-norm bound. Wave 4 adds
+`milestoneE_pivot_gram_inv_trace_le`
+(`tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9`, polynomial in `n` but
+exponential in `k`, not a joint `poly(n,k)` bound) and a certified
+rational `3×8` witness `frame38` with `r_CPQR > 1`
+(`frame38_mul_transpose`, `frame38_cpqr_set`,
+`frame38_inv_norm_lb` in `SmallInstanceChecks.lean`,
+`native_decide` only). The `frame38` certificate refutes the ideal
+`C = 1` bound but stays below the named polynomial
+(`4.37 ≪ 512`), so it is not outcome 2; a `4×12` record with
+`r_CPQR ≈ 1.236` is numeric only, not certified. Parallel merge
+adds `milestoneE_residual_antitone`,
+`milestoneE_residual_insert_downdate`,
+`milestoneE_gram_inv_trace_eq_sum_inv_residual`,
+`milestoneE_sigma_min_ge_inv_sqrt_trace`,
+`milestoneE_gsR_mul_transpose` (`R Rᵀ = I`), and
+`milestoneE_bidiagonal_U_inv_trace_le` (polynomial inverse-trace
+**only if** Gram–Schmidt `U` is bidiagonal: a hypothesis on `U`,
+not a class of `A`, not Path 1). Path 2 search
+(`structselect/adverse.py`,
+`experiments/cpqr_adverse_ladder_seed20260816.json`) is
+polynomial-looking through `k = 8`; worst recorded `(8,24)` has
+inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66` (`≈ 0.17%` of the named
+polynomial); `C = 1` witnesses exist; no superpolynomial family.
+`structselect/certify.py` re-certifies `frame38`. None of the
+three characterization outcomes for general `k` is claimed.
+Milestone E remains **OPEN**.
 
 ### Milestone F: CSSP perturbation bridge
 

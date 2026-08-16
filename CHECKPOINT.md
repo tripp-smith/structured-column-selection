@@ -1,4 +1,4 @@
-# Research checkpoint (2026-08-15)
+# Research checkpoint (2026-08-16)
 
 This is the working memory for the next agent or human. It records
 what was proved, what was only observed, which proof attempts stalled,
@@ -27,7 +27,20 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone D | **PROVED** | `milestoneD_expected_inv_frob_sq`, `milestoneD_markov_inv_frob` |
 | Milestone E structural CPQR | **PROVED** (not a bound) | `milestoneE_leverage_sum`, `milestoneE_first_pivot_is_max`, `milestoneE_first_leverage_ge`, `milestoneE_cpqr_card_eq` |
 | Milestone E, `k = 1` volume | **PROVED** (special case) | `milestoneE_k1_volume_ge` |
+| Milestone E residual energy | **PROVED** (not a bound) | `milestoneE_residual_energy`, `milestoneE_next_residual_ge` |
+| Milestone E binomial volume | **PROVED** (exponential / not polynomial) | `milestoneE_cpqr_volume_ge_binomial` |
+| Milestone E contraction / last residual | **PROVED** (not a joint poly bound) | `milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, `milestoneE_last_residual_ge` |
+| Milestone E triangular trace bound | **PROVED** (poly in `n`, exponential in `k`; not a joint poly bound) | `milestoneE_pivot_gram_inv_trace_le` |
+| Milestone E residual monotonicity | **PROVED** (not a bound) | `milestoneE_residual_antitone`, `milestoneE_residual_insert_downdate` |
+| Milestone E Gram inverse-trace / `σ_min` | **PROVED** (not a joint poly bound) | `milestoneE_gram_inv_trace_eq_sum_inv_residual`, `milestoneE_sigma_min_ge_inv_sqrt_trace` |
+| Milestone E `R Rᵀ = I` | **PROVED** (not a bound) | `milestoneE_gsR_mul_transpose` |
+| Milestone E bidiagonal-`U` trace bound | **PROVED** (hypothesis on `U`, not a class of `A`, not Path 1) | `milestoneE_bidiagonal_U_inv_trace_le` |
+| Milestone E `C = 1` witness `3×8` | **CERTIFIED** in Lean (kills only `C = 1`; `4.38 ≪ 512` named poly) | `frame38_mul_transpose`, `frame38_cpqr_set`, `frame38_inv_norm_lb` (`SmallInstanceChecks`, `native_decide`) |
+| Milestone E `4×12` `r_CPQR > 1` record | **NUMERIC ONLY** (float, not exact-certified) | `experiments/cpqr_r_gt_1_numeric_4_12.json` |
 | Milestone E §8 census | **NUMERICALLY OBSERVED** | `structselect/census.py`, `experiments/census_seed0.json` |
+| Milestone E Wave 1 census | **NUMERICALLY OBSERVED** | ETF / clustered / Haar-growth / block; `experiments/census_wave1_*_seed1.json` |
+| Milestone E Path 2 adverse ladder | **NUMERICALLY OBSERVED** (polynomial-looking through `k=8`; no superpoly family) | `structselect/adverse.py`, `experiments/cpqr_adverse_ladder_seed20260816.json` |
+| Milestone E §9 certificate automation | **SHIPPED** (does not close E) | `structselect/certify.py`; re-certifies `frame38` |
 | Milestone E characterization | **OPEN** | still needs one of the three SPEC §16 outcomes |
 | Milestone F CSSP bridge | **UNTOUCHED** | do not start unless E is closed or the user asks |
 
@@ -45,8 +58,19 @@ first leverage 1 ≥ 2/3
 
 frame12 = [[3/5, 4/5]]
 CPQR selects {1}
-volumeWeight = 16/25 ≥ 1/2
+volumeWeight = 16/25 ≥ 1/2 = 1/C(2,1)
+
+frame23 after {0}: residuals 0 + 9/25 + 16/25 = 1
+volumeWeight({0,2}) = 16/25 ≥ 1/3 = 1/C(3,2)
+
+frame38 (rational 3×8, certified in Lean):
+CPQR selects {0, 1, 2}
+18 ‖A_J x‖² < ‖x‖²  ⇒  ‖A_J⁻¹‖₂ > √18 = √(k(n-k+1)),  r_CPQR > 1 (r_lb ≈ 1.030)
+‖A_J⁻¹‖₂ lower bound ≈ 4.37 ≪ 512 = max(n³, k³, (k(n-k+1))²)
 ```
+
+`frame38` kills only the ideal `C = 1` bound. The `4×12` record
+(`r_CPQR ≈ 1.236`) is a float observation, **not** exact-certified.
 
 ---
 
@@ -202,7 +226,7 @@ already exceeds every polynomial the project named (SPEC §9).
 
 Do not treat “every sample had `r < 1`” as evidence of a theorem.
 
-### 3.5 Residual-energy / binomial-volume attempt (stalled)
+### 3.5 Residual energy and binomial volume (proved, not polynomial)
 
 The natural next identity is
 
@@ -231,30 +255,23 @@ not polynomial in `n` and `k` jointly.** `C(2k,k) ∼ 4^k / √(πk)`.
 For `k = 1` it recovers `√n` (already proved). For `k = 2` it only
 gives `r ≤ √n / 2`, which is loose compared with the census.
 
-The Lean attempt lived briefly in `CPQRVolume.lean` (Schur complement
-of `appendColumn` Gram via `Matrix.fromBlocks` + `finSumFinEquiv`).
-It stalled on mathlib Matrix notation:
+Shipped in `ResidualEnergy.lean` and `CPQRVolume.lean`. Public names:
+`milestoneE_residual_energy`, `milestoneE_next_residual_ge`,
+`milestoneE_cpqr_volume_ge_binomial`.
 
-- `open Matrix` makes `M i j` fail; `open scoped Matrix` is required;
-- `rw [Matrix.mul_apply]` on a transpose product becomes
-  “function expected `(appendColumn B v)ᵀ p.castSucc`”;
-- `⬝ᵥ` / `*ᵥ` / `ᵥ*` precedence silently reassociates
-  `v ⬝ᵥ G⁻¹ *ᵥ x` as `(v ⬝ᵥ G⁻¹) *ᵥ x`;
-- `Write` of `ᵀ` / `⬝ᵥ` near other glyphs corrupted source.
+The Schur / `fromBlocks` path compiled after:
 
-The `k = 1` theorems were extracted and shipped without Schur. The
-residual-energy identity is still the right next formal lemma. When
-retrying:
+- `open scoped Matrix`, never `open Matrix`, if writing `M i j`;
+- no `rw` on an `M i j` goal; use `Matrix.ext` / `simp only` / `rfl`;
+- parenthesize every `⬝ᵥ` / `*ᵥ`;
+- give `fromBlocks` blocks explicit `Matrix _ _ ℝ` ascriptions;
+- name `⅟G` as a local `Ginv` matrix before writing entries;
+- relate `appendColumn` to `selectedCols (insert j J)` by an
+  enumeration equivalence (`appendEnum` / `appendToInsertEquiv`),
+  then `det_submatrix_equiv_self`.
 
-1. prove `∑_j a_j ⬝ᵥ (M *ᵥ a_j) = (M * A * Aᵀ).trace` with
-   `Matrix.ext_iff` / `simp [mul_apply, transpose_apply]`, never
-   `rw` on `M i j`;
-2. parenthesize every `⬝ᵥ` / `*ᵥ`;
-3. give `fromBlocks` blocks explicit `Matrix _ _ ℝ` ascriptions;
-4. mark `selectedProjector` `noncomputable`;
-5. compile after each lemma.
-
-Even after it lands, **do not announce a polynomial CPQR theorem.**
+**Do not announce a polynomial CPQR theorem.** The binomial bound is
+the non-polynomial theorem named in Path 1 step 4.
 
 ### 3.6 Literature lead (not a claim)
 
@@ -269,6 +286,180 @@ bad behaviour in the census.
 This is a research lead, not a theorem, and not a novelty claim
 (SPEC §12: do not claim “random sketch + sRRQR works”).
 
+### 3.7 Wave 0 consults (INCOMPLETE — research lead only)
+
+Budgeted Claude Opus 5 consult did **not** return a usable reply.
+
+- Claude CLI: `claude --list-models` is not a valid flag on this
+  install. `claude --model opus -p` failed with
+  `OAuth session expired and could not be refreshed`.
+- Cursor Task `claude-opus-5-thinking-high`: launched, then stalled
+  / was interrupted (~40 min) with no consult text.
+- Recovery (2026-08-15): no leftover `claude` or Task processes to
+  kill. Did not retry the hung command in a loop. Did **not** spend
+  the Kimi K3 / Fable 5 oracle slot (that slot requires a usable
+  Claude reply that still needs a second opinion).
+- Wave 3 Claude re-consult was also skipped for the same reason.
+
+The notes below are campaign algebra plus Wave 1 evidence, **not**
+a consult theorem and **not** a SPEC §16 outcome.
+
+1. Constructions that keep `AAᵀ = I`. Mercedes-Benz / simplex ETF
+   survive and are well-defined Parseval frames. Clustered
+   near-parallels in orthogonal planes, then `row_orthonormalize`,
+   behave like orthonormalized Kahan: the adverse geometry dies.
+   Block-diagonal ETF copies stay well-conditioned (`r` falls as
+   more copies are added). Haar `k ≤ 12` showed no growth.
+2. Improving `σ_min` past `|det|`, or the volume product past
+   `1/C(n,k)`, cannot be done *universally*. The simplex ETF
+   saturates both equalities (see §3.8). Path 1 therefore needs an
+   argument that forbids that equality case when `C(n,k)` is
+   exponential (`n ≈ 2k`), not a better universal volume lemma.
+3. A joint `poly(n,k)` theorem is still the better bet than a
+   superpolynomial family *on present evidence*: every Wave 1
+   sample stayed below `r = 1` and far below the named polynomial
+   `max(n³, k³, (k(n-k+1))²)`. A superpolynomial disproof would
+   need a family with `n ≈ 2k` that is near volume-saturation
+   *and* unbalance `≈ 1`. That family was not found.
+
+Ranked lemma list (still to prove; none of these is claimed):
+
+1. `AAᵀ = I ⇒ A` is a contraction, hence `σ_max(A_J) ≤ 1`.
+2. Conditional prefix lemma: if the first `k−1` CPQR columns are
+   orthonormal, then `‖A_J⁻¹‖₂` is at most polynomial in `n`
+   (last residual `≥ 1/(n-k+1)`). Does **not** close E.
+3. Show that when `n ≈ 2k`, the CPQR set is far from the simplex
+   equality case (`vol · C(n,k) ≫ 1` or unbalance `≪ 1`).
+4. Only then a public `milestoneE_cpqr_inv_le_poly`.
+
+### 3.8 Wave 1 census (NUMERICALLY OBSERVED, 2026-08-15)
+
+Seed 1, revision `e302093`, JSON under `experiments/census_wave1_*`.
+Every recorded matrix had `AAᵀ ≈ I` (max entrywise error `< 10⁻¹⁵`).
+**No** sample had `r_CPQR > 1`. **No** sample met or exceeded the
+named polynomial. Tests do not assert a universal bound.
+
+| Track | Worst `r_CPQR` | Instance | `σ_min` | `|det|` | unbalance | `AAᵀ≈I` |
+| --- | --- | --- | --- | --- | --- | --- |
+| ETF / Paley | `√3/2 ≈ 0.866` | simplex / Mercedes-Benz `k=2,n=3` | `1/√3` | `1/√3` | `1` | yes |
+| Clustered | `≈ 0.323` | `k=4,n=8`, `eps=0.1`, 2 clusters | `0.692` | `0.336` | `0.485` | yes |
+| Haar growth | `≈ 0.442` | Haar `k=8,n=12` | `0.358` | `0.173` | `0.485` | yes |
+| Block ETF | `≈ 0.516` | block simplex `2+3` | `0.500` | `0.289` | `0.577` | yes |
+
+Simplex family (exact pattern, still a witness):
+`‖A_J⁻¹‖₂ = √(k+1)`, workshop scale `√(2k)`,
+`r_CPQR = √((k+1)/(2k)) → 1/√2`. Volume
+`det² · C(k+1,k) = 1` and unbalance `inv · |det| = 1`.
+So `1/C(n,k)` and `σ_min = |det|` are **sharp** on this family.
+That does **not** close E: `√(k+1)` is polynomial-scale and
+`r < 1`.
+
+Clustered near-parallels after `row_orthonormalize` stayed
+well-conditioned, including random-rotated planes. Same class of
+failure as orthonormalized Kahan.
+
+Haar `k ∈ {8,10,12}`, `n` up to 24: volume was *loose*
+(`det² · C(n,k)` from about 7 to several hundred) and `r`
+stayed below `0.45`. Exhaustive opt on `n ≤ 12` did not surface
+a growing gap.
+
+Mercedes-Benz / simplex `k=2,n=3` is algebraic (`√3/2`), not a
+`C = 1` counterexample, and was not sent through SPEC §9.
+
+Wave 2 branch: every sample bounded → do not certify a
+counterexample. Wave 3 shipped contraction and last-residual
+lemmas (see §3.9). Milestone E remains **OPEN**.
+
+### 3.9 Wave 3 Path 1 formal (2026-08-15)
+
+Consults: Claude CLI still expired; no Cursor Task retry; Kimi /
+Fable unused. Proceeded from campaign algebra and Wave 1 evidence.
+
+Shipped in `PrefixInverse.lean`, public names in `Theorems.lean`:
+
+- `milestoneE_mulVec_energy_le`: `AAᵀ = I ⇒` Euclidean energy of
+  `A x` is at most the energy of `x`.
+- `milestoneE_col_energy_le`: every column leverage is `≤ 1`.
+- `milestoneE_last_residual_ge`: the last CPQR residual is at least
+  `1 / (n-k+1)`.
+
+A prefix-orthonormal inverse-Frobenius bound (`#J + 2 / residual`,
+hence `O(n)` on that class) was attempted and **not** shipped: the
+block-inverse trace argument did not compile in this wave. That
+remains the next formal target. None of the shipped lemmas is
+`milestoneE_cpqr_inv_le_poly`. Milestone E remains **OPEN**.
+
+### 3.10 Wave 4 triangular trace bound and certified `C = 1` witness (2026-08-15)
+
+Shipped in `TriangularBound.lean`, public name in `Theorems.lean`:
+
+- `milestoneE_pivot_gram_inv_trace_le`: for `AAᵀ = I`, the
+  pivot-ordered CPQR Gram matrix `G' = Uᵀ Δ U` satisfies
+  `tr((G')⁻¹) ≤ (n - k + 1)(4^k + 6k - 1)/9`. The proof factors the
+  pivot Gram via Gram–Schmidt (`|U| ≤ 1` by greedy maximality),
+  inverts `U` by the finite Neumann series `S = Σ_{p<k} (1-U)^p`,
+  bounds `|S i j| ≤ 2^{j-i-1}` by strong induction
+  (Businger–Golub), and assembles the trace with the residual-energy
+  ratio `1/δ_l ≤ (n-l)/(k-l) ≤ n-k+1`. **Polynomial in `n` but
+  exponential in `k`** (`≈ n · 4^k / 9`). This is the Drmač–Gugercin /
+  Gu–Eisenstat style estimate; it is NOT a joint `poly(n,k)` bound
+  and does NOT close E. Axioms: `propext`, `Classical.choice`,
+  `Quot.sound` only.
+
+Certified witness in `SmallInstanceChecks.lean` (`native_decide`,
+kept out of `Theorems.lean`):
+
+- `frame38`: rational `3×8` orthogonal-row matrix from an SLSQP
+  adverse search, re-parametrized over `ℚ` via a Cayley transform
+  (denominator `10⁴`). Certified facts: `frame38 * frame38ᵀ = 1`
+  (`frame38_mul_transpose`), CPQR selects `{0,1,2}` with strictly
+  positive pivot margins (`frame38_cpqr_set`), and the explicit
+  rational test vector gives `18‖A_J x‖² < ‖x‖²`
+  (`frame38_inv_norm_lb`), i.e. `‖A_J⁻¹‖₂ > √(k(n-k+1))` and
+  `r_CPQR ≥ r_lb ≈ 1.030 > 1`. Independent exact re-certification in
+  `tests/test_cpqr_r_gt_1.py` over `Fraction`. Record:
+  `experiments/cpqr_r_gt_1_witness_3_8.json`.
+- This is a SPEC §9 certification of the `C = 1` case **only**: the
+  certified inverse norm `≈ 4.37` is far below the campaign's named
+  polynomial `max(n³, k³, (k(n-k+1))²) = 512`, so it is not outcome
+  2 of SPEC §16. Milestone E remains **OPEN**.
+- `experiments/cpqr_r_gt_1_numeric_4_12.json` records a `4×12` float
+  matrix with `r_CPQR ≈ 1.236` (`σ_min ≈ 0.1348`, `AAᵀ` error
+  `≈ 2·10⁻¹⁶`). **NUMERIC ONLY**: not exact, not certified in Lean.
+  It is a target for future rational certification, not a theorem.
+
+Consults: none (all oracle CLIs unavailable/failed); done directly.
+
+### 3.11 Parallel Milestone E merge (2026-08-16)
+
+Five isolated branches from `8562578` were merged. Public wrappers
+in `Theorems.lean` export only honest statements; each docstring
+says it does **not** close E. ResidualMono is the residual source
+of truth (no duplicate residual modules from tracks B/C).
+
+Proved, default axioms only:
+
+- `milestoneE_residual_antitone`,
+  `milestoneE_residual_insert_downdate`;
+- `milestoneE_gram_inv_trace_eq_sum_inv_residual`,
+  `milestoneE_sigma_min_ge_inv_sqrt_trace`;
+- `milestoneE_gsR_mul_transpose` (`R Rᵀ = I`);
+- `milestoneE_bidiagonal_U_inv_trace_le`: polynomial inverse-trace
+  **only if** Gram–Schmidt `U` is bidiagonal. Hypothesis on `U`,
+  not a class of `A`, not Path 1. **Not** a joint `poly(n,k)`
+  theorem. Do not export `pivotGram_inv_trace_le_of_bidiagonal` as
+  one.
+
+Numeric Path 2 ladder (`structselect/adverse.py`, seed
+`20260816`): polynomial-looking through `k = 8`. Worst recorded
+`(k,n)=(8,24)` has inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66`
+(`inv / named_poly ≈ 0.0017`). `C = 1` witnesses exist. No
+superpolynomial family. `structselect/certify.py` re-certifies
+`frame38`. Tests do not assert a universal `r_CPQR` bound.
+
+None of the five tracks proved a joint `poly(n,k)` inverse-norm
+bound. Milestone E remains **OPEN**. Milestone F untouched.
+
 ---
 
 ## 4. How Milestone E can close
@@ -282,11 +473,11 @@ axioms.
 
 Promising formal steps, in order:
 
-1. Residual energy `∑ residual = k − #J` on independent `J`.
-2. Each CPQR pivot residual `≥ (k−t)/(n−t)`.
-3. Product of residuals `= volumeWeight A (cpqrSet A)`.
-4. That gives the binomial bound (exponential; ship it as a
-   **non-polynomial** theorem with an explicit non-claim).
+1. Residual energy `∑ residual = k − #J` on independent `J`. **Done.**
+2. Each CPQR pivot residual `≥ (k−t)/(n−t)`. **Done.**
+3. Product of residuals `= volumeWeight A (cpqrSet A)`. **Done.**
+4. Binomial bound (exponential; shipped as a **non-polynomial**
+   theorem with an explicit non-claim). **Done.**
 5. Improve the analysis: `σ_min ≥ |det| / σ_max^{k−1}` is the
    pessimistic step. A polynomial bound needs to stop one singular
    value from eating the whole volume, or show residuals cannot
@@ -308,24 +499,27 @@ SPEC §9 protocol, in order:
    witness, **not** as a public structural theorem.
 
 `r_CPQR > 1` on one matrix kills only the ideal `C = 1` bound.
-Killing `poly(n,k)` needs superpolynomial growth or an instance
-past every named polynomial.
+**Done (Wave 4):** `frame38` (`3×8`, rational) is certified in Lean
+with `r_CPQR > 1`; see §3.10. Killing `poly(n,k)` still needs
+superpolynomial growth or an instance past every named polynomial.
 
 Constructions that did **not** work after `AAᵀ = I`:
 
 - classical Kahan (orthonormalization kills it);
 - leverage-skew and near-duplicate frames in the seed-0 sweep;
-- Haar up to `k = 8` in a later probe (worst seen `≈ 0.44`).
+- Haar up to `k = 12` in Wave 1 (worst seen `≈ 0.44` at `k=8,n=12`);
+- clustered near-parallels in orthogonal planes, then
+  `row_orthonormalize` (worst `r ≈ 0.32`; geometry dies);
+- Mercedes-Benz / simplex / Paley / icosahedral ETFs (`r ≤ √3/2`);
+- block-diagonal ETF copies (`r` falls as copies are added).
 
 Worth trying next, still as Python first:
 
-- Mercedes-Benz / simplex ETF (`k=2, n=3` has `r = √3/2 ≈ 0.866`,
-  closer to 1 than Hadamard `2/3`, not a counterexample);
-- other ETFs and conference/Paley frames;
-- two clusters of near-parallel columns in orthogonal planes,
-  *then* row-orthonormalize and check whether the adverse geometry
-  survives;
-- larger Haar (`k ≥ 10`) only as a growth probe, not a proof.
+- frames with `n ≈ 2k` that are near *both* volume-saturation
+  (`det² · C(n,k) ≈ 1`) *and* unbalance `≈ 1` (the simplex does
+  this only for `n = k+1`, where `C(n,k)` is linear);
+- other combinatorial ETFs / Steiner systems with `n ≫ k+1`;
+- larger Haar only as a growth probe, not a proof.
 
 ### Path 3 — counterexample plus a stronger static class
 
@@ -414,22 +608,32 @@ Do not weaken theorems to make any of this easier.
 
 Work the first item that is still open. Do not start F.
 
-1. **Residual energy in Lean** (`∑ residual = k − #J` on independent
-   `J`), then the binomial volume lower bound, labelled as
-   exponential / not outcome 1. This is the highest-leverage formal
-   step that does not require a new idea.
-2. **Deeper census, still Python.** Mercedes-Benz / ETFs; clustered
-   near-parallels that survive orthonormalization; larger `k` only
-   as a growth probe. Tests must not assert a universal bound. If
-   `r_CPQR > 1` appears on a rational matrix, switch to SPEC §9
-   immediately and only then add a Lean witness.
+1. **Beat the `4^k` in the triangular trace bound, or a
+   non-universal Path 1 argument.** `R Rᵀ = I` is now proved
+   (`milestoneE_gsR_mul_transpose`). A polynomial inverse-trace
+   bound holds only under a bidiagonal hypothesis on `U`
+   (`milestoneE_bidiagonal_U_inv_trace_le`); that is not a class of
+   `A` and is not Path 1. The Businger–Golub entry bound
+   `|S i j| ≤ 2^{j-i-1}` is sharp for worst-case triangular
+   matrices, so closing Path 1 still needs an argument that CPQR's
+   greedy pivoting forbids the worst-case `U`. Do not announce a
+   polynomial theorem until the joint statement is proved.
+2. **Certify a Path 2 instance past the named polynomial, or a
+   superpolynomial family (SPEC §9).** The `C = 1` case is certified
+   on `frame38`. Path 2 search through `k = 8` is polynomial-looking
+   (worst `(8,24)` inverse `≈ 30.98`, `≈ 0.17%` of the named
+   polynomial). The `4×12` numeric record remains a certification
+   target; Cayley rounding so far drops below `r = 1`. A Path 2
+   close needs a certified family growing past every named
+   polynomial.
 3. **`AxiomAudit.lean` + GitHub Actions** reusing `scripts/verify.sh`.
    Cheap, matches playbook Phases 6–7, and prevents silent axiom
    drift.
 4. **`CONTRIBUTING.md`** with the search-first proof workflow
    (playbook Phases 3, 4, 14). Do not create `AGENTS.md`.
 5. **leanblueprint** (playbook Phase 2) once public theorem names
-   are stable. Nodes: A–D, E structural, E `k=1`, E open, F open.
+   are stable. Nodes: A–D, E structural, E `k=1`, E residual /
+   binomial, E open, F open.
 6. **Only if a counterexample exists:** isolate the weakest static
    extra hypothesis (leverage ratio / coherence) and prove a poly
    bound on that class.
@@ -444,10 +648,20 @@ Work the first item that is still open. Do not start F.
 | `SPEC.md` | mathematical contract; edit status notes only |
 | `Theorems.lean` | public names only |
 | `ColumnPivotedQR.lean` | CPQR definition and structural proofs |
-| `CPQRVolume.lean` | first leverage and `k = 1` volume |
+| `ResidualEnergy.lean` | residual energy and next-residual average |
+| `CPQRVolume.lean` | first leverage, `k = 1` volume, binomial volume |
+| `PrefixInverse.lean` | contraction, column energy `≤ 1`, last residual |
+| `TriangularBound.lean` | pivot-Gram inverse-trace bound (poly in `n`, exp in `k`) |
+| `ResidualMono.lean` | residual antitone / rank-1 downdate (source of truth) |
+| `SigmaMinBounds.lean` | Gram inverse-trace = sum inv LOO residual; `σ_min ≥ 1/√tr` |
+| `RowOrthoConstraints.lean` | `R Rᵀ = I`; poly bound only under bidiagonal `U` |
 | `SmallInstanceChecks.lean` | exact `ℚ` witnesses, `native_decide` allowed |
 | `structselect/census.py` | §8 generators; witnesses, not theorems |
+| `structselect/certify.py` | §9 Cayley/Givens rational certificates; does not close E |
+| `structselect/adverse.py` | Path 2 trapezoidal search; witnesses, not theorems |
 | `experiments/census_seed0.json` | recorded seed-0 sweep |
+| `experiments/census_wave1_*_seed1.json` | Wave 1 ETF / clustered / growth / block |
+| `experiments/cpqr_adverse_ladder_seed20260816.json` | Path 2 ladder through `k=8` |
 | `scripts/verify.sh` | `lake build`, `sorry` scan, pytest |
 | `autonomous-implementation.md` | 16-phase engineering playbook |
 | `.cursor/skills/autonomous-implementation/SKILL.md` | agent loop |
@@ -461,10 +675,26 @@ Work the first item that is still open. Do not start F.
 Merged before this document: PRs #1–#5 (Milestones A–D and the
 first E discovery commit on `main`).
 
-Open at writing: PR #6
-`cursor/phase-e-cpqr-cadence-e353` — structural E, §8 census,
-`k = 1` volume, agent skills. Intended to land on `main` together
-with this file.
+Merged before this residual-energy phase: PRs #1–#6 (Milestones A–D,
+structural E, §8 census, `k = 1` volume).
+
+Residual-energy phase: `cursor/phase-e-residual-energy-e353` /
+draft PR #7 — residual energy, next-residual average, binomial
+volume (exponential / not polynomial).
+
+This Close-E wave: `cursor/phase-e-close-e353` / draft PR #8 —
+Wave 1 census, Wave 3 contraction / last-residual, Wave 4
+triangular trace bound and certified `C = 1` witness.
+
+Parallel merge (this checkpoint): `cursor/phase-e-parallel-merge-e353`
+integrates tracks A–E (residual mono, sigma-min, row-ortho, Path 2
+ladder, rational certify) onto that campaign and updates PR #8.
+`R Rᵀ = I` proved. Poly bound only under bidiagonal `U`. Path 2
+search polynomial-looking through `k = 8`. No joint `poly(n,k)`
+theorem. Milestone E remains **OPEN**. Do not start F.
+
+PRs #9 (`cursor/phase-e-rational-certify-e353`) and #10
+(`cursor/row-ortho-constraints-e353`) are absorbed by this merge.
 
 Branch rule: `cursor/<descriptive-name>-e353`. Draft PR before
 official `scripts/verify.sh`; update the PR after any fix.

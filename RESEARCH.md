@@ -77,14 +77,23 @@ Delivery:
 | `milestoneE_first_leverage_ge` | a first pivot has leverage `≥ k/n` | `CPQRVolume.lean` | frame23 first leverage `1 ≥ 2/3` |
 | `milestoneE_cpqr_card_eq` | `AAᵀ = I ⇒ #(cpqrSet A) = k` | `ColumnPivotedQR.lean` | frame23 / frame12 cardinalities |
 | `milestoneE_k1_volume_ge` | `k=1 ⇒ volumeWeight(cpqrSet) ≥ n⁻¹` | `CPQRVolume.lean` | `frame12` volume `16/25 ≥ 1/2` |
+| `milestoneE_residual_energy` | `AAᵀ = I`, Gram invertible `⇒ ∑ residualSq = k-#J` | `ResidualEnergy.lean` | frame23 after `{0}`: `0+9/25+16/25=1` |
+| `milestoneE_next_residual_ge` | unused max residual `≥ (k-#J)/(n-#J)` | `ResidualEnergy.lean` | frame23 after `{0}`: `16/25 ≥ 1/2` |
+| `milestoneE_cpqr_volume_ge_binomial` | `volumeWeight(cpqrSet) ≥ 1/C(n,k)` (not polynomial) | `CPQRVolume.lean` | frame23 `16/25 ≥ 1/3`; frame12 `16/25 ≥ 1/2` |
+| `milestoneE_mulVec_energy_le` | `AAᵀ = I ⇒` energy of `A x` is `≤` energy of `x` | `PrefixInverse.lean` | column energies `≤ 1` |
+| `milestoneE_col_energy_le` | `AAᵀ = I ⇒` column leverage `≤ 1` | `PrefixInverse.lean` | frame23 leverages `1, 9/25, 16/25` |
+| `milestoneE_last_residual_ge` | last CPQR residual `≥ 1/(n-k+1)` | `PrefixInverse.lean` | frame23 last residual `16/25 ≥ 1/2` |
+| `milestoneE_pivot_gram_inv_trace_le` | `tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9` (poly in `n`, exp in `k`) | `TriangularBound.lean` | `frame23` pivot Gram trace |
 
 Independent computational witness: `frame23_cpqr_set` selects `{0,2}` with `r_CPQR = 5/8`.
 
 The card identity is a full-rank stopping theorem: CPQR on an
 orthogonal-row matrix cannot halt before `k` columns. The `k = 1`
 volume bound is a workshop-scale inverse-magnitude theorem for a
-single orthonormal row. Neither is a bound on `‖A_J⁻¹‖₂` for
-general `k`.
+single orthonormal row. Residual energy and the binomial volume bound
+are identities for every orthogonal-row matrix; `1/C(n,k)` is
+exponential in `k` when `n ≈ 2k` and is not a `poly(n,k)` inverse-norm
+bound. None of these closes Milestone E.
 
 ## Thread 5b — Milestone E characterization census (in progress)
 
@@ -99,17 +108,96 @@ On the seed-0 sweep the worst recorded ratio is Hadamard `k=3,n=8`
 with `r_CPQR = 2/3 < 1`. Several Haar draws are slightly worse than
 the exhaustive optimum and still below the workshop scale.
 
+Wave 1 (seed 1): Mercedes-Benz / simplex / Paley / icosahedral ETFs,
+clustered near-parallels, Haar `k ≤ 12`, and block-diagonal ETF
+copies. Worst recorded `r_CPQR` is `√3/2` on the `2×3` simplex /
+Mercedes-Benz frame. No sample exceeded `r = 1` or the named
+polynomial yardstick. The simplex saturates `1/C(n,k)` and
+`σ_min = |det|` at `n = k+1`; clustered near-parallels do not
+survive `row_orthonormalize`. JSON:
+`experiments/census_wave1_*_seed1.json`.
+
 This is **not** a polynomial CPQR theorem and **not** a
 machine-checked counterexample. Milestone E remains open.
 
-The dated reasoning log, stalled residual-energy attempt, census
-labels, and ordered next-work queue are in `CHECKPOINT.md`.
+## Thread 5c — Milestone E triangular bound and `C = 1` witness (Wave 4)
+
+Formal (proved, default axioms only):
+
+| Name | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `milestoneE_pivot_gram_inv_trace_le` | `AAᵀ = I ⇒ tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9` | `TriangularBound.lean` | pivot-Gram trace identity `pivotGram_inv_trace` |
+
+The trace bound is polynomial in `n` but exponential in `k`
+(`≈ n·4^k/9`), so it is **not** outcome 1.
+
+Certified witness (`native_decide`, kept in `SmallInstanceChecks.lean`,
+not exported as a public structural theorem):
+
+| Name | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `frame38_mul_transpose` | `frame38 * frame38ᵀ = 1` (exact, `ℚ`) | `SmallInstanceChecks.lean` | `tests/test_cpqr_r_gt_1.py` |
+| `frame38_cpqr_set` | CPQR selects `{0,1,2}` (strict pivot margins) | `SmallInstanceChecks.lean` | same |
+| `frame38_inv_norm_lb` | `18‖A_J x‖² < ‖x‖²`, hence `r_CPQR > 1` | `SmallInstanceChecks.lean` | same |
+
+This is a SPEC §9 certification of the `C = 1` case only
+(`r_lb ≈ 1.030`, inverse norm `≈ 4.37 ≪ 512 = max(n³, k³,
+(k(n-k+1))²)`), so it is **not** outcome 2. The `4×12` record
+(`r_CPQR ≈ 1.236`, `experiments/cpqr_r_gt_1_numeric_4_12.json`) is a
+float observation and is **not** certified. The Python pipeline that
+produced and re-checks these certificates is `structselect.certify`
+(`tests/test_certify.py`). Milestone E remains open.
+
+## Thread 5d — Parallel Milestone E merge (not a close)
+
+Formal (proved, default axioms only; none closes E):
+
+| Name | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `milestoneE_residual_antitone` | independent `J ⊆ J' ⇒ residualSq A J' ≤ residualSq A J` | `ResidualMono.lean` | projector absorption |
+| `milestoneE_residual_insert_downdate` | rank-1 residual downdate on an independent insert | `ResidualMono.lean` | CPQR form `residualSq_cpqr_downdate` |
+| `milestoneE_gram_inv_trace_eq_sum_inv_residual` | `tr(G_J⁻¹) = ∑_{j∈J} 1/residualSq A (J.erase j) j` | `SigmaMinBounds.lean` | Cramer's rule / adjugate diagonal |
+| `milestoneE_sigma_min_ge_inv_sqrt_trace` | `‖x‖² ≤ ‖A_J x‖² · tr(G⁻¹)` (`σ_min ≥ 1/√tr`) | `SigmaMinBounds.lean` | Cauchy–Schwarz on the inverse Gram |
+| `milestoneE_gsR_mul_transpose` | implicit CPQR factor `R Rᵀ = I` | `RowOrthoConstraints.lean` | Parseval pairing of GS directions |
+| `milestoneE_bidiagonal_U_inv_trace_le` | bidiagonal `U` `⇒ tr((G')⁻¹) ≤ k(k+1)/2 · (n-k+1)` | `RowOrthoConstraints.lean` | hypothesis on `U`, not a class of `A` |
+
+Numeric (witnesses, not theorems): Path 2 trapezoidal search
+(`structselect/adverse.py`,
+`experiments/cpqr_adverse_ladder_seed20260816.json`) is
+polynomial-looking through `k = 8`. Worst recorded `(8,24)` has
+inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66` (`≈ 0.17%` of the named
+polynomial). `C = 1` witnesses exist; no superpolynomial family.
+
+The dated reasoning log, census labels, and ordered next-work queue
+are in `CHECKPOINT.md`. Residual energy and the binomial volume bound
+are now proved there as non-polynomial theorems.
 
 Non-claims (intentional):
 
 - no polynomial CPQR inverse-norm bound for general `k`
-- no CPQR counterexample
+- no CPQR counterexample past the named polynomial (the certified
+  `frame38` witness refutes only the ideal `C = 1` bound)
 - no extra static hypothesis (leverage ratio, coherence, …)
 - no claim that Problem 4.1 is solved
 - Python census is a witness, not a source of truth
 - `milestoneE_k1_volume_ge` does not close Milestone E
+- `milestoneE_cpqr_volume_ge_binomial` is exponential, not polynomial,
+  and does not close Milestone E
+- `milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, and
+  `milestoneE_last_residual_ge` do not close Milestone E
+- `milestoneE_pivot_gram_inv_trace_le` is polynomial in `n` but
+  exponential in `k` and does not close Milestone E
+- `milestoneE_residual_antitone` and
+  `milestoneE_residual_insert_downdate` are projector identities
+  and do not close Milestone E
+- `milestoneE_gram_inv_trace_eq_sum_inv_residual` and
+  `milestoneE_sigma_min_ge_inv_sqrt_trace` are not joint
+  `poly(n,k)` bounds and do not close Milestone E
+- `milestoneE_gsR_mul_transpose` is `R Rᵀ = I`, not an inverse-norm
+  bound
+- `milestoneE_bidiagonal_U_inv_trace_le` is a hypothesis on
+  Gram–Schmidt `U`, not a class of `A`, not Path 1, and not a
+  joint `poly(n,k)` theorem
+- Path 2 ladder through `k = 8` is polynomial-looking (worst
+  `(8,24)` inverse `≈ 30.98`, `r_CPQR ≈ 2.66`, `≈ 0.17%` of the
+  named polynomial); census ratios are witnesses, not theorems

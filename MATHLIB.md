@@ -54,13 +54,51 @@ determinants and matrix rank:
 - `firstLeverage_ge`
 - `cpqrSet_card_eq`
 - `cpqr_k1_volume_ge`
+- `residualEnergy`
+- `nextResidual_ge`
+- `cpqr_volume_ge_binomial`
+- `mulVec_energy_le`, `col_energy_le`, `lastResidual_ge`
 - residual nonnegativity and unused-column span control
 
-These use mathlib `Matrix.rank`, `rank_transpose_mul_self`, and
-`rank_of_det_ne_zero`. The `k=1` volume bound is a determinant
-comparison, not a spectral-norm argument.
+These use mathlib `Matrix.rank`, `rank_transpose_mul_self`,
+`rank_of_det_ne_zero`, `det_fromBlocks₁₁`, and `det_submatrix_equiv_self`.
+The `k=1` volume bound is a determinant comparison, not a
+spectral-norm argument. The binomial volume bound is a product of
+Gram-determinant ratios and is not polynomial in `n` and `k`.
 
-The §8 census is Python-only and is not a mathlib candidate.
+Phase 6 adds the triangular inverse machinery behind
+`pivotGram_inv_trace_le`:
+
+- `geom_sum_one_sub` (finite geometric series with `1 - X` in a
+  noncommutative matrix ring)
+- unit-triangular inversion by the finite Neumann series
+  `S = Σ_{p<k} (1-U)^p` (`gsS_mul_gsU`, `gsU_inv`)
+- the Businger–Golub entry bound `|S i j| ≤ 2^{j-i-1}` for the
+  inverse of a unit upper triangular matrix with `|U i j| ≤ 1`
+  (`gsS_entry_abs_le`)
+- the trace factorization `tr((UᵀΔU)⁻¹) = Σ_l δ_l⁻¹ ‖S e_l‖²`
+  (`pivotGram_inv_trace`)
+
+The generic triangular-inverse lemmas are mathlib-shaped candidates;
+the CPQR-specific ones stay here. The `frame38` witness theorems use
+`native_decide` and are not mathlib candidates.
+
+Phase 7 adds residual monotonicity, the leave-one-out inverse-trace
+identity, and row-orthonormality of the implicit CPQR factor:
+
+- `residualSq_antitone`, `residualSq_insert_downdate`
+- `selectedColGram_inv_trace_eq_sum_inv_residual`
+- `selectedCols_energy_mul_inv_trace_ge`
+- `gsR_mul_transpose`
+
+These stay on finite Gram projectors and are not a joint
+`poly(n,k)` inverse-norm theorem. The bidiagonal-`U` bound
+`pivotGram_inv_trace_le_of_bidiagonal` is a hypothesis on the
+coefficient pattern of `U`, not a class of `A`.
+
+The §8 census, including the Wave 1 ETF / clustered / Haar-growth
+tracks and the Path 2 adverse ladder, is Python-only and is not a
+mathlib candidate.
 
 ## Later candidates
 

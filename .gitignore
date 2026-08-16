@@ -4,3 +4,6 @@
 __pycache__/
 .pytest_cache/
 *.egg-info/
+
+# local reference documents (not part of the theorem log)
+/_ref/
