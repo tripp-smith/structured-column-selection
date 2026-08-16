@@ -763,8 +763,23 @@ rational `3×8` witness `frame38` with `r_CPQR > 1`
 `native_decide` only). The `frame38` certificate refutes the ideal
 `C = 1` bound but stays below the named polynomial
 (`4.37 ≪ 512`), so it is not outcome 2; a `4×12` record with
-`r_CPQR ≈ 1.236` is numeric only, not certified. None of
-the three characterization outcomes for general `k` is claimed.
+`r_CPQR ≈ 1.236` is numeric only, not certified. Parallel merge
+adds `milestoneE_residual_antitone`,
+`milestoneE_residual_insert_downdate`,
+`milestoneE_gram_inv_trace_eq_sum_inv_residual`,
+`milestoneE_sigma_min_ge_inv_sqrt_trace`,
+`milestoneE_gsR_mul_transpose` (`R Rᵀ = I`), and
+`milestoneE_bidiagonal_U_inv_trace_le` (polynomial inverse-trace
+**only if** Gram–Schmidt `U` is bidiagonal: a hypothesis on `U`,
+not a class of `A`, not Path 1). Path 2 search
+(`structselect/adverse.py`,
+`experiments/cpqr_adverse_ladder_seed20260816.json`) is
+polynomial-looking through `k = 8`; worst recorded `(8,24)` has
+inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66` (`≈ 0.17%` of the named
+polynomial); `C = 1` witnesses exist; no superpolynomial family.
+`structselect/certify.py` re-certifies `frame38`. None of the
+three characterization outcomes for general `k` is claimed.
+Milestone E remains **OPEN**.
 
 ### Milestone F: CSSP perturbation bridge
 

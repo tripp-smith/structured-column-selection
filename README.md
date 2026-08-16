@@ -41,6 +41,19 @@ Phases completed:
   - `milestoneE_pivot_gram_inv_trace_le` (pivot-Gram inverse trace
     `≤ (n-k+1)(4^k+6k-1)/9`; polynomial in `n`, exponential in `k`;
     not a joint `poly(n,k)` bound)
+  - `milestoneE_residual_antitone` (independent residuals decrease
+    when the column set grows; not an inverse-norm bound)
+  - `milestoneE_residual_insert_downdate` (rank-1 residual downdate;
+    not an inverse-norm bound)
+  - `milestoneE_gram_inv_trace_eq_sum_inv_residual`
+    (`tr(G_J⁻¹) = ∑ 1/` leave-one-out residual; not a joint poly bound)
+  - `milestoneE_sigma_min_ge_inv_sqrt_trace`
+    (`σ_min(A_J) ≥ 1/√tr(G⁻¹)`; not a joint poly bound)
+  - `milestoneE_gsR_mul_transpose` (implicit CPQR factor `R Rᵀ = I`;
+    not an inverse-norm bound)
+  - `milestoneE_bidiagonal_U_inv_trace_le` (poly inverse-trace bound
+    **only if** Gram–Schmidt `U` is bidiagonal; a hypothesis on `U`,
+    not a class of `A`, not Path 1, not a joint `poly(n,k)` theorem)
 - Milestone E `C = 1` counterexample witness (certified, kills only
   `C = 1`): rational `3×8` `frame38` with `AAᵀ = I`, CPQR set
   `{0,1,2}`, and `r_CPQR > 1` (`frame38_mul_transpose`,
@@ -58,6 +71,12 @@ Phases completed:
   clustered near-parallels, Haar `k ≤ 12` growth, block-diagonal ETF
   copies (`experiments/census_wave1_*_seed1.json`). Worst recorded
   `r_CPQR` there is `√3/2` on the Mercedes-Benz / simplex `2×3`.
+- Milestone E Path 2 adverse ladder (witnesses only): trapezoidal
+  search in `structselect/adverse.py`, record
+  `experiments/cpqr_adverse_ladder_seed20260816.json`. Worst
+  recorded instance is `(k,n)=(8,24)` with inverse norm `≈ 30.98`,
+  `r_CPQR ≈ 2.66` (`≈ 0.17%` of the named polynomial). Growth looks
+  polynomial through `k = 8`; no superpolynomial family.
 
 Not yet claimed:
 
@@ -104,6 +123,17 @@ drop.
   its Neumann-series inverse, the Businger–Golub entry bound, and
   the trace bound `tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9` (polynomial in
   `n`, exponential in `k`; not a joint `poly(n,k)` bound).
+- `StructuredColumnSelection/ResidualMono.lean`:
+  residual monotonicity and rank-1 / CPQR residual downdate.
+  Not a joint `poly(n,k)` inverse bound.
+- `StructuredColumnSelection/SigmaMinBounds.lean`:
+  Gram inverse-trace as a sum of reciprocal leave-one-out residuals,
+  and the elementary `σ_min ≥ 1/√tr` bound. Not a joint `poly(n,k)`
+  inverse bound.
+- `StructuredColumnSelection/RowOrthoConstraints.lean`:
+  implicit CPQR factor `R Rᵀ = I`, and a polynomial inverse-trace
+  bound only under a bidiagonal hypothesis on `U` (not a class of
+  `A`, not Path 1).
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
   exact rational enumerations used as independent witnesses,
   including the certified `frame38` `C = 1` counterexample

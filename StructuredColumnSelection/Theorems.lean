@@ -8,11 +8,15 @@ import StructuredColumnSelection.ResidualEnergy
 import StructuredColumnSelection.CPQRVolume
 import StructuredColumnSelection.PrefixInverse
 import StructuredColumnSelection.TriangularBound
+import StructuredColumnSelection.ResidualMono
+import StructuredColumnSelection.SigmaMinBounds
+import StructuredColumnSelection.RowOrthoConstraints
 
 namespace StructuredColumnSelection
 
 open Classical
 open Matrix Finset
+open scoped Matrix
 
 /-- Milestone A theorem: transpose correspondence of orthogonality structure. -/
 theorem milestoneA_transpose_correspondence {n k : ℕ}
@@ -194,5 +198,77 @@ theorem milestoneE_pivot_gram_inv_trace_le {k n : ℕ}
     ((pivotGram A hA)⁻¹).trace ≤
       ((n : ℝ) - k + 1) * ((4 : ℝ)^k + 6*k - 1) / 9 :=
   pivotGram_inv_trace_le A hA
+
+/-- Residual is antitone in the independent index set.
+
+This is a projector identity, not a CPQR inverse-norm bound, and
+does not close Milestone E. -/
+theorem milestoneE_residual_antitone {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) {J J' : Finset (Fin n)}
+    (hJJ : J ⊆ J') (hG : (selectedColGram A J).det ≠ 0)
+    (hG' : (selectedColGram A J').det ≠ 0) (j : Fin n) :
+    residualSq A J' j ≤ residualSq A J j :=
+  residualSq_antitone A hJJ hG hG' j
+
+/-- Rank-1 residual downdate after inserting an independent column.
+
+This is not a CPQR inverse-norm bound and does not close Milestone E. -/
+theorem milestoneE_residual_insert_downdate {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) {J : Finset (Fin n)} {p : Fin n}
+    (hp : p ∉ J) (hG : (selectedColGram A J).det ≠ 0)
+    (hG' : (selectedColGram A (insert p J)).det ≠ 0) (j : Fin n) :
+    residualSq A (insert p J) j =
+      residualSq A J j -
+        (((fun i => A i j) ⬝ᵥ residualVec A J p) ^ 2) *
+          (residualSq A J p)⁻¹ :=
+  residualSq_insert_downdate A hp hG hG' j
+
+/-- Inverse-Frobenius identity: the selected Gram inverse-trace equals
+the sum of reciprocal leave-one-out residuals.
+
+This is not a joint `poly(n,k)` inverse-norm bound and does not
+close Milestone E. -/
+theorem milestoneE_gram_inv_trace_eq_sum_inv_residual {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
+    (hG : (selectedColGram A J).det ≠ 0) :
+    ((selectedColGram A J)⁻¹).trace =
+      ∑ j ∈ J, (residualSq A (J.erase j) j)⁻¹ :=
+  selectedColGram_inv_trace_eq_sum_inv_residual A J hG
+
+/-- Elementary `σ_min` bound: `‖x‖² ≤ ‖A_J x‖² · tr(G_J⁻¹)`,
+equivalently `σ_min(A_J) ≥ 1 / √tr(G⁻¹)`.
+
+This is not a joint `poly(n,k)` inverse-norm bound and does not
+close Milestone E. -/
+theorem milestoneE_sigma_min_ge_inv_sqrt_trace {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
+    (hG : (selectedColGram A J).det ≠ 0) (x : Fin J.card → ℝ) :
+    vecEnergy x ≤
+      vecEnergy (selectedCols A J *ᵥ x) *
+        ((selectedColGram A J)⁻¹).trace :=
+  selectedCols_energy_mul_inv_trace_ge A J hG x
+
+/-- Implicit CPQR Gram–Schmidt factor is row-orthonormal: `R Rᵀ = I`.
+
+This is not an inverse-norm bound and does not close Milestone E. -/
+theorem milestoneE_gsR_mul_transpose {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    gsR A hA * (gsR A hA)ᵀ = 1 :=
+  gsR_mul_transpose A hA
+
+/-- Inverse-Frobenius proxy when the Gram–Schmidt factor `U` is
+bidiagonal (`U_s t = 0` unless `t ∈ {s, s+1}`).
+
+This is a hypothesis on the coefficient pattern of `U`, not a
+static class of matrices `A`, and not Path 1. It is **not** a
+joint `poly(n,k)` inverse-norm bound for every orthogonal-row
+matrix. Multi-neighbor coupling remains open. It does not close
+Milestone E. -/
+theorem milestoneE_bidiagonal_U_inv_trace_le {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hbi : gsUBidiagonal A hA) :
+    ((pivotGram A hA)⁻¹).trace ≤
+      ((k : ℝ) * (k + 1) / 2) * ((n : ℝ) - k + 1) :=
+  pivotGram_inv_trace_le_of_bidiagonal A hA hbi
 
 end StructuredColumnSelection

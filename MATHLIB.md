@@ -83,8 +83,22 @@ The generic triangular-inverse lemmas are mathlib-shaped candidates;
 the CPQR-specific ones stay here. The `frame38` witness theorems use
 `native_decide` and are not mathlib candidates.
 
+Phase 7 adds residual monotonicity, the leave-one-out inverse-trace
+identity, and row-orthonormality of the implicit CPQR factor:
+
+- `residualSq_antitone`, `residualSq_insert_downdate`
+- `selectedColGram_inv_trace_eq_sum_inv_residual`
+- `selectedCols_energy_mul_inv_trace_ge`
+- `gsR_mul_transpose`
+
+These stay on finite Gram projectors and are not a joint
+`poly(n,k)` inverse-norm theorem. The bidiagonal-`U` bound
+`pivotGram_inv_trace_le_of_bidiagonal` is a hypothesis on the
+coefficient pattern of `U`, not a class of `A`.
+
 The §8 census, including the Wave 1 ETF / clustered / Haar-growth
-tracks, is Python-only and is not a mathlib candidate.
+tracks and the Path 2 adverse ladder, is Python-only and is not a
+mathlib candidate.
 
 ## Later candidates
 

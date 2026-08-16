@@ -36,7 +36,16 @@ the source of truth for contraction and the last residual is
 `milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, and
 `milestoneE_last_residual_ge`; the source of truth for the
 pivot-Gram inverse trace bound is `milestoneE_pivot_gram_inv_trace_le`
-(polynomial in `n`, exponential in `k`).
+(polynomial in `n`, exponential in `k`); residual monotonicity and
+downdate are `milestoneE_residual_antitone` and
+`milestoneE_residual_insert_downdate`; the Gram inverse-trace /
+leave-one-out identity is
+`milestoneE_gram_inv_trace_eq_sum_inv_residual`; the elementary
+`σ_min ≥ 1/√tr` bound is `milestoneE_sigma_min_ge_inv_sqrt_trace`;
+row-orthonormality of the implicit CPQR factor is
+`milestoneE_gsR_mul_transpose`; the bidiagonal-`U` inverse-trace
+bound is `milestoneE_bidiagonal_U_inv_trace_le` (hypothesis on `U`,
+not a class of `A`, not Path 1).
 
 `tests/test_cpqr_r_gt_1.py` re-certifies the `3×8` witness
 `experiments/cpqr_r_gt_1_witness_3_8.json` in exact `Fraction`
@@ -60,6 +69,15 @@ rationals and after Cayley re-parametrization of the float matrix.
 The automation does not close Milestone E: `C = 1` witnesses stay
 below the named polynomial, and Cayley rounding of the `4×12` float
 record does not preserve `r_CPQR > 1`.
+
+`structselect/adverse.py` and
+`tests/test_adverse.py` record a Path 2 trapezoidal growth search
+(`experiments/cpqr_adverse_ladder_seed20260816.json`). Tests check
+row-orthonormality, pivot margins, and named-poly flags; they do
+not assert a universal `r_CPQR` bound. The worst recorded instance
+is `(k,n)=(8,24)` with inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66`
+(`≈ 0.17%` of the named polynomial). Growth looks polynomial
+through `k = 8`. This is a witness, not a theorem.
 
 When selectors are added, this document will separate:
 

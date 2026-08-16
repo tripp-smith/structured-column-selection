@@ -162,15 +162,45 @@ vector). The published `frame38` rationals re-certify, as does a
 Cayley re-parametrization of the same float matrix. That pipeline
 does not close Milestone E.
 
+## Phase 7 (parallel Milestone E merge) delivered
+
+Five isolated tracks were merged. None of them is a joint
+`poly(n,k)` inverse-norm bound, and Milestone E stays **OPEN**.
+
+Proved (default axioms only; public names in `Theorems.lean`):
+
+- residual antitone / rank-1 downdate
+  (`milestoneE_residual_antitone`,
+  `milestoneE_residual_insert_downdate`);
+- Gram inverse-trace equals the sum of reciprocal leave-one-out
+  residuals (`milestoneE_gram_inv_trace_eq_sum_inv_residual`),
+  hence `σ_min(A_J) ≥ 1/√tr(G⁻¹)`
+  (`milestoneE_sigma_min_ge_inv_sqrt_trace`);
+- implicit CPQR factor `R Rᵀ = I`
+  (`milestoneE_gsR_mul_transpose`);
+- a polynomial inverse-trace bound **only if** Gram–Schmidt `U` is
+  bidiagonal (`milestoneE_bidiagonal_U_inv_trace_le`). That is a
+  hypothesis on `U`, not a class of matrices `A`, and not Path 1.
+
+Path 2 trapezoidal search (`structselect/adverse.py`,
+`experiments/cpqr_adverse_ladder_seed20260816.json`) is
+polynomial-looking through `k = 8`. The worst recorded instance is
+`(k,n)=(8,24)` with inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66`
+(`≈ 0.17%` of the named polynomial). `C = 1` witnesses exist;
+no superpolynomial family was found.
+
 ## What remains open
 
 Milestone E still requires one of: a polynomial CPQR theorem for
 general `k`, a machine-checked counterexample past the named
 polynomial, or a counterexample plus a stronger static class. The
 certified `frame38` witness kills only the ideal `C = 1` bound.
-Residual energy, the binomial volume bound, and the triangular trace
-bound are proved; the latter two are exponential in `k` and none of
-them closes E. The `k = 1` volume bound is a genuine special case
-and also does not close E. Milestone F (CSSP bridge) is untouched.
+`R Rᵀ = I` is proved; a polynomial inverse-trace bound is proved
+only under a bidiagonal hypothesis on `U`. Residual energy, the
+binomial volume bound, and the triangular trace bound are proved;
+the latter two are exponential in `k` and none of them closes E.
+The Path 2 ladder through `k = 8` is a witness, not a theorem.
+The `k = 1` volume bound is a genuine special case and also does
+not close E. Milestone F (CSSP bridge) is untouched.
 This repository does not claim to have solved all of Problem 4.1.
 See `CHECKPOINT.md` for the reasoning log and the next-work queue.

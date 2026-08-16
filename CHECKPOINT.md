@@ -1,4 +1,4 @@
-# Research checkpoint (2026-08-15)
+# Research checkpoint (2026-08-16)
 
 This is the working memory for the next agent or human. It records
 what was proved, what was only observed, which proof attempts stalled,
@@ -31,10 +31,16 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone E binomial volume | **PROVED** (exponential / not polynomial) | `milestoneE_cpqr_volume_ge_binomial` |
 | Milestone E contraction / last residual | **PROVED** (not a joint poly bound) | `milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, `milestoneE_last_residual_ge` |
 | Milestone E triangular trace bound | **PROVED** (poly in `n`, exponential in `k`; not a joint poly bound) | `milestoneE_pivot_gram_inv_trace_le` |
+| Milestone E residual monotonicity | **PROVED** (not a bound) | `milestoneE_residual_antitone`, `milestoneE_residual_insert_downdate` |
+| Milestone E Gram inverse-trace / `σ_min` | **PROVED** (not a joint poly bound) | `milestoneE_gram_inv_trace_eq_sum_inv_residual`, `milestoneE_sigma_min_ge_inv_sqrt_trace` |
+| Milestone E `R Rᵀ = I` | **PROVED** (not a bound) | `milestoneE_gsR_mul_transpose` |
+| Milestone E bidiagonal-`U` trace bound | **PROVED** (hypothesis on `U`, not a class of `A`, not Path 1) | `milestoneE_bidiagonal_U_inv_trace_le` |
 | Milestone E `C = 1` witness `3×8` | **CERTIFIED** in Lean (kills only `C = 1`; `4.38 ≪ 512` named poly) | `frame38_mul_transpose`, `frame38_cpqr_set`, `frame38_inv_norm_lb` (`SmallInstanceChecks`, `native_decide`) |
 | Milestone E `4×12` `r_CPQR > 1` record | **NUMERIC ONLY** (float, not exact-certified) | `experiments/cpqr_r_gt_1_numeric_4_12.json` |
 | Milestone E §8 census | **NUMERICALLY OBSERVED** | `structselect/census.py`, `experiments/census_seed0.json` |
 | Milestone E Wave 1 census | **NUMERICALLY OBSERVED** | ETF / clustered / Haar-growth / block; `experiments/census_wave1_*_seed1.json` |
+| Milestone E Path 2 adverse ladder | **NUMERICALLY OBSERVED** (polynomial-looking through `k=8`; no superpoly family) | `structselect/adverse.py`, `experiments/cpqr_adverse_ladder_seed20260816.json` |
+| Milestone E §9 certificate automation | **SHIPPED** (does not close E) | `structselect/certify.py`; re-certifies `frame38` |
 | Milestone E characterization | **OPEN** | still needs one of the three SPEC §16 outcomes |
 | Milestone F CSSP bridge | **UNTOUCHED** | do not start unless E is closed or the user asks |
 
@@ -424,6 +430,36 @@ kept out of `Theorems.lean`):
 
 Consults: none (all oracle CLIs unavailable/failed); done directly.
 
+### 3.11 Parallel Milestone E merge (2026-08-16)
+
+Five isolated branches from `8562578` were merged. Public wrappers
+in `Theorems.lean` export only honest statements; each docstring
+says it does **not** close E. ResidualMono is the residual source
+of truth (no duplicate residual modules from tracks B/C).
+
+Proved, default axioms only:
+
+- `milestoneE_residual_antitone`,
+  `milestoneE_residual_insert_downdate`;
+- `milestoneE_gram_inv_trace_eq_sum_inv_residual`,
+  `milestoneE_sigma_min_ge_inv_sqrt_trace`;
+- `milestoneE_gsR_mul_transpose` (`R Rᵀ = I`);
+- `milestoneE_bidiagonal_U_inv_trace_le`: polynomial inverse-trace
+  **only if** Gram–Schmidt `U` is bidiagonal. Hypothesis on `U`,
+  not a class of `A`, not Path 1. **Not** a joint `poly(n,k)`
+  theorem. Do not export `pivotGram_inv_trace_le_of_bidiagonal` as
+  one.
+
+Numeric Path 2 ladder (`structselect/adverse.py`, seed
+`20260816`): polynomial-looking through `k = 8`. Worst recorded
+`(k,n)=(8,24)` has inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66`
+(`inv / named_poly ≈ 0.0017`). `C = 1` witnesses exist. No
+superpolynomial family. `structselect/certify.py` re-certifies
+`frame38`. Tests do not assert a universal `r_CPQR` bound.
+
+None of the five tracks proved a joint `poly(n,k)` inverse-norm
+bound. Milestone E remains **OPEN**. Milestone F untouched.
+
 ---
 
 ## 4. How Milestone E can close
@@ -573,27 +609,23 @@ Do not weaken theorems to make any of this easier.
 Work the first item that is still open. Do not start F.
 
 1. **Beat the `4^k` in the triangular trace bound, or a
-   non-universal Path 1 argument.** The pivot-Gram trace bound
-   `tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9` is now proved
-   (`milestoneE_pivot_gram_inv_trace_le`, poly in `n`, exponential in
-   `k`). The Businger–Golub entry bound `|S i j| ≤ 2^{j-i-1}` is
-   sharp for worst-case triangular matrices, so closing Path 1 needs
-   an argument that CPQR's greedy pivoting forbids the worst-case
-   `U`, e.g. forbidding the simplex equality case when `C(n,k)` is
-   exponential. Do not announce a polynomial theorem until the joint
-   statement is proved.
-2. **Certify the `4×12` record (SPEC §9).** The `C = 1` case is now
-   certified on `frame38` (`3×8`, `r_lb ≈ 1.030`, Lean
-   `native_decide` in `SmallInstanceChecks.lean`). The rational
-   pipeline is automated in `structselect/certify.py` (Cayley / Givens
-   re-parametrization, pivot margins, inverse-norm test vector) and
-   re-certifies `frame38`. The `4×12` numeric record (`r_CPQR ≈ 1.236`,
-   `experiments/cpqr_r_gt_1_numeric_4_12.json`) is still the next
-   certification target: Cayley rounding so far yields an exact
-   Parseval frame but drops below `r = 1`. It still sits below the
-   named polynomial, so even a successful certificate would leave E
-   open; a Path 2 close needs a certified family growing past every
-   named polynomial.
+   non-universal Path 1 argument.** `R Rᵀ = I` is now proved
+   (`milestoneE_gsR_mul_transpose`). A polynomial inverse-trace
+   bound holds only under a bidiagonal hypothesis on `U`
+   (`milestoneE_bidiagonal_U_inv_trace_le`); that is not a class of
+   `A` and is not Path 1. The Businger–Golub entry bound
+   `|S i j| ≤ 2^{j-i-1}` is sharp for worst-case triangular
+   matrices, so closing Path 1 still needs an argument that CPQR's
+   greedy pivoting forbids the worst-case `U`. Do not announce a
+   polynomial theorem until the joint statement is proved.
+2. **Certify a Path 2 instance past the named polynomial, or a
+   superpolynomial family (SPEC §9).** The `C = 1` case is certified
+   on `frame38`. Path 2 search through `k = 8` is polynomial-looking
+   (worst `(8,24)` inverse `≈ 30.98`, `≈ 0.17%` of the named
+   polynomial). The `4×12` numeric record remains a certification
+   target; Cayley rounding so far drops below `r = 1`. A Path 2
+   close needs a certified family growing past every named
+   polynomial.
 3. **`AxiomAudit.lean` + GitHub Actions** reusing `scripts/verify.sh`.
    Cheap, matches playbook Phases 6–7, and prevents silent axiom
    drift.
@@ -619,11 +651,17 @@ Work the first item that is still open. Do not start F.
 | `ResidualEnergy.lean` | residual energy and next-residual average |
 | `CPQRVolume.lean` | first leverage, `k = 1` volume, binomial volume |
 | `PrefixInverse.lean` | contraction, column energy `≤ 1`, last residual |
+| `TriangularBound.lean` | pivot-Gram inverse-trace bound (poly in `n`, exp in `k`) |
+| `ResidualMono.lean` | residual antitone / rank-1 downdate (source of truth) |
+| `SigmaMinBounds.lean` | Gram inverse-trace = sum inv LOO residual; `σ_min ≥ 1/√tr` |
+| `RowOrthoConstraints.lean` | `R Rᵀ = I`; poly bound only under bidiagonal `U` |
 | `SmallInstanceChecks.lean` | exact `ℚ` witnesses, `native_decide` allowed |
 | `structselect/census.py` | §8 generators; witnesses, not theorems |
 | `structselect/certify.py` | §9 Cayley/Givens rational certificates; does not close E |
+| `structselect/adverse.py` | Path 2 trapezoidal search; witnesses, not theorems |
 | `experiments/census_seed0.json` | recorded seed-0 sweep |
 | `experiments/census_wave1_*_seed1.json` | Wave 1 ETF / clustered / growth / block |
+| `experiments/cpqr_adverse_ladder_seed20260816.json` | Path 2 ladder through `k=8` |
 | `scripts/verify.sh` | `lake build`, `sorry` scan, pytest |
 | `autonomous-implementation.md` | 16-phase engineering playbook |
 | `.cursor/skills/autonomous-implementation/SKILL.md` | agent loop |
@@ -644,10 +682,19 @@ Residual-energy phase: `cursor/phase-e-residual-energy-e353` /
 draft PR #7 — residual energy, next-residual average, binomial
 volume (exponential / not polynomial).
 
-This Close-E wave: `cursor/phase-e-close-e353` — Wave 1 census
-and Wave 3 contraction / last-residual lemmas. Wave 0 consult
-incomplete. No `r_CPQR > 1`. No joint `poly(n,k)` theorem.
-Milestone E remains open. Do not start F.
+This Close-E wave: `cursor/phase-e-close-e353` / draft PR #8 —
+Wave 1 census, Wave 3 contraction / last-residual, Wave 4
+triangular trace bound and certified `C = 1` witness.
+
+Parallel merge (this checkpoint): `cursor/phase-e-parallel-merge-e353`
+integrates tracks A–E (residual mono, sigma-min, row-ortho, Path 2
+ladder, rational certify) onto that campaign and updates PR #8.
+`R Rᵀ = I` proved. Poly bound only under bidiagonal `U`. Path 2
+search polynomial-looking through `k = 8`. No joint `poly(n,k)`
+theorem. Milestone E remains **OPEN**. Do not start F.
+
+PRs #9 (`cursor/phase-e-rational-certify-e353`) and #10
+(`cursor/row-ortho-constraints-e353`) are absorbed by this merge.
 
 Branch rule: `cursor/<descriptive-name>-e353`. Draft PR before
 official `scripts/verify.sh`; update the PR after any fix.
