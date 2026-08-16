@@ -10,6 +10,7 @@ import StructuredColumnSelection.ResidualEnergy
 import StructuredColumnSelection.CPQRVolume
 import StructuredColumnSelection.PrefixInverse
 import StructuredColumnSelection.TriangularBound
+import StructuredColumnSelection.RowOrthoConstraints
 import StructuredColumnSelection.SmallInstanceChecks
 import StructuredColumnSelection.Theorems
 
