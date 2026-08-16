@@ -255,11 +255,11 @@ theorem cpqr_inv_energy_le_of_minDim {k n d : ℕ}
   · subst hk
     have hcard0 : (cpqrSet A).card = 0 := by
       simpa using cpqrSet_card_eq A hA
-    have : IsEmpty (Fin (cpqrSet A).card) := by
-      rw [hcard0]
-      infer_instance
-    haveI := this
-    simp [vecEnergy]
+    have hempty : (univ : Finset (Fin (cpqrSet A).card)) = ∅ :=
+      univ_eq_empty_iff.mpr (by
+        rw [hcard0]
+        infer_instance)
+    simp [vecEnergy, hempty]
   · have hn : 1 ≤ n :=
       le_trans (Nat.succ_le_of_lt (Nat.pos_of_ne_zero hk)) hkn
     have hmin : (n : ℝ) ^ min k (n - k) ≤ (n : ℝ) ^ d :=

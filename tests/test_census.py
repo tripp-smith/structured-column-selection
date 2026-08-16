@@ -17,7 +17,6 @@ from structselect.census import (
     icosahedral_etf,
     kahan_like_frame,
     leverage_skew_frame,
-    max_abs_col_inner,
     max_r,
     mercedes_benz,
     min_dim,
@@ -148,7 +147,7 @@ def test_static_class_census_records_diagnostics() -> None:
         assert rec.min_dim == min_dim(rec.k, rec.n)
         assert rec.choose_k is not None and rec.choose_k >= 1
         assert rec.inv_energy_choose_bound == rec.k * rec.choose_k
-        assert rec.inv_energy_mindim_bound == rec.k * (rec.n ** rec.min_dim)
+        assert rec.inv_energy_mindim_bound == float(rec.k * (rec.n ** rec.min_dim))
         assert rec.max_abs_inner is not None
         assert rec.incoherent_gap is not None
         assert rec.inv_sq_over_choose is not None

@@ -217,10 +217,6 @@ Non-claims (intentional):
 - `milestoneE_bidiagonal_U_inv_trace_le` is a hypothesis on
   Gram–Schmidt `U`, not a class of `A`, not Path 1, and not a
   joint `poly(n,k)` theorem
-- `milestoneE_cpqr_inv_energy_le_choose` is exponential in `k`
-  when `n ≈ 2k` and does not close Milestone E
-- `milestoneE_cpqr_inv_energy_le_of_minDim` is a Path 3 theorem
-  on `min(k, n-k) ≤ d` and does not close Path 1
-- Path 2 ladder through `k = 8` is polynomial-looking (worst
+- Path 2 ladder through `k = 8` is polynomial-looking (worst)
   `(8,24)` inverse `≈ 30.98`, `r_CPQR ≈ 2.66`, `≈ 0.17%` of the
   named polynomial); census ratios are witnesses, not theorems

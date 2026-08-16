@@ -731,6 +731,12 @@ theorem. Milestone E remains **OPEN**. Do not start F.
 PRs #9 (`cursor/phase-e-rational-certify-e353`) and #10
 (`cursor/row-ortho-constraints-e353`) are absorbed by this merge.
 
+Path 3 complementary-dimension class: `cursor/phase-e-static-class-e353`
+/ draft PR #11 — binomial inverse energy and `min(k,n-k)≤d`.
+`scripts/verify.sh` passed (lake build, no `sorry`, 66 pytest).
+Public axioms: `propext`, `Classical.choice`, `Quot.sound`.
+Milestone E remains **OPEN**. Do not start F.
+
 Branch rule: `cursor/<descriptive-name>-e353`. Draft PR before
 official `scripts/verify.sh`; update the PR after any fix.
 
