@@ -6,6 +6,7 @@ import StructuredColumnSelection.InverseNormBounds
 import StructuredColumnSelection.ColumnPivotedQR
 import StructuredColumnSelection.ResidualEnergy
 import StructuredColumnSelection.CPQRVolume
+import StructuredColumnSelection.PrefixInverse
 
 namespace StructuredColumnSelection
 
@@ -151,5 +152,33 @@ theorem milestoneE_cpqr_volume_ge_binomial {k n : ℕ}
     (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
     (n.choose k : ℝ)⁻¹ ≤ volumeWeight A (cpqrSet A) :=
   cpqr_volume_ge_binomial A hA
+
+/-- Orthogonal-row matrices are contractions in Euclidean energy.
+
+This is not an inverse-norm bound and does not close Milestone E. -/
+theorem milestoneE_mulVec_energy_le {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) (x : Fin n → ℝ) :
+    vecEnergy (A.mulVec x) ≤ vecEnergy x :=
+  mulVec_energy_le A hA x
+
+/-- Every column of an orthogonal-row matrix has leverage at most `1`.
+
+This is not an inverse-norm bound and does not close Milestone E. -/
+theorem milestoneE_col_energy_le {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) (j : Fin n) :
+    vecEnergy (fun i => A i j) ≤ 1 :=
+  col_energy_le A hA j
+
+/-- Last CPQR residual is at least `1 / (n-k+1)`.
+
+This is not a joint `poly(n,k)` inverse-norm bound and does not
+close Milestone E. -/
+theorem milestoneE_last_residual_ge {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 0 < k) :
+    (1 : ℝ) / ((n : ℝ) - ((k - 1 : ℕ) : ℝ)) ≤
+      residualSq A (cpqrIterate A (k - 1))
+        (cpqrChosen A hA (k - 1) (Nat.sub_one_lt_of_lt hk)) :=
+  lastResidual_ge A hA hk
 
 end StructuredColumnSelection

@@ -102,6 +102,11 @@ Kahan-like frames. On the seed-0 sweep the worst ratio is `2/3`
 (Hadamard `3×8`). That is a recorded witness, not a polynomial bound
 and not a counterexample.
 
+Wave 3 adds contraction and last-residual lemmas
+(`milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`,
+`milestoneE_last_residual_ge`). They constrain the residual-to-`σ_min`
+gap and are not a joint `poly(n,k)` inverse-norm bound.
+
 Wave 1 (`experiments/census_wave1_*_seed1.json`) adds Mercedes-Benz /
 simplex / Paley / icosahedral ETFs, clustered near-parallels after
 `row_orthonormalize`, Haar growth with `k ≤ 12`, and block-diagonal

@@ -57,6 +57,7 @@ determinants and matrix rank:
 - `residualEnergy`
 - `nextResidual_ge`
 - `cpqr_volume_ge_binomial`
+- `mulVec_energy_le`, `col_energy_le`, `lastResidual_ge`
 - residual nonnegativity and unused-column span control
 
 These use mathlib `Matrix.rank`, `rank_transpose_mul_self`,

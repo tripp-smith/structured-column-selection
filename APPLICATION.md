@@ -31,7 +31,10 @@ columns. The source of truth for the selected set is
 `milestoneE_cpqr_card_eq`; the source of truth for residual energy is
 `milestoneE_residual_energy`; the source of truth for the binomial
 volume bound is `milestoneE_cpqr_volume_ge_binomial`; the source of
-truth for the `k=1` volume bound is `milestoneE_k1_volume_ge`.
+truth for the `k=1` volume bound is `milestoneE_k1_volume_ge`;
+the source of truth for contraction and the last residual is
+`milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, and
+`milestoneE_last_residual_ge`.
 
 When selectors are added, this document will separate:
 

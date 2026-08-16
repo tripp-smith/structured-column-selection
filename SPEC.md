@@ -735,7 +735,9 @@ binomial volume): the greedy algorithm is defined in
 `milestoneE_cpqr_card_le`, `milestoneE_cpqr_card_eq`,
 `milestoneE_k1_volume_ge`, `milestoneE_residual_energy`,
 `milestoneE_next_residual_ge`, and
-`milestoneE_cpqr_volume_ge_binomial`. Orthogonal-row CPQR returns
+`milestoneE_cpqr_volume_ge_binomial`,
+`milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, and
+`milestoneE_last_residual_ge`. Orthogonal-row CPQR returns
 exactly `k` columns. A first pivot has leverage at least `k/n`. For
 `k=1` the selected volume is at least `n⁻¹` (workshop scale).
 Independent residuals sum to `k-#J`, and the CPQR volume is at least
@@ -745,7 +747,9 @@ set is `frame23_cpqr_set`. The Section 8 numerical census lives in
 `structselect/census.py` and `experiments/census_seed0.json`. Wave 1
 adds ETF / clustered / Haar-growth / block records in
 `experiments/census_wave1_*_seed1.json` (worst recorded `r_CPQR`
-is `√3/2` on the `2×3` simplex; no `r_CPQR > 1`). None of
+is `√3/2` on the `2×3` simplex; no `r_CPQR > 1`). Wave 3 proves
+a contraction and a last-residual average; those are not a joint
+`poly(n,k)` inverse-norm bound. None of
 the three characterization outcomes for general `k` is claimed.
 
 ### Milestone F: CSSP perturbation bridge

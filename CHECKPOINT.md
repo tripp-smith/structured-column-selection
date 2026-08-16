@@ -29,6 +29,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone E, `k = 1` volume | **PROVED** (special case) | `milestoneE_k1_volume_ge` |
 | Milestone E residual energy | **PROVED** (not a bound) | `milestoneE_residual_energy`, `milestoneE_next_residual_ge` |
 | Milestone E binomial volume | **PROVED** (exponential / not polynomial) | `milestoneE_cpqr_volume_ge_binomial` |
+| Milestone E contraction / last residual | **PROVED** (not a joint poly bound) | `milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, `milestoneE_last_residual_ge` |
 | Milestone E §8 census | **NUMERICALLY OBSERVED** | `structselect/census.py`, `experiments/census_seed0.json` |
 | Milestone E Wave 1 census | **NUMERICALLY OBSERVED** | ETF / clustered / Haar-growth / block; `experiments/census_wave1_*_seed1.json` |
 | Milestone E characterization | **OPEN** | still needs one of the three SPEC §16 outcomes |
@@ -349,10 +350,27 @@ Mercedes-Benz / simplex `k=2,n=3` is algebraic (`√3/2`), not a
 `C = 1` counterexample, and was not sent through SPEC §9.
 
 Wave 2 branch: every sample bounded → do not certify a
-counterexample. Wave 3 Path 1 Lean poly theorem was **not**
-started this wave (Wave 0 lemma consult unavailable; simplex
-already shows the universal volume/`|det|` route cannot beat
-`√C(n,k)`). Milestone E remains **OPEN**.
+counterexample. Wave 3 shipped contraction and last-residual
+lemmas (see §3.9). Milestone E remains **OPEN**.
+
+### 3.9 Wave 3 Path 1 formal (2026-08-15)
+
+Consults: Claude CLI still expired; no Cursor Task retry; Kimi /
+Fable unused. Proceeded from campaign algebra and Wave 1 evidence.
+
+Shipped in `PrefixInverse.lean`, public names in `Theorems.lean`:
+
+- `milestoneE_mulVec_energy_le`: `AAᵀ = I ⇒` Euclidean energy of
+  `A x` is at most the energy of `x`.
+- `milestoneE_col_energy_le`: every column leverage is `≤ 1`.
+- `milestoneE_last_residual_ge`: the last CPQR residual is at least
+  `1 / (n-k+1)`.
+
+A prefix-orthonormal inverse-Frobenius bound (`#J + 2 / residual`,
+hence `O(n)` on that class) was attempted and **not** shipped: the
+block-inverse trace argument did not compile in this wave. That
+remains the next formal target. None of the shipped lemmas is
+`milestoneE_cpqr_inv_le_poly`. Milestone E remains **OPEN**.
 
 ---
 
@@ -501,13 +519,14 @@ Do not weaken theorems to make any of this easier.
 
 Work the first item that is still open. Do not start F.
 
-1. **Path 1 Lean, or a saturating `n ≈ 2k` family.** Wave 1 did
-   not produce `r_CPQR > 1`. Simplex saturates `1/C(n,k)` and
-   `σ_min = |det|` at `n = k+1`, so a better *universal* volume
-   lemma cannot close E. Next Lean target is the contraction
-   `σ_max(A_J) ≤ 1`, then an argument that forbids the simplex
-   equality case when `C(n,k)` is exponential. Do not announce a
-   polynomial theorem until that joint statement is proved.
+1. **Prefix-ON inverse-Frobenius, then a non-universal Path 1
+   argument.** Contraction and last residual are proved. Next is
+   the orthonormal-prefix bound
+   `tr((A_Jᵀ A_J)⁻¹) ≤ #J + 2 / residual`, which is `O(n)` on that
+   class and still does not close E, then an argument that forbids
+   the simplex equality case when `C(n,k)` is exponential. Do not
+   announce a polynomial theorem until the joint statement is
+   proved.
 2. **If a later census finds `r_CPQR > 1`**, switch to SPEC §9.
    Below the named polynomial, certify as a `C = 1` witness and
    leave E open. At or above it, or on a certified growing family,
@@ -536,6 +555,7 @@ Work the first item that is still open. Do not start F.
 | `ColumnPivotedQR.lean` | CPQR definition and structural proofs |
 | `ResidualEnergy.lean` | residual energy and next-residual average |
 | `CPQRVolume.lean` | first leverage, `k = 1` volume, binomial volume |
+| `PrefixInverse.lean` | contraction, column energy `≤ 1`, last residual |
 | `SmallInstanceChecks.lean` | exact `ℚ` witnesses, `native_decide` allowed |
 | `structselect/census.py` | §8 generators; witnesses, not theorems |
 | `experiments/census_seed0.json` | recorded seed-0 sweep |
@@ -561,9 +581,9 @@ draft PR #7 — residual energy, next-residual average, binomial
 volume (exponential / not polynomial).
 
 This Close-E wave: `cursor/phase-e-close-e353` — Wave 1 census
-(ETF, clustered, Haar growth, block). Wave 0 consult incomplete.
-No `r_CPQR > 1`. No new public Lean theorem. Milestone E remains
-open. Do not start F.
+and Wave 3 contraction / last-residual lemmas. Wave 0 consult
+incomplete. No `r_CPQR > 1`. No joint `poly(n,k)` theorem.
+Milestone E remains open. Do not start F.
 
 Branch rule: `cursor/<descriptive-name>-e353`. Draft PR before
 official `scripts/verify.sh`; update the PR after any fix.

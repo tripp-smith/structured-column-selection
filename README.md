@@ -35,6 +35,9 @@ Phases completed:
   - `milestoneE_residual_energy`
   - `milestoneE_next_residual_ge`
   - `milestoneE_cpqr_volume_ge_binomial` (exponential / not polynomial)
+  - `milestoneE_mulVec_energy_le` (contraction; not an inverse bound)
+  - `milestoneE_col_energy_le` (column leverage `≤ 1`; not an inverse bound)
+  - `milestoneE_last_residual_ge` (last residual `≥ 1/(n-k+1)`; not a joint poly bound)
 - Milestone E §8 census (witnesses only): `structselect/census.py`
 - Milestone E Wave 1 census (witnesses only): ETF / simplex / Paley,
   clustered near-parallels, Haar `k ≤ 12` growth, block-diagonal ETF
@@ -77,6 +80,9 @@ drop.
 - `StructuredColumnSelection/CPQRVolume.lean`:
   first-pivot leverage, the `k = 1` volume bound, and the binomial
   volume lower bound (exponential, not polynomial).
+- `StructuredColumnSelection/PrefixInverse.lean`:
+  orthogonal-row contraction, column energy `≤ 1`, and the last
+  CPQR residual average. Not a joint `poly(n,k)` inverse bound.
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
   exact rational enumerations used as independent witnesses.
 - `StructuredColumnSelection/Theorems.lean`:
