@@ -12,6 +12,7 @@ import StructuredColumnSelection.PrefixInverse
 import StructuredColumnSelection.TriangularBound
 import StructuredColumnSelection.ResidualMono
 import StructuredColumnSelection.SigmaMinBounds
+import StructuredColumnSelection.RowOrthoConstraints
 import StructuredColumnSelection.SmallInstanceChecks
 import StructuredColumnSelection.Theorems
 
