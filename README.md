@@ -32,6 +32,8 @@ Phases completed:
   - `milestoneE_cpqr_card_le`
   - `milestoneE_cpqr_card_eq`
   - `milestoneE_k1_volume_ge` (`k = 1` only; workshop scale, not general `k`)
+  - `milestoneE_k2_inv_trace_le` (`k = 2` only; bidiagonal `U` is
+    automatic on `Fin 2`, so `tr((G')⁻¹) ≤ 3(n-1)`; not general `k`)
   - `milestoneE_residual_energy`
   - `milestoneE_next_residual_ge`
   - `milestoneE_cpqr_volume_ge_binomial` (exponential / not polynomial)
@@ -80,7 +82,8 @@ Phases completed:
 
 Not yet claimed:
 
-- a polynomial CPQR theorem for general `k`, a counterexample past the
+- a polynomial CPQR theorem for general `k` (the `k = 1` and `k = 2`
+  slices are special cases, not Path 1), a counterexample past the
   named polynomial (the certified `frame38` kills only `C = 1`), or a
   refined class
 - CSSP perturbation bridge
@@ -131,9 +134,11 @@ drop.
   and the elementary `σ_min ≥ 1/√tr` bound. Not a joint `poly(n,k)`
   inverse bound.
 - `StructuredColumnSelection/RowOrthoConstraints.lean`:
-  implicit CPQR factor `R Rᵀ = I`, and a polynomial inverse-trace
-  bound only under a bidiagonal hypothesis on `U` (not a class of
-  `A`, not Path 1).
+  implicit CPQR factor `R Rᵀ = I`, leftover unselected energy of `R`,
+  a polynomial Frobenius bound on `N = 1-U` (not an inverse bound), a
+  polynomial inverse-trace bound under a bidiagonal hypothesis on `U`
+  (not a class of `A`, not Path 1), and the `k = 2` special case
+  where that hypothesis is vacuous.
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
   exact rational enumerations used as independent witnesses,
   including the certified `frame38` `C = 1` counterexample
@@ -158,7 +163,17 @@ Phase execution cadence is defined in:
 - `.cursor/rules/claim-discipline.mdc`
 
 It covers specify → implement → verify → document → ship, with explicit
-claim discipline. Verify with `bash scripts/verify.sh`.
+claim discipline. Verify with `bash scripts/verify.sh` (build, `sorry`
+scan, public-theorem axiom audit, pytest). GitHub Actions runs the same
+script. Contributor proof workflow is in `CONTRIBUTING.md`.
+
+## Formalization blueprint
+
+`blueprint/src/content.tex` is a leanblueprint graph wired to public
+names in `Theorems.lean` (A–D closed, E structural / `k=1` / `k=2` /
+residual / triangular / bidiagonal-`U`, E open, F open). How to build
+the optional PDF/web graph is in `blueprint/README.md`. The web build
+is not part of CI.
 
 A detailed reasoning log, failed attempts, and the next-work queue
 live in `CHECKPOINT.md`. The engineering playbook is

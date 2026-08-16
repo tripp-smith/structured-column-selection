@@ -771,7 +771,10 @@ adds `milestoneE_residual_antitone`,
 `milestoneE_gsR_mul_transpose` (`R Rᵀ = I`), and
 `milestoneE_bidiagonal_U_inv_trace_le` (polynomial inverse-trace
 **only if** Gram–Schmidt `U` is bidiagonal: a hypothesis on `U`,
-not a class of `A`, not Path 1). Path 2 search
+not a class of `A`, not Path 1), and
+`milestoneE_k2_inv_trace_le` (`k = 2` only: bidiagonal `U` is
+automatic, so `tr((G')⁻¹) ≤ 3(n-1)`; a special case like
+`milestoneE_k1_volume_ge`, not Path 1 for general `k`). Path 2 search
 (`structselect/adverse.py`,
 `experiments/cpqr_adverse_ladder_seed20260816.json`) is
 polynomial-looking through `k = 8`; worst recorded `(8,24)` has
@@ -780,6 +783,14 @@ polynomial); `C = 1` witnesses exist; no superpolynomial family.
 `structselect/certify.py` re-certifies `frame38`. None of the
 three characterization outcomes for general `k` is claimed.
 Milestone E remains **OPEN**.
+
+Status note (hygiene): `scripts/verify.sh` runs `lake build`, a
+`sorry` scan, a public-theorem axiom audit
+(`StructuredColumnSelection/AxiomAudit.lean` via
+`lake env lean --stdin`), and `pytest`. GitHub Actions
+(`.github/workflows/verify.yml`) wraps that script.
+`CONTRIBUTING.md` records the search-first proof workflow. Blueprint
+sources live in `blueprint/src/` and are optional to build.
 
 ### Milestone F: CSSP perturbation bridge
 
@@ -835,6 +846,8 @@ APPLICATION.md
 MATHLIB.md
 CHECKPOINT.md
 autonomous-implementation.md
+CONTRIBUTING.md
+blueprint/
 ```
 
 `README.md` should lead with the theorem status, not the research ambition.

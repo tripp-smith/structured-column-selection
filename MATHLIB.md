@@ -94,7 +94,11 @@ identity, and row-orthonormality of the implicit CPQR factor:
 These stay on finite Gram projectors and are not a joint
 `poly(n,k)` inverse-norm theorem. The bidiagonal-`U` bound
 `pivotGram_inv_trace_le_of_bidiagonal` is a hypothesis on the
-coefficient pattern of `U`, not a class of `A`.
+coefficient pattern of `U`, not a class of `A`. The `k = 2`
+specialization `pivotGram_inv_trace_le_of_k_eq_two` is automatic
+bidiagonal, not a general-`k` theorem. The polynomial Frobenius
+bound on `N = 1-U` stays here: it is CPQR-specific and does not
+control the Neumann products that produce `S`.
 
 The §8 census, including the Wave 1 ETF / clustered / Haar-growth
 tracks and the Path 2 adverse ladder, is Python-only and is not a

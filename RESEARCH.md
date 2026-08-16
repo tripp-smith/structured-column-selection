@@ -160,6 +160,7 @@ Formal (proved, default axioms only; none closes E):
 | `milestoneE_sigma_min_ge_inv_sqrt_trace` | `‖x‖² ≤ ‖A_J x‖² · tr(G⁻¹)` (`σ_min ≥ 1/√tr`) | `SigmaMinBounds.lean` | Cauchy–Schwarz on the inverse Gram |
 | `milestoneE_gsR_mul_transpose` | implicit CPQR factor `R Rᵀ = I` | `RowOrthoConstraints.lean` | Parseval pairing of GS directions |
 | `milestoneE_bidiagonal_U_inv_trace_le` | bidiagonal `U` `⇒ tr((G')⁻¹) ≤ k(k+1)/2 · (n-k+1)` | `RowOrthoConstraints.lean` | hypothesis on `U`, not a class of `A` |
+| `milestoneE_k2_inv_trace_le` | `k=2` `⇒ tr((G')⁻¹) ≤ 3(n-1)` | `RowOrthoConstraints.lean` | bidiagonal `U` is automatic; not general `k` |
 
 Numeric (witnesses, not theorems): Path 2 trapezoidal search
 (`structselect/adverse.py`,
@@ -198,6 +199,21 @@ Non-claims (intentional):
 - `milestoneE_bidiagonal_U_inv_trace_le` is a hypothesis on
   Gram–Schmidt `U`, not a class of `A`, not Path 1, and not a
   joint `poly(n,k)` theorem
+- `milestoneE_k2_inv_trace_le` is a `k = 2` special case, like
+  `milestoneE_k1_volume_ge`, and does not close Milestone E
 - Path 2 ladder through `k = 8` is polynomial-looking (worst
   `(8,24)` inverse `≈ 30.98`, `r_CPQR ≈ 2.66`, `≈ 0.17%` of the
   named polynomial); census ratios are witnesses, not theorems
+
+## Thread 5e — Path 1 `k = 2` slice and hygiene (not a close)
+
+Formal: `milestoneE_k2_inv_trace_le` specializes the bidiagonal
+inverse-trace bound to every orthogonal-row `2 × n` matrix because
+`gsUBidiagonal` is vacuous on `Fin 2`. Supporting lemmas
+`gsN_frob_sq_le` (`∑ N_{ij}² ≤ k(n-k+1)`) and leftover unselected
+energy of `R` (`≤ k`) are polynomial but do not control products of
+`N`. Bandwidth `w ≥ 2` is recorded as still exponential in `k`.
+
+Hygiene: `AxiomAudit.lean` plus `scripts/verify.sh`, GitHub Actions,
+`CONTRIBUTING.md`, and `blueprint/src/`. Milestone E remains open.
+Milestone F is untouched.

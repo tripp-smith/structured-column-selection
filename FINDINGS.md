@@ -189,6 +189,30 @@ polynomial-looking through `k = 8`. The worst recorded instance is
 (`≈ 0.17%` of the named polynomial). `C = 1` witnesses exist;
 no superpolynomial family was found.
 
+## Phase 8 (`k = 2` inverse-trace + hygiene) delivered
+
+For `k ≤ 2` the off-bidiagonal condition on Gram–Schmidt `U` is
+vacuous, so `gsUBidiagonal` holds for every orthogonal-row matrix
+with two rows. Specializing the nearest-neighbor inverse-trace bound
+gives
+
+```text
+tr((G')⁻¹) ≤ 3(n-1)
+```
+
+(`milestoneE_k2_inv_trace_le`). This is a joint polynomial bound for
+two orthonormal rows. It is not SPEC §16 outcome 1. Off-diagonal
+Frobenius energy of `N = 1-U` is at most `k(n-k+1)`, and unselected
+columns of `R` hold leftover row energy at most `k`; neither controls
+products of `N` and neither closes Path 1. A bandwidth-`w`
+hypothesis with `w ≥ 2` still permits exponential-in-`k` growth.
+
+Hygiene shipped in the same change: public-theorem axiom audit
+(`AxiomAudit.lean` via `scripts/verify.sh`), GitHub Actions wrapping
+that script, `CONTRIBUTING.md` (search-first proofs; no `AGENTS.md`),
+and leanblueprint sources under `blueprint/`. Milestone E stays
+**OPEN**. Milestone F is untouched.
+
 ## What remains open
 
 Milestone E still requires one of: a polynomial CPQR theorem for
@@ -201,6 +225,11 @@ binomial volume bound, and the triangular trace bound are proved;
 the latter two are exponential in `k` and none of them closes E.
 The Path 2 ladder through `k = 8` is a witness, not a theorem.
 The `k = 1` volume bound is a genuine special case and also does
-not close E. Milestone F (CSSP bridge) is untouched.
+not close E. The `k = 2` inverse-trace bound
+(`milestoneE_k2_inv_trace_le`, `tr((G')⁻¹) ≤ 3(n-1)`) is the same
+kind of special case: bidiagonal `U` is automatic on `Fin 2`, so the
+nearest-neighbor polynomial applies to every orthogonal-row `2 × n`
+matrix. It does not close Path 1 for general `k`. Milestone F (CSSP
+bridge) is untouched.
 This repository does not claim to have solved all of Problem 4.1.
 See `CHECKPOINT.md` for the reasoning log and the next-work queue.
