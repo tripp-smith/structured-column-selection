@@ -34,7 +34,21 @@ volume bound is `milestoneE_cpqr_volume_ge_binomial`; the source of
 truth for the `k=1` volume bound is `milestoneE_k1_volume_ge`;
 the source of truth for contraction and the last residual is
 `milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, and
-`milestoneE_last_residual_ge`.
+`milestoneE_last_residual_ge`; the source of truth for the
+pivot-Gram inverse trace bound is `milestoneE_pivot_gram_inv_trace_le`
+(polynomial in `n`, exponential in `k`).
+
+`tests/test_cpqr_r_gt_1.py` re-certifies the `3×8` witness
+`experiments/cpqr_r_gt_1_witness_3_8.json` in exact `Fraction`
+arithmetic: `AAᵀ = I`, CPQR selects `{0,1,2}` with strictly positive
+pivot margins, and `18‖A_J x‖² < ‖x‖²`, i.e. `r_CPQR > 1`. The Lean
+source of truth is `frame38_mul_transpose`, `frame38_cpqr_set`, and
+`frame38_inv_norm_lb` in `SmallInstanceChecks.lean` (`native_decide`;
+not exported as a public structural theorem). The witness refutes
+only the ideal `C = 1` bound: the certified inverse norm stays below
+the named polynomial `512`, so Milestone E remains open. The `4×12`
+record `experiments/cpqr_r_gt_1_numeric_4_12.json`
+(`r_CPQR ≈ 1.236`) is a float observation and is not certified.
 
 When selectors are added, this document will separate:
 

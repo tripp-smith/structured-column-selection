@@ -30,6 +30,9 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone E residual energy | **PROVED** (not a bound) | `milestoneE_residual_energy`, `milestoneE_next_residual_ge` |
 | Milestone E binomial volume | **PROVED** (exponential / not polynomial) | `milestoneE_cpqr_volume_ge_binomial` |
 | Milestone E contraction / last residual | **PROVED** (not a joint poly bound) | `milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, `milestoneE_last_residual_ge` |
+| Milestone E triangular trace bound | **PROVED** (poly in `n`, exponential in `k`; not a joint poly bound) | `milestoneE_pivot_gram_inv_trace_le` |
+| Milestone E `C = 1` witness `3×8` | **CERTIFIED** in Lean (kills only `C = 1`; `4.38 ≪ 512` named poly) | `frame38_mul_transpose`, `frame38_cpqr_set`, `frame38_inv_norm_lb` (`SmallInstanceChecks`, `native_decide`) |
+| Milestone E `4×12` `r_CPQR > 1` record | **NUMERIC ONLY** (float, not exact-certified) | `experiments/cpqr_r_gt_1_numeric_4_12.json` |
 | Milestone E §8 census | **NUMERICALLY OBSERVED** | `structselect/census.py`, `experiments/census_seed0.json` |
 | Milestone E Wave 1 census | **NUMERICALLY OBSERVED** | ETF / clustered / Haar-growth / block; `experiments/census_wave1_*_seed1.json` |
 | Milestone E characterization | **OPEN** | still needs one of the three SPEC §16 outcomes |
@@ -53,7 +56,15 @@ volumeWeight = 16/25 ≥ 1/2 = 1/C(2,1)
 
 frame23 after {0}: residuals 0 + 9/25 + 16/25 = 1
 volumeWeight({0,2}) = 16/25 ≥ 1/3 = 1/C(3,2)
+
+frame38 (rational 3×8, certified in Lean):
+CPQR selects {0, 1, 2}
+18 ‖A_J x‖² < ‖x‖²  ⇒  ‖A_J⁻¹‖₂ > √18 = √(k(n-k+1)),  r_CPQR > 1 (r_lb ≈ 1.030)
+‖A_J⁻¹‖₂ lower bound ≈ 4.37 ≪ 512 = max(n³, k³, (k(n-k+1))²)
 ```
+
+`frame38` kills only the ideal `C = 1` bound. The `4×12` record
+(`r_CPQR ≈ 1.236`) is a float observation, **not** exact-certified.
 
 ---
 
@@ -372,6 +383,47 @@ block-inverse trace argument did not compile in this wave. That
 remains the next formal target. None of the shipped lemmas is
 `milestoneE_cpqr_inv_le_poly`. Milestone E remains **OPEN**.
 
+### 3.10 Wave 4 triangular trace bound and certified `C = 1` witness (2026-08-15)
+
+Shipped in `TriangularBound.lean`, public name in `Theorems.lean`:
+
+- `milestoneE_pivot_gram_inv_trace_le`: for `AAᵀ = I`, the
+  pivot-ordered CPQR Gram matrix `G' = Uᵀ Δ U` satisfies
+  `tr((G')⁻¹) ≤ (n - k + 1)(4^k + 6k - 1)/9`. The proof factors the
+  pivot Gram via Gram–Schmidt (`|U| ≤ 1` by greedy maximality),
+  inverts `U` by the finite Neumann series `S = Σ_{p<k} (1-U)^p`,
+  bounds `|S i j| ≤ 2^{j-i-1}` by strong induction
+  (Businger–Golub), and assembles the trace with the residual-energy
+  ratio `1/δ_l ≤ (n-l)/(k-l) ≤ n-k+1`. **Polynomial in `n` but
+  exponential in `k`** (`≈ n · 4^k / 9`). This is the Drmač–Gugercin /
+  Gu–Eisenstat style estimate; it is NOT a joint `poly(n,k)` bound
+  and does NOT close E. Axioms: `propext`, `Classical.choice`,
+  `Quot.sound` only.
+
+Certified witness in `SmallInstanceChecks.lean` (`native_decide`,
+kept out of `Theorems.lean`):
+
+- `frame38`: rational `3×8` orthogonal-row matrix from an SLSQP
+  adverse search, re-parametrized over `ℚ` via a Cayley transform
+  (denominator `10⁴`). Certified facts: `frame38 * frame38ᵀ = 1`
+  (`frame38_mul_transpose`), CPQR selects `{0,1,2}` with strictly
+  positive pivot margins (`frame38_cpqr_set`), and the explicit
+  rational test vector gives `18‖A_J x‖² < ‖x‖²`
+  (`frame38_inv_norm_lb`), i.e. `‖A_J⁻¹‖₂ > √(k(n-k+1))` and
+  `r_CPQR ≥ r_lb ≈ 1.030 > 1`. Independent exact re-certification in
+  `tests/test_cpqr_r_gt_1.py` over `Fraction`. Record:
+  `experiments/cpqr_r_gt_1_witness_3_8.json`.
+- This is a SPEC §9 certification of the `C = 1` case **only**: the
+  certified inverse norm `≈ 4.37` is far below the campaign's named
+  polynomial `max(n³, k³, (k(n-k+1))²) = 512`, so it is not outcome
+  2 of SPEC §16. Milestone E remains **OPEN**.
+- `experiments/cpqr_r_gt_1_numeric_4_12.json` records a `4×12` float
+  matrix with `r_CPQR ≈ 1.236` (`σ_min ≈ 0.1348`, `AAᵀ` error
+  `≈ 2·10⁻¹⁶`). **NUMERIC ONLY**: not exact, not certified in Lean.
+  It is a target for future rational certification, not a theorem.
+
+Consults: none (all oracle CLIs unavailable/failed); done directly.
+
 ---
 
 ## 4. How Milestone E can close
@@ -411,8 +463,9 @@ SPEC §9 protocol, in order:
    witness, **not** as a public structural theorem.
 
 `r_CPQR > 1` on one matrix kills only the ideal `C = 1` bound.
-Killing `poly(n,k)` needs superpolynomial growth or an instance
-past every named polynomial.
+**Done (Wave 4):** `frame38` (`3×8`, rational) is certified in Lean
+with `r_CPQR > 1`; see §3.10. Killing `poly(n,k)` still needs
+superpolynomial growth or an instance past every named polynomial.
 
 Constructions that did **not** work after `AAᵀ = I`:
 
@@ -519,18 +572,25 @@ Do not weaken theorems to make any of this easier.
 
 Work the first item that is still open. Do not start F.
 
-1. **Prefix-ON inverse-Frobenius, then a non-universal Path 1
-   argument.** Contraction and last residual are proved. Next is
-   the orthonormal-prefix bound
-   `tr((A_Jᵀ A_J)⁻¹) ≤ #J + 2 / residual`, which is `O(n)` on that
-   class and still does not close E, then an argument that forbids
-   the simplex equality case when `C(n,k)` is exponential. Do not
-   announce a polynomial theorem until the joint statement is
-   proved.
-2. **If a later census finds `r_CPQR > 1`**, switch to SPEC §9.
-   Below the named polynomial, certify as a `C = 1` witness and
-   leave E open. At or above it, or on a certified growing family,
-   Path 2 can close E.
+1. **Beat the `4^k` in the triangular trace bound, or a
+   non-universal Path 1 argument.** The pivot-Gram trace bound
+   `tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9` is now proved
+   (`milestoneE_pivot_gram_inv_trace_le`, poly in `n`, exponential in
+   `k`). The Businger–Golub entry bound `|S i j| ≤ 2^{j-i-1}` is
+   sharp for worst-case triangular matrices, so closing Path 1 needs
+   an argument that CPQR's greedy pivoting forbids the worst-case
+   `U`, e.g. forbidding the simplex equality case when `C(n,k)` is
+   exponential. Do not announce a polynomial theorem until the joint
+   statement is proved.
+2. **Certify the `4×12` record (SPEC §9).** The `C = 1` case is now
+   certified on `frame38` (`3×8`, `r_lb ≈ 1.030`, Lean
+   `native_decide` in `SmallInstanceChecks.lean`). The `4×12`
+   numeric record (`r_CPQR ≈ 1.236`,
+   `experiments/cpqr_r_gt_1_numeric_4_12.json`) is the next
+   certification target: exact rational recovery, `AAᵀ = I`, pivot
+   margins, inverse-norm lower bound. It still sits below the named
+   polynomial, so it leaves E open; a Path 2 close needs a certified
+   family growing past every named polynomial.
 3. **`AxiomAudit.lean` + GitHub Actions** reusing `scripts/verify.sh`.
    Cheap, matches playbook Phases 6–7, and prevents silent axiom
    drift.

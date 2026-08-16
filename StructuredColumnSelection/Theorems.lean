@@ -7,6 +7,7 @@ import StructuredColumnSelection.ColumnPivotedQR
 import StructuredColumnSelection.ResidualEnergy
 import StructuredColumnSelection.CPQRVolume
 import StructuredColumnSelection.PrefixInverse
+import StructuredColumnSelection.TriangularBound
 
 namespace StructuredColumnSelection
 
@@ -180,5 +181,18 @@ theorem milestoneE_last_residual_ge {k n : ℕ}
       residualSq A (cpqrIterate A (k - 1))
         (cpqrChosen A hA (k - 1) (Nat.sub_one_lt_of_lt hk)) :=
   lastResidual_ge A hA hk
+
+/-- Triangular (Drmač–Gugercin / Gu–Eisenstat style) trace bound for the
+pivot-ordered CPQR Gram matrix of an orthogonal-row matrix:
+`tr((G')⁻¹) ≤ (n - k + 1) · (4^k + 6k - 1) / 9`.
+
+This is polynomial in `n` but exponential in `k` (it grows like
+`n · 4^k / 9`), so it is NOT a joint `poly(n, k)` inverse-norm bound
+and does NOT close Milestone E. -/
+theorem milestoneE_pivot_gram_inv_trace_le {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ((pivotGram A hA)⁻¹).trace ≤
+      ((n : ℝ) - k + 1) * ((4 : ℝ)^k + 6*k - 1) / 9 :=
+  pivotGram_inv_trace_le A hA
 
 end StructuredColumnSelection

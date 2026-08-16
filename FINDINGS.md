@@ -124,13 +124,47 @@ The Fin-indexed Cauchy–Binet `powersetCard` form is now also named
 https://faabian.github.io/algebraic-combinatorics/docs/AlgebraicCombinatorics/CauchyBinet.html
 including the empty-sum case `n < k → det(AB) = 0`.
 
+## Phase 6 (triangular trace bound + certified `C = 1` witness) delivered
+
+The pivot-ordered CPQR Gram matrix factors as `G' = Uᵀ Δ U` with `U`
+unit upper triangular, `|U i j| ≤ 1` (greedy maximality), and
+`Δ = diag(δ)` the pivot residuals. Inverting `U` through the finite
+Neumann series gives the Businger–Golub entry bound
+`|S i j| ≤ 2^{j-i-1}` on `S = U⁻¹`, and the residual-energy ratio
+`1/δ_l ≤ (n-l)/(k-l)` assembles into
+
+```text
+tr((G')⁻¹) ≤ (n - k + 1)(4^k + 6k - 1) / 9
+```
+
+(`milestoneE_pivot_gram_inv_trace_le`; Drmač–Gugercin /
+Gu–Eisenstat style). This is polynomial in `n` but exponential in
+`k`, so it is not a joint `poly(n,k)` inverse-norm bound and does
+not close Milestone E.
+
+A certified `C = 1` counterexample now exists: the rational `3×8`
+frame `frame38` satisfies `AAᵀ = I` exactly, CPQR selects `{0,1,2}`
+with strictly positive pivot margins, and an explicit rational test
+vector certifies `‖A_J⁻¹‖₂ > √(k(n-k+1))`, i.e. `r_CPQR > 1`
+(certified lower bound `r ≈ 1.030`). All three facts are
+machine-checked in `SmallInstanceChecks.lean` (`native_decide`) and
+re-certified independently over `Fraction` in
+`tests/test_cpqr_r_gt_1.py`. This refutes only the ideal `C = 1`
+workshop-scale bound: the certified inverse norm `≈ 4.37` is far
+below the campaign's named polynomial `max(n³, k³, (k(n-k+1))²) =
+512`, so Milestone E remains open. A `4×12` float record with
+`r_CPQR ≈ 1.236` (`experiments/cpqr_r_gt_1_numeric_4_12.json`) is
+numeric only and not certified.
+
 ## What remains open
 
 Milestone E still requires one of: a polynomial CPQR theorem for
-general `k`, a machine-checked counterexample, or a counterexample
-plus a stronger static class. Residual energy and the binomial volume
-bound are proved; they are exponential and do not close E. The `k = 1`
-volume bound is a genuine special case and also does not close E.
-Milestone F (CSSP bridge) is untouched. This repository does not claim
-to have solved all of Problem 4.1. See `CHECKPOINT.md` for the
-reasoning log and the next-work queue.
+general `k`, a machine-checked counterexample past the named
+polynomial, or a counterexample plus a stronger static class. The
+certified `frame38` witness kills only the ideal `C = 1` bound.
+Residual energy, the binomial volume bound, and the triangular trace
+bound are proved; the latter two are exponential in `k` and none of
+them closes E. The `k = 1` volume bound is a genuine special case
+and also does not close E. Milestone F (CSSP bridge) is untouched.
+This repository does not claim to have solved all of Problem 4.1.
+See `CHECKPOINT.md` for the reasoning log and the next-work queue.

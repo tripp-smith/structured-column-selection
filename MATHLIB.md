@@ -66,6 +66,23 @@ The `k=1` volume bound is a determinant comparison, not a
 spectral-norm argument. The binomial volume bound is a product of
 Gram-determinant ratios and is not polynomial in `n` and `k`.
 
+Phase 6 adds the triangular inverse machinery behind
+`pivotGram_inv_trace_le`:
+
+- `geom_sum_one_sub` (finite geometric series with `1 - X` in a
+  noncommutative matrix ring)
+- unit-triangular inversion by the finite Neumann series
+  `S = Σ_{p<k} (1-U)^p` (`gsS_mul_gsU`, `gsU_inv`)
+- the Businger–Golub entry bound `|S i j| ≤ 2^{j-i-1}` for the
+  inverse of a unit upper triangular matrix with `|U i j| ≤ 1`
+  (`gsS_entry_abs_le`)
+- the trace factorization `tr((UᵀΔU)⁻¹) = Σ_l δ_l⁻¹ ‖S e_l‖²`
+  (`pivotGram_inv_trace`)
+
+The generic triangular-inverse lemmas are mathlib-shaped candidates;
+the CPQR-specific ones stay here. The `frame38` witness theorems use
+`native_decide` and are not mathlib candidates.
+
 The §8 census, including the Wave 1 ETF / clustered / Haar-growth
 tracks, is Python-only and is not a mathlib candidate.
 

@@ -202,5 +202,60 @@ theorem frame12_binomial_volume :
   rw [frame12_k1_volume]
   native_decide
 
+/-! ### Certified `r_CPQR > 1` witness (C = 1 counterexample)
+
+`frame38` is a rational `3×8` orthogonal-row matrix on which ordinary
+CPQR selects columns `{0, 1, 2}` while the selected block has a
+singular value below `1/√18`, i.e. `‖A_J⁻¹‖₂ > √(k(n-k+1))`. This
+refutes the ideal `C = 1` workshop-scale bound. The witness is far
+below every named polynomial (`max(n³, k³, (k(n-k+1))²) = 512`), so
+Milestone E stays OPEN (SPEC §16 outcome 2 is a *machine-checked
+counterexample*; this certificate is the `C = 1` special case).
+
+Provenance: SLSQP adverse search in the row-trapezoidal
+parametrization (strict pivot-margin floor `2×10⁻³`), then a rational
+Cayley-transform re-parametrization (coefficient denominator `10⁴`),
+then exact certification in ℚ: `AAᵀ = I`, every pivot margin strictly
+positive (minimum `≈ 1.78×10⁻³`), and the inverse-norm lower bound
+via the explicit rational test vector below. Full record:
+`experiments/cpqr_r_gt_1_witness_3_8.json`.
+-/
+
+/-- The certified `3×8` rational orthogonal-row CPQR witness. -/
+def frame38 : Matrix (Fin 3) (Fin 8) ℚ :=
+  !![
+    ((3875327271587471739122796338825603 : ℚ) / 5433644339183757333293380411174397), ((33080315996430581254342847665480000 : ℚ) / 70637376409388845332813945345267161), (-(33234586449631383673439144534530000 : ℚ) / 70637376409388845332813945345267161), (-(8647746605122426503895656066660000 : ℚ) / 70637376409388845332813945345267161), ((3750448977575622889592262703400000 : ℚ) / 70637376409388845332813945345267161), ((8654911025192579199555355207220000 : ℚ) / 70637376409388845332813945345267161), (-(8655539699923975855605376687390000 : ℚ) / 70637376409388845332813945345267161), ((3748249565660503172469290912090000 : ℚ) / 70637376409388845332813945345267161);
+    ((306686546004074227834368040000 : ℚ) / 5433644339183757333293380411174397), ((37877113065131977716358845192232839 : ℚ) / 70637376409388845332813945345267161), ((24179290770860588362228755666805000 : ℚ) / 70637376409388845332813945345267161), ((24322902389788522530507181489030000 : ℚ) / 70637376409388845332813945345267161), ((24382597565826882225810024011510000 : ℚ) / 70637376409388845332813945345267161), (-(24386148760286194482032236158260000 : ℚ) / 70637376409388845332813945345267161), ((24385234164233267258229149131805000 : ℚ) / 70637376409388845332813945345267161), ((24390297096426521012057147561945000 : ℚ) / 70637376409388845332813945345267161);
+    ((675184486701012177592898810000 : ℚ) / 5433644339183757333293380411174397), ((4356029305662815783447858195000 : ℚ) / 70637376409388845332813945345267161), (-(28983327604234595073632867757767161 : ℚ) / 70637376409388845332813945345267161), ((28807791813129660304569526588530000 : ℚ) / 70637376409388845332813945345267161), (-(28805826211100419458476564268885000 : ℚ) / 70637376409388845332813945345267161), (-(28808338688255858833537260993510000 : ℚ) / 70637376409388845332813945345267161), ((28808351570366738716672871038255000 : ℚ) / 70637376409388845332813945345267161), (-(28811448764991543201062985153900000 : ℚ) / 70637376409388845332813945345267161)]
+
+/-- Orthonormality of the witness, exactly. -/
+theorem frame38_mul_transpose :
+    frame38 * frame38ᵀ = 1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;> native_decide
+
+/-- CPQR on `frame38` selects columns `{0, 1, 2}` (every pivot margin
+is strictly positive, so the smallest-index tie break is never used). -/
+theorem frame38_cpqr_set :
+    cpqrSet frame38 = ({0, 1, 2} : Finset (Fin 8)) := by
+  native_decide
+
+/-- Test vector for the inverse-norm lower bound on the selected block. -/
+private def frame38TestVec : Fin 3 → ℚ :=
+  ![(-(180013 : ℚ) / 250000), ((122339 : ℚ) / 250000), (-(491991 : ℚ) / 1000000)]
+
+/-- Inverse-norm lower bound certificate: `18 ‖A_J x‖² < ‖x‖²` implies
+`σ_min(A_J)² < 1/18`, hence `‖A_J⁻¹‖₂ > √18 = √(k(n-k+1))` and
+`r_CPQR > 1`. This is a `C = 1` counterexample certificate, not a
+polynomial-bound refutation: `4.38 ≪ 512 = max(n³, k³, (k(n-k+1))²)`.
+Milestone E remains OPEN. -/
+theorem frame38_inv_norm_lb :
+    (18 : ℚ) * (∑ i : Fin 3,
+        (frame38 i 0 * frame38TestVec 0 +
+         frame38 i 1 * frame38TestVec 1 +
+         frame38 i 2 * frame38TestVec 2) ^ 2) <
+      ∑ i : Fin 3, frame38TestVec i ^ 2 := by
+  native_decide
+
 end SmallInstance
 end StructuredColumnSelection

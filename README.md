@@ -38,16 +38,30 @@ Phases completed:
   - `milestoneE_mulVec_energy_le` (contraction; not an inverse bound)
   - `milestoneE_col_energy_le` (column leverage `≤ 1`; not an inverse bound)
   - `milestoneE_last_residual_ge` (last residual `≥ 1/(n-k+1)`; not a joint poly bound)
+  - `milestoneE_pivot_gram_inv_trace_le` (pivot-Gram inverse trace
+    `≤ (n-k+1)(4^k+6k-1)/9`; polynomial in `n`, exponential in `k`;
+    not a joint `poly(n,k)` bound)
+- Milestone E `C = 1` counterexample witness (certified, kills only
+  `C = 1`): rational `3×8` `frame38` with `AAᵀ = I`, CPQR set
+  `{0,1,2}`, and `r_CPQR > 1` (`frame38_mul_transpose`,
+  `frame38_cpqr_set`, `frame38_inv_norm_lb` in
+  `SmallInstanceChecks.lean`, plus exact Python re-certification in
+  `tests/test_cpqr_r_gt_1.py`). The certified inverse norm `≈ 4.37`
+  is below the campaign's named polynomial `512`, so Milestone E
+  stays open. A `4×12` record with `r_CPQR ≈ 1.236`
+  (`experiments/cpqr_r_gt_1_numeric_4_12.json`) is numeric only and
+  not certified.
 - Milestone E §8 census (witnesses only): `structselect/census.py`
 - Milestone E Wave 1 census (witnesses only): ETF / simplex / Paley,
   clustered near-parallels, Haar `k ≤ 12` growth, block-diagonal ETF
   copies (`experiments/census_wave1_*_seed1.json`). Worst recorded
-  `r_CPQR` is `√3/2` on the Mercedes-Benz / simplex `2×3`. No sample
-  had `r_CPQR > 1`.
+  `r_CPQR` there is `√3/2` on the Mercedes-Benz / simplex `2×3`.
 
 Not yet claimed:
 
-- a polynomial CPQR theorem for general `k`, a counterexample, or a refined class
+- a polynomial CPQR theorem for general `k`, a counterexample past the
+  named polynomial (the certified `frame38` kills only `C = 1`), or a
+  refined class
 - CSSP perturbation bridge
 - a solution of all of Problem 4.1
 
@@ -83,8 +97,15 @@ drop.
 - `StructuredColumnSelection/PrefixInverse.lean`:
   orthogonal-row contraction, column energy `≤ 1`, and the last
   CPQR residual average. Not a joint `poly(n,k)` inverse bound.
+- `StructuredColumnSelection/TriangularBound.lean`:
+  Gram–Schmidt factorization of the pivot-ordered CPQR Gram matrix,
+  its Neumann-series inverse, the Businger–Golub entry bound, and
+  the trace bound `tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9` (polynomial in
+  `n`, exponential in `k`; not a joint `poly(n,k)` bound).
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
-  exact rational enumerations used as independent witnesses.
+  exact rational enumerations used as independent witnesses,
+  including the certified `frame38` `C = 1` counterexample
+  (`native_decide`, not a public structural theorem).
 - `StructuredColumnSelection/Theorems.lean`:
   public theorem exports.
 

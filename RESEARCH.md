@@ -83,6 +83,7 @@ Delivery:
 | `milestoneE_mulVec_energy_le` | `AAᵀ = I ⇒` energy of `A x` is `≤` energy of `x` | `PrefixInverse.lean` | column energies `≤ 1` |
 | `milestoneE_col_energy_le` | `AAᵀ = I ⇒` column leverage `≤ 1` | `PrefixInverse.lean` | frame23 leverages `1, 9/25, 16/25` |
 | `milestoneE_last_residual_ge` | last CPQR residual `≥ 1/(n-k+1)` | `PrefixInverse.lean` | frame23 last residual `16/25 ≥ 1/2` |
+| `milestoneE_pivot_gram_inv_trace_le` | `tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9` (poly in `n`, exp in `k`) | `TriangularBound.lean` | `frame23` pivot Gram trace |
 
 Independent computational witness: `frame23_cpqr_set` selects `{0,2}` with `r_CPQR = 5/8`.
 
@@ -119,6 +120,32 @@ survive `row_orthonormalize`. JSON:
 This is **not** a polynomial CPQR theorem and **not** a
 machine-checked counterexample. Milestone E remains open.
 
+## Thread 5c — Milestone E triangular bound and `C = 1` witness (Wave 4)
+
+Formal (proved, default axioms only):
+
+| Name | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `milestoneE_pivot_gram_inv_trace_le` | `AAᵀ = I ⇒ tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9` | `TriangularBound.lean` | pivot-Gram trace identity `pivotGram_inv_trace` |
+
+The trace bound is polynomial in `n` but exponential in `k`
+(`≈ n·4^k/9`), so it is **not** outcome 1.
+
+Certified witness (`native_decide`, kept in `SmallInstanceChecks.lean`,
+not exported as a public structural theorem):
+
+| Name | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `frame38_mul_transpose` | `frame38 * frame38ᵀ = 1` (exact, `ℚ`) | `SmallInstanceChecks.lean` | `tests/test_cpqr_r_gt_1.py` |
+| `frame38_cpqr_set` | CPQR selects `{0,1,2}` (strict pivot margins) | `SmallInstanceChecks.lean` | same |
+| `frame38_inv_norm_lb` | `18‖A_J x‖² < ‖x‖²`, hence `r_CPQR > 1` | `SmallInstanceChecks.lean` | same |
+
+This is a SPEC §9 certification of the `C = 1` case only
+(`r_lb ≈ 1.030`, inverse norm `≈ 4.37 ≪ 512 = max(n³, k³,
+(k(n-k+1))²)`), so it is **not** outcome 2. The `4×12` record
+(`r_CPQR ≈ 1.236`, `experiments/cpqr_r_gt_1_numeric_4_12.json`) is a
+float observation and is **not** certified. Milestone E remains open.
+
 The dated reasoning log, census labels, and ordered next-work queue
 are in `CHECKPOINT.md`. Residual energy and the binomial volume bound
 are now proved there as non-polynomial theorems.
@@ -126,7 +153,8 @@ are now proved there as non-polynomial theorems.
 Non-claims (intentional):
 
 - no polynomial CPQR inverse-norm bound for general `k`
-- no CPQR counterexample
+- no CPQR counterexample past the named polynomial (the certified
+  `frame38` witness refutes only the ideal `C = 1` bound)
 - no extra static hypothesis (leverage ratio, coherence, …)
 - no claim that Problem 4.1 is solved
 - Python census is a witness, not a source of truth
@@ -135,3 +163,5 @@ Non-claims (intentional):
   and does not close Milestone E
 - `milestoneE_mulVec_energy_le`, `milestoneE_col_energy_le`, and
   `milestoneE_last_residual_ge` do not close Milestone E
+- `milestoneE_pivot_gram_inv_trace_le` is polynomial in `n` but
+  exponential in `k` and does not close Milestone E

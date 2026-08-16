@@ -747,9 +747,19 @@ set is `frame23_cpqr_set`. The Section 8 numerical census lives in
 `structselect/census.py` and `experiments/census_seed0.json`. Wave 1
 adds ETF / clustered / Haar-growth / block records in
 `experiments/census_wave1_*_seed1.json` (worst recorded `r_CPQR`
-is `√3/2` on the `2×3` simplex; no `r_CPQR > 1`). Wave 3 proves
+there is `√3/2` on the `2×3` simplex). Wave 3 proves
 a contraction and a last-residual average; those are not a joint
-`poly(n,k)` inverse-norm bound. None of
+`poly(n,k)` inverse-norm bound. Wave 4 adds
+`milestoneE_pivot_gram_inv_trace_le`
+(`tr((G')⁻¹) ≤ (n-k+1)(4^k+6k-1)/9`, polynomial in `n` but
+exponential in `k`, not a joint `poly(n,k)` bound) and a certified
+rational `3×8` witness `frame38` with `r_CPQR > 1`
+(`frame38_mul_transpose`, `frame38_cpqr_set`,
+`frame38_inv_norm_lb` in `SmallInstanceChecks.lean`,
+`native_decide` only). The `frame38` certificate refutes the ideal
+`C = 1` bound but stays below the named polynomial
+(`4.37 ≪ 512`), so it is not outcome 2; a `4×12` record with
+`r_CPQR ≈ 1.236` is numeric only, not certified. None of
 the three characterization outcomes for general `k` is claimed.
 
 ### Milestone F: CSSP perturbation bridge
