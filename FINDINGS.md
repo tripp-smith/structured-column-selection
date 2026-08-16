@@ -156,6 +156,12 @@ below the campaign's named polynomial `max(n³, k³, (k(n-k+1))²) =
 `r_CPQR ≈ 1.236` (`experiments/cpqr_r_gt_1_numeric_4_12.json`) is
 numeric only and not certified.
 
+SPEC §9 certification is automated in `structselect/certify.py`
+(Cayley transform / rational Givens, pivot margins, inverse-norm test
+vector). The published `frame38` rationals re-certify, as does a
+Cayley re-parametrization of the same float matrix. That pipeline
+does not close Milestone E.
+
 ## What remains open
 
 Milestone E still requires one of: a polynomial CPQR theorem for

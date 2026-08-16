@@ -45,7 +45,11 @@ class CensusRecord:
 
 
 def row_orthonormalize(B: np.ndarray) -> np.ndarray:
-    """Return A (k×n) with A Aᵀ = I from a full-row-rank k×n matrix."""
+    """Return A (k×n) with A Aᵀ = I from a full-row-rank k×n matrix.
+
+    Floating-point QR. For an exact rational frame (``AAᵀ = I`` in ``ℚ``)
+    and the SPEC §9 CPQR certificate, use ``structselect.certify``.
+    """
     k, n = B.shape
     q, _ = np.linalg.qr(B.T, mode="reduced")
     A = q[:, :k].T
