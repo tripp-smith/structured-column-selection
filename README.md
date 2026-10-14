@@ -54,6 +54,10 @@ Phases completed:
   - `milestoneE_bidiagonal_U_inv_trace_le` (poly inverse-trace bound
     **only if** Gram–Schmidt `U` is bidiagonal; a hypothesis on `U`,
     not a class of `A`, not Path 1, not a joint `poly(n,k)` theorem)
+  - `milestoneE_cpqr_inv_energy_le_choose` (`k · C(n,k)` inverse
+    energy; exponential / not polynomial)
+  - `milestoneE_cpqr_inv_energy_le_of_minDim` (Path 3: `k · n^d` on
+    the static class `min(k, n-k) ≤ d`; not Path 1)
 - Milestone E `C = 1` counterexample witness (certified, kills only
   `C = 1`): rational `3×8` `frame38` with `AAᵀ = I`, CPQR set
   `{0,1,2}`, and `r_CPQR > 1` (`frame38_mul_transpose`,
@@ -80,9 +84,10 @@ Phases completed:
 
 Not yet claimed:
 
-- a polynomial CPQR theorem for general `k`, a counterexample past the
-  named polynomial (the certified `frame38` kills only `C = 1`), or a
-  refined class
+- a polynomial CPQR theorem for general `k`, or a counterexample past
+  the named polynomial (the certified `frame38` kills only `C = 1`).
+  Path 3 has a polynomial inverse-energy theorem on the static class
+  `min(k, n-k) ≤ d`; that does not close Path 1.
 - CSSP perturbation bridge
 - a solution of all of Problem 4.1
 
@@ -134,6 +139,9 @@ drop.
   implicit CPQR factor `R Rᵀ = I`, and a polynomial inverse-trace
   bound only under a bidiagonal hypothesis on `U` (not a class of
   `A`, not Path 1).
+- `StructuredColumnSelection/StaticClass.lean`:
+  binomial inverse-energy bound and the Path 3 complementary-dimension
+  class `min(k, n-k) ≤ d`. Not a joint `poly(n,k)` theorem.
 - `StructuredColumnSelection/SmallInstanceChecks.lean`:
   exact rational enumerations used as independent witnesses,
   including the certified `frame38` `C = 1` counterexample

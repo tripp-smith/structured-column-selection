@@ -3,7 +3,8 @@
 Phase 5 adds a Python CPQR selector in `structselect/cpqr.py` and a
 SPEC §8 census in `structselect/census.py`. The census writes
 machine-readable records (`experiments/census_seed0.json`,
-`experiments/census_wave1_*_seed1.json`) with
+`experiments/census_wave1_*_seed1.json`,
+`experiments/census_static_class_seed1.json`) with
 `r_CPQR`, singular values, pivot trajectories, and optional
 exhaustive optima. It is a
 discovery witness, not a certified polynomial bound.
@@ -45,7 +46,10 @@ leave-one-out identity is
 row-orthonormality of the implicit CPQR factor is
 `milestoneE_gsR_mul_transpose`; the bidiagonal-`U` inverse-trace
 bound is `milestoneE_bidiagonal_U_inv_trace_le` (hypothesis on `U`,
-not a class of `A`, not Path 1).
+not a class of `A`, not Path 1); the binomial inverse-energy bound
+is `milestoneE_cpqr_inv_energy_le_choose` (exponential / not
+polynomial); the Path 3 complementary-dimension theorem is
+`milestoneE_cpqr_inv_energy_le_of_minDim` (not Path 1).
 
 `tests/test_cpqr_r_gt_1.py` re-certifies the `3×8` witness
 `experiments/cpqr_r_gt_1_witness_3_8.json` in exact `Fraction`

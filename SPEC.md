@@ -777,8 +777,15 @@ not a class of `A`, not Path 1). Path 2 search
 polynomial-looking through `k = 8`; worst recorded `(8,24)` has
 inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66` (`≈ 0.17%` of the named
 polynomial); `C = 1` witnesses exist; no superpolynomial family.
-`structselect/certify.py` re-certifies `frame38`. None of the
-three characterization outcomes for general `k` is claimed.
+`structselect/certify.py` re-certifies `frame38`. Path 3 adds
+`milestoneE_cpqr_inv_energy_le_choose` (`‖x‖² ≤ k C(n,k) ‖A_J x‖²`,
+exponential / not polynomial) and
+`milestoneE_cpqr_inv_energy_le_of_minDim` (polynomial inverse
+energy on the static class `min(k, n-k) ≤ d`). That class is
+checkable from the shape of `A` alone and is weaker than “every
+`k`-set is well-conditioned.” It is **not** a joint `poly(n,k)`
+theorem for every orthogonal-row matrix. None of the three
+characterization outcomes for general `k` is claimed.
 Milestone E remains **OPEN**.
 
 ### Milestone F: CSSP perturbation bridge

@@ -160,6 +160,8 @@ Formal (proved, default axioms only; none closes E):
 | `milestoneE_sigma_min_ge_inv_sqrt_trace` | `‖x‖² ≤ ‖A_J x‖² · tr(G⁻¹)` (`σ_min ≥ 1/√tr`) | `SigmaMinBounds.lean` | Cauchy–Schwarz on the inverse Gram |
 | `milestoneE_gsR_mul_transpose` | implicit CPQR factor `R Rᵀ = I` | `RowOrthoConstraints.lean` | Parseval pairing of GS directions |
 | `milestoneE_bidiagonal_U_inv_trace_le` | bidiagonal `U` `⇒ tr((G')⁻¹) ≤ k(k+1)/2 · (n-k+1)` | `RowOrthoConstraints.lean` | hypothesis on `U`, not a class of `A` |
+| `milestoneE_cpqr_inv_energy_le_choose` | `‖x‖² ≤ k C(n,k) ‖A_J x‖²` (exponential / not polynomial) | `StaticClass.lean` | frame23 `25/16 ≤ 6`; frame12 `25/16 ≤ 2` |
+| `milestoneE_cpqr_inv_energy_le_of_minDim` | `min(k,n-k)≤d ⇒ ‖x‖² ≤ k n^d ‖A_J x‖²` (Path 3; not Path 1) | `StaticClass.lean` | frame23 `d=1`, `25/16 ≤ 6` |
 
 Numeric (witnesses, not theorems): Path 2 trapezoidal search
 (`structselect/adverse.py`,
@@ -167,6 +169,18 @@ Numeric (witnesses, not theorems): Path 2 trapezoidal search
 polynomial-looking through `k = 8`. Worst recorded `(8,24)` has
 inverse norm `≈ 30.98`, `r_CPQR ≈ 2.66` (`≈ 0.17%` of the named
 polynomial). `C = 1` witnesses exist; no superpolynomial family.
+
+## Thread 5e — Path 3 complementary-dimension class
+
+Formal (proved, default axioms only; does not close Path 1):
+
+| Name | Statement | File | Independent check |
+| --- | --- | --- | --- |
+| `milestoneE_cpqr_inv_energy_le_choose` | `‖x‖² ≤ k C(n,k) ‖A_J x‖²` | `StaticClass.lean` | frame23 `25/16 ≤ 6` |
+| `milestoneE_cpqr_inv_energy_le_of_minDim` | `min(k,n-k)≤d ⇒ ‖x‖² ≤ k n^d ‖A_J x‖²` | `StaticClass.lean` | frame23 `d=1` |
+
+ETF / clustered diagnostics:
+`experiments/census_static_class_seed1.json`. No new `r_CPQR > 1`.
 
 The dated reasoning log, census labels, and ordered next-work queue
 are in `CHECKPOINT.md`. Residual energy and the binomial volume bound
@@ -177,7 +191,8 @@ Non-claims (intentional):
 - no polynomial CPQR inverse-norm bound for general `k`
 - no CPQR counterexample past the named polynomial (the certified
   `frame38` witness refutes only the ideal `C = 1` bound)
-- no extra static hypothesis (leverage ratio, coherence, …)
+- no extra static hypothesis that closes Path 1 (the Path 3 class
+  `min(k, n-k) ≤ d` is dimensional, not a geometry of `A`)
 - no claim that Problem 4.1 is solved
 - Python census is a witness, not a source of truth
 - `milestoneE_k1_volume_ge` does not close Milestone E
@@ -195,9 +210,13 @@ Non-claims (intentional):
   `poly(n,k)` bounds and do not close Milestone E
 - `milestoneE_gsR_mul_transpose` is `R Rᵀ = I`, not an inverse-norm
   bound
+- `milestoneE_cpqr_inv_energy_le_choose` is exponential in `k`
+  when `n ≈ 2k` and does not close Milestone E
+- `milestoneE_cpqr_inv_energy_le_of_minDim` is a Path 3 theorem
+  on `min(k, n-k) ≤ d` and does not close Path 1
 - `milestoneE_bidiagonal_U_inv_trace_le` is a hypothesis on
   Gram–Schmidt `U`, not a class of `A`, not Path 1, and not a
   joint `poly(n,k)` theorem
-- Path 2 ladder through `k = 8` is polynomial-looking (worst
+- Path 2 ladder through `k = 8` is polynomial-looking (worst)
   `(8,24)` inverse `≈ 30.98`, `r_CPQR ≈ 2.66`, `≈ 0.17%` of the
   named polynomial); census ratios are witnesses, not theorems
