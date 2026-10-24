@@ -1,3 +1,4 @@
+import StructuredColumnSelection.ColumnBudget
 import StructuredColumnSelection.OrthogonalRows
 import StructuredColumnSelection.PrincipalColumns
 import StructuredColumnSelection.VolumeWeights
@@ -297,5 +298,31 @@ theorem milestoneE_cpqr_inv_energy_le_of_minDim {k n d : ℕ}
       (k : ℝ) * (n : ℝ) ^ d *
         vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) :=
   cpqr_inv_energy_le_of_minDim A hA hd x
+/-- Milestone E, `k = 2` only: the CPQR pivot-Gram inverse-trace is at
+most `3(n-1)`.
+
+This is the `k = 2` slice: Gram–Schmidt `U` is automatically bidiagonal
+on `Fin 2`, so the nearest-neighbor inverse-trace bound applies to every
+orthogonal-row `2 × n` matrix. It matches a joint polynomial bound for
+two orthonormal rows. It does **not** close Milestone E (SPEC §16
+outcome 1 needs all `k`). -/
+theorem milestoneE_k2_inv_trace_le {n : ℕ}
+    (A : Matrix (Fin 2) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ((pivotGram A hA)⁻¹).trace ≤ (3 : ℝ) * ((n : ℝ) - 1) :=
+  pivotGram_inv_trace_le_of_k_eq_two A hA
+
+/-- Additional column ℓ¹ budget bounds every inverse entry. Not a general CPQR claim. -/
+theorem milestoneE_column_budget_S_abs_le_one {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hb : gsUColumnBudget A hA) (i j : Fin k) : |gsS A hA i j| ≤ 1 :=
+  gsS_abs_le_one_of_column_budget A hA hb i j
+
+/-- Polynomial inverse-trace under an extra coefficient budget; E remains open. -/
+theorem milestoneE_column_budget_inv_trace_le {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hb : gsUColumnBudget A hA) :
+    ((pivotGram A hA)⁻¹).trace ≤
+      ((k : ℝ) * (k + 1) / 2) * ((n : ℝ) - k + 1) :=
+  pivotGram_inv_trace_le_of_column_budget A hA hb
 
 end StructuredColumnSelection

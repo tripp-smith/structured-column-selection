@@ -94,7 +94,11 @@ identity, and row-orthonormality of the implicit CPQR factor:
 These stay on finite Gram projectors and are not a joint
 `poly(n,k)` inverse-norm theorem. The bidiagonal-`U` bound
 `pivotGram_inv_trace_le_of_bidiagonal` is a hypothesis on the
-coefficient pattern of `U`, not a class of `A`.
+coefficient pattern of `U`, not a class of `A`. The `k = 2`
+specialization `pivotGram_inv_trace_le_of_k_eq_two` is automatic
+bidiagonal, not a general-`k` theorem. The polynomial Frobenius
+bound on `N = 1-U` stays here: it is CPQR-specific and does not
+control the Neumann products that produce `S`.
 
 Phase 8 adds the binomial inverse-energy comparison and the Path 3
 complementary-dimension class:
@@ -116,3 +120,11 @@ is not a mathlib candidate.
 
 - a type-generic version of `weightedMarkov` for mathlib;
 - operator-norm comparisons packaged with the existing Frobenius proxy.
+
+## Column-budget phase search (2026-10-23)
+
+Searched mathlib big-operator order files before adding local lemmas.
+Candidates reused: `Finset.abs_sum_le_sum_abs`,
+`Finset.sum_le_sum_of_subset_of_nonneg`, `Finset.sum_le_sum`,
+`pow_le_one₀`. Repository-specific recurrence: `gsS_recurrence`.
+No new general matrix norm abstraction is needed for this finite core.

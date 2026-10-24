@@ -21,13 +21,24 @@ Proved here, with no placeholders:
   `|S i j| ≤ 1`, and the inverse-Frobenius proxy is at most
   `k(k+1)/2 · (n-k+1)` — a joint `poly(n,k)` bound **on that coefficient
   pattern**, not on every orthogonal-row matrix.
+* For `k ≤ 2` the bidiagonal hypothesis is vacuous (`Fin 2 = {0,1}` cannot
+  satisfy `s+1 < t`), so the same inverse-trace bound holds for every
+  orthogonal-row matrix with two rows: `tr((G')⁻¹) ≤ 3(n-1)`.
+* Off-bidiagonal energy of `N = 1-U` is polynomial:
+  `∑_{i,j} N_{ij}² ≤ k(n-k+1)`. Unselected columns of `R` absorb leftover
+  row energy after the selected triangular block, at most `k` in total.
+  Neither fact closes Path 1: Businger–Golub products of `N` can still
+  grow as `2^{j-i}`.
 
 Non-claims (intentional):
 
 * This is **not** a joint `poly(n,k)` inverse-norm / inverse-Frobenius bound
   for every orthogonal-row matrix. Multi-neighbor coupling in `U` can still
   feed the Businger–Golub `2^{j-i}` recurrence; whether the `n-k+1` column
-  budget forbids that growth is open.
+  budget forbids that growth is open. The `k = 2` theorem is a special case,
+  like `k = 1`, not SPEC §16 outcome 1.
+* A bandwidth-`w` hypothesis with `w ≥ 2` still permits exponential-in-`k`
+  growth of `S = U⁻¹`. It is not a Path 1 close.
 * Milestone E remains **OPEN**. This module does not close Path 1.
 * No CSSP / Milestone F statement.
 -/
@@ -318,6 +329,123 @@ lemma gsU_col_sq_sum_le (t : Fin k) :
         mul_le_mul_of_nonneg_left (gsU_col_weighted_sq_sum_le A hA t) hC
     _ = (n : ℝ) - k + 1 := mul_one _
 
+/-! ### Remaining-column energy of `R` and off-diagonal energy of `N` -/
+
+/-- Selected CPQR columns, as a `Finset`. -/
+noncomputable def gsRChosenIndex : Finset (Fin n) :=
+  (univ : Finset (Fin k)).image fun t : Fin k => cpqrChosen A hA t t.isLt
+
+lemma gsR_chosen_row_sq_sum (s : Fin k) :
+    ∑ t : Fin k, (gsR A hA s (cpqrChosen A hA t t.isLt)) ^ 2 =
+      gsδ A hA s * ∑ t : Fin k, (gsU A hA s t) ^ 2 := by
+  rw [mul_sum]
+  refine sum_congr rfl fun t _ => ?_
+  rw [gsR_pivot, mul_pow, gsδ_sqrt_sq, mul_comm]
+
+/-- Unselected columns of `R` hold the leftover row energy after the
+selected triangular block. This is an energy identity, not an inverse-norm
+bound. -/
+lemma gsR_unselected_row_sq_sum (s : Fin k) :
+    ∑ j ∈ (univ : Finset (Fin n)) \ gsRChosenIndex A hA,
+      (gsR A hA s j) ^ 2 =
+      1 - ∑ t : Fin k, (gsR A hA s (cpqrChosen A hA t t.isLt)) ^ 2 := by
+  have himg :
+      ∑ t : Fin k, (gsR A hA s (cpqrChosen A hA t t.isLt)) ^ 2 =
+        ∑ j ∈ gsRChosenIndex A hA, (gsR A hA s j) ^ 2 := by
+    unfold gsRChosenIndex
+    rw [sum_image]
+    intro t _ u _ heq
+    exact cpqrChosen_injective A hA heq
+  rw [eq_sub_iff_add_eq, himg, sum_sdiff (subset_univ _), gsR_row_sq_sum]
+
+lemma gsU_row_sq_sum_ge_one (s : Fin k) :
+    (1 : ℝ) ≤ ∑ t : Fin k, (gsU A hA s t) ^ 2 := by
+  have hnn : ∀ t ∈ (univ : Finset (Fin k)),
+      (0 : ℝ) ≤ (gsU A hA s t) ^ 2 := fun _ _ => sq_nonneg _
+  calc (1 : ℝ)
+      = (gsU A hA s s) ^ 2 := by rw [gsU_apply_diag]; norm_num
+    _ ≤ ∑ t : Fin k, (gsU A hA s t) ^ 2 :=
+        single_le_sum hnn (mem_univ s)
+
+/-- Leftover unselected energy in row `s` is at most `1 - δ_s`, since the
+selected block already carries at least the diagonal contribution `δ_s`. -/
+lemma gsR_unselected_row_sq_sum_le (s : Fin k) :
+    ∑ j ∈ (univ : Finset (Fin n)) \ gsRChosenIndex A hA,
+      (gsR A hA s j) ^ 2 ≤ 1 - gsδ A hA s := by
+  rw [gsR_unselected_row_sq_sum]
+  have hδ := gsδ_pos A hA s.isLt
+  have hsel : gsδ A hA s ≤
+      ∑ t : Fin k, (gsR A hA s (cpqrChosen A hA t t.isLt)) ^ 2 := by
+    have hU := gsU_row_sq_sum_ge_one A hA s
+    calc gsδ A hA s
+        = gsδ A hA s * 1 := (mul_one _).symm
+      _ ≤ gsδ A hA s * ∑ t : Fin k, (gsU A hA s t) ^ 2 :=
+          mul_le_mul_of_nonneg_left hU hδ.le
+      _ = ∑ t : Fin k, (gsR A hA s (cpqrChosen A hA t t.isLt)) ^ 2 :=
+          (gsR_chosen_row_sq_sum A hA s).symm
+  linarith
+
+/-- Total leftover energy in the unselected columns of `R` is at most `k`.
+
+Polynomial in `k`, but not an inverse-norm bound: it does not control
+products of off-diagonal `U` entries. -/
+lemma gsR_unselected_frob_sq_le :
+    ∑ s : Fin k,
+      ∑ j ∈ (univ : Finset (Fin n)) \ gsRChosenIndex A hA,
+        (gsR A hA s j) ^ 2 ≤ (k : ℝ) := by
+  calc ∑ s : Fin k,
+        ∑ j ∈ (univ : Finset (Fin n)) \ gsRChosenIndex A hA,
+          (gsR A hA s j) ^ 2
+      ≤ ∑ s : Fin k, (1 - gsδ A hA s) :=
+        sum_le_sum fun s _ => gsR_unselected_row_sq_sum_le A hA s
+    _ = (∑ s : Fin k, (1 : ℝ)) - ∑ s : Fin k, gsδ A hA s := by
+        rw [sum_sub_distrib]
+    _ = (k : ℝ) - ∑ s : Fin k, gsδ A hA s := by
+        simp [sum_const, nsmul_eq_mul, card_univ, Fintype.card_fin]
+    _ ≤ (k : ℝ) := by
+        have hnn : (0 : ℝ) ≤ ∑ s : Fin k, gsδ A hA s :=
+          sum_nonneg fun s _ => (gsδ_pos A hA s.isLt).le
+        linarith
+
+lemma gsN_apply_of_lt {i j : Fin k} (h : (i : ℕ) < (j : ℕ)) :
+    gsN A hA i j = -gsU A hA i j := by
+  rw [gsN_apply, Matrix.one_apply_ne (fun hc => absurd (hc ▸ h) (lt_irrefl _)),
+    zero_sub]
+
+lemma gsN_sq_le_gsU_sq (i j : Fin k) :
+    (gsN A hA i j) ^ 2 ≤ (gsU A hA i j) ^ 2 := by
+  by_cases h : (i : ℕ) < (j : ℕ)
+  · have hneg : (-gsU A hA i j) ^ 2 = (gsU A hA i j) ^ 2 := by ring
+    rw [gsN_apply_of_lt A hA h, hneg]
+  · rw [gsN_apply_of_not_lt A hA h]
+    nlinarith [sq_nonneg (gsU A hA i j)]
+
+/-- Off-diagonal Frobenius energy of `N = 1 - U`.
+
+This is polynomial in `n` and `k`, from row energy of `U` plus the
+residual-energy bound on `1/δ_s`. It does **not** close Path 1: the
+inverse `S = ∑ N^p` can still grow as `2^{j-i}` under multi-neighbor
+coupling. -/
+lemma gsN_frob_sq_le :
+    ∑ i : Fin k, ∑ j : Fin k, (gsN A hA i j) ^ 2 ≤
+      (k : ℝ) * ((n : ℝ) - k + 1) := by
+  have hkn := orthogonalRows_le A hA
+  have hC : (0 : ℝ) ≤ (n : ℝ) - k + 1 := by
+    have : (k : ℝ) ≤ n := Nat.cast_le.mpr hkn
+    linarith
+  calc ∑ i : Fin k, ∑ j : Fin k, (gsN A hA i j) ^ 2
+      ≤ ∑ i : Fin k, ∑ j : Fin k, (gsU A hA i j) ^ 2 :=
+        sum_le_sum fun i _ =>
+          sum_le_sum fun j _ => gsN_sq_le_gsU_sq A hA i j
+    _ ≤ ∑ i : Fin k, (gsδ A hA i)⁻¹ :=
+        sum_le_sum fun i _ => gsU_row_sq_sum_le A hA i
+    _ ≤ ∑ _i : Fin k, ((n : ℝ) - k + 1) :=
+        sum_le_sum fun i _ =>
+          (gsδ_inv_le A hA hkn i).trans (gsδ_ratio_le hkn i)
+    _ = (k : ℝ) * ((n : ℝ) - k + 1) := by
+        simp [sum_const, nsmul_eq_mul, card_univ, Fintype.card_fin]
+        ring
+
 /-! ### Nearest-neighbor (bidiagonal) back-substitution -/
 
 /-- Superdiagonal-only Gram–Schmidt coefficients: `U_s t = 0` unless
@@ -325,6 +453,25 @@ lemma gsU_col_sq_sum_le (t : Fin k) :
 of matrices `A`. -/
 def gsUBidiagonal : Prop :=
   ∀ s t : Fin k, (s : ℕ) + 1 < (t : ℕ) → gsU A hA s t = 0
+
+/-- Superdiagonal bandwidth `w`: `U_s t = 0` when `t > s + w`.
+`w = 1` is `gsUBidiagonal`. For `w ≥ 2` the inverse `S = U⁻¹` can still
+grow exponentially in `k` (a linear recurrence of order `w`). This is
+not a class of matrices `A` and is not Path 1. -/
+def gsUBandwidth (w : ℕ) : Prop :=
+  ∀ s t : Fin k, (s : ℕ) + w < (t : ℕ) → gsU A hA s t = 0
+
+lemma gsUBidiagonal_iff_bandwidth_one :
+    gsUBidiagonal A hA ↔ gsUBandwidth A hA 1 :=
+  Iff.rfl
+
+/-- For `k ≤ 2` the off-bidiagonal condition is vacuous: `Fin 2 = {0,1}`
+cannot satisfy `s + 1 < t`. Every orthogonal-row matrix with at most two
+rows therefore has bidiagonal `U`. -/
+lemma gsUBidiagonal_of_le_two (hk : k ≤ 2) : gsUBidiagonal A hA := by
+  intro s t hst
+  have : (t : ℕ) < k := t.isLt
+  exact False.elim (by omega)
 
 lemma gsS_recurrence_bidiagonal (hbi : gsUBidiagonal A hA)
     {i j : Fin k} (hij : (i : ℕ) < (j : ℕ)) :
@@ -441,5 +588,21 @@ theorem pivotGram_inv_trace_le_of_bidiagonal (hbi : gsUBidiagonal A hA) :
     _ = ((k : ℝ) * (k + 1) / 2) * ((n : ℝ) - k + 1) := by ring
 
 end RowOrthoQR
+
+/-- Inverse-Frobenius proxy for two orthonormal rows.
+
+Bidiagonal `U` is automatic (`gsUBidiagonal_of_le_two`), so this is a
+joint polynomial bound for every orthogonal-row `2 × n` matrix. It does
+not close Milestone E: SPEC §16 outcome 1 needs every `k`. -/
+theorem pivotGram_inv_trace_le_of_k_eq_two {n : ℕ}
+    (A : Matrix (Fin 2) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ((pivotGram A hA)⁻¹).trace ≤ (3 : ℝ) * ((n : ℝ) - 1) := by
+  have hbi : gsUBidiagonal A hA := gsUBidiagonal_of_le_two A hA (Nat.le_refl 2)
+  have h := pivotGram_inv_trace_le_of_bidiagonal A hA hbi
+  have hsimp :
+      ((2 : ℝ) * (2 + 1) / 2) * ((n : ℝ) - 2 + 1) =
+        (3 : ℝ) * ((n : ℝ) - 1) := by ring
+  rw [← hsimp]
+  exact h
 
 end StructuredColumnSelection

@@ -1,3 +1,4 @@
+import StructuredColumnSelection.ColumnBudget
 import StructuredColumnSelection.Definitions
 import StructuredColumnSelection.PrincipalColumns
 import StructuredColumnSelection.OrthogonalRows

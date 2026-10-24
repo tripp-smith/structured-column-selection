@@ -234,3 +234,20 @@ The `k = 1` volume bound is a genuine special case and also does
 not close E. Milestone F (CSSP bridge) is untouched.
 This repository does not claim to have solved all of Problem 4.1.
 See `CHECKPOINT.md` for the reasoning log and the next-work queue.
+
+## Column ℓ¹ budget on CPQR U (2026-10-23 phase)
+
+Finite Lean result (`milestoneE_column_budget_S_abs_le_one`): if every
+strict-upper column of U has absolute
+sum at most one, back-substitution bounds each entry of S=U⁻¹ by one.
+The triangular support then gives column energy ≤ j+1, and the existing
+reciprocal-residual estimate gives inverse trace ≤ k(k+1)(n-k+1)/2.
+This allows dense coupling and long edges; the budget is an extra
+coefficient hypothesis, not a consequence established from AAᵀ=I.
+
+Exact failed weakening: U=[[1,-1,-1],[0,1,-1],[0,0,1]] has entries bounded
+by one, but U(2,1,1)ᵀ=e₂, so its inverse has entry 2. This is an
+algebraic obstruction to that implication, not a CPQR/frame counterexample.
+The rational dense and chain tests independently recompute solve energies;
+the chain realizes ∑(j+1)=k(k+1)/2 at the coefficient level.
+Milestone E remains open. Randomized volume sampling is unchanged.
