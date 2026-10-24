@@ -83,7 +83,7 @@ example {k n : ℕ} (hkn : k ≤ n) (A : Matrix (Fin k) (Fin n) ℝ)
     (hdiag : ∀ i : Fin k, A i (Fin.castLE hkn i) ≠ 0) :
     ∀ t ≤ k, (selectedColGram A (widePrefix n t)).det ≠ 0 ∧
       ∀ x, selectedProjector A (widePrefix n t) *ᵥ x =
-        (fun i => if (i : ℕ) < t then x i else 0) :=
+        (fun i : Fin k => if (i : ℕ) < t then x i else 0) :=
   milestoneE_triangular_prefix_projector hkn A hupper hdiag
 
 example {k n : ℕ} (hkn : k ≤ n) (A : Matrix (Fin k) (Fin n) ℝ)
