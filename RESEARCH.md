@@ -1,5 +1,10 @@
 # Research threads
 
+Current audit (2026-10-24): historical C/D completion entries below refer to
+adjugate cores. The original all-frame actual-inverse equality is false.
+See the current actual-inverse contract and obstruction at the end of this
+file; the efficient sampler, general E characterization and F remain open.
+
 ## Thread 1 — Milestone A (completed)
 
 Delivery:
@@ -270,3 +275,84 @@ is checked by the same root command and CI. Draft PR #13, branch
 `codex/phase-e-column-budget`. This phase delivers the proposed conditional
 theorem, not a weaker surrogate. Next: identify a geometric sufficient
 condition for the budget or a certified frame obstruction to such a condition.
+
+## Goal audit and Phase D actual inverse contract (2026-10-24)
+
+Progress estimate: **45% of the original obligations**, with low confidence in
+remaining research effort. The initial 55% estimate counted proxy results too
+optimistically. This is not a probability of resolving CPQR. Previous goal turn
+was interrupted before actions; this turn revalidated main at 2e691bd and takes
+concrete action. Phase column-budget delivery is complete (merged PR #13).
+
+Original obligations, linked to SPEC rather than replaced:
+- SPEC §§5–6 and §16 C/D require an actual inverse expectation and inverse-norm
+  probability guarantee on every orthogonal-row frame. Existing public names
+  prove adjugate proxy identities/tails; the actual-inverse bridge is missing.
+  The claimed unconditional expectation equality is false on singular-support
+  frames: A=[1,0], k=1,n=2 gives actual expectation 1 versus proxy sum 2.
+- SPEC §5 efficient reverse sampler: no sampler exists in structselect; open.
+- SPEC §16 E: no general polynomial CPQR theorem or qualifying certified
+  obstruction yet; coefficient-budget/min-dimension slices do not close it.
+- SPEC §16 F: CSSP norm perturbation bridge is unimplemented; open. Audit and
+  delivery interfaces must eventually cover the actual original statements.
+
+Route review: further hypotheses on U do not discharge the missing general
+CPQR bridge. Prioritize repairing the randomized theorem's actual semantics,
+then investigate new primary CPQR constructions rather than accumulate more
+conditional U estimates. A recent primary source (Damle, arXiv:2607.13532,
+introduction and bibliography [16]) reports adverse orthogonal-row CPQR examples
+and points to Chen et al., arXiv:2606.02484; this is a research lead, not a Lean
+certificate. No new CPQR result is claimed in this phase.
+
+Frozen mathematical contract (namespace StructuredColumnSelection):
+- Define `selectedInvTrace A J` as the actual inverse column-Gram trace.
+  Existing `cols_mul_transpose_inv_trace` identifies it with the row-Gram
+  trace on nonsingular k-sets. Sums/events are restricted to those k-sets.
+- `milestoneD_actual_expected_inv_trace_le`: AAᵀ=I implies
+  ∑_{#J=k} volumeWeight A J * selectedInvTrace A J ≤ k(n+1-k).
+- `milestoneD_actual_expected_inv_trace_eq_of_full_support`: the same is an
+  equality if every k-column block has nonzero determinant. This extra
+  hypothesis is explicit; it does not silently repair the original false type.
+- `milestoneD_singular_volume_mass_zero`: singular k-blocks have total mass 0.
+- `milestoneD_actual_inv_trace_good_mass`: for δ>0 the mass of nonsingular
+  blocks with actual inverse trace ≤ k(n+1-k)/δ is at least 1-δ.
+- `milestoneD_actual_inverse_energy_good_mass`: the good event may instead
+  require ∀x, ‖x‖² ≤ (k(n+1-k)/δ)‖A_J x‖², an explicit inverse-energy RRQR
+  guarantee without a hidden adjugate proxy. No measure-theory/spectral API
+  claim; the quadratic bound has its literal finite quantifiers.
+
+Lean target: ActualInverseExpectation.lean, Theorems.lean, AxiomAudit.lean;
+public-only expected-type consumers in scripts/CompletionContract.lean.
+Independent Python artifact: structselect/volume_exact.py and
+ tests/test_volume_exact.py, finite Fraction determinant/solve enumeration,
+cofactor recertification and A=[1,0] plus existing frame23 (actual sum=3,
+proxy=4) witnesses. Enumeration is an exact verifier, not an efficient sampler.
+`milestoneD_actual_expectation_equality_obstruction` is a Lean exact
+real-arithmetic witness for A=[1,0], no custom axioms/native_decide
+in public structural results. Non-claims: no unconditional equality, efficient
+sampler, general CPQR characterization, CSSP bridge, or solution of Problem 4.1.
+Success criterion: actual-inverse bounds and finite probability statement,
+plus certified failed equality, pass the root command and exact-head CI.
+
+Implementation outcome: the exact five probability/expectation contracts and
+one public counterexample are implemented. `selectedInvTrace` uses column
+Gram trace (equal to the row-Gram trace on nonsingular square blocks). The
+all-frame inverse-energy event explicitly requires nonsingularity and ∀x.
+The focused module, including the real-arithmetic counterexample, elaborates.
+Sixteen exact tests pass, including full-support frames and extremely small
+positive rational masses. No new general matrix expectation equality is claimed.
+
+Estimated completion after this phase: **50%**, conditional on verification
+and delivery. This increases from the audited 45% because the actual finite
+inverse-energy RRQR obligation is now discharged. It is not based on theorem
+or PR counts. Major remaining work: efficient reverse-volume sampling with
+exactness/failure evidence, general CPQR proof or certified obstruction,
+CSSP perturbation bridge and full original-interface completion audit. These
+include research uncertainty; no reliable calendar bound is available.
+
+Next phase selection: implement the missing efficient exact reverse sampler
+and prove its finite deletion-weight identity. Continue the CPQR research
+route from [Chen et al., §7](https://arxiv.org/html/2606.02484#S7) and
+[Damle](https://arxiv.org/html/2607.13532v1), recording explicit n-growth before
+claiming a joint-polynomial obstruction. No externally reported result is
+counted as a repository theorem.

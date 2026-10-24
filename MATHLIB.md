@@ -128,3 +128,13 @@ Candidates reused: `Finset.abs_sum_le_sum_abs`,
 `Finset.sum_le_sum_of_subset_of_nonneg`, `Finset.sum_le_sum`,
 `pow_le_one₀`. Repository-specific recurrence: `gsS_recurrence`.
 No new general matrix norm abstraction is needed for this finite core.
+
+## Actual inverse phase search (2026-10-24)
+
+Reused existing `invFrobWeight_eq_volumeWeight_mul_inv_trace` and
+`cols_mul_transpose_inv_trace` in SigmaMinBounds.lean, rather than duplicate
+matrix inverse algebra. Mathlib candidates: `Matrix.mul_inv_rev`,
+`Matrix.trace_mul_comm`, `Finset.sum_filter_add_sum_filter_not`,
+`Finset.sum_filter`, `Finset.sum_le_sum_of_subset_of_nonneg`. Existing finite
+`markovInvFrob` controls the proxy; a pointwise event-mass identity transfers
+it to the actual nonsingular inverse event.

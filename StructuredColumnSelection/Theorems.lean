@@ -1,3 +1,4 @@
+import StructuredColumnSelection.ActualInverseExpectation
 import StructuredColumnSelection.ColumnBudget
 import StructuredColumnSelection.OrthogonalRows
 import StructuredColumnSelection.PrincipalColumns
@@ -324,5 +325,57 @@ theorem milestoneE_column_budget_inv_trace_le {k n : ℕ}
     ((pivotGram A hA)⁻¹).trace ≤
       ((k : ℝ) * (k + 1) / 2) * ((n : ℝ) - k + 1) :=
   pivotGram_inv_trace_le_of_column_budget A hA hb
+
+/-- Actual volume-weighted inverse expectation; no full-support assumption. -/
+theorem milestoneD_actual_expected_inv_trace_le {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ∑ J ∈ (univ : Finset (Fin n)).powersetCard k,
+      volumeWeight A J * selectedInvTrace A J ≤
+      (k : ℝ) * ((n + 1 - k : ℕ) : ℝ) :=
+  actual_expected_inv_trace_le A hA
+
+/-- Expectation equality with the explicit additional nonsingular-support hypothesis. -/
+theorem milestoneD_actual_expected_inv_trace_eq_of_full_support {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hfull : ∀ J : Finset (Fin n), J.card = k → (selectedColGram A J).det ≠ 0) :
+    ∑ J ∈ (univ : Finset (Fin n)).powersetCard k,
+      volumeWeight A J * selectedInvTrace A J =
+      (k : ℝ) * ((n + 1 - k : ℕ) : ℝ) :=
+  actual_expected_inv_trace_eq_of_full_support A hA hfull
+
+/-- Singular square selections have zero probability mass. -/
+theorem milestoneD_singular_volume_mass_zero {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) :
+    ∑ J ∈ ((univ : Finset (Fin n)).powersetCard k).filter
+      (fun J => (selectedColGram A J).det = 0), volumeWeight A J = 0 :=
+  singular_volume_mass_zero A
+
+/-- Finite volume probability of actual nonsingular inverse-trace control. -/
+theorem milestoneD_actual_inv_trace_good_mass {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) {δ : ℝ}
+    (hδ : 0 < δ) :
+    1 - δ ≤ ∑ J ∈ ((univ : Finset (Fin n)).powersetCard k).filter
+      (actualInvTraceGood A (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ)),
+      volumeWeight A J :=
+  actual_inv_trace_good_mass A hA hδ
+
+/-- Actual inverse-energy RRQR probability bound, with literal vector quantification. -/
+theorem milestoneD_actual_inverse_energy_good_mass {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) {δ : ℝ}
+    (hδ : 0 < δ) :
+    1 - δ ≤ ∑ J ∈ ((univ : Finset (Fin n)).powersetCard k).filter
+      (actualInverseEnergyGood A (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ)),
+      volumeWeight A J :=
+  actual_inverse_energy_good_mass A hA hδ
+
+/-- The original all-frame expectation equality fails, already for one row. -/
+theorem milestoneD_actual_expectation_equality_obstruction :
+    ∃ A : Matrix (Fin 1) (Fin 2) ℝ, OrthogonalRows A ∧
+      (∑ J ∈ (univ : Finset (Fin 2)).powersetCard 1,
+        volumeWeight A J * selectedInvTrace A J) ≠ (2 : ℝ) := by
+  refine ⟨ActualInverseWitness.zeroColumnFrame,
+    ActualInverseWitness.zeroColumnFrame_orthogonal, ?_⟩
+  rw [ActualInverseWitness.zeroColumnFrame_actual_expectation]
+  norm_num
 
 end StructuredColumnSelection

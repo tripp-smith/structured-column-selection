@@ -950,3 +950,24 @@ Additional structural slice (goals unchanged): public names
 k(k+1)(n-k+1)/2 inverse-trace control under `gsUColumnBudget`.
 This is an extra hypothesis on U, beyond bidiagonal support; no general
 Path 1 result, no new frame counterexample, no closure of E or Problem 4.1.
+
+
+### Status correction — 2026-10-24 actual inverse audit
+
+The unconditional inverse-expectation equalities in §§4–6, §16 C/D and §20
+are false when some k-blocks are singular. The historical target text above
+is retained for audit. A=[1,0] has actual volume-weighted inverse trace 1,
+whereas k(n-k+1)=2; frame23 gives 3 versus 4. Adjugate equalities do not
+establish those original actual-inverse equalities. The valid all-frame
+trace result is `milestoneD_actual_expected_inv_trace_le`; equality is
+`milestoneD_actual_expected_inv_trace_eq_of_full_support` with its explicit
+additional hypothesis. The finite probability contract is delivered via
+`milestoneD_singular_volume_mass_zero`,
+`milestoneD_actual_inv_trace_good_mass`, and
+`milestoneD_actual_inverse_energy_good_mass`. The latter directly quantifies
+all selected-column vectors, and therefore expresses inverse-energy RRQR.
+`milestoneD_actual_expectation_equality_obstruction` certifies the failed
+unconditional equality in Lean using real arithmetic and default axioms.
+No matrix Loewner-expectation equality or spectral-norm API theorem is claimed.
+The efficient executable sampler, E characterization, and F bridge are open.
+The previous assertion of a completed minimum publishable package was premature.

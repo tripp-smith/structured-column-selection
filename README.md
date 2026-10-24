@@ -8,6 +8,11 @@ under orthogonal-row structure (`A Aᵀ = I`) for Simons Workshop Problem 4.1.
 Machine-checked randomized quasi-optimal column selection for the
 orthogonal-row case of Simons Problem 4.1.
 
+The finite-distribution guarantee does not yet include an efficient executable
+volume sampler. Unconditional inverse-expectation equality is false with
+singular support; the audited inequality and probability theorem are listed
+below. General CPQR characterization and the CSSP bridge remain open.
+
 Phases completed:
 
 - Milestone A (structural foundations)
@@ -17,10 +22,10 @@ Phases completed:
 - Milestone B (volume normalisation)
   - `milestoneB_cauchyBinet`
   - `milestoneB_volume_normalization`
-- Milestone C (exact inverse-Gram identity)
+- Milestone C (exact adjugate identity; actual inverse equality needs full support)
   - `milestoneC_adjugate_sum`
   - `milestoneC_inverse_gram_expectation`
-- Milestone D (finite inverse-Frobenius expectation and Markov tail)
+- Milestone D (finite adjugate proxy expectation and Markov tail; actual bridge below)
   - `milestoneD_expected_inv_frob_sq`
   - `milestoneD_markov_inv_frob`
 
@@ -172,7 +177,7 @@ A detailed reasoning log, failed attempts, and the next-work queue
 live in `CHECKPOINT.md`. The engineering playbook is
 `autonomous-implementation.md`.
 
-Current bounded phase: **E column budget — verified**. Delivered Lean outputs: `milestoneE_column_budget_S_abs_le_one` and
+Completed bounded phase: **E column budget — verified**. Delivered Lean outputs: `milestoneE_column_budget_S_abs_le_one` and
 `milestoneE_column_budget_inv_trace_le`, with inverse trace bounded by
 `k(k+1)(n-k+1)/2` under `gsUColumnBudget`. Root `./scripts/verify.sh` passes: Lean build, no proof placeholders or
 custom axioms, default-axiom audit for all 34 public theorems, and 70 Python
@@ -182,3 +187,17 @@ coupling beyond bidiagonal support. General Milestone E remains open.
 Draft PR: [#13](https://github.com/tripp-smith/structured-column-selection/pull/13).
 Branch: `codex/phase-e-column-budget`. Skills and workflow provenance are in
 `.agents/WORKFLOW_IMPORT.md`.
+
+Current phase: **D actual inverse — implemented; verification/delivery receipt
+on the phase PR**. Estimated original-objective completion after this phase:
+**50%**, with uncertain research effort. Public outputs:
+`milestoneD_actual_expected_inv_trace_le`,
+`milestoneD_actual_expected_inv_trace_eq_of_full_support`,
+`milestoneD_singular_volume_mass_zero`,
+`milestoneD_actual_inv_trace_good_mass`,
+`milestoneD_actual_inverse_energy_good_mass`, and
+`milestoneD_actual_expectation_equality_obstruction`.
+The last result certifies why the original unconditional equality cannot be
+claimed. An exact enumeration verifier is included; the efficient sampler
+remains the next executable obligation. See RESEARCH.md and the phase PR for
+original obligations, exact-revision checks, and delivery status.

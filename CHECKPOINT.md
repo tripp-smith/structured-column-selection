@@ -1,5 +1,12 @@
 # Research checkpoint (2026-08-16)
 
+Current audit correction (2026-10-24): C/D historical completion labels mean
+adjugate cores, not the unconditional actual-inverse equality (false).
+The actual inequality/probability phase and remaining original obligations
+are recorded at the end of this file and in RESEARCH.md. No efficient volume
+sampler exists yet. E and F remain open.
+
+
 This is the working memory for the next agent or human. It records
 what was proved, what was only observed, which proof attempts stalled,
 and the next concrete moves. It is **not** a theorem.
@@ -758,3 +765,28 @@ Phase result: both column-budget theorems delivered, root verification
 passed with 70 tests and all 34 public names audited using only defaults.
 CI passed; final revision checks are on draft PR #13. The column-budget
 phase is verified; general Milestone E remains OPEN.
+
+
+## 2026-10-24 actual inverse semantic audit (current priority)
+
+Earlier entries reporting C/D as the complete minimum package are historical:
+the original actual-inverse expectation equality is false with singular
+support; an efficient executable sampler is also absent. Current obligations
+and the frozen repair contract are in RESEARCH.md. The valid inequality,
+zero singular mass, and actual inverse-energy good-event probability are the
+next shipped outputs. Do not equate adjugate proxies with actual expectations.
+
+Route decision: after this correction, prioritize the efficient exact reverse
+sampler and investigate Chen et al. arXiv:2606.02484 §7 as a CPQR construction
+lead (reported externally, not yet certified here). Their theorem concerns
+arbitrary polynomial deterioration relative to workshop scale as a function
+of k; a joint (n,k) conclusion still requires checking n-growth explicitly.
+No outcome of Milestone E follows merely from citing that paper. Current
+obligation-based estimate: 45%, expected to improve when this direct bridge
+is verified; remaining research effort is uncertain.
+
+Phase implementation is complete: six public actual-inverse outputs, including
+the exact counterexample. Post-phase estimate: 50% of original obligations;
+next implement exact reverse sampling rather than another conditional U bound.
+Canonical verification/delivery evidence is on the phase PR; existing general
+CPQR and CSSP obligations remain open.
