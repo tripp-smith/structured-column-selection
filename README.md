@@ -177,3 +177,7 @@ Current bounded phase: **E column budget — in progress**. Delivered Lean outpu
 `k(k+1)(n-k+1)/2` under `gsUColumnBudget`. Focused Lean and four exact
 Python tests pass; full verification and CI are pending. This allows
 coupling beyond bidiagonal support. General Milestone E remains open.
+
+Draft PR: [#13](https://github.com/tripp-smith/structured-column-selection/pull/13).
+Branch: `codex/phase-e-column-budget`. Skills and workflow provenance are in
+`.agents/WORKFLOW_IMPORT.md`.
