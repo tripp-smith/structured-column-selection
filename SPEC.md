@@ -941,3 +941,12 @@ That creates a solid theorem-producing repository almost immediately, with the h
 [2]: https://arxiv.org/abs/1806.01969 "Reverse iterative volume sampling for linear regression"
 [3]: https://arxiv.org/abs/2402.13975 "A sublinear-time randomized algorithm for column and row subset selection based on strong rank-revealing QR factorizations"
 [4]: https://arxiv.org/abs/2503.18496 "[2503.18496] Randomized strong rank-revealing QR for column subset selection and low-rank matrix approximation"
+
+### Status annotation — 2026-10-23 column-budget phase
+
+Additional structural slice (goals unchanged): public names
+`milestoneE_column_budget_S_abs_le_one` and
+`milestoneE_column_budget_inv_trace_le` target inverse-entry and
+k(k+1)(n-k+1)/2 inverse-trace control under `gsUColumnBudget`.
+This is an extra hypothesis on U, beyond bidiagonal support; no general
+Path 1 result, no new frame counterexample, no closure of E or Problem 4.1.

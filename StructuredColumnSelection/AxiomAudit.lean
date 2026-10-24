@@ -47,3 +47,11 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_sigma_min_ge_inv_sqrt_trace
 #print axioms StructuredColumnSelection.milestoneE_gsR_mul_transpose
 #print axioms StructuredColumnSelection.milestoneE_bidiagonal_U_inv_trace_le
+
+#print axioms StructuredColumnSelection.milestoneE_cpqr_inv_energy_le_choose
+
+#print axioms StructuredColumnSelection.milestoneE_cpqr_inv_energy_le_of_minDim
+
+#print axioms StructuredColumnSelection.milestoneE_column_budget_S_abs_le_one
+
+#print axioms StructuredColumnSelection.milestoneE_column_budget_inv_trace_le

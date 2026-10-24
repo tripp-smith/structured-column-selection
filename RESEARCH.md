@@ -220,3 +220,44 @@ Non-claims (intentional):
 - Path 2 ladder through `k = 8` is polynomial-looking (worst)
   `(8,24)` inverse `≈ 30.98`, `r_CPQR ≈ 2.66`, `≈ 0.17%` of the
   named polynomial); census ratios are witnesses, not theorems
+
+## Phase E column budget — contract (2026-10-23, in progress)
+
+Next Path 1 structural slice after the bidiagonal theorem. For real `A :
+Matrix (Fin k) (Fin n) ℝ` with `hA : OrthogonalRows A`, assume
+`gsUColumnBudget A hA`: for every column `j`,
+`∑ l ∈ Iio j, |gsU A hA l j| ≤ 1`.
+
+Named outputs in `ColumnBudget.lean`, re-exported through `Theorems.lean`:
+- `milestoneE_column_budget_S_abs_le_one`: every entry of `S=U⁻¹` has
+  absolute value at most one, by finite back-substitution.
+- `milestoneE_column_budget_inv_trace_le`:
+  `tr((pivotGram A hA)⁻¹) ≤ k(k+1)/2 * (n-k+1)`.
+
+This permits multiple predecessors and arbitrarily long edges, unlike
+bidiagonal U. Dependencies: existing `gsS_recurrence`, triangular support,
+`pivotGram_inv_trace`, and reciprocal residual bounds. Python artifact:
+`structselect/column_budget.py`, exact Fraction back-substitution and budget
+checks; `tests/test_column_budget.py` independently checks products, trace
+closed forms, dense rational examples and a failed weakened hypothesis.
+No pivot/selection claims from numerics. Finite deterministic checks only.
+
+Non-claims: budget is an extra hypothesis on CPQR coefficients, not proved
+from AAᵀ=I, not a static geometric characterization, not a general CPQR
+polynomial theorem, not a solution of Problem 4.1. No volume-sampling changes.
+Failed hypothesis to certify: entrywise |U_ij|≤1 alone does not imply the
+unit inverse-entry bound (3×3 U with all strict upper entries -1).
+
+Workflow import: GECP reference revision af8b592ca227625aec05e260dbc290bba0261fa2;
+all `.agents/skills` copied verbatim. Its CI workflow is preserved as
+`.github/workflows/reference/gecp-ci.yml.source`; active CSSP CI uses the
+root verify command because GECP module names and dependency commands do
+not apply here. Existing unmerged k=2/hygiene work integrated with current
+origin/main before this phase; both public tracks and axiom audit retained.
+
+Outcome so far: both named Lean results passed focused elaboration without
+placeholders. The failed entrywise-only hypothesis is exactly recertified:
+column masses (0,1,2), inverse-column energies (1,2,6), maximum entry 2.
+Dense budget examples and chain closed forms pass exact independent tests.
+No theorem weakening was needed; the coefficient hypothesis is explicit.
+Final root verification and CI status are recorded in README and the PR.

@@ -743,3 +743,13 @@ official `scripts/verify.sh`; update the PR after any fix.
 This run has no linked Cloud Agent environment (`environment: null`).
 Do not invent dashboard environment IDs. Install is
 `bash .cursor/install.sh` and must not run tests.
+
+## 2026-10-23 bounded column-budget phase
+
+Synced origin/main (including Path 3 min-dimension result) and retained
+unmerged k=2 plus axiom-audit/CI hygiene. Imported all GECP skills and
+workflow source with explicit CSSP bindings. Current contract is in
+RESEARCH.md: column ℓ¹ budget, inverse entries ≤1, polynomial inverse
+trace under that extra factor hypothesis. Next open general question:
+find a geometric class of A implying this budget, or quantify amplification
+when it fails. Do not infer the budget from AAᵀ=I or start F.

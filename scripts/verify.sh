@@ -9,14 +9,14 @@ lake build
 
 echo "verify: sorry scan"
 if command -v rg >/dev/null 2>&1; then
-  if rg -q sorry --glob '*.lean'; then
-    echo "sorry found in Lean sources" >&2
-    rg sorry --glob '*.lean' >&2
+  if rg -q '\bsorry\b|\badmit\b|^\s*(private\s+|protected\s+)?axiom\s' --glob '*.lean'; then
+    echo "proof placeholder or custom axiom found in Lean sources" >&2
+    rg '\bsorry\b|\badmit\b|^\s*(private\s+|protected\s+)?axiom\s' --glob '*.lean' >&2
     exit 1
   fi
 else
   if grep -R --include='*.lean' --exclude-dir=.lake -n sorry .; then
-    echo "sorry found in Lean sources" >&2
+    echo "proof placeholder or custom axiom found in Lean sources" >&2
     exit 1
   fi
 fi

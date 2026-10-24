@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "codex/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          build: true
+          use-mathlib-cache: true
+      - run: scripts/check_axioms.sh
+      - name: Check original-SPEC public theorem contracts
+        run: lake env lean scripts/CompletionContract.lean
+      - name: Reject proof placeholders and custom axioms
+        run: |
+          if rg -n '\bsorry\b|\badmit\b|\bnative_decide\b|^\s*(private\s+|protected\s+)?axiom\s' --glob '*.lean' --glob '!.lake/**'; then
+            exit 1
+          fi
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --all-extras --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy kernelgecp
+      - run: uv run python -m pytest
+      - run: uv run pip-audit

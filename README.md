@@ -171,3 +171,9 @@ claim discipline. Verify with `bash scripts/verify.sh`.
 A detailed reasoning log, failed attempts, and the next-work queue
 live in `CHECKPOINT.md`. The engineering playbook is
 `autonomous-implementation.md`.
+
+Current bounded phase: **E column budget — in progress**. Delivered Lean outputs: `milestoneE_column_budget_S_abs_le_one` and
+`milestoneE_column_budget_inv_trace_le`, with inverse trace bounded by
+`k(k+1)(n-k+1)/2` under `gsUColumnBudget`. Focused Lean and four exact
+Python tests pass; full verification and CI are pending. This allows
+coupling beyond bidiagonal support. General Milestone E remains open.

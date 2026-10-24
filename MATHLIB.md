@@ -120,3 +120,11 @@ is not a mathlib candidate.
 
 - a type-generic version of `weightedMarkov` for mathlib;
 - operator-norm comparisons packaged with the existing Frobenius proxy.
+
+## Column-budget phase search (2026-10-23)
+
+Searched mathlib big-operator order files before adding local lemmas.
+Candidates reused: `Finset.abs_sum_le_sum_abs`,
+`Finset.sum_le_sum_of_subset_of_nonneg`, `Finset.sum_le_sum`,
+`pow_le_one₀`. Repository-specific recurrence: `gsS_recurrence`.
+No new general matrix norm abstraction is needed for this finite core.

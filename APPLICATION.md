@@ -87,3 +87,14 @@ When selectors are added, this document will separate:
 
 - rigorously certified quantities linked to Lean statements; and
 - empirical or heuristic diagnostics used for exploration.
+
+## Exact coefficient-budget checks
+
+`structselect.column_budget.check_column_budget(rows)` accepts a rational
+unit upper triangular matrix and returns Fraction column masses, budget
+status, solve-column energies, maximum solve entry, and explicit finite
+stop/certification labels. Invalid shape or triangular structure raises
+ValueError. It solves one RHS at a time and never forms an explicit inverse.
+This checks coefficients only: it neither selects pivots nor certifies that
+an input arises from a row-orthogonal CPQR frame. The tests independently
+use the opposite multiplication recurrence and check exact products.
