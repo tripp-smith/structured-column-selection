@@ -356,3 +356,16 @@ route from [Chen et al., §7](https://arxiv.org/html/2606.02484#S7) and
 [Damle](https://arxiv.org/html/2607.13532v1), recording explicit n-growth before
 claiming a joint-polynomial obstruction. No externally reported result is
 counted as a repository theorem.
+
+Original expected type for the §5 scalar expectation (refuted; deliberately
+not introduced as a public declaration):
+```lean
+∀ {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ), OrthogonalRows A →
+  (∑ J ∈ (univ : Finset (Fin n)).powersetCard k,
+    volumeWeight A J * selectedInvTrace A J) =
+      (k : ℝ) * ((n + 1 - k : ℕ) : ℝ)
+```
+The public counterexample refutes this at k=1,n=2. The public-only contract
+consumer for the valid inequality/energy statement has no full-support or
+coefficient-budget assumption. PR #14 holds the canonical verification and
+merge receipt; phase verification is conditional on the exact checked head.

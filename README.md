@@ -201,3 +201,6 @@ The last result certifies why the original unconditional equality cannot be
 claimed. An exact enumeration verifier is included; the efficient sampler
 remains the next executable obligation. See RESEARCH.md and the phase PR for
 original obligations, exact-revision checks, and delivery status.
+
+Phase PR and canonical verification/delivery receipt:
+[#14](https://github.com/tripp-smith/structured-column-selection/pull/14).

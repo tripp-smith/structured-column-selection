@@ -221,6 +221,11 @@ bound.
 
 ## 5. Headline randomized theorem target
 
+Status annotation (2026-10-24): the unconditional expectation equality below
+is refuted on singular-support frames. The all-frame inequality and direct
+inverse-energy probability theorem are delivered in the actual-inverse phase;
+see the final status correction. The efficient sampler remains open.
+
 The primary public Lean theorem should ultimately have the mathematical content:
 
 > **Theorem R1, randomized rank revelation for orthogonal rows.**
@@ -251,6 +256,10 @@ The implementation should use an efficient reverse-iterative volume sampler rath
 This result constitutes the repository's concrete answer to Problem 4.1 for the structural class (AA^T=I). It should **not** be described as resolving all of Problem 4.1 or Problem 4.3.
 
 ## 6. Exact expectation theorem
+
+Status annotation (2026-10-24): this original inverse identity is false without
+extra support assumptions. The proved adjugate identity is distinct. The
+original text is retained as a refuted target, not a completed theorem.
 
 A stronger theorem should be formalized before the probabilistic corollary:
 

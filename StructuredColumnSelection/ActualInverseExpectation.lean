@@ -1,8 +1,8 @@
 import StructuredColumnSelection.SigmaMinBounds
 
 /-! Actual volume-weighted inverse traces, including singular-support frames.
-The adjugate sum is an upper bound on the true expectation; equality requires
-additional full support. Singular blocks have zero volume probability. -/
+The adjugate sum is an upper bound on the true expectation; equality is proved
+under an additional full-support hypothesis. Singular blocks have zero volume probability. -/
 namespace StructuredColumnSelection
 open Classical Finset
 open scoped Matrix
