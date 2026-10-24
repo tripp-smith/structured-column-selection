@@ -222,3 +222,6 @@ general CPQR characterization, the CSSP bridge, remaining comparison APIs and
 the final full-contract audit remain open. The original unconditional inverse
 expectation equality remains refuted. Next research target: a prescribed
 triangular block with a polynomial-width Parseval completion (RESEARCH.md).
+
+Reverse-sampling phase and canonical verification/delivery receipt:
+[#15](https://github.com/tripp-smith/structured-column-selection/pull/15).

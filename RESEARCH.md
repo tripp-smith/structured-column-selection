@@ -465,3 +465,7 @@ after verified delivery: about 60%, reflecting the executable sampler and its
 distribution/conditioning link, not theorem or PR counts. Remaining research
 work is uncertain. No failed mathematical hypothesis was needed in this phase;
 the backend reduction hurdle was resolved without weakening the contract.
+
+Canonical verification and authorized merge evidence for this phase are on
+PR #15. The source status remains implemented until that receipt proves the
+final revision passed the root command, exact-head CI, merge and main checks.
