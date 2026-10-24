@@ -8,8 +8,9 @@ under orthogonal-row structure (`A Aᵀ = I`) for Simons Workshop Problem 4.1.
 Machine-checked randomized quasi-optimal column selection for the
 orthogonal-row case of Simons Problem 4.1.
 
-The finite-distribution guarantee does not yet include an efficient executable
-volume sampler. Unconditional inverse-expectation equality is false with
+The current reverse-sampling phase supplies an exact rational executable
+sampler alongside the all-real finite kernel theorem. Python/RNG extraction
+into Lean is not claimed. Unconditional inverse-expectation equality is false with
 singular support; the audited inequality and probability theorem are listed
 below. General CPQR characterization and the CSSP bridge remain open.
 
@@ -188,7 +189,7 @@ Draft PR: [#13](https://github.com/tripp-smith/structured-column-selection/pull/
 Branch: `codex/phase-e-column-budget`. Skills and workflow provenance are in
 `.agents/WORKFLOW_IMPORT.md`.
 
-Current phase: **D actual inverse — implemented; verification/delivery receipt
+Completed phase: **D actual inverse — implemented; verification/delivery receipt
 on the phase PR**. Estimated original-objective completion after this phase:
 **50%**, with uncertain research effort. Public outputs:
 `milestoneD_actual_expected_inv_trace_le`,
@@ -204,3 +205,23 @@ original obligations, exact-revision checks, and delivery status.
 
 Phase PR and canonical verification/delivery receipt:
 [#14](https://github.com/tripp-smith/structured-column-selection/pull/14).
+
+Current phase: **D reverse volume sampling — implemented; verification in progress**.
+The public `volume_sample` API and `python3 -m structselect` run a bounded exact
+hybrid reverse sampler with rational LDLᵀ and solve-based certificates. The
+finite kernel law is `milestoneD_reverse_sampler_law`; its actual inverse-energy
+guarantee is `milestoneD_reverse_inverse_energy_good_mass`. Public deletion,
+Gram-determinant and score-ratio theorems connect the model to matrix quantities.
+`milestoneD_reverse_fast_proposal_sum_le` is an explicit finite proposal-mean
+sum bound, not a machine runtime theorem. Tests use exact full-state propagation,
+independent determinants and LDLᵀ reconstruction, including failure paths.
+
+Estimated completion after verified delivery: **about 60%** of original
+obligations, with uncertain research effort. The sampler gap is addressed;
+general CPQR characterization, the CSSP bridge, remaining comparison APIs and
+the final full-contract audit remain open. The original unconditional inverse
+expectation equality remains refuted. Next research target: a prescribed
+triangular block with a polynomial-width Parseval completion (RESEARCH.md).
+
+Reverse-sampling phase and canonical verification/delivery receipt:
+[#15](https://github.com/tripp-smith/structured-column-selection/pull/15).

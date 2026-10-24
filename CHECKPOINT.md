@@ -3,8 +3,8 @@
 Current audit correction (2026-10-24): C/D historical completion labels mean
 adjugate cores, not the unconditional actual-inverse equality (false).
 The actual inequality/probability phase and remaining original obligations
-are recorded at the end of this file and in RESEARCH.md. No efficient volume
-sampler exists yet. E and F remain open.
+are recorded at the end of this file and in RESEARCH.md. The current reverse-volume phase implements the efficient sampler; its
+verification/delivery receipt is linked from README. E and F remain open.
 
 
 This is the working memory for the next agent or human. It records
@@ -790,3 +790,22 @@ the exact counterexample. Post-phase estimate: 50% of original obligations;
 next implement exact reverse sampling rather than another conditional U bound.
 Canonical verification/delivery evidence is on the phase PR; existing general
 CPQR and CSSP obligations remain open.
+
+
+## 2026-10-24 reverse volume sampling phase
+
+Actual-inverse phase PR #14 is merged and verified at 9d9345e. The next gap was
+an executable reverse sampler, not another volume enumeration. The new phase
+supplies the hybrid LDLᵀ/rejection/small-dense implementation and a literal
+finite reverse recursion with volume-weighted endpoint law, including zero
+mass outside k-sets. Public inverse-energy probability follows by composition.
+A masked-column Cauchy–Binet bridge and determinant-lemma score ratio identify
+its matrix deletion probabilities. The finite fast-proposal sum is bounded by
+2 max(n-2k,0). Runtime and random-source extraction are not Lean theorems.
+
+Exact tests propagate all small endpoint states and budget failures, compare
+updates with independent determinants, and check every LDLᵀ reconstruction.
+Post-phase estimate: about 60%, pending verification/delivery receipt. Next:
+wide-frame CPQR prescribed-block completion candidate in RESEARCH.md; then
+CSSP and the remaining comparison/interface obligations. Do not count the
+candidate as a certified CPQR result before all three proof obligations pass.

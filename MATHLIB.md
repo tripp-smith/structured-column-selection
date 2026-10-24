@@ -138,3 +138,18 @@ matrix inverse algebra. Mathlib candidates: `Matrix.mul_inv_rev`,
 `Finset.sum_filter`, `Finset.sum_le_sum_of_subset_of_nonneg`. Existing finite
 `markovInvFrob` controls the proxy; a pointwise event-mass identity transfers
 it to the actual nonsingular inverse event.
+
+## Reverse-volume phase search (2026-10-24)
+
+Finite combinatorics candidates: `Finset.powersetCard_mono`,
+`Finset.mem_powersetCard`, `Finset.card_sdiff_of_subset`, `Finset.subset_erase`,
+`Finset.powersetCard_self`, `Finset.sum_comm`, `Finset.sum_filter`, and
+`Finset.card_erase_of_mem`. Use the existing `volumeWeight_nonneg` and
+`volumeWeights_sum_eq_one`; no new probability-space abstraction is needed.
+The weighted endpoint invariant will prove the actual recursive kernel law.
+
+Backend bridge search: `Matrix.det_eq_zero_of_column_eq_zero`,
+`Matrix.det_add_replicateCol_mul_replicateRow` / `Matrix.det_add_mul`
+(SchurComplement.lean), `Matrix.vecMulVec_eq`, and
+`Matrix.replicateRow_mul_replicateCol_apply`. Cauchy–Binet on masked columns
+identifies retained subset-volume sums with the retained row-Gram determinant.

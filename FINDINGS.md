@@ -272,3 +272,26 @@ These are direct finite-distribution statements, not adjugate event labels.
 An efficient executable volume sampler remains missing. CPQR and CSSP remain
 separate open tracks. This audit corrects the earlier claim that the minimum
 publishable package was already complete.
+
+## Reverse volume sampling phase (2026-10-24)
+
+The literal finite reverse-deletion kernel has volume-sampling endpoint mass.
+For retained S, let V(S) be the sum of volumes of its k-subsets. Each k-subset
+survives deletion of exactly |S|-k elements, so
+`∑ i∈S V(S.erase i) = (|S|-k)V(S)`. A weighted endpoint invariant telescopes
+through zero-volume states without division by a zero child volume. Under
+AAᵀ=I, the resulting (n-k)-step endpoint mass is exactly volumeWeight(J).
+
+The efficient implementation uses rational LDLᵀ solves and downdates while
+|S|>2k, then a projection Gram of at most 2k columns. Rejection weights are
+`1-aᵢᵀ G_S⁻¹ aᵢ`; the dense finish uses their exact normalized values. The
+backend bridge identifies V(S) with det(G_S) and these scores with determinant
+ratios. Exact tests compare the factor/dense updates to independent determinants
+and propagate the whole small-state distribution, including bounded failures.
+They do not infer a law from empirical frequencies.
+
+The ideal finite kernel is a Lean theorem. The Python program and its seeded
+random source are not extracted/verified in Lean. Rational arithmetic can have
+large bit growth. A proposal-budget failure is explicit and returns no sample.
+CPQR characterization and the CSSP bridge remain open; the failed unconditional
+inverse-expectation equality is still refuted, not restored by this sampler.
