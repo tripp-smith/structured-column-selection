@@ -1,3 +1,4 @@
+import StructuredColumnSelection.VolumeSampling
 import StructuredColumnSelection.ActualInverseExpectation
 import StructuredColumnSelection.ColumnBudget
 import StructuredColumnSelection.Definitions

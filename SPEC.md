@@ -980,3 +980,19 @@ unconditional equality in Lean using real arithmetic and default axioms.
 No matrix Loewner-expectation equality or spectral-norm API theorem is claimed.
 The efficient executable sampler, E characterization, and F bridge are open.
 The previous assertion of a completed minimum publishable package was premature.
+
+### Status annotation — reverse volume phase (2026-10-24)
+
+SPEC §5/§14/§20 executable reverse sampling is implemented by the public
+`structselect.volume_sample` and `python3 -m structselect`, for exact rational
+Parseval inputs. This is a hybrid reverse algorithm, not subset enumeration.
+Its return is an explicit VolumeSample status/certificate record, with indices
+in `.selected`; the proposed convenience API in §14 remains partially open.
+The finite all-real kernel law is `milestoneD_reverse_sampler_law`, and its
+inverse-energy guarantee is `milestoneD_reverse_inverse_energy_good_mass`.
+Deletion normalization and the retained-Gram/solve-score bridge have public
+`milestoneB_*` names in Theorems.lean. Python extraction, random-bit correctness,
+budget-conditioning and rational bit-complexity are not claimed as Lean theorems.
+The earlier unconditional inverse-expectation equality remains false. E, F and
+the remaining §14/§15 comparison interfaces are open. Canonical verification and
+post-merge evidence are linked from README to the phase PR.

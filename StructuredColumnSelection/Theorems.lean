@@ -1,3 +1,4 @@
+import StructuredColumnSelection.VolumeSampling
 import StructuredColumnSelection.ActualInverseExpectation
 import StructuredColumnSelection.ColumnBudget
 import StructuredColumnSelection.OrthogonalRows
@@ -377,5 +378,60 @@ theorem milestoneD_actual_expectation_equality_obstruction :
     ActualInverseWitness.zeroColumnFrame_orthogonal, ?_⟩
   rw [ActualInverseWitness.zeroColumnFrame_actual_expectation]
   norm_num
+
+/-- Cauchy–Binet identifies retained k-volume with the retained row-Gram determinant. -/
+theorem milestoneB_retained_volume_eq_det_gram {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (S : Finset (Fin n)) :
+    retainedVolume A S = (retainedGram A S).det :=
+  retainedVolume_eq_det_gram A S
+
+/-- The solve-based rejection score equals the exact deletion-volume ratio. -/
+theorem milestoneB_reverse_score_eq_volume_ratio {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (S : Finset (Fin n)) {i : Fin n}
+    (hi : i ∈ S) (hV : retainedVolume A S ≠ 0) :
+    reverseDeletionScore A S i = retainedVolume A (S.erase i) / retainedVolume A S :=
+  reverse_score_eq_volume_ratio A S hi hV
+
+/-- Exact rejection scores lie in the unit interval on a positive-volume parent. -/
+theorem milestoneB_reverse_score_bounds {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (S : Finset (Fin n)) {i : Fin n}
+    (hi : i ∈ S) (hV : 0 < retainedVolume A S) :
+    0 ≤ reverseDeletionScore A S i ∧ reverseDeletionScore A S i ≤ 1 :=
+  reverse_score_bounds A S hi hV
+
+/-- Exact finite deletion normalization core, including zero-volume retained sets. -/
+theorem milestoneB_reverse_deletion_mass {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (S : Finset (Fin n)) :
+    ∑ i ∈ S, retainedVolume A (S.erase i) =
+      ((S.card - k : ℕ) : ℝ) * retainedVolume A S :=
+  reverse_deletion_mass A S
+
+/-- A positive-volume parent larger than k has a normalized deletion distribution. -/
+theorem milestoneB_reverse_transition_normalization {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (S : Finset (Fin n))
+    (hs : k < S.card) (hV : 0 < retainedVolume A S) :
+    (∀ i ∈ S, 0 ≤ reverseDeleteProb A S i) ∧
+      ∑ i ∈ S, reverseDeleteProb A S i = 1 :=
+  ⟨fun i _ => reverseDeleteProb_nonneg A S i, reverse_transition_normalization A S hs hV⟩
+
+/-- The literal reverse-deletion recursion ends in the volume-sampling law. -/
+theorem milestoneD_reverse_sampler_law {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) (J : Finset (Fin n)) :
+    reverseEndpointMass A (n-k) univ J = volumeWeight A J :=
+  reverse_sampler_law A hA J
+
+/-- Actual inverse-energy RRQR guarantee for the finite reverse-sampling kernel. -/
+theorem milestoneD_reverse_inverse_energy_good_mass {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) {δ : ℝ} (hδ : 0 < δ) :
+    1 - δ ≤ ∑ J ∈ ((univ : Finset (Fin n)).powersetCard k).filter
+      (actualInverseEnergyGood A (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ)),
+      reverseEndpointMass A (n-k) univ J := by
+  simpa only [reverse_sampler_law A hA] using (actual_inverse_energy_good_mass A hA hδ)
+
+/-- Finite fast-stage proposal-mean sum bound; no machine runtime claim. -/
+theorem milestoneD_reverse_fast_proposal_sum_le (k n : ℕ) :
+    ∑ s ∈ Icc (2*k+1) n, (s : ℝ) / ((s-k : ℕ) : ℝ) ≤
+      2 * ((n-2*k : ℕ) : ℝ) :=
+  reverse_fast_proposal_sum_le k n
 
 end StructuredColumnSelection

@@ -49,3 +49,23 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
       volumeWeight A J * ((selectedColGram A J)⁻¹).trace =
       (k : ℝ) * ((n + 1 - k : ℕ) : ℝ) :=
   milestoneD_actual_expected_inv_trace_eq_of_full_support A hA hfull
+
+
+-- All-frame reverse recursion law; no full-support, coefficient or endpoint-card assumption.
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (J : Finset (Fin n)) :
+    reverseEndpointMass A (n-k) univ J = volumeWeight A J :=
+  milestoneD_reverse_sampler_law A hA J
+
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (S : Finset (Fin n))
+    (hs : k < S.card) (hV : 0 < retainedVolume A S) :
+    (∀ i ∈ S, 0 ≤ reverseDeleteProb A S i) ∧
+      ∑ i ∈ S, reverseDeleteProb A S i = 1 :=
+  milestoneB_reverse_transition_normalization A S hs hV
+
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    {δ : ℝ} (hδ : 0 < δ) :
+    1 - δ ≤ ∑ J ∈ ((univ : Finset (Fin n)).powersetCard k).filter
+      (actualInverseEnergyGood A (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ)),
+      reverseEndpointMass A (n-k) univ J :=
+  milestoneD_reverse_inverse_energy_good_mass A hA hδ

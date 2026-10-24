@@ -369,3 +369,99 @@ The public counterexample refutes this at k=1,n=2. The public-only contract
 consumer for the valid inequality/energy statement has no full-support or
 coefficient-budget assumption. PR #14 holds the canonical verification and
 merge receipt; phase verification is conditional on the exact checked head.
+
+## Phase D reverse volume sampler (2026-10-24, contract)
+
+Previous goal turn: progress, merged PR #14; exact merge-revision CI passed
+at 9d9345e and local/origin main agree. Actual-inverse phase delivery is
+complete. Overall estimate remains about 50% before this phase; the efficient
+sampler, CPQR characterization and CSSP bridge are still required.
+
+Original obligation: SPEC §5/§14/§20 requires an efficient executable reverse
+volume sampler, not an exhaustive verifier or a different pivot mechanism.
+Retain the existing finite-distribution inverse-energy theorem from PR #14.
+This phase connects reverse deletion to its distribution and supplies a
+solve-based rational implementation. It does not close CPQR or CSSP.
+
+Frozen formal contract in `VolumeSampling.lean`, with public aliases in
+Theorems.lean and public-only expected-type consumers:
+- `retainedVolume A S := ∑ J∈S.powersetCard k, volumeWeight A J`.
+- `reverseDeleteProb A S i := retainedVolume A (S.erase i) /
+  ((S.card-k) * retainedVolume A S)` (natural subtraction cast to ℝ).
+- `milestoneB_reverse_deletion_mass`: sum over i∈S of retainedVolume(S.erase i)
+  equals (S.card-k) retainedVolume(S), for k≤S.card.
+- `milestoneB_reverse_transition_normalization`: if k<S.card and
+  retainedVolume(S)>0, deletion probabilities sum to 1 (and are nonnegative).
+- `reverseEndpointMass A r S J` is the literal r-step finite recursion: at
+  r=0 the indicator S=J, at r+1 sum_i reverseDeleteProb * child endpoint mass.
+- `milestoneD_reverse_sampler_law`: for AAᵀ=I, r=n-k, starting at univ,
+  endpoint mass of every J equals volumeWeight A J (zero at wrong cardinality).
+  A weighted endpoint invariant on #S=k+r is the proof core, not a replacement
+  for this all-frame distribution statement.
+
+Python artifact `structselect/volume_sampling.py`, public `volume_sample`:
+exact Parseval rational inputs; uniform rejection while |S|>2k; rational
+LDLᵀ downdates; switch to a ≤2k projection Gram block and exact deletion
+weights, updated by a rank-one formula. No explicit inverse, floating pivot
+or tolerance. Fixed seed/config/revision gives deterministic results. A bounded
+proposal budget returns explicit failure without a purported selected sample.
+Successful samples include trajectory, arithmetic/certification status and
+factorization counters. The ideal transition law is formal; extraction of the
+Python program into Lean and random-bit/bit-complexity proofs are non-claims.
+Arithmetic work is O(nk²) in expectation for the unbounded hybrid algorithm;
+finite counters and exact small-state probability propagation will check the
+implemented mechanism. A bounded-failure probability must not be called success.
+
+Independent checks: signed-permutation determinant enumeration on small rational
+frames to recompute every transition, propagate the entire finite endpoint law,
+check LDLᵀ reconstruction after every downdate, compare dense projection updates
+with fresh solves, test zero/tiny weights, repeated columns, seeded byte stability,
+and force budget exhaustion. These are exact oracles, not Monte Carlo tests.
+No canonical floating experiment or new CPQR selection claim is introduced.
+
+Literature gate: Dereziński–Warmuth, Reverse iterative volume sampling,
+[§5](https://arxiv.org/html/1806.01969), describes hybrid rejection followed by a
+small dense finish. We adapt the mechanism to factor/solve arithmetic rather
+than storing an explicit inverse. No novelty claim. Before implementing local
+finite combinatorics, search mathlib and record candidates in MATHLIB.md.
+
+Backend bridge refinement before implementation: also prove
+`milestoneB_retained_volume_eq_det_gram` using Cauchy–Binet on zeroed-out
+columns, and `milestoneB_reverse_score_eq_volume_ratio` for the actual solve
+score 1-aᵢᵀG_S⁻¹aᵢ. Its [0,1] bounds justify rejection sampling. These results
+connect the efficient backend's matrix quantities to the finite kernel, rather
+than rely on tests alone for that conceptual identification. Python LDLᵀ and
+dense-update code is not formally extracted; it is independently recertified.
+
+Proof-development checkpoint: the endpoint law compiled before the backend
+bridge. Matrix notation/simplification attempts at the determinant lemma
+exposed a 1×1 reduction issue, isolated as the precise helper obligation
+`det(1 + row(v) * M⁻¹ * col(-v)) = 1 - vᵀ M⁻¹ v`. Use mathlib's determinant
+lemma plus `replicateCol_mulVec`/`mulVec_mulVec`; no new hypothesis or weakened
+sampler statement is introduced. The issue is a typed matrix reduction, not a
+counterexample to the deletion law. The rational backend tests already include
+full LDLᵀ reconstruction and independent determinant ratios at each deletion.
+
+Next decision after verified delivery: pursue a concrete wide-frame CPQR
+completion construction, rather than more sufficient hypotheses on U. Candidate
+parameters (not yet a theorem/counterexample): k=m², ε=(4m²-1)/(4m²+1),
+s=4m/(4m²+1), c=s/2, α=1/(2k), and an upper-triangular selected block with
+diagonal αε^i and strict-upper entries -cαε^i. Complete I-RRᵀ by a PSD square
+root, then split each completion column into t=32k² copies scaled by 1/√t.
+The proposed ambient width is n=k+32k³, explicitly polynomial in k. The
+research obligations are strict pivot order for every prefix, exact Parseval
+completion, and a quantitative inverse-entry amplification bound. Test those
+claims exactly before any outcome-2 claim. This adapts the prescribed-block
+completion idea from Chen et al.; no new novelty or CPQR conclusion is claimed
+by this sampler phase. CSSP and the remaining application comparison API are
+still separate obligations.
+
+Implementation status: the backend Gram/score bridge and literal endpoint law
+pass focused Lean elaboration. Successful samples now also carry an exact
+inverse trace, computed one solve RHS at a time. A CLI emits canonical seeded
+records with source/input hashes and Python version. Twenty-three focused tests
+pass; the public exports and full root gates are next. Estimated completion
+after verified delivery: about 60%, reflecting the executable sampler and its
+distribution/conditioning link, not theorem or PR counts. Remaining research
+work is uncertain. No failed mathematical hypothesis was needed in this phase;
+the backend reduction hurdle was resolved without weakening the contract.

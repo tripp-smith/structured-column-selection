@@ -67,3 +67,19 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneD_actual_inverse_energy_good_mass
 
 #print axioms StructuredColumnSelection.milestoneD_actual_expectation_equality_obstruction
+
+#print axioms StructuredColumnSelection.milestoneB_retained_volume_eq_det_gram
+
+#print axioms StructuredColumnSelection.milestoneB_reverse_score_eq_volume_ratio
+
+#print axioms StructuredColumnSelection.milestoneB_reverse_score_bounds
+
+#print axioms StructuredColumnSelection.milestoneB_reverse_deletion_mass
+
+#print axioms StructuredColumnSelection.milestoneB_reverse_transition_normalization
+
+#print axioms StructuredColumnSelection.milestoneD_reverse_sampler_law
+
+#print axioms StructuredColumnSelection.milestoneD_reverse_inverse_energy_good_mass
+
+#print axioms StructuredColumnSelection.milestoneD_reverse_fast_proposal_sum_le

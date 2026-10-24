@@ -117,3 +117,51 @@ floats and ragged/empty matrices raise ValueError. The Lean theorem includes
 k=0, while this Python diagnostic intentionally requires a nonempty matrix.
 This is a bounded verification tool, not the efficient reverse sampler still
 required by SPEC §5. No random seed or pivot claims are involved.
+
+## Exact reverse volume sampler
+
+`from structselect import volume_sample` is now the public sampling entrypoint:
+
+```python
+result = volume_sample(A, k, seed=42, max_proposals=1000000)
+if result.ok:
+    J = result.selected
+    print(result.gram_determinant, result.inverse_trace)
+else:
+    assert result.selected is None  # explicit budget exhaustion
+```
+
+A must be a rectangular exact rational Parseval frame; k equals its row count.
+Integers, rational strings and Fraction entries are accepted; floats and inputs
+not satisfying AAᵀ=I exactly are rejected. An unexpected algebraic-invariant
+failure raises ArithmeticError rather than returning a certified sample. For zero rows pass `n_columns=n`;
+the selected set is empty. A square orthogonal frame needs no deletion proposals.
+The result records exact deletion probabilities, modes, proposal and solve counts,
+LDLᵀ downdates, final Gram determinant and inverse trace. `inverse_trace` is
+‖A_J⁻¹‖_F² and gives the squared inverse-energy bound; no square root rounding
+or spectral norm estimate is advertised. Failures have selected=None and no
+inverse-trace certificate. k=0 returns trace 0 and determinant 1.
+
+`python3 -m structselect frame.json --seed 42 --max-proposals 1000000`
+accepts a JSON list of rational rows. It emits a deterministic JSON result plus
+input/implementation hashes and Python version. Source changes during the run
+are rejected. Exit 0 means success; budget exhaustion emits its
+failure record with exit 2. Invalid input reports an error with exit 2. Runtime
+and wall-clock timestamps are excluded from canonical output.
+
+Mechanism: uniform rejection while more than 2k columns remain, then exact
+weighted deletion on a projection Gram of size at most 2k. No k-subset enumeration
+or explicit Gram inverse is used. Using the finite bound in `milestoneD_reverse_fast_proposal_sum_le`, the
+unbounded hybrid is O(nk²) in expectation: fast-stage expected proposals are
+`∑_{s=2k+1}^n s/(s-k) ≤ 2 max(n-2k,0)`, dense deletions ≤k, downdates n-k,
+and at most 2k dense-initialization plus k final-certificate solves. The bounded
+implementation has proposals≤budget, downdates≤n-k, dense dimension≤2k and
+solves≤proposals+3k. These are arithmetic counts, not bit-complexity guarantees.
+
+The distribution theorem concerns the ideal deletion kernel and ideal uniform
+random draws. Python uses Random(seed); the RNG and code are not formally
+extracted. Under ideal draws, trial counts have state-independent acceptance
+probability (s-k)/s in the rejection stage; conditioning on the global proposal
+budget succeeding therefore preserves the endpoint law. The Lean theorem does
+not formalize that budget-conditioning argument. Exact finite-state tests check
+it separately. No result returned after exhaustion is called a successful sample.
