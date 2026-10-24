@@ -1,0 +1,125 @@
+\chapter{Dependency graph}
+
+This blueprint records the public theorem graph of the orthogonal-row
+formalization. It is not a substitute for \texttt{SPEC.md}. Status line
+after Milestone D: machine-checked randomized quasi-optimal column
+selection for the orthogonal-row case of Simons Problem 4.1. Do not say
+Problem 4.1 is solved.
+
+\section{Milestones A--D (closed)}
+
+\begin{theorem}[Orthogonal-row / column correspondence]
+\label{thm:milestone-a}
+\lean{StructuredColumnSelection.milestoneA_transpose_correspondence}
+\leanok
+Working with $A\in\RR^{k\times n}$ and $AA^\top=I$ is equivalent to
+working with $Q=A^\top$ and $Q^\top Q=I$. Selected squares and Grams are
+available as definitions.
+\end{theorem}
+
+\begin{theorem}[Volume normalisation]
+\label{thm:milestone-b}
+\lean{StructuredColumnSelection.milestoneB_volume_normalization, StructuredColumnSelection.milestoneB_cauchyBinet}
+\leanok
+\uses{thm:milestone-a}
+If $AA^\top=I$, then $\sum_{|J|=k}\det(A_J)^2=1$.
+\end{theorem}
+
+\begin{theorem}[Inverse-Gram identity]
+\label{thm:milestone-c}
+\lean{StructuredColumnSelection.milestoneC_inverse_gram_expectation, StructuredColumnSelection.milestoneC_adjugate_sum}
+\leanok
+\uses{thm:milestone-b}
+$\sum_{|J|=k}\operatorname{adj}(A_J A_J^\top)=(n-k+1)I$ when $AA^\top=I$.
+\end{theorem}
+
+\begin{theorem}[Inverse-Frobenius expectation and Markov tail]
+\label{thm:milestone-d}
+\lean{StructuredColumnSelection.milestoneD_expected_inv_frob_sq, StructuredColumnSelection.milestoneD_markov_inv_frob}
+\leanok
+\uses{thm:milestone-c}
+The volume-weighted inverse-Frobenius energy is $k(n-k+1)$, with a finite
+Markov tail on that proxy.
+\end{theorem}
+
+\section{Milestone E, structural CPQR}
+
+\begin{theorem}[CPQR full-rank stopping]
+\label{thm:e-structural}
+\lean{StructuredColumnSelection.milestoneE_leverage_sum, StructuredColumnSelection.milestoneE_first_pivot_is_max, StructuredColumnSelection.milestoneE_first_leverage_ge, StructuredColumnSelection.milestoneE_cpqr_card_eq}
+\leanok
+\uses{thm:milestone-a}
+Empty residuals are leverages and sum to $k$. A first pivot maximises
+empty residual, hence leverage $\ge k/n$. Orthogonal-row $\CPQR$ returns
+exactly $k$ columns. This is not an inverse-norm bound.
+\end{theorem}
+
+\begin{theorem}[$k=1$ volume]
+\label{thm:e-k1}
+\lean{StructuredColumnSelection.milestoneE_k1_volume_ge}
+\leanok
+\uses{thm:e-structural}
+For a single orthonormal row, $\CPQR$ volume is at least $n^{-1}$, matching
+the workshop scale $\sqrt{n}$. This does not close Milestone E.
+\end{theorem}
+
+\begin{theorem}[$k=2$ inverse-trace]
+\label{thm:e-k2}
+\lean{StructuredColumnSelection.milestoneE_k2_inv_trace_le}
+\leanok
+\uses{thm:e-bidiagonal}
+For two orthonormal rows, Gram--Schmidt $U$ is automatically bidiagonal, so
+$\tr((G')^{-1})\le 3(n-1)$. This matches a joint polynomial bound for
+$k=2$. It does not close Milestone E: SPEC §16 outcome 1 needs every $k$.
+\end{theorem}
+
+\begin{theorem}[Residual energy and binomial volume]
+\label{thm:e-residual}
+\lean{StructuredColumnSelection.milestoneE_residual_energy, StructuredColumnSelection.milestoneE_next_residual_ge, StructuredColumnSelection.milestoneE_cpqr_volume_ge_binomial}
+\leanok
+\uses{thm:e-structural}
+Independent residuals sum to $k-\#J$. $\CPQR$ volume is at least
+$1/\binom{n}{k}$. That factor is exponential in $k$ when $n\approx 2k$ and
+is not a joint $\poly(n,k)$ bound.
+\end{theorem}
+
+\begin{theorem}[Triangular inverse-trace bound]
+\label{thm:e-triangular}
+\lean{StructuredColumnSelection.milestoneE_pivot_gram_inv_trace_le}
+\leanok
+\uses{thm:e-residual}
+$\tr((G')^{-1})\le (n-k+1)(4^k+6k-1)/9$. Polynomial in $n$, exponential in
+$k$. Not a joint $\poly(n,k)$ bound.
+\end{theorem}
+
+\begin{theorem}[Bidiagonal-$U$ inverse-trace]
+\label{thm:e-bidiagonal}
+\lean{StructuredColumnSelection.milestoneE_bidiagonal_U_inv_trace_le, StructuredColumnSelection.milestoneE_gsR_mul_transpose}
+\leanok
+\uses{thm:e-triangular}
+If Gram--Schmidt $U$ is bidiagonal, then
+$\tr((G')^{-1})\le k(k+1)/2\cdot(n-k+1)$. This is a hypothesis on $U$, not a
+class of $A$, and not Path 1. Implicit $R$ satisfies $RR^\top=I$.
+\end{theorem}
+
+\begin{conjecture}[Milestone E remains open]
+\label{conj:e-open}
+\notready
+\uses{thm:e-k1, thm:e-k2, thm:e-residual, thm:e-triangular, thm:e-bidiagonal}
+A joint $\poly(n,k)$ inverse-norm or inverse-Frobenius bound for every
+orthogonal-row $\CPQR$ set, or a certified superpolynomial counterexample,
+or a counterexample plus a stronger static class (SPEC §16). Path 1 is not
+closed for general $k$. Multi-neighbor coupling in $U$ still blocks the
+general statement; Businger--Golub $|S_{ij}|\le 2^{j-i-1}$ is sharp for
+arbitrary unit-triangular matrices.
+\end{conjecture}
+
+\section{Milestone F}
+
+\begin{conjecture}[CSSP perturbation bridge]
+\label{conj:f-open}
+\notready
+Do not start Milestone F until E is closed or the user asks. The intended
+statement is $\|\Pi_J A-A\|\le(1+\|Q_J^{-1}\|)\|A-A_k\|$ for $A=B+E$ with
+$B$ of rank $k$ and $Q$ the right singular frame of $B$.
+\end{conjecture}
