@@ -469,3 +469,121 @@ the backend reduction hurdle was resolved without weakening the contract.
 Canonical verification and authorized merge evidence for this phase are on
 PR #15. The source status remains implemented until that receipt proves the
 final revision passed the root command, exact-head CI, merge and main checks.
+
+## Phase E wide-frame CPQR obstruction (2026-10-24, initial research contract)
+
+Previous goal turn: progress; PR #15 merged at b654abb, exact main CI passed
+and local/origin main agree. Reverse-sampling phase delivery is complete.
+Overall estimate remains about 60%; no new CPQR conclusion is counted yet.
+
+Original SPEC §16 E obligation remains a general polynomial theorem, a
+qualifying certified obstruction, or a counterexample plus a stronger class.
+This phase targets an actual orthogonal-row adverse family, not another U-only
+sufficient hypothesis. SPEC §9 requires exact row orthogonality, every pivot,
+and an inverse-norm/energy lower bound. CPQR and randomized results stay separate.
+
+Frozen candidate, with conservative polynomial padding: m≥2, k=m²,
+ε=(4m²-1)/(4m²+1), c=2m/(4m²+1), α=1/(2k), dᵢ=αεⁱ.
+R is upper triangular, Rᵢᵢ=dᵢ and Rᵢⱼ=-c dᵢ for i<j. Complete
+I-RRᵀ=C Cᵀ using mathlib positive-semidefinite factorization and split each
+column of C into t=32k³ copies scaled by 1/√t. Thus n=k+32k⁴. The earlier
+n=k+32k³ route would require a per-column bound ≤1 for a principal square root;
+we instead use the elementary total-energy bound ≤k for a generic factor.
+This changes a proof-route degree, not the joint-polynomial obstruction target.
+
+Target Lean modules: WideCPQR.lean (generic completion/prefix pivot facts),
+WideCPQRFamily.lean (parameters, exact triangular witness, quantitative rate).
+Public targets, exported through Theorems.lean with expected-type consumers:
+- `milestoneE_wide_completion_orthogonal`: small-Frobenius R admits the stated
+  finite padded orthogonal-row completion, with original columns unchanged.
+- `milestoneE_triangular_prefix_pivots`: an upper-triangular leading block with
+  strict tail-energy pivot dominance and smaller completion columns is selected
+  by the actual `cpqrIterate`/`cpqrSet` implementation. The hypotheses concern
+  finite entries/energies, not the asserted pivot sequence.
+- `milestoneE_wide_adverse_family`: for every m≥2 an actual completed frame at
+  polynomial width, the certified first-k pivot set, and an explicit inverse
+  energy witness growing at least geometrically in m. Proposed lower scale is
+  (2m/3)(4/3)^(m-1), to be checked before any rate claim.
+- Intended close `milestoneE_cpqr_no_joint_polynomial`: for every natural d and
+  C>0, some orthogonal-row frame and nonzero selected-coordinate x satisfy
+  C(n+k+1)^(2d) energy(A_selected x) < energy(x). Do not claim this theorem
+  unless the actual full statement is proved; a weaker output must be named
+  precisely and leave E open.
+
+Small exact core first: prefix projectors are coordinate truncations; leading
+triangular columns have strict residual dominance; PSD completion gives small
+filler columns; back-substitution supplies a rational witness. The finite
+parameter/growth bounds precede any asymptotic language. Search mathlib first.
+
+Independent Python target `structselect/wide_cpqr.py` and exact tests: bounded
+rational R and LDLᵀ completion certificates; symbolic columns L(:,j)√(Dⱼ/t)
+with rational pair products; exact row-Gram reconstruction and all prefix
+residual comparisons; solve-based inverse-energy witness. Large dimensions
+must remain compressed. Parameter-only bounds are labeled as such, not a full
+materialized matrix certificate; budget exhaustion is explicit. No floating
+pivot decision or explicit inverse is permitted.
+
+Non-claims until completion: no qualifying CPQR counterexample, polynomial
+upper bound, leverage/coherence theorem, CSSP bridge or solution of all Problem
+4.1. The prescribed-block completion route is informed by Chen et al.,
+[§7](https://arxiv.org/html/2606.02484#S7), without a novelty claim. If a planned
+rate/hypothesis fails, preserve the exact failed case and deliver only a named
+weaker theorem or certified obstruction. Do not replace the endpoint with a
+conditional or tautological wrapper.
+
+### Bounded delivery contract — completion and prefix core
+
+The request to commit and merge the current local work closes this phase at
+the exact algebraic core. The full adverse family and no-joint-polynomial
+statement above are **not delivered**. Milestone E and SPEC §9's qualifying
+obstruction remain open; the overall estimate stays about 60%. This is a named
+weaker result, not an outcome-2 certificate or a revised original SPEC goal.
+
+Delivered public types (all matrices are real and finite):
+- `milestoneE_wide_completion_orthogonal`: for every square k×k R with
+  `frobEnergy R ≤ 1` and every natural t>0, there exists k×(k+k*t) A with
+  `OrthogonalRows A`, first k columns exactly R, and each remaining column's
+  energy ≤ k/t. This includes k=0; no triangular or invertibility assumption.
+- `milestoneE_triangular_prefix_projector`: for every k≤n and k×n A whose
+  first k columns are upper triangular with nonzero diagonal, every t≤k has
+  nonsingular selected-column Gram on `widePrefix n t`, and its projector
+  sends every x to `prefixCut t x`. No row-orthogonality assumption is needed.
+- `milestoneE_triangular_prefix_residual`: under the same entry hypotheses,
+  every column j and t≤k satisfy `residualSq A (widePrefix n t) j =
+  tailEnergy t (A.col j)`.
+- `milestoneE_triangular_prefix_pivots`: additionally assume, for every p<k
+  and j>p, `tailEnergy p (A.col j) < A p (Fin.castLE hkn p)^2`.
+  Then every t≤k satisfies `cpqrIterate A t = widePrefix n t`. The strict
+  inequalities are entry/tail-energy hypotheses, not a pivot-sequence premise.
+- `milestoneE_wide_parameter_diagonal_lower`: for every natural m≥2 and
+  i<m², `wideAlpha m / 2 < wideDiagNat m i`, with the rational parameters
+  in the initial contract. It does not assert a completed-family pivot law.
+
+Implementation: `WideCPQR.lean`, `WideCPQRParameters.lean`, public exports in
+`Theorems.lean`, audit declarations, and literal consumers in
+`scripts/CompletionContract.lean`. The downstream consumer is the proposed
+family: instantiate the triangular tail inequalities, prove its Frobenius
+bound, transport the selected coordinates, and establish inverse growth.
+Those bridges and the all-polynomial quantifier remain outstanding.
+
+Independent Python evidence: `structselect/wide_cpqr.py` gives bounded exact
+compressed algebraic checks; `tests/test_wide_cpqr.py` uses bordered-Gram
+determinant ratios computed by row elimination, not the coordinate-tail rule
+or LDL solve. It checks every prefix for m=2,3, all symbolic completion pair
+products, closed-form witnesses for m=2,3,4, deterministic bytes, invalid
+inputs and factor/budget failures. Scalar-only checks at m=2,64,1024 remain
+explicitly separate from frame certification. No explicit inverse is formed.
+
+Failed/unsupported hypotheses: no mathematical counterexample to these core
+lemmas was found. A unit-column bound on an arbitrary completion factor was
+not established by this proof route; the delivered theorem uses the proved
+total-energy bound k and padding 32k³. The proposed amplification bound has
+small-instance evidence, not an all-m theorem. Earlier unfinished proof errors
+were elaboration/algebra errors, not evidence refuting the family. No joint
+CPQR obstruction, polynomial upper bound, CSSP bridge or Problem 4.1 solution
+is claimed. Verification and delivery are recorded in the phase PR receipt.
+
+Workflow synchronization: upstream GECP main was checked at
+`f06a46300156ce2f645fa3413a7919f8e1b81229`. All four imported skill/reference
+blobs and the saved CI workflow source match that revision exactly; no newer
+skill content needed copying. CSSP bindings remain in `.agents/WORKFLOW_IMPORT.md`.

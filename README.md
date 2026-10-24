@@ -206,7 +206,7 @@ original obligations, exact-revision checks, and delivery status.
 Phase PR and canonical verification/delivery receipt:
 [#14](https://github.com/tripp-smith/structured-column-selection/pull/14).
 
-Current phase: **D reverse volume sampling — implemented; verification in progress**.
+Completed phase: **D reverse volume sampling — verified and merged (PR #15)**.
 The public `volume_sample` API and `python3 -m structselect` run a bounded exact
 hybrid reverse sampler with rational LDLᵀ and solve-based certificates. The
 finite kernel law is `milestoneD_reverse_sampler_law`; its actual inverse-energy
@@ -225,3 +225,19 @@ triangular block with a polynomial-width Parseval completion (RESEARCH.md).
 
 Reverse-sampling phase and canonical verification/delivery receipt:
 [#15](https://github.com/tripp-smith/structured-column-selection/pull/15).
+
+Current bounded phase: **E wide completion and prefix core — implemented**;
+verification and delivery status are in the phase PR receipt. Public outputs:
+`milestoneE_wide_completion_orthogonal`,
+`milestoneE_triangular_prefix_projector`,
+`milestoneE_triangular_prefix_residual`,
+`milestoneE_triangular_prefix_pivots`, and
+`milestoneE_wide_parameter_diagonal_lower`.
+These prove finite completion, coordinate residual identities, and an actual
+CPQR sequence under explicit strict tail-energy hypotheses. Exact compressed
+checks use independent bordered-Gram determinants and witness multiplication.
+The all-parameter adverse family and joint-polynomial obstruction remain open;
+overall completion stays about 60%. Randomized volume sampling is separate.
+
+Phase PR and canonical verification/delivery receipt:
+[#16](https://github.com/tripp-smith/structured-column-selection/pull/16).

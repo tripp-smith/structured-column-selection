@@ -165,3 +165,24 @@ probability (s-k)/s in the rejection stage; conditioning on the global proposal
 budget succeeding therefore preserves the endpoint law. The Lean theorem does
 not formalize that budget-conditioning argument. Exact finite-state tests check
 it separately. No result returned after exhaustion is called a successful sample.
+
+## Compressed wide-frame research checks
+
+`structselect.wide_cpqr.compressed_certificate(m, max_dimension=64)` accepts
+integer m≥2 and works in dimension k=m². It builds a rational triangular block
+and an exact LDLᵀ factor of its complementary row Gram. Completion columns are
+represented algebraically as L(:,q)√(Dq/t), repeated t=32k³ times; the reported
+width is k+32k⁴. Pair products, tail-energy margins and the back-substitution
+witness use Fraction arithmetic. The result's `certified=True` concerns these
+finite compressed checks; it does not assert an all-parameter Lean family.
+
+If k exceeds the budget, the function returns `dimension_budget_exhausted` with
+`certified=False` before factorization. Invalid inputs raise ValueError; a failed
+algebraic invariant raises ArithmeticError. There is no random seed or explicit
+inverse. Results are deterministic for fixed code and arguments. Large rational
+bit growth remains possible within a dimension budget.
+
+`growth_parameters(m)` performs scalar checks only, always reporting
+`frame_certified=False`. Its proposed inverse lower scale and polynomial
+comparison are conditional research diagnostics. They are not a certified
+CPQR obstruction or a replacement for the public randomized sampler.

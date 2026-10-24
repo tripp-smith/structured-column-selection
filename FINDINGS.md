@@ -295,3 +295,25 @@ random source are not extracted/verified in Lean. Rational arithmetic can have
 large bit growth. A proposal-budget failure is explicit and returns no sample.
 CPQR characterization and the CSSP bridge remain open; the failed unconditional
 inverse-expectation equality is still refuted, not restored by this sampler.
+
+## Wide completion and prefix core (2026-10-24)
+
+Every k×k real R with squared Frobenius energy ≤1 embeds unchanged as the first
+k columns of a k×(k+k*t) Parseval frame for every natural t>0. Completion columns
+have energy ≤k/t. The proof factors the PSD complement and repeats/scales its
+columns; it does not assume an adverse family already exists.
+
+For any upper-triangular leading block with nonzero diagonal, prefix projectors
+are coordinate cuts and residuals are exact tail energies. Strict domination
+of all later columns' tail energies by each leading diagonal square implies
+the actual CPQR iterate chooses that prefix. These are finite entry conditions,
+not a general inverse bound. The candidate rational diagonal stays above half
+its initial scale for every m≥2 and i<m².
+
+Public names are the five `milestoneE_wide_*` / `milestoneE_triangular_prefix_*`
+outputs listed in README. Independent exact bordered-Gram computations check
+every prefix at m=2,3; symbolic pair products certify row orthogonality without
+materializing the wide frame. Direct multiplication checks closed-form inverse
+witnesses at m=2,3,4. Larger scalar tests certify only scalar inequalities.
+No all-parameter adverse-family theorem or joint-polynomial obstruction is
+delivered. Milestone E, CSSP and the full Problem 4.1 remain open.

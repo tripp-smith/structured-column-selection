@@ -153,3 +153,21 @@ Backend bridge search: `Matrix.det_eq_zero_of_column_eq_zero`,
 (SchurComplement.lean), `Matrix.vecMulVec_eq`, and
 `Matrix.replicateRow_mul_replicateCol_apply`. Cauchy–Binet on masked columns
 identifies retained subset-volume sums with the retained row-Gram determinant.
+
+## Wide CPQR construction search (2026-10-24)
+
+Candidates: `Matrix.posSemidef_iff_dotProduct_mulVec`,
+`CStarAlgebra.nonneg_iff_eq_star_mul_self` with MatrixOrder,
+`Matrix.PosSemidef.nonneg`, `Fin.sum_univ_add`, `Fintype.sum_prod_type`,
+`Real.sq_sqrt`, `geom_sum_mul`, `one_add_mul_le_pow`, and finite triangular
+identities. Reuse repository `selectedProjector_insert_mulVec`,
+`selectedColGram_insert_det_ne_zero`, `residualSq_eq_quadForm`, and
+`one_sub_selectedProjector_energy_le`. Prefix Gram/projector induction can
+avoid a duplicate generic QR or triangular inverse library.
+
+Used: PSD quadratic-form criterion and CStarAlgebra star-square factorization
+for the complementary Gram; finite sum reindexing for repeated columns;
+`one_add_mul_le_pow` for the explicit diagonal lower bound. Reused local
+projector/Gram insert lemmas to prove coordinate-prefix identities and the
+actual pivot sequence. No new generic QR or triangular inverse abstraction.
+The parameter-family pivot instantiation and inverse-growth bridge remain open.

@@ -996,3 +996,16 @@ budget-conditioning and rational bit-complexity are not claimed as Lean theorems
 The earlier unconditional inverse-expectation equality remains false. E, F and
 the remaining §14/§15 comparison interfaces are open. Canonical verification and
 post-merge evidence are linked from README to the phase PR.
+
+### Status annotation — wide completion and prefix core (2026-10-24)
+
+Additional finite structural results, original goals unchanged:
+`milestoneE_wide_completion_orthogonal` embeds a small-Frobenius square block
+in an explicit-width Parseval frame; `milestoneE_triangular_prefix_projector`
+and `milestoneE_triangular_prefix_residual` identify prefix projectors and
+residuals from entry hypotheses; `milestoneE_triangular_prefix_pivots` proves
+the actual iterate under strict tail-energy dominance.
+`milestoneE_wide_parameter_diagonal_lower` bounds the candidate diagonal.
+No all-parameter family, qualifying §9 obstruction, joint-polynomial conclusion,
+or §16 E closure is delivered. The compressed Python checks are finite evidence.
+Randomized sampling and the CPQR track remain separate; F remains open.
