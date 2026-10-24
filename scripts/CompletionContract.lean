@@ -19,7 +19,19 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
         ∀ x : Fin J.card → ℝ, vecEnergy x ≤
           (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ) *
             vecEnergy (selectedCols A J *ᵥ x)), volumeWeight A J :=
-  milestoneD_actual_inverse_energy_good_mass A hA hδ
+  by
+    classical
+    have hset :
+        ((univ : Finset (Fin n)).powersetCard k).filter
+          (actualInverseEnergyGood A (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ)) =
+        ((univ : Finset (Fin n)).powersetCard k).filter
+          (fun J => (selectedColGram A J).det ≠ 0 ∧
+            ∀ x : Fin J.card → ℝ, vecEnergy x ≤
+              (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ) *
+                vecEnergy (selectedCols A J *ᵥ x)) := by
+      ext J
+      simp only [mem_filter, actualInverseEnergyGood]
+    simpa only [hset] using (milestoneD_actual_inverse_energy_good_mass A hA hδ)
 
 example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) :
     ∑ J ∈ ((univ : Finset (Fin n)).powersetCard k).filter
