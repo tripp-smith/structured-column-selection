@@ -221,7 +221,7 @@ Non-claims (intentional):
   `(8,24)` inverse `≈ 30.98`, `r_CPQR ≈ 2.66`, `≈ 0.17%` of the
   named polynomial); census ratios are witnesses, not theorems
 
-## Phase E column budget — contract (2026-10-23, in progress)
+## Phase E column budget — contract (2026-10-23, verified)
 
 Next Path 1 structural slice after the bidiagonal theorem. For real `A :
 Matrix (Fin k) (Fin n) ℝ` with `hA : OrthogonalRows A`, assume
@@ -261,3 +261,12 @@ column masses (0,1,2), inverse-column energies (1,2,6), maximum entry 2.
 Dense budget examples and chain closed forms pass exact independent tests.
 No theorem weakening was needed; the coefficient hypothesis is explicit.
 Final root verification and CI status are recorded in README and the PR.
+
+Verification outcome: root `./scripts/verify.sh` passed (70 tests), all 34
+public theorem axiom reports use only propext, Classical.choice, Quot.sound,
+and CI passed on 13b4d03. Exact chain sums for k=0,1,2,3,8,12 were
+independently recomputed as 0,1,3,6,36,78. Final documentation-only revision
+is checked by the same root command and CI. Draft PR #13, branch
+`codex/phase-e-column-budget`. This phase delivers the proposed conditional
+theorem, not a weaker surrogate. Next: identify a geometric sufficient
+condition for the budget or a certified frame obstruction to such a condition.

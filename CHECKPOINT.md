@@ -753,3 +753,8 @@ RESEARCH.md: column ℓ¹ budget, inverse entries ≤1, polynomial inverse
 trace under that extra factor hypothesis. Next open general question:
 find a geometric class of A implying this budget, or quantify amplification
 when it fails. Do not infer the budget from AAᵀ=I or start F.
+
+Phase result: both column-budget theorems delivered, root verification
+passed with 70 tests and all 34 public names audited using only defaults.
+CI passed; final revision checks are on draft PR #13. The column-budget
+phase is verified; general Milestone E remains OPEN.
