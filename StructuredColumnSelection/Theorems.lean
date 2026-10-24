@@ -1,3 +1,5 @@
+import StructuredColumnSelection.WideCPQR
+import StructuredColumnSelection.WideCPQRParameters
 import StructuredColumnSelection.VolumeSampling
 import StructuredColumnSelection.ActualInverseExpectation
 import StructuredColumnSelection.ColumnBudget
@@ -433,5 +435,46 @@ theorem milestoneD_reverse_fast_proposal_sum_le (k n : ℕ) :
     ∑ s ∈ Icc (2*k+1) n, (s : ℝ) / ((s-k : ℕ) : ℝ) ≤
       2 * ((n-2*k : ℕ) : ℝ) :=
   reverse_fast_proposal_sum_le k n
+
+/-- A small-Frobenius block has an explicit finite Parseval completion. -/
+theorem milestoneE_wide_completion_orthogonal {k : ℕ}
+    (R : Matrix (Fin k) (Fin k) ℝ) (hR : frobEnergy R ≤ 1) (t : ℕ) (ht : 0 < t) :
+    ∃ A : Matrix (Fin k) (Fin (k+k*t)) ℝ, OrthogonalRows A ∧
+      (∀ i j : Fin k, A i (j.castAdd (k*t)) = R i j) ∧
+      ∀ j : Fin (k*t), vecEnergy (fun i => A i (j.natAdd k)) ≤ (k : ℝ) / t :=
+  wide_completion_orthogonal R hR t ht
+
+/-- Triangular leading columns identify the projector without a pivot assumption. -/
+theorem milestoneE_triangular_prefix_projector {k n : ℕ} (hkn : k ≤ n)
+    (A : Matrix (Fin k) (Fin n) ℝ)
+    (hupper : ∀ i j : Fin k, (j : ℕ) < (i : ℕ) → A i (Fin.castLE hkn j) = 0)
+    (hdiag : ∀ i : Fin k, A i (Fin.castLE hkn i) ≠ 0) :
+    ∀ t ≤ k, (selectedColGram A (widePrefix n t)).det ≠ 0 ∧
+      ∀ x, selectedProjector A (widePrefix n t) *ᵥ x = prefixCut t x :=
+  leading_prefix_projector hkn A hupper hdiag
+
+/-- Exact coordinate-tail residual identity under finite triangular entry conditions. -/
+theorem milestoneE_triangular_prefix_residual {k n : ℕ} (hkn : k ≤ n)
+    (A : Matrix (Fin k) (Fin n) ℝ)
+    (hupper : ∀ i j : Fin k, (j : ℕ) < (i : ℕ) → A i (Fin.castLE hkn j) = 0)
+    (hdiag : ∀ i : Fin k, A i (Fin.castLE hkn i) ≠ 0)
+    (t : ℕ) (ht : t ≤ k) (j : Fin n) :
+    residualSq A (widePrefix n t) j = tailEnergy t (A.col j) :=
+  residualSq_leading_tail hkn A hupper hdiag t ht j
+
+/-- Strict tail-energy domination forces the actual greedy prefix sequence. -/
+theorem milestoneE_triangular_prefix_pivots {k n : ℕ} (hkn : k ≤ n)
+    (A : Matrix (Fin k) (Fin n) ℝ)
+    (hupper : ∀ i j : Fin k, (j : ℕ) < (i : ℕ) → A i (Fin.castLE hkn j) = 0)
+    (hdiag : ∀ i : Fin k, A i (Fin.castLE hkn i) ≠ 0)
+    (htail : ∀ p : Fin k, ∀ j : Fin n, (p : ℕ) < (j : ℕ) →
+      tailEnergy p (A.col j) < A p (Fin.castLE hkn p)^2) :
+    ∀ t ≤ k, cpqrIterate A t = widePrefix n t :=
+  triangular_prefix_pivots hkn A hupper hdiag htail
+
+/-- Explicit candidate diagonal bound; no all-parameter adverse-family claim. -/
+theorem milestoneE_wide_parameter_diagonal_lower {m : ℕ} (hm : 2 ≤ m)
+    {i : ℕ} (hi : i < wideDim m) : wideAlpha m / 2 < wideDiagNat m i :=
+  wideDiag_half_lower hm hi
 
 end StructuredColumnSelection

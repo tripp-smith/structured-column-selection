@@ -809,3 +809,14 @@ Post-phase estimate: about 60%, pending verification/delivery receipt. Next:
 wide-frame CPQR prescribed-block completion candidate in RESEARCH.md; then
 CSSP and the remaining comparison/interface obligations. Do not count the
 candidate as a certified CPQR result before all three proof obligations pass.
+
+## 2026-10-24 bounded wide-completion delivery
+
+The current local work is being shipped as five named finite core results:
+small-Frobenius Parseval completion, triangular prefix projector/residual
+identities, actual CPQR iterates under strict tail-energy dominance, and the
+candidate diagonal lower bound. Exact compressed checks have independent
+bordered-Gram and closed-form witness tests. Full family/pivot instantiation,
+inverse-growth transport and the all-polynomial quantifier remain open.
+Milestone E is not closed; completion remains about 60%. The phase PR receipt
+linked in README is authoritative for verification and remote delivery.

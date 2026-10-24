@@ -83,3 +83,13 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneD_reverse_inverse_energy_good_mass
 
 #print axioms StructuredColumnSelection.milestoneD_reverse_fast_proposal_sum_le
+
+#print axioms StructuredColumnSelection.milestoneE_wide_completion_orthogonal
+
+#print axioms StructuredColumnSelection.milestoneE_triangular_prefix_projector
+
+#print axioms StructuredColumnSelection.milestoneE_triangular_prefix_residual
+
+#print axioms StructuredColumnSelection.milestoneE_triangular_prefix_pivots
+
+#print axioms StructuredColumnSelection.milestoneE_wide_parameter_diagonal_lower

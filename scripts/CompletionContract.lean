@@ -69,3 +69,42 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
       (actualInverseEnergyGood A (((k : ℝ) * ((n + 1 - k : ℕ) : ℝ)) / δ)),
       reverseEndpointMass A (n-k) univ J :=
   milestoneD_reverse_inverse_energy_good_mass A hA hδ
+
+-- Bounded core only: these consumers do not assert an adverse-family endpoint.
+example {k : ℕ} (R : Matrix (Fin k) (Fin k) ℝ)
+    (hR : (∑ i : Fin k, ∑ j : Fin k, R i j ^ 2) ≤ 1) (t : ℕ) (ht : 0 < t) :
+    ∃ A : Matrix (Fin k) (Fin (k+k*t)) ℝ, A * Aᵀ = 1 ∧
+      (∀ i j : Fin k, A i (j.castAdd (k*t)) = R i j) ∧
+      ∀ j : Fin (k*t), (∑ i : Fin k, A i (j.natAdd k)^2) ≤ (k : ℝ) / t :=
+  milestoneE_wide_completion_orthogonal R hR t ht
+
+example {k n : ℕ} (hkn : k ≤ n) (A : Matrix (Fin k) (Fin n) ℝ)
+    (hupper : ∀ i j : Fin k, (j : ℕ) < (i : ℕ) → A i (Fin.castLE hkn j) = 0)
+    (hdiag : ∀ i : Fin k, A i (Fin.castLE hkn i) ≠ 0) :
+    ∀ t ≤ k, (selectedColGram A (widePrefix n t)).det ≠ 0 ∧
+      ∀ x, selectedProjector A (widePrefix n t) *ᵥ x =
+        (fun i => if (i : ℕ) < t then x i else 0) :=
+  milestoneE_triangular_prefix_projector hkn A hupper hdiag
+
+example {k n : ℕ} (hkn : k ≤ n) (A : Matrix (Fin k) (Fin n) ℝ)
+    (hupper : ∀ i j : Fin k, (j : ℕ) < (i : ℕ) → A i (Fin.castLE hkn j) = 0)
+    (hdiag : ∀ i : Fin k, A i (Fin.castLE hkn i) ≠ 0)
+    (t : ℕ) (ht : t ≤ k) (j : Fin n) :
+    residualSq A (widePrefix n t) j =
+      ∑ i : Fin k, if t ≤ (i : ℕ) then A i j ^ 2 else 0 :=
+  milestoneE_triangular_prefix_residual hkn A hupper hdiag t ht j
+
+example {k n : ℕ} (hkn : k ≤ n) (A : Matrix (Fin k) (Fin n) ℝ)
+    (hupper : ∀ i j : Fin k, (j : ℕ) < (i : ℕ) → A i (Fin.castLE hkn j) = 0)
+    (hdiag : ∀ i : Fin k, A i (Fin.castLE hkn i) ≠ 0)
+    (htail : ∀ p : Fin k, ∀ j : Fin n, (p : ℕ) < (j : ℕ) →
+      (∑ i : Fin k, if (p : ℕ) ≤ (i : ℕ) then A i j ^ 2 else 0) <
+        A p (Fin.castLE hkn p)^2) :
+    ∀ t ≤ k, cpqrIterate A t = widePrefix n t :=
+  milestoneE_triangular_prefix_pivots hkn A hupper hdiag htail
+
+example {m : ℕ} (hm : 2 ≤ m) {i : ℕ} (hi : i < m*m) :
+    (1 / (2 * ((m*m : ℕ) : ℝ))) / 2 <
+      (1 / (2 * ((m*m : ℕ) : ℝ))) *
+        ((4*(m : ℝ)^2-1)/(4*(m : ℝ)^2+1))^i :=
+  milestoneE_wide_parameter_diagonal_lower hm hi
