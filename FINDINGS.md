@@ -237,7 +237,8 @@ See `CHECKPOINT.md` for the reasoning log and the next-work queue.
 
 ## Column ℓ¹ budget on CPQR U (2026-10-23 phase)
 
-Proposed finite result: if every strict-upper column of U has absolute
+Finite Lean result (`milestoneE_column_budget_S_abs_le_one`): if every
+strict-upper column of U has absolute
 sum at most one, back-substitution bounds each entry of S=U⁻¹ by one.
 The triangular support then gives column energy ≤ j+1, and the existing
 reciprocal-residual estimate gives inverse trace ≤ k(k+1)(n-k+1)/2.

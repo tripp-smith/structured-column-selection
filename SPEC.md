@@ -946,7 +946,7 @@ That creates a solid theorem-producing repository almost immediately, with the h
 
 Additional structural slice (goals unchanged): public names
 `milestoneE_column_budget_S_abs_le_one` and
-`milestoneE_column_budget_inv_trace_le` target inverse-entry and
+`milestoneE_column_budget_inv_trace_le` deliver inverse-entry and
 k(k+1)(n-k+1)/2 inverse-trace control under `gsUColumnBudget`.
 This is an extra hypothesis on U, beyond bidiagonal support; no general
 Path 1 result, no new frame counterexample, no closure of E or Problem 4.1.
