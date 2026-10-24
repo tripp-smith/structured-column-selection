@@ -238,3 +238,6 @@ CPQR sequence under explicit strict tail-energy hypotheses. Exact compressed
 checks use independent bordered-Gram determinants and witness multiplication.
 The all-parameter adverse family and joint-polynomial obstruction remain open;
 overall completion stays about 60%. Randomized volume sampling is separate.
+
+Phase PR and canonical verification/delivery receipt:
+[#16](https://github.com/tripp-smith/structured-column-selection/pull/16).
