@@ -1,7 +1,9 @@
 # Workflow provenance and CSSP bindings
 
 Copied all skills from tripp-smith/gecp-kernel-structure at
-`af8b592ca227625aec05e260dbc290bba0261fa2` verbatim. The workflow source is
+`f06a46300156ce2f645fa3413a7919f8e1b81229` verbatim (refreshed 2026-10-24), including both referenced
+evidence documents. The workflow source remains from the original import
+`af8b592ca227625aec05e260dbc290bba0261fa2` and is
 preserved at `.github/workflows/reference/gecp-ci.yml.source`; its active
 CSSP counterpart is `.github/workflows/verify.yml`. Do not run GECP-only
 completion contracts or use its package names here.
