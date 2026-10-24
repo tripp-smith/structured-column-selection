@@ -33,8 +33,9 @@ The proof deletes one row, applies Cauchy–Binet to the resulting
 `(k-1)×k` and `(k-1)×n` products, and counts how many `k`-sets contain
 each `(k-1)`-set (`n-k+1` of them).
 
-The adjugate form is the correct reading of
-`∑ det(A_J)² (A_J A_Jᵀ)⁻¹`. Mathlib's matrix inverse is zero on
+The adjugate identity is distinct from
+`∑ det(A_J)² (A_J A_Jᵀ)⁻¹`: these are not equal without additional support
+conditions. Mathlib's matrix inverse is zero on
 singular blocks, which would drop nonzero adjugate contributions. On
 the running `2×3` witness the singular pair `{1,2}` contributes
 `[[1,0],[0,0]]`; omitting it would break the identity.
@@ -251,3 +252,23 @@ algebraic obstruction to that implication, not a CPQR/frame counterexample.
 The rational dense and chain tests independently recompute solve energies;
 the chain realizes ∑(j+1)=k(k+1)/2 at the coefficient level.
 Milestone E remains open. Randomized volume sampling is unchanged.
+
+
+## Actual inverse expectation audit (2026-10-24)
+
+For all orthogonal-row frames the true volume-weighted inverse trace is
+at most k(n-k+1). Equality holds if every k-block is nonsingular. The
+adjugate proxy may carry a nonzero contribution at a zero-probability
+singular block, so the unconditional equality stated in the original SPEC
+is false. The original formula is retained there with this status annotation,
+not silently replaced by a weaker target.
+
+Exact witnesses: [1,0] has true expectation 1 and proxy 2. The running
+frame23 has true expectation 3 and proxy 4. LDLᵀ/solve enumeration and an
+independent signed-permutation determinant/cofactor formulation agree.
+The actual nonsingular inverse-trace event, and its quantified inverse-energy
+consequence, have volume mass at least 1-δ. Singular selections have mass zero.
+These are direct finite-distribution statements, not adjugate event labels.
+An efficient executable volume sampler remains missing. CPQR and CSSP remain
+separate open tracks. This audit corrects the earlier claim that the minimum
+publishable package was already complete.

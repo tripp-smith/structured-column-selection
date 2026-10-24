@@ -55,3 +55,15 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_column_budget_S_abs_le_one
 
 #print axioms StructuredColumnSelection.milestoneE_column_budget_inv_trace_le
+
+#print axioms StructuredColumnSelection.milestoneD_actual_expected_inv_trace_le
+
+#print axioms StructuredColumnSelection.milestoneD_actual_expected_inv_trace_eq_of_full_support
+
+#print axioms StructuredColumnSelection.milestoneD_singular_volume_mass_zero
+
+#print axioms StructuredColumnSelection.milestoneD_actual_inv_trace_good_mass
+
+#print axioms StructuredColumnSelection.milestoneD_actual_inverse_energy_good_mass
+
+#print axioms StructuredColumnSelection.milestoneD_actual_expectation_equality_obstruction

@@ -66,6 +66,9 @@ for match in re.finditer(r"depends on axioms:\s*\[(.*?)\]", out, re.S):
 print("axiom audit: public theorems use only propext, Classical.choice, Quot.sound")
 PY
 
+echo "verify: public expected-type contracts"
+lake env lean scripts/CompletionContract.lean
+
 echo "verify: pytest"
 python3 -m pytest
 

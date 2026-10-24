@@ -98,3 +98,22 @@ ValueError. It solves one RHS at a time and never forms an explicit inverse.
 This checks coefficients only: it neither selects pivots nor certifies that
 an input arises from a row-orthogonal CPQR frame. The tests independently
 use the opposite multiplication recurrence and check exact products.
+
+
+## Actual volume expectation verifier (2026-10-24)
+
+`structselect.volume_exact.exact_volume_expectation(rows, max_subsets=10000)`
+accepts a nonempty exact rational orthogonal-row frame (integers, rational
+strings or Fraction entries). It enumerates k-subsets and factors each Gram
+with rational LDLᵀ. One RHS is solved at a time to compute the inverse trace;
+an explicit inverse is never formed. Singular terms have zero weight and
+`inverse_trace=None`, rather than a fabricated successful inverse.
+
+The result contains exact Fraction expectation, normalized mass, bound and
+per-subset terms. `status=exhaustive_exact` certifies the finite computation.
+An insufficient subset budget returns `status=budget_exhausted`,
+`certified=False`, and no partial expectation. Invalid/non-Parseval inputs,
+floats and ragged/empty matrices raise ValueError. The Lean theorem includes
+k=0, while this Python diagnostic intentionally requires a nonempty matrix.
+This is a bounded verification tool, not the efficient reverse sampler still
+required by SPEC §5. No random seed or pivot claims are involved.
