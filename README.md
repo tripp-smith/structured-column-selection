@@ -306,3 +306,6 @@ with fewer than `k` columns, some unused column has positive residual and
 inverse-trace increment at most
 `((n - t) + trace(G⁻¹) - t) / (k - t)`. This is not a CPQR bound and it
 does not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#22](https://github.com/tripp-smith/structured-column-selection/pull/22).

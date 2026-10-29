@@ -803,3 +803,6 @@ is `2`. It does not call CPQR. It is not the theorem.
 Non-claims: no polynomial CPQR bound, no claim that the max-residual pivot
 meets the estimate, no closure of outcome 3, and no claim that Problem
 4.1 is solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#22](https://github.com/tripp-smith/structured-column-selection/pull/22).
