@@ -817,6 +817,12 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (increment set): `milestoneE_increment_set_bound` says the
+least-index minimizer of the inverse-trace increment selects `k`
+columns with inverse trace at most `k (n - k + 1)` and
+`‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`. It is not a CPQR bound. Outcome 3
+stays open.
+
 Status note (inverse spectral bound): `milestoneE_minimizing_inv_spectral_le`
 says some `k` columns chosen by the increment bound satisfy
 `‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`. It is not a CPQR bound. Outcome 3

@@ -61,6 +61,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Inverse-trace growth step | **PROVED** (does not close outcome 3) | `milestoneE_inv_trace_growth_step` |
 | Increment-pivot inverse-trace induction | **PROVED** (does not close outcome 3) | `milestoneE_minimizing_inv_trace_le` |
 | Increment-pivot squared spectral bound | **PROVED** (does not close outcome 3) | `milestoneE_minimizing_inv_spectral_le` |
+| Least-index increment set | **PROVED** (does not close outcome 3) | `milestoneE_increment_set_bound` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

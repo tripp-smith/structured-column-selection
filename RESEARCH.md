@@ -899,3 +899,36 @@ set, no closure of outcome 3, and no claim that Problem 4.1 is solved.
 
 Phase PR and verification receipt:
 [#25](https://github.com/tripp-smith/structured-column-selection/pull/25).
+
+## Phase M increment set (2026-10-29, contract)
+
+Iteration M. Outcome 3 stays open. Outcome 1 is not the target.
+
+Route checkpoint. Phases K and L prove that some column sequence meeting
+the increment bound has inverse trace at most `k (n - k + 1)` and
+squared inverse operator norm at most `1 + k (n - k)`. The max-residual
+rule is a different pivot. This phase names the least-index minimizer of
+the increment `(1 + ‖G⁻¹ Bᵀ a_j‖²) / residual` and proves the bounds for
+that set. Success is `milestoneE_increment_set_bound`. Exit if the
+least-index minimizer fails the average comparison that phase I proves
+for some column.
+
+Target in `StructuredColumnSelection/IncrementSet.lean`, re-exported as
+`milestoneE_increment_set_bound`: for orthogonal rows, `incrementSet A`
+has cardinality `k`, invertible selected Gram, inverse trace at most
+`k (n - k + 1)`, and `‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`.
+
+Independent check: `tests/test_increment_set.py` computes the empty-block
+scores `1`, `25/9`, and `25/16` on the rational `2×3` frame, then the
+Schur scores after column 0. The least index of the minimum is column 0
+and then column 2. The Gram inverse trace of those columns is
+`1 + 25/16`, which is at most `4`. It does not call CPQR. It is not the
+theorem.
+
+Non-claims: no polynomial CPQR bound, no claim that this pivot is
+max-residual CPQR, no closure of outcome 3, and no claim that
+Problem 4.1 is solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3.
+
+Phase PR and verification receipt:
+[#26](https://github.com/tripp-smith/structured-column-selection/pull/26).

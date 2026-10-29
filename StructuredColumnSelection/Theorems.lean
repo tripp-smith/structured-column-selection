@@ -1,3 +1,4 @@
+import StructuredColumnSelection.IncrementSet
 import StructuredColumnSelection.InvSpectralBound
 import StructuredColumnSelection.InvTraceInduction
 import StructuredColumnSelection.InvTraceGrowth
@@ -631,5 +632,22 @@ theorem milestoneE_minimizing_inv_spectral_le {k n : ℕ}
           (1 + (k : ℝ) * ((n : ℝ) - k)) *
             vecEnergy (selectedCols A J *ᵥ x) :=
   minimizing_inv_spectral_le A hA
+
+/-- The least-index increment pivot selects `k` columns whose inverse
+trace is at most `k (n - k + 1)` and which satisfy
+`‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`.
+
+This is not the max-residual CPQR pivot and does not close outcome 3. -/
+theorem milestoneE_increment_set_bound {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    (incrementSet A).card = k ∧
+      (selectedColGram A (incrementSet A)).det ≠ 0 ∧
+      ((selectedColGram A (incrementSet A))⁻¹).trace ≤
+        (k : ℝ) * ((n : ℝ) - k + 1) ∧
+      ∀ x : Fin (incrementSet A).card → ℝ,
+        vecEnergy x ≤
+          (1 + (k : ℝ) * ((n : ℝ) - k)) *
+            vecEnergy (selectedCols A (incrementSet A) *ᵥ x) :=
+  increment_set_bound A hA
 
 end StructuredColumnSelection

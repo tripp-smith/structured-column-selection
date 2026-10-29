@@ -328,10 +328,21 @@ outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#24](https://github.com/tripp-smith/structured-column-selection/pull/24).
 
-Current phase: **L inverse spectral bound — in progress**. Target:
-`milestoneE_minimizing_inv_spectral_le`. The same increment-pivot set
-satisfies `‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`. This is not a CPQR bound
-and it does not close outcome 3. The contract is in RESEARCH.md.
+Completed phase: **L inverse spectral bound**.
+`milestoneE_minimizing_inv_spectral_le` says the increment pivot selects
+`k` columns satisfying `‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`. This is not a
+CPQR bound and it does not close outcome 3. The contract is in
+RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#25](https://github.com/tripp-smith/structured-column-selection/pull/25).
+
+Current phase: **M increment set — in progress**. Target:
+`milestoneE_increment_set_bound`. The least-index minimizer of the
+inverse-trace increment selects `k` columns with inverse trace at most
+`k (n - k + 1)` and squared inverse operator norm at most
+`1 + k (n - k)`. This is not a CPQR bound and it does not close
+outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#26](https://github.com/tripp-smith/structured-column-selection/pull/26).
