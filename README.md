@@ -332,3 +332,6 @@ Current phase: **L inverse spectral bound — in progress**. Target:
 `milestoneE_minimizing_inv_spectral_le`. The same increment-pivot set
 satisfies `‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`. This is not a CPQR bound
 and it does not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#25](https://github.com/tripp-smith/structured-column-selection/pull/25).
