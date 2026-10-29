@@ -869,3 +869,33 @@ outcome 3.
 
 Phase PR and verification receipt:
 [#24](https://github.com/tripp-smith/structured-column-selection/pull/24).
+
+## Phase L inverse spectral bound (2026-10-29, contract)
+
+Iteration L. Outcome 3 stays open. Outcome 1 is not the target.
+
+Route checkpoint. Phase K produces a `k`-set with
+`trace(G⁻¹) ≤ k (n - k + 1)`. Every column submatrix of an
+orthogonal-row matrix is a contraction, so `G⁻¹ - I` is positive
+semidefinite and the largest Rayleigh quotient of `G⁻¹` is at most
+`trace(G⁻¹) - (k - 1)`. That quantity is at most `1 + k (n - k)`.
+Success is the public squared-energy inequality below. Exit if the
+contraction fails to make `G⁻¹ - I` positive semidefinite, or if the
+trace subtraction does not reach `1 + k (n - k)`.
+
+Target in `StructuredColumnSelection/InvSpectralBound.lean`, re-exported
+as `milestoneE_minimizing_inv_spectral_le`: for orthogonal rows, some
+`J` with `#J = k` has invertible selected Gram and
+`‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²` for every coefficient vector `x`.
+
+Independent check: `tests/test_inv_spectral_bound.py` multiplies columns
+`{0, 2}` of the rational `2×3` frame by `(0, 1)`. The image energy is
+`16/25`, and `1 + k (n - k) = 3`. It does not call CPQR. It is not the
+theorem.
+
+Non-claims: no polynomial CPQR bound, no claim that CPQR selects this
+set, no closure of outcome 3, and no claim that Problem 4.1 is solved.
+`MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#25](https://github.com/tripp-smith/structured-column-selection/pull/25).
