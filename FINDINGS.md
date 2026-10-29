@@ -350,3 +350,13 @@ One exact rational example checks that identity and the squared Frobenius
 comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
+
+## Wide leverage escape (2026-10-29)
+
+`milestoneE_wide_leverage_escape` says that for every `τ ≥ 0` some frame
+from the outcome-2 family has two column energies with ratio greater than
+`τ`, and in fact greater than `8 m²`. The family therefore lies outside
+every fixed leverage-ratio class. This is not a polynomial theorem for
+matrices whose column energies are within a fixed ratio, and it does not
+close outcome 3. Exact triangular and LDL energies at `m = 2, 3, 4`
+meet the same `8 m²` comparison; that check is not the theorem.

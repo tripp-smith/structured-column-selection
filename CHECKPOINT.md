@@ -55,6 +55,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone E outcome 2 adverse family | **PROVED** | `milestoneE_wide_adverse_family`, `milestoneE_cpqr_no_joint_polynomial`, `milestoneE_cpqr_named_polynomial_obstruction` |
 | Milestone E outcomes 1 and 3 | **OPEN** | no polynomial bound for every orthogonal-row matrix, and no static class beside outcome 2 |
 | Milestone F CSSP bridge | **PROVED** | `milestoneF_cssp_spectral`, `milestoneF_cssp_frobenius` |
+| Wide-family leverage escape | **PROVED** (does not close outcome 3) | `milestoneE_wide_leverage_escape` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

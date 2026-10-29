@@ -817,6 +817,11 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (wide leverage escape): `milestoneE_wide_leverage_escape`
+shows that for every `τ ≥ 0` some outcome-2 frame has column energies
+in ratio greater than `τ` and greater than `8 m²`. Outcome 3 stays open.
+This is not a polynomial bound on a leverage-ratio class.
+
 Status note (hygiene): `scripts/verify.sh` runs `lake build`,
 `scripts/check_lean_hygiene.py`, `scripts/check_axioms.sh`
 (`scripts/AxiomAudit.lean`), `scripts/CompletionContract.lean`, and

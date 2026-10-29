@@ -709,3 +709,34 @@ in `tests/test_cssp_bridge.py`. It is not the theorem.
 
 Phase PR and verification receipt:
 [#19](https://github.com/tripp-smith/structured-column-selection/pull/19).
+
+## Phase G wide leverage escape (2026-10-29, contract)
+
+Iteration G of the long-horizon cadence. Outcome 1 is not the target:
+`milestoneE_cpqr_no_joint_polynomial` already says no single polynomial
+bounds every orthogonal-row matrix. Outcome 3 stays open. This phase does
+not close it.
+
+Route checkpoint. Sequential CPQR residuals are at least `(k-#J)/(n-#J)`
+(`milestoneE_next_residual_ge`), which recovers only the binomial volume
+bound. Inverse trace is a sum of leave-one-out residuals
+(`milestoneE_gram_inv_trace_eq_sum_inv_residual`). A leverage-ratio class
+can exclude the outcome-2 family only if that family's column-energy ratio
+is unbounded. Exact compressed energies at `m = 2, 3, 4` sit just above
+`8 m²`. The proof uses the average filler energy, not those explicit
+LDL values.
+
+Target in `StructuredColumnSelection/WideLeverage.lean`, re-exported as
+`milestoneE_wide_leverage_escape`: for every `τ ≥ 0` there is an `m ≥ 2`
+and a frame from `wide_adverse_family` with two columns whose empty
+residuals `e_min`, `e_max` satisfy `τ e_min < e_max`. The ratio is at
+least `8 m²`.
+
+Independent check: `tests/test_wide_leverage.py` recomputes triangular
+column energies and LDL completion-column energies at `m = 2, 3, 4` and
+checks that their max/min is at least `8 m²`. Float prints are not the
+proof.
+
+Non-claims: no polynomial inverse bound under a leverage-ratio hypothesis,
+no coherence theorem, no closure of outcome 3, and no claim that Problem
+4.1 is solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
