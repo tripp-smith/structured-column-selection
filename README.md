@@ -408,3 +408,6 @@ Target: `milestoneE_equal_energy_cpqr_three_trace`. Equal column energy
 makes the CPQR three-column inverse trace at most the two-column bound
 plus one Rayleigh-controlled step. This bounds only that prefix and does
 not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#33](https://github.com/tripp-smith/structured-column-selection/pull/33).

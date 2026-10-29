@@ -1150,8 +1150,7 @@ Independent check: `tests/test_equal_energy_three.py` uses exact
 arithmetic on the `3×3` identity. The inverse trace is `3` and the bound
 is `5`. It does not call the repository CPQR code. It is not the theorem.
 
-Non-claims: no polynomial CPQR bound for every equal-energy matrix when
-`k > 3`, no finished induction, no closure of outcome 1 or outcome 3, and
-no claim that Problem 4.1 is solved. Equal energy is stricter than the
-weakest SPEC §10 class. The outcome-2 family is outside it.
 `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#33](https://github.com/tripp-smith/structured-column-selection/pull/33).
