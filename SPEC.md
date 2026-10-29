@@ -817,6 +817,11 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (zero-coefficient pivot): `milestoneE_zero_coeff_same_pivot`
+says that a zero coefficient on every positive-residual unused column
+makes the increment pivot and max-residual CPQR return the same column.
+It is not a polynomial CPQR bound. Outcome 3 stays open.
+
 Status note (pivot split): `milestoneE_increment_set_ne_cpqr` says there
 is an orthogonal-row `2×5` matrix with `incrementSet A ≠ cpqrSet A`.
 It is not a polynomial CPQR bound. Outcomes 1 and 3 stay open.

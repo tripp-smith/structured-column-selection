@@ -347,11 +347,20 @@ outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#26](https://github.com/tripp-smith/structured-column-selection/pull/26).
 
-Current phase: **N pivot split — in progress**. Target:
-`milestoneE_increment_set_ne_cpqr`. On one orthogonal-row `2×5` frame,
-max-residual CPQR selects `{0, 1}` and the least-index increment pivot
-selects `{0, 2}`. This does not close outcome 1 or outcome 3. The
-contract is in RESEARCH.md.
+Completed phase: **N pivot split**.
+`milestoneE_increment_set_ne_cpqr` says there is an orthogonal-row
+`2×5` matrix on which max-residual CPQR selects `{0, 1}` and the
+least-index increment pivot selects `{0, 2}`. This does not close
+outcome 1 or outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#27](https://github.com/tripp-smith/structured-column-selection/pull/27).
+
+Current phase: **O zero-coefficient pivot — in progress**. Target:
+`milestoneE_zero_coeff_same_pivot`. If every positive-residual unused
+column has coefficient zero, the increment pivot and max-residual CPQR
+return the same column. This does not close outcome 3. The contract is
+in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#28](https://github.com/tripp-smith/structured-column-selection/pull/28).

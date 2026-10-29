@@ -1,3 +1,4 @@
+import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
 import StructuredColumnSelection.IncrementSet
 import StructuredColumnSelection.InvSpectralBound
@@ -659,5 +660,21 @@ theorem milestoneE_increment_set_ne_cpqr :
     ∃ A : Matrix (Fin 2) (Fin 5) ℝ,
       OrthogonalRows A ∧ incrementSet A ≠ cpqrSet A :=
   increment_set_ne_cpqr
+
+/-- If every positive-residual unused column has coefficient zero, the
+increment pivot and max-residual CPQR return the same column.
+
+A nonzero coefficient can separate them, as in
+`milestoneE_increment_set_ne_cpqr`. This does not close outcome 3. -/
+theorem milestoneE_zero_coeff_same_pivot {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
+    (hG : (selectedColGram A J).det ≠ 0)
+    (hzero : ∀ j ∈ incrementCandidates A J,
+      (((selectedColGram A J)⁻¹ *ᵥ
+          ((selectedCols A J)ᵀ *ᵥ fun i => A i j)) ⬝ᵥ
+        ((selectedColGram A J)⁻¹ *ᵥ
+          ((selectedCols A J)ᵀ *ᵥ fun i => A i j))) = 0) :
+    incrementPivot A J = cpqrPivot A J :=
+  zero_coeff_same_pivot A J hG hzero
 
 end StructuredColumnSelection
