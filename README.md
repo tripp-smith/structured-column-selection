@@ -390,3 +390,6 @@ makes the first CPQR pivot column `0`, makes the second CPQR pivot agree
 with the increment pivot, and bounds the two-column inverse trace by
 `2 (n - 1) / (k - 1)`. This does not close outcome 3. The contract is in
 RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#31](https://github.com/tripp-smith/structured-column-selection/pull/31).

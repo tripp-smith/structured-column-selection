@@ -1088,3 +1088,6 @@ Problem 4.1 is solved. Equal energy is stricter than the weakest SPEC §10
 class. The outcome-2 family is outside it. When `k = 2` the two-column
 bound is `k (n - k + 1)`, and that still does not close outcome 1 or 3.
 `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#31](https://github.com/tripp-smith/structured-column-selection/pull/31).
