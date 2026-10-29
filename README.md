@@ -337,8 +337,8 @@ RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#25](https://github.com/tripp-smith/structured-column-selection/pull/25).
 
-Current phase: **M increment set — in progress**. Target:
-`milestoneE_increment_set_bound`. The least-index minimizer of the
+Completed phase: **M increment set**.
+`milestoneE_increment_set_bound` says the least-index minimizer of the
 inverse-trace increment selects `k` columns with inverse trace at most
 `k (n - k + 1)` and squared inverse operator norm at most
 `1 + k (n - k)`. This is not a CPQR bound and it does not close
@@ -346,3 +346,9 @@ outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#26](https://github.com/tripp-smith/structured-column-selection/pull/26).
+
+Current phase: **N pivot split — in progress**. Target:
+`milestoneE_increment_set_ne_cpqr`. On one orthogonal-row `2×5` frame,
+max-residual CPQR selects `{0, 1}` and the least-index increment pivot
+selects `{0, 2}`. This does not close outcome 1 or outcome 3. The
+contract is in RESEARCH.md.

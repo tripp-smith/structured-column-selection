@@ -227,6 +227,11 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
             vecEnergy (selectedCols A (incrementSet A) *ᵥ x) :=
   milestoneE_increment_set_bound A hA
 
+example :
+    ∃ A : Matrix (Fin 2) (Fin 5) ℝ,
+      OrthogonalRows A ∧ incrementSet A ≠ cpqrSet A :=
+  milestoneE_increment_set_ne_cpqr
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,

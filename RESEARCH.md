@@ -932,3 +932,33 @@ outcome 3.
 
 Phase PR and verification receipt:
 [#26](https://github.com/tripp-smith/structured-column-selection/pull/26).
+
+## Phase N pivot split (2026-10-29, contract)
+
+Iteration N. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase M names the least-index minimizer of the
+inverse-trace increment and proves its inverse-trace and squared
+spectral bounds. Those statements do not identify the pivot with
+max-residual CPQR. This phase separates the two rules on one explicit
+orthogonal-row frame. Success is `milestoneE_increment_set_ne_cpqr`.
+Exit if every orthogonal-row matrix that was checked gives the same set
+for both rules, or if the separation needs `native_decide`.
+
+Target in `StructuredColumnSelection/PivotSplit.lean`, re-exported as
+`milestoneE_increment_set_ne_cpqr`: there is an orthogonal-row `2×5`
+matrix with `incrementSet A ≠ cpqrSet A`. The witness is `(1/4)` times
+the integer rows `(1, -3, -2, -1, -1)` and `(-3, 1, -2, -1, -1)`. Both
+rules take column `0` first. CPQR then takes column `1`. The increment
+pivot takes column `2`.
+
+Independent check: `tests/test_pivot_split.py` recomputes the row Gram,
+the five column energies, the four residuals after column `0`, and the
+four increment ratios from the entries with rational arithmetic. The
+CPQR index is `1` and the increment index is `2`. It does not call the
+repository CPQR code. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound, no closure of outcome 1 or
+outcome 3, and no claim that Problem 4.1 is solved. The `2×5` witness
+is a separation of two pivots. `k = 2` stays outside outcome 3.
+`MinDimLe` stays outside outcome 3.

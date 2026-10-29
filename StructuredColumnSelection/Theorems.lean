@@ -1,3 +1,4 @@
+import StructuredColumnSelection.PivotSplit
 import StructuredColumnSelection.IncrementSet
 import StructuredColumnSelection.InvSpectralBound
 import StructuredColumnSelection.InvTraceInduction
@@ -649,5 +650,14 @@ theorem milestoneE_increment_set_bound {k n : ℕ}
           (1 + (k : ℝ) * ((n : ℝ) - k)) *
             vecEnergy (selectedCols A (incrementSet A) *ᵥ x) :=
   increment_set_bound A hA
+
+/-- Max-residual CPQR and the least-index increment pivot select different
+columns on an explicit orthogonal-row `2×5` frame.
+
+This does not close outcome 1 or outcome 3. -/
+theorem milestoneE_increment_set_ne_cpqr :
+    ∃ A : Matrix (Fin 2) (Fin 5) ℝ,
+      OrthogonalRows A ∧ incrementSet A ≠ cpqrSet A :=
+  increment_set_ne_cpqr
 
 end StructuredColumnSelection

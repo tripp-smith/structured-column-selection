@@ -817,6 +817,10 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (pivot split): `milestoneE_increment_set_ne_cpqr` says there
+is an orthogonal-row `2×5` matrix with `incrementSet A ≠ cpqrSet A`.
+It is not a polynomial CPQR bound. Outcomes 1 and 3 stay open.
+
 Status note (increment set): `milestoneE_increment_set_bound` says the
 least-index minimizer of the inverse-trace increment selects `k`
 columns with inverse trace at most `k (n - k + 1)` and

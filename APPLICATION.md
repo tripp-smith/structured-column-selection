@@ -198,6 +198,10 @@ CPQR obstruction or a replacement for the public randomized sampler.
 scores on the rational `2×3` frame select columns `{0, 2}`. It does not
 change the sampler.
 
+`tests/test_pivot_split.py` checks that, on one rational `2×5` frame,
+the max-residual scores select column `1` after column `0` and the
+increment scores select column `2`. It does not change the sampler.
+
 `tests/test_inv_spectral_bound.py` checks that columns `{0, 2}` of the
 rational `2×3` frame send `(0, 1)` to a vector of energy `16/25`, which
 is at least `1/3` of the input energy. It does not change the sampler.
