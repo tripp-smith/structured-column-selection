@@ -1221,3 +1221,6 @@ claim that every matrix of ratio `32/13` splits, and no closure of
 outcome 1 or outcome 3. Equal energy remains the case in which the
 second pivots agree. Problem 4.1 is not solved. `MinDimLe`, `k = 1`,
 and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#35](https://github.com/tripp-smith/structured-column-selection/pull/35).
