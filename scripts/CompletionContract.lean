@@ -169,6 +169,15 @@ example {m n k : ℕ}
         frobeniusNorm E :=
   milestoneF_cssp_frobenius A E U S Q hQ J hJ hInv hA
 
+example {k t : ℕ} (B : Matrix (Fin k) (Fin t) ℝ) (v : Fin k → ℝ)
+    (hG : (Bᵀ * B).det ≠ 0)
+    (hs : v ⬝ᵥ v - ((Bᵀ *ᵥ v) ⬝ᵥ ((Bᵀ * B)⁻¹ *ᵥ (Bᵀ *ᵥ v))) ≠ 0) :
+    (((appendColumn B v)ᵀ * appendColumn B v)⁻¹).trace =
+      ((Bᵀ * B)⁻¹).trace +
+        (1 + (((Bᵀ * B)⁻¹ *ᵥ (Bᵀ *ᵥ v)) ⬝ᵥ ((Bᵀ * B)⁻¹ *ᵥ (Bᵀ *ᵥ v)))) /
+          (v ⬝ᵥ v - ((Bᵀ *ᵥ v) ⬝ᵥ ((Bᵀ * B)⁻¹ *ᵥ (Bᵀ *ᵥ v)))) :=
+  milestoneE_append_inv_trace_increment B v hG hs
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,

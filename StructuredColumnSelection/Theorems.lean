@@ -1,3 +1,4 @@
+import StructuredColumnSelection.InvTraceStep
 import StructuredColumnSelection.CSSPBridge
 import StructuredColumnSelection.WideLeverage
 import StructuredColumnSelection.WideCPQR
@@ -553,5 +554,19 @@ theorem milestoneE_wide_leverage_escape {τ : ℝ} (hτ : 0 ≤ τ) :
           τ * residualSq A ∅ jMin < residualSq A ∅ jMax ∧
           (8 * (wideDim m : ℝ)) * residualSq A ∅ jMin < residualSq A ∅ jMax :=
   wide_leverage_escape hτ
+
+/-- Appending a column adds `(1 + ‖G⁻¹ Bᵀ v‖²) / residual` to the inverse trace.
+
+This is not a bound for the max-residual CPQR pivot and does not close
+outcome 3. -/
+theorem milestoneE_append_inv_trace_increment {k t : ℕ}
+    (B : Matrix (Fin k) (Fin t) ℝ) (v : Fin k → ℝ)
+    (hG : (Bᵀ * B).det ≠ 0)
+    (hs : v ⬝ᵥ v - ((Bᵀ *ᵥ v) ⬝ᵥ ((Bᵀ * B)⁻¹ *ᵥ (Bᵀ *ᵥ v))) ≠ 0) :
+    (((appendColumn B v)ᵀ * appendColumn B v)⁻¹).trace =
+      ((Bᵀ * B)⁻¹).trace +
+        (1 + (((Bᵀ * B)⁻¹ *ᵥ (Bᵀ *ᵥ v)) ⬝ᵥ ((Bᵀ * B)⁻¹ *ᵥ (Bᵀ *ᵥ v)))) /
+          (v ⬝ᵥ v - ((Bᵀ *ᵥ v) ⬝ᵥ ((Bᵀ * B)⁻¹ *ᵥ (Bᵀ *ᵥ v)))) :=
+  append_inv_trace_increment B v hG hs
 
 end StructuredColumnSelection

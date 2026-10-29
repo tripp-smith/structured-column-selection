@@ -194,6 +194,9 @@ CPQR obstruction or a replacement for the public randomized sampler.
 `A - A_J T = E - E_J T` and the squared Frobenius comparison against
 `(1 + |q|⁻¹)²`. It does not change the sampler.
 
+`tests/test_inv_trace_step.py` checks one rational `2×2` Gram inverse trace
+against `1 + 25/9`. It does not change the sampler.
+
 `tests/test_wide_leverage.py` compares explicit triangular and LDL column
 energies of the wide family at `m = 2, 3, 4` with `8 m²`. It does not
 change the sampler.
