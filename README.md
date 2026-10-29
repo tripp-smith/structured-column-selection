@@ -399,3 +399,6 @@ Target: `milestoneE_equal_energy_cpqr_prefix_rayleigh`. Equal column energy
 makes the two-column CPQR Rayleigh quotient at least
 `(k - 1) / (2 (n - 1))`. This bounds only that prefix and does not close
 outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#32](https://github.com/tripp-smith/structured-column-selection/pull/32).
