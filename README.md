@@ -343,3 +343,6 @@ inverse-trace increment selects `k` columns with inverse trace at most
 `k (n - k + 1)` and squared inverse operator norm at most
 `1 + k (n - k)`. This is not a CPQR bound and it does not close
 outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#26](https://github.com/tripp-smith/structured-column-selection/pull/26).
