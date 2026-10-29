@@ -1126,3 +1126,31 @@ is outside it. When `k = 2` the phase-R trace bound is
 
 Phase PR and verification receipt:
 [#32](https://github.com/tripp-smith/structured-column-selection/pull/32).
+
+## Phase T equal-energy three-column trace (2026-10-29, contract)
+
+Iteration T. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase S bounds the two-column Rayleigh quotient so that
+`‖G⁻¹ v‖² ≤ q / λ_min` at that prefix. The consumer is one CPQR step:
+the third-column inverse-trace increment is `(1 + ‖G⁻¹ v‖²) / residual`,
+the residual is at least `(k - 2) / (n - 2)`, and `‖G⁻¹ v‖²` is at most
+`(k / n) / λ_min`. Success is that three-column trace bound only:
+`milestoneE_equal_energy_cpqr_three_trace`. Exit if the third residual is
+below the unused average, or if the coefficient exceeds `(k / n) / λ_min`.
+
+Target in `StructuredColumnSelection/EqualEnergyPivot.lean`, re-exported
+as `milestoneE_equal_energy_cpqr_three_trace`: if the rows are orthogonal,
+every column energy is equal, `3 ≤ k`, and `0 < n`, then the CPQR
+three-column Gram is invertible and its inverse trace is at most
+`2 (n - 1) / (k - 1)` plus
+`(1 + 2 k (n - 1) / (n (k - 1))) · (n - 2) / (k - 2)`.
+
+Independent check: `tests/test_equal_energy_three.py` uses exact
+arithmetic on the `3×3` identity. The inverse trace is `3` and the bound
+is `5`. It does not call the repository CPQR code. It is not the theorem.
+
+`MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#33](https://github.com/tripp-smith/structured-column-selection/pull/33).

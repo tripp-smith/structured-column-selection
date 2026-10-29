@@ -817,6 +817,12 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (equal-energy three-column trace):
+`milestoneE_equal_energy_cpqr_three_trace` says that equal column energy
+makes the CPQR three-column inverse trace at most the two-column bound
+plus one Rayleigh-controlled step. This bounds only that prefix.
+Outcome 3 stays open.
+
 Status note (equal-energy prefix Rayleigh):
 `milestoneE_equal_energy_cpqr_prefix_rayleigh` says that equal column energy
 makes the two-column CPQR Rayleigh quotient at least

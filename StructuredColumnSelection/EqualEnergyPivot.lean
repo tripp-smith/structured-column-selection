@@ -1,3 +1,4 @@
+import StructuredColumnSelection.InvTraceInduction
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 
@@ -662,5 +663,197 @@ theorem equal_energy_cpqr_prefix_rayleigh {k n : ℕ}
   have hquad : x ⬝ᵥ (G *ᵥ x) = vecEnergy (selectedCols A J *ᵥ x) :=
     (vecEnergy_selectedCols A J x).symm
   exact hscale.trans (hform.trans (le_of_eq hquad))
+
+lemma inv_norm_sq_le_of_quad_lower {m : ℕ}
+    (G : Matrix (Fin m) (Fin m) ℝ) (μ : ℝ)
+    (hμ : 0 < μ) (hG : G.det ≠ 0)
+    (hRay : ∀ x : Fin m → ℝ, μ * vecEnergy x ≤ x ⬝ᵥ (G *ᵥ x))
+    (v : Fin m → ℝ) :
+    (G⁻¹ *ᵥ v) ⬝ᵥ (G⁻¹ *ᵥ v) ≤ (v ⬝ᵥ (G⁻¹ *ᵥ v)) / μ := by
+  let y : Fin m → ℝ := G⁻¹ *ᵥ v
+  have hGy : G *ᵥ y = v := by
+    change G *ᵥ (G⁻¹ *ᵥ v) = v
+    rw [mulVec_mulVec, Matrix.mul_nonsing_inv _ (Ne.isUnit hG), one_mulVec_eq]
+  have hle : μ * (y ⬝ᵥ y) ≤ v ⬝ᵥ y := by
+    have hquad := hRay y
+    rw [hGy, vecEnergy_eq_dot, dotProduct_comm y v] at hquad
+    exact hquad
+  rw [le_div_iff₀ hμ]
+  simpa [y, mul_comm] using hle
+
+/-- Equal column energy makes the CPQR three-column inverse trace at most
+the two-column bound plus one Rayleigh-controlled step. This does not
+bound later pivots and does not close outcome 3. -/
+theorem equal_energy_cpqr_three_trace {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : 3 ≤ k) (hn : 0 < n) :
+    (selectedColGram A (cpqrIterate A 3)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A 3))⁻¹).trace ≤
+        (2 : ℝ) * ((n : ℝ) - 1) / ((k : ℝ) - 1) +
+          (1 + (2 * (k : ℝ) * ((n : ℝ) - 1)) / ((n : ℝ) * ((k : ℝ) - 1))) *
+            (((n : ℝ) - 2) / ((k : ℝ) - 2)) := by
+  have hk2 : 2 ≤ k := by omega
+  have hn3 : 3 ≤ n := by
+    have hkn := orthogonalRows_le A hA
+    omega
+  let J := cpqrIterate A 2
+  have hinv2 := cpqrIterate_invariant A hA 2 hk2
+  have hcard : J.card = 2 := hinv2.1
+  have hdet : (selectedColGram A J).det ≠ 0 := hinv2.2 (by omega)
+  have hinv3 := cpqrIterate_invariant A hA 3 hk
+  have hdet3 : (selectedColGram A (cpqrIterate A 3)).det ≠ 0 := hinv3.2 (by omega)
+  have htr2 : ((selectedColGram A J)⁻¹).trace ≤
+      (2 : ℝ) * ((n : ℝ) - 1) / ((k : ℝ) - 1) :=
+    (equal_energy_cpqr_prefix_trace A hA hE hk2 hn).2.2.2
+  let μ : ℝ := ((k : ℝ) - 1) / (2 * ((n : ℝ) - 1))
+  have hμ : 0 < μ := by
+    have hk1 : (0 : ℝ) < (k : ℝ) - 1 := by
+      have : (1 : ℝ) < (k : ℝ) := by exact_mod_cast (show 1 < k by omega)
+      linarith
+    have hn1 : (0 : ℝ) < (n : ℝ) - 1 := by
+      have : (1 : ℝ) < (n : ℝ) := by exact_mod_cast (show 1 < n by omega)
+      linarith
+    exact div_pos hk1 (mul_pos (by norm_num) hn1)
+  let G := selectedColGram A J
+  have hlower : ∀ x : Fin J.card → ℝ, μ * vecEnergy x ≤ x ⬝ᵥ (G *ᵥ x) := by
+    intro x
+    rw [← vecEnergy_selectedCols A J x]
+    simpa [μ, G, J] using
+      equal_energy_cpqr_prefix_rayleigh A hA hE hk2 hn x
+  have hcardn : J.card < n := by
+    rw [hcard]
+    omega
+  have hmax : ((k : ℝ) - 2) / ((n : ℝ) - 2) ≤ maxResidual A J := by
+    have hcast : (J.card : ℝ) = 2 := by
+      rw [hcard]
+      norm_num
+    have hrhs : ((k : ℝ) - (J.card : ℝ)) / ((n : ℝ) - (J.card : ℝ)) =
+        ((k : ℝ) - 2) / ((n : ℝ) - 2) := by
+      rw [hcast]
+    simpa [hrhs] using nextResidual_ge A hA J hdet hcardn
+  have havgpos : 0 < ((k : ℝ) - 2) / ((n : ℝ) - 2) := by
+    refine div_pos ?_ ?_
+    · have : (2 : ℝ) < (k : ℝ) := by exact_mod_cast (show 2 < k by omega)
+      linarith
+    · have : (2 : ℝ) < (n : ℝ) := by exact_mod_cast (show 2 < n by omega)
+      linarith
+  have hmaxpos : 0 < maxResidual A J := lt_of_lt_of_le havgpos hmax
+  have hunused : (unused J).Nonempty := by
+    refine card_pos.mp ?_
+    have : 0 < n - J.card := Nat.sub_pos_of_lt hcardn
+    simpa [unused_card] using this
+  obtain ⟨j0, hj0, hj0eq⟩ := Finset.exists_mem_eq_sup' hunused (residualSq A J)
+  have hmaxeq : maxResidual A J = residualSq A J j0 := by
+    unfold maxResidual
+    rw [dif_pos hunused]
+    exact hj0eq
+  have hpos0 : 0 < residualSq A J j0 := by
+    rw [← hmaxeq]
+    exact hmaxpos
+  let s := (unused J).filter fun j =>
+    residualSq A J j = maxResidual A J ∧ 0 < residualSq A J j
+  have hs : s.Nonempty := by
+    refine ⟨j0, mem_filter.mpr ⟨hj0, ?_, hpos0⟩⟩
+    rw [hmaxeq]
+  have hP : cpqrPivot A J = some (s.min' hs) := by
+    unfold cpqrPivot
+    simp only [s]
+    rw [dif_pos hs]
+  let j : Fin n := s.min' hs
+  have hmem : j ∈ s := min'_mem _ hs
+  have hresj : residualSq A J j = maxResidual A J := (mem_filter.mp hmem).2.1
+  have hposj : 0 < residualSq A J j := (mem_filter.mp hmem).2.2
+  have hj : j ∉ J := cpqrPivot_not_mem hP
+  have hresge : ((k : ℝ) - 2) / ((n : ℝ) - 2) ≤ residualSq A J j := by
+    rw [hresj]
+    exact hmax
+  let v : Fin k → ℝ := fun i => A i j
+  let w : Fin J.card → ℝ := (selectedCols A J)ᵀ *ᵥ v
+  let c : ℝ := (G⁻¹ *ᵥ w) ⬝ᵥ (G⁻¹ *ᵥ w)
+  let q : ℝ := w ⬝ᵥ (G⁻¹ *ᵥ w)
+  have hschur : residualSq A J j = v ⬝ᵥ v - q := by
+    simpa [v, w, q, G] using residualSq_eq_schur A J j hdet
+  have hej : v ⬝ᵥ v = (k : ℝ) / n := by
+    have hv : v ⬝ᵥ v = colInner A j j := rfl
+    rw [hv]
+    exact equal_column_energy A hA hE hn j
+  have hcle : c ≤ ((k : ℝ) / n) / μ := by
+    have hcq : c ≤ q / μ := by
+      simpa [c, q, G] using inv_norm_sq_le_of_quad_lower G μ hμ hdet hlower w
+    have hqle : q ≤ (k : ℝ) / n := by
+      have hr0 : 0 ≤ residualSq A J j := residualSq_nonneg A J j
+      rw [hschur, hej] at hr0
+      linarith
+    exact le_trans hcq (div_le_div_of_nonneg_right hqle hμ.le)
+  have hclosed : ((k : ℝ) / n) / μ =
+      (2 * (k : ℝ) * ((n : ℝ) - 1)) / ((n : ℝ) * ((k : ℝ) - 1)) := by
+    unfold μ
+    field_simp
+  have hnum : 1 + c ≤ 1 + (2 * (k : ℝ) * ((n : ℝ) - 1)) /
+      ((n : ℝ) * ((k : ℝ) - 1)) := by
+    rw [← hclosed]
+    linarith
+  have hdenpos : 0 < residualSq A J j := hposj
+  have hratio : (1 + c) / residualSq A J j ≤
+      (1 + (2 * (k : ℝ) * ((n : ℝ) - 1)) / ((n : ℝ) * ((k : ℝ) - 1))) /
+        (((k : ℝ) - 2) / ((n : ℝ) - 2)) := by
+    have hden : ((k : ℝ) - 2) / ((n : ℝ) - 2) ≤ residualSq A J j := hresge
+    have hposnum : 0 ≤ 1 + (2 * (k : ℝ) * ((n : ℝ) - 1)) /
+        ((n : ℝ) * ((k : ℝ) - 1)) := by
+      refine add_nonneg zero_le_one (div_nonneg ?_ ?_)
+      · exact mul_nonneg (mul_nonneg (by norm_num) (by exact_mod_cast (Nat.zero_le k)))
+          (by linarith [show (1 : ℝ) ≤ n by exact_mod_cast (show 1 ≤ n by omega)])
+      · exact mul_nonneg (by exact_mod_cast (Nat.zero_le n))
+          (by linarith [show (1 : ℝ) ≤ k by exact_mod_cast (show 1 ≤ k by omega)])
+    exact le_trans
+      (div_le_div_of_nonneg_right hnum hdenpos.le)
+      (div_le_div_of_nonneg_left hposnum havgpos hden)
+  have hratio' : (1 + c) / residualSq A J j ≤
+      (1 + (2 * (k : ℝ) * ((n : ℝ) - 1)) / ((n : ℝ) * ((k : ℝ) - 1))) *
+        (((n : ℝ) - 2) / ((k : ℝ) - 2)) := by
+    refine le_trans hratio ?_
+    rw [div_eq_mul_inv, inv_div]
+  have hsne :
+      (fun i => A i j) ⬝ᵥ (fun i => A i j) -
+        (((selectedCols A J)ᵀ *ᵥ fun i => A i j) ⬝ᵥ
+          (((selectedCols A J)ᵀ * selectedCols A J)⁻¹ *ᵥ
+            ((selectedCols A J)ᵀ *ᵥ fun i => A i j))) ≠ 0 := by
+    have h := (residualSq_eq_schur A J j hdet).symm
+    unfold selectedColGram at h
+    rw [h]
+    exact ne_of_gt hposj
+  have hinc :=
+    append_inv_trace_increment (selectedCols A J) (fun i => A i j) hdet hsne
+  have hfrac :
+      (1 + ((((selectedCols A J)ᵀ * selectedCols A J)⁻¹ *ᵥ
+            ((selectedCols A J)ᵀ *ᵥ fun i => A i j)) ⬝ᵥ
+          (((selectedCols A J)ᵀ * selectedCols A J)⁻¹ *ᵥ
+            ((selectedCols A J)ᵀ *ᵥ fun i => A i j)))) /
+        ((fun i => A i j) ⬝ᵥ (fun i => A i j) -
+          (((selectedCols A J)ᵀ *ᵥ fun i => A i j) ⬝ᵥ
+            (((selectedCols A J)ᵀ * selectedCols A J)⁻¹ *ᵥ
+              ((selectedCols A J)ᵀ *ᵥ fun i => A i j)))) =
+        (1 + c) / residualSq A J j := by
+    have hden := (residualSq_eq_schur A J j hdet).symm
+    unfold selectedColGram at hden
+    unfold c w G selectedColGram v
+    rw [hden]
+  have happdet :
+      ((appendColumn (selectedCols A J) (fun i => A i j))ᵀ *
+          appendColumn (selectedCols A J) (fun i => A i j)).det ≠ 0 := by
+    rw [appendColumn_gram_det_eq_insert A hj]
+    have h3 : cpqrIterate A 3 = insert j J := by
+      conv_lhs => unfold cpqrIterate
+      rw [hP]
+    rw [← h3]
+    exact hdet3
+  have hinsert := append_inv_trace_eq_insert A hj happdet
+  refine ⟨hdet3, ?_⟩
+  have h3 : cpqrIterate A 3 = insert j J := by
+    conv_lhs => unfold cpqrIterate
+    rw [hP]
+  rw [h3, ← hinsert, hinc, hfrac]
+  exact add_le_add htr2 hratio'
 
 end StructuredColumnSelection

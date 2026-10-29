@@ -68,6 +68,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Adverse family outside orthogonal columns | **PROVED** (does not close outcome 3) | `milestoneE_wide_not_incoherent_zero` |
 | Equal-energy second CPQR pivot | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_cpqr_prefix_trace` |
 | Equal-energy prefix Rayleigh | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_cpqr_prefix_rayleigh` |
+| Equal-energy three-column trace | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_cpqr_three_trace` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.
