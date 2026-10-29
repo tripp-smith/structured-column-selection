@@ -351,6 +351,17 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Inverse-trace increment (2026-10-29)
+
+`milestoneE_append_inv_trace_increment` says that appending a column `v`
+to an invertible column block `B` increases the Gram inverse trace by
+`(1 + ‖(Bᵀ B)⁻¹ Bᵀ v‖²) / residual`. The denominator is the Schur
+complement `‖v‖² - (Bᵀ v) ⬝ (Bᵀ B)⁻¹ (Bᵀ v)`. Standard CPQR does not
+choose the column that minimizes this ratio. This is not a polynomial
+inverse bound and it does not close outcome 3. An exact `2×2` inverse
+trace on columns `(1,0)` and `(0,3/5)` equals `1 + 25/9`; that check is
+not the theorem.
+
 ## Wide leverage escape (2026-10-29)
 
 `milestoneE_wide_leverage_escape` says that for every `τ ≥ 0` some frame

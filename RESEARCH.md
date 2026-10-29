@@ -743,3 +743,40 @@ no coherence theorem, no closure of outcome 3, and no claim that Problem
 
 Phase PR and verification receipt:
 [#20](https://github.com/tripp-smith/structured-column-selection/pull/20).
+
+## Phase H inverse-trace step (2026-10-29, contract)
+
+Iteration H. Outcome 3 stays open. Outcome 1 is not the target.
+
+Route checkpoint. Standard CPQR maximizes the residual denominator.
+The inverse-trace increment of an appended column is
+`(1 + ‖G⁻¹ Bᵀ v‖²) / residual`, so the numerator can make a large-residual
+column a bad pivot. The minimizing choice of that whole ratio is a
+different rule. Phase G already shows the outcome-2 family leaves every
+fixed leverage ratio; it does not bound this numerator. The consumer of
+the increment identity is a later induction for the minimizing rule.
+That induction is not this phase.
+
+Target in `StructuredColumnSelection/InvTraceStep.lean`, re-exported
+from `Theorems.lean`:
+
+- `milestoneE_append_inv_trace_increment`: if `Bᵀ B` is invertible and the
+  Schur residual of `v` is nonzero, the inverse trace of
+  `(appendColumn B v)ᵀ (appendColumn B v)` equals the inverse trace of
+  `Bᵀ B` plus `(1 + ‖(Bᵀ B)⁻¹ (Bᵀ v)‖²) / residual`.
+
+The comparison that some unused column meets
+`((n - t) + trace(G⁻¹) - t) / (k - t)` is the next phase, not this one.
+
+Independent check: `tests/test_inv_trace_step.py` recomputes the `2×2`
+Gram inverse trace of columns `{0,1}` of the rational `2×3` frame
+`[[1,0,0],[0,3/5,4/5]]` and compares it with `1 + 25/9`. It does not
+call the CPQR residual code. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound, no claim that the max-residual
+pivot obeys the same increment estimate, no closure of outcome 3, and
+no claim that Problem 4.1 is solved. `MinDimLe`, `k = 1`, and `k = 2`
+stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#21](https://github.com/tripp-smith/structured-column-selection/pull/21).

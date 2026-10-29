@@ -817,6 +817,10 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (inverse-trace step): `milestoneE_append_inv_trace_increment`
+is the one-column Gram inverse-trace update
+`(1 + ‖G⁻¹ Bᵀ v‖²) / residual`. It is not a CPQR bound. Outcome 3 stays open.
+
 Status note (wide leverage escape): `milestoneE_wide_leverage_escape`
 shows that for every `τ ≥ 0` some outcome-2 frame has column energies
 in ratio greater than `τ` and greater than `8 m²`. Outcome 3 stays open.

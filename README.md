@@ -281,12 +281,21 @@ Problem 4.1. Outcomes 1 and 3 stay open. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#19](https://github.com/tripp-smith/structured-column-selection/pull/19).
 
-Current phase: **G wide leverage escape — in progress**. Target:
-`milestoneE_wide_leverage_escape`, an exact column-energy ratio of at least
-`8 m²` on the outcome-2 family, so every fixed leverage ratio excludes a
-large member of that family. This is not a polynomial bound on the
-leverage-ratio class, and it does not close outcome 3. The contract is in
-RESEARCH.md.
+Completed phase: **G wide leverage escape**. `milestoneE_wide_leverage_escape`
+shows that for every `τ ≥ 0` some outcome-2 frame has two column energies
+with ratio greater than `τ` and greater than `8 m²`. Every fixed leverage
+ratio therefore excludes a large member of that family. This is not a
+polynomial bound on the leverage-ratio class, and it does not close
+outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#20](https://github.com/tripp-smith/structured-column-selection/pull/20).
+
+Current phase: **H inverse-trace step — in progress**. Target:
+`milestoneE_append_inv_trace_increment`. Appending a column increases the
+Gram inverse trace by `(1 + ‖G⁻¹ Bᵀ v‖²) / residual`. This is not the
+standard CPQR pivot, not a polynomial inverse bound, and it does not
+close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#21](https://github.com/tripp-smith/structured-column-selection/pull/21).

@@ -56,6 +56,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone E outcomes 1 and 3 | **OPEN** | no polynomial bound for every orthogonal-row matrix, and no static class beside outcome 2 |
 | Milestone F CSSP bridge | **PROVED** | `milestoneF_cssp_spectral`, `milestoneF_cssp_frobenius` |
 | Wide-family leverage escape | **PROVED** (does not close outcome 3) | `milestoneE_wide_leverage_escape` |
+| Append inverse-trace increment | **PROVED** (does not close outcome 3) | `milestoneE_append_inv_trace_increment` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.
