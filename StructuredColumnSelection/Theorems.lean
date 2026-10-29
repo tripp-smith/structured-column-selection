@@ -727,4 +727,18 @@ theorem milestoneE_equal_energy_cpqr_prefix_trace {k n : ℕ}
       (2 : ℝ) * ((n : ℝ) - 1) / ((k : ℝ) - 1) :=
   equal_energy_cpqr_prefix_trace A hA hE hk hn
 
+/-- Equal column energy makes the two-column CPQR Rayleigh quotient at
+least `(k - 1) / (2 (n - 1))`.
+
+This bounds only that prefix. It does not bound a `k`-set for `k > 2`
+and does not close outcome 3. -/
+theorem milestoneE_equal_energy_cpqr_prefix_rayleigh {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : 2 ≤ k) (hn : 0 < n)
+    (x : Fin (cpqrIterate A 2).card → ℝ) :
+    ((k : ℝ) - 1) / (2 * ((n : ℝ) - 1)) * vecEnergy x ≤
+      vecEnergy (selectedCols A (cpqrIterate A 2) *ᵥ x) :=
+  equal_energy_cpqr_prefix_rayleigh A hA hE hk hn x
+
 end StructuredColumnSelection

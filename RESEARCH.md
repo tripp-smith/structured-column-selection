@@ -1091,3 +1091,35 @@ bound is `k (n - k + 1)`, and that still does not close outcome 1 or 3.
 
 Phase PR and verification receipt:
 [#31](https://github.com/tripp-smith/structured-column-selection/pull/31).
+
+## Phase S equal-energy prefix Rayleigh (2026-10-29, contract)
+
+Iteration S. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase R's estimate `‖G⁻¹ v‖² ≤ trace(G⁻¹) · q` does not
+close pivots after the second. At the two-column prefix the smaller
+eigenvalue is available: the second residual is at least `(k - 1) / (n - 1)`,
+and `e - |s|` is at least half that residual. Success is that Rayleigh
+lower bound only: `milestoneE_equal_energy_cpqr_prefix_rayleigh`. Exit if
+the second pivot residual is below the unused average, or if `e - |s|`
+is below half the residual.
+
+Target in `StructuredColumnSelection/EqualEnergyPivot.lean`, re-exported
+as `milestoneE_equal_energy_cpqr_prefix_rayleigh`: if the rows are
+orthogonal, every column energy is equal, `2 ≤ k`, and `0 < n`, then for
+every coefficient vector on the CPQR two-column set,
+`((k - 1) / (2 (n - 1))) ‖x‖² ≤ ‖A_J x‖²`.
+
+Independent check: `tests/test_equal_energy_pivot.py` uses exact
+arithmetic on the rational `2×4` frame. Columns `{0, 1}` have inner
+product `0` and energy `1/2`, so the image energy of `(3, 4)` is `25/2`,
+and `(k - 1) / (2 (n - 1)) = 1/6`. It does not call the repository CPQR
+code. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound for every equal-energy matrix when
+`k > 2`, no finished induction from `c ≤ q / λ_min`, no closure of
+outcome 1 or outcome 3, and no claim that Problem 4.1 is solved. Equal
+energy is stricter than the weakest SPEC §10 class. The outcome-2 family
+is outside it. When `k = 2` the phase-R trace bound is
+`k (n - k + 1)`, and that still does not close outcome 1 or 3.
+`MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.

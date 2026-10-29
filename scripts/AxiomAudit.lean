@@ -87,3 +87,4 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_incoherent_zero_cpqr_bound
 #print axioms StructuredColumnSelection.milestoneE_wide_not_incoherent_zero
 #print axioms StructuredColumnSelection.milestoneE_equal_energy_cpqr_prefix_trace
+#print axioms StructuredColumnSelection.milestoneE_equal_energy_cpqr_prefix_rayleigh
