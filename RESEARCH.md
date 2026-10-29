@@ -996,3 +996,38 @@ no claim that Problem 4.1 is solved. Phase N remains the separation.
 
 Phase PR and verification receipt:
 [#28](https://github.com/tripp-smith/structured-column-selection/pull/28).
+
+## Phase P orthogonal-column CPQR (2026-10-29, contract)
+
+Iteration P. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phases H–O compare the inverse-trace increment with
+max-residual CPQR. Another pivot-agreement lemma would not discharge
+outcome 3. This phase proves a CPQR bound on a static class:
+`ColumnIncoherent A 0`, pairwise orthogonal columns. With orthogonal
+rows, every column energy is `0` or `1`, exactly `k` columns have
+energy `1`, and max-residual CPQR selects them. Their Gram is the
+identity. Success is `milestoneE_incoherent_zero_cpqr_bound`. Exit if
+an unused energy-`1` column can have a nonzero coefficient against the
+selected block.
+
+Target in `StructuredColumnSelection/OrthogonalColumns.lean`, re-exported
+as `milestoneE_incoherent_zero_cpqr_bound`: for `OrthogonalRows A` and
+`ColumnIncoherent A 0`, the CPQR set has cardinality `k`, invertible
+Gram, inverse trace at most `k (n - k + 1)`, and
+`‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`.
+
+Independent check: `tests/test_orthogonal_columns.py` recomputes the
+`2×4` partial permutation. Off-diagonal column dots are `0`, energies
+are `1, 1, 0, 0`, both scores select `{0, 1}`, and the inverse trace
+`2` is at most `k (n - k + 1) = 6`. It does not call the repository
+CPQR code. It is not the theorem.
+
+Non-claims: this does not close outcome 1 or outcome 3.
+`ColumnIncoherent A 0` is read from `A` and is checkable, but it is
+stricter than the weakest SPEC §10 class. The adverse family is not
+incoherent at `0`. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3. Problem 4.1 is not solved.
+
+Phase PR and verification receipt:
+[#29](https://github.com/tripp-smith/structured-column-selection/pull/29).

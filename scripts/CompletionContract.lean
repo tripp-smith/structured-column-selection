@@ -242,6 +242,18 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
     incrementPivot A J = cpqrPivot A J :=
   milestoneE_zero_coeff_same_pivot A J hG hzero
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hC : ColumnIncoherent A 0) :
+    (cpqrSet A).card = k ∧
+      (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (k : ℝ) * ((n : ℝ) - k + 1) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          (1 + (k : ℝ) * ((n : ℝ) - k)) *
+            vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) :=
+  milestoneE_incoherent_zero_cpqr_bound A hA hC
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,

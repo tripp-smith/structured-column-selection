@@ -351,6 +351,16 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Orthogonal-column CPQR (2026-10-29)
+
+`milestoneE_incoherent_zero_cpqr_bound` says that pairwise orthogonal
+columns of an orthogonal-row matrix are selected by max-residual CPQR.
+Exactly `k` columns have energy `1`, the Gram is the identity, the
+inverse trace is `k`, and `‖x‖² = ‖A_J x‖²`. Both quantities sit under
+`k (n - k + 1)` and `1 + k (n - k)`. The class is read from `A`. It is
+stricter than the SPEC §10 target, and the adverse family is outside
+it. This does not close outcome 3.
+
 ## Zero-coefficient pivot (2026-10-29)
 
 `milestoneE_zero_coeff_same_pivot` says that if the selected Gram is
