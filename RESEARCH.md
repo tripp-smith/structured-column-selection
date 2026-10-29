@@ -962,3 +962,6 @@ Non-claims: no polynomial CPQR bound, no closure of outcome 1 or
 outcome 3, and no claim that Problem 4.1 is solved. The `2×5` witness
 is a separation of two pivots. `k = 2` stays outside outcome 3.
 `MinDimLe` stays outside outcome 3.
+
+Phase PR and verification receipt:
+[#27](https://github.com/tripp-smith/structured-column-selection/pull/27).

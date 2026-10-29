@@ -352,3 +352,6 @@ Current phase: **N pivot split — in progress**. Target:
 max-residual CPQR selects `{0, 1}` and the least-index increment pivot
 selects `{0, 2}`. This does not close outcome 1 or outcome 3. The
 contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#27](https://github.com/tripp-smith/structured-column-selection/pull/27).
