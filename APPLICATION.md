@@ -216,6 +216,11 @@ the sampler.
 that three-column expression at `k = 3` and that the identity satisfies
 `‖x‖² ≤ 5 ‖A_J x‖²`. It does not change the sampler.
 
+`tests/test_leverage_ratio_split.py` checks that the integer `2×5`
+columns have energy ratio `32/13`, common residual `1/4`, and that the
+second increment pivot is column `2` while the max residual is column
+`1`. It does not change the sampler.
+
 `tests/test_wide_incoherent.py` checks that the `m = 2` triangular
 prefix inner product is `-(4/17) * (1/8)^2`. It does not change the
 sampler.

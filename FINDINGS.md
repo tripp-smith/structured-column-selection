@@ -351,6 +351,16 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Leverage ratio `32/13` splits the second pivot (2026-10-29)
+
+`milestoneE_leverage_ratio_pivot_split` gives an orthogonal-row `2×5`
+frame whose column energies lie in `[13/50, 16/25]`. The ratio of those
+endpoints is `32/13`. Both rules take column `0` first. Every later
+residual equals `1/4`, so max-residual CPQR takes column `1`, while the
+increment ratios `89/16`, `65/16`, `73/16`, and `65/16` take column `2`.
+Equal column energy still makes those second pivots agree. This witness
+does not close outcome 3.
+
 ## Equal-energy three-row CPQR (2026-10-29)
 
 `milestoneE_equal_energy_cpqr_k3` says that when `k = 3`, equal column

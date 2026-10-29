@@ -420,3 +420,10 @@ outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#34](https://github.com/tripp-smith/structured-column-selection/pull/34).
+
+Current phase: **V leverage-ratio pivot split — in progress**.
+Target: `milestoneE_leverage_ratio_pivot_split`. An orthogonal-row
+`2×5` frame with column energies in `[13/50, 16/25]` has leverage ratio
+`32/13`, and on it max-residual CPQR and the increment pivot select
+different columns. Equal energy still makes the second pivots agree.
+This does not close outcome 3. The contract is in RESEARCH.md.
