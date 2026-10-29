@@ -375,11 +375,18 @@ does not close outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#29](https://github.com/tripp-smith/structured-column-selection/pull/29).
 
-Current phase: **Q adverse family outside orthogonal columns — in progress**.
-Target: `milestoneE_wide_not_incoherent_zero`. For every `m ≥ 2`, the
+Completed phase: **Q adverse family outside orthogonal columns**.
+`milestoneE_wide_not_incoherent_zero` says that for every `m ≥ 2` the
 outcome-2 frame has a nonzero column inner product, so the phase-P
 bound does not apply to it. This does not close outcome 3. The contract
 is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#30](https://github.com/tripp-smith/structured-column-selection/pull/30).
+
+Current phase: **R equal-energy second pivot — in progress**.
+Target: `milestoneE_equal_energy_cpqr_prefix_trace`. Equal column energy
+makes the first CPQR pivot column `0`, makes the second CPQR pivot agree
+with the increment pivot, and bounds the two-column inverse trace by
+`2 (n - 1) / (k - 1)`. This does not close outcome 3. The contract is in
+RESEARCH.md.

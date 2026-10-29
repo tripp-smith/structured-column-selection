@@ -1058,3 +1058,33 @@ of outcome 1 or outcome 3, and no claim that Problem 4.1 is solved.
 
 Phase PR and verification receipt:
 [#30](https://github.com/tripp-smith/structured-column-selection/pull/30).
+
+## Phase R equal-energy second pivot (2026-10-29, contract)
+
+Iteration R. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Equal column energy is leverage ratio `1`, the balanced
+end of the SPEC §10 leverage-ratio candidate. A direct induction with
+`‖G⁻¹ v‖² ≤ trace(G⁻¹) · q` unrolls exponentially, so this phase does not
+claim a `k`-set bound. Success is the second pivot only:
+`milestoneE_equal_energy_cpqr_prefix_trace`. Exit if the one-column ratio
+is not monotone in the residual.
+
+Target in `StructuredColumnSelection/EqualEnergyPivot.lean`, re-exported
+as `milestoneE_equal_energy_cpqr_prefix_trace`: if the rows are orthogonal,
+every column energy is equal, `2 ≤ k`, and `0 < n`, then each energy is
+`k / n`, the first CPQR pivot is column `0`, the second CPQR pivot equals
+the increment pivot, and the two-column inverse trace is at most
+`2 (n - 1) / (k - 1)`.
+
+Independent check: `tests/test_equal_energy_pivot.py` uses exact
+arithmetic on the rational `2×4` frame with entries `±1/2`. Both scores
+select column `0`, then column `1`, and the inverse trace is `4 ≤ 6`.
+It does not call the repository CPQR code. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound for every equal-energy matrix when
+`k > 2`, no closure of outcome 1 or outcome 3, and no claim that
+Problem 4.1 is solved. Equal energy is stricter than the weakest SPEC §10
+class. The outcome-2 family is outside it. When `k = 2` the two-column
+bound is `k (n - k + 1)`, and that still does not close outcome 1 or 3.
+`MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
