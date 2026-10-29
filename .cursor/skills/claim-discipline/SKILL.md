@@ -8,7 +8,9 @@ description: >-
 
 # Claim discipline
 
-Read `SPEC.md` §19 before writing status text.
+Read `SPEC.md` §19 and the obligation ledger at the top of `RESEARCH.md`
+before writing status text. A proved lemma closes an E outcome only when
+that ledger says so.
 
 Allowed after Milestone D:
 
@@ -24,6 +26,10 @@ Forbidden unless the corresponding Lean theorem exists:
 Counterexample protocol (SPEC §9): minimize dimension, recover an
 exact representation, certify `AAᵀ = I`, certify every CPQR pivot,
 certify the inverse-norm lower bound, then formalize in Lean.
+
+Census files are indexed by `experiments/manifest.json`. A float ratio
+is not a theorem. The `3×8` witness stays out of `Theorems.lean` until
+it is proved there.
 
 Print axioms of public theorems with:
 

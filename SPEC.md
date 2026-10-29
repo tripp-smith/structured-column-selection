@@ -800,13 +800,15 @@ theorem for every orthogonal-row matrix. None of the three
 characterization outcomes for general `k` is claimed.
 Milestone E remains **OPEN**.
 
-Status note (hygiene): `scripts/verify.sh` runs `lake build`, a
-`sorry` scan, a public-theorem axiom audit
-(`StructuredColumnSelection/AxiomAudit.lean` via
-`lake env lean --stdin`), and `pytest`. GitHub Actions
-(`.github/workflows/verify.yml`) wraps that script.
-`CONTRIBUTING.md` records the search-first proof workflow. Blueprint
-sources live in `blueprint/src/` and are optional to build.
+Status note (hygiene): `scripts/verify.sh` runs `lake build`,
+`scripts/check_lean_hygiene.py`, `scripts/check_axioms.sh`
+(`scripts/AxiomAudit.lean`), `scripts/CompletionContract.lean`, and
+`pytest`. Computational witnesses stay in `SmallInstanceChecks.lean`.
+GitHub Actions (`.github/workflows/verify.yml`) runs the Lean gates and
+pytest as separate jobs. `CONTRIBUTING.md` records the search-first
+proof workflow. Blueprint sources live in `blueprint/src/` and are
+optional to build. The obligation ledger is the table at the top of
+`RESEARCH.md`.
 
 ### Milestone F: CSSP perturbation bridge
 

@@ -44,6 +44,18 @@ trajectory. Compare CPQR to exhaustive optimum on small `n`.
 
 The research question is whether `r_CPQR` stays bounded or grows.
 
+## Frozen evidence
+
+`experiments/manifest.json` lists every census file, its seed, its
+recorded revision, and whether it is numeric. Pytest checks that
+inventory. A new canonical write goes through
+`structselect.provenance.require_clean_worktree`. Do not relabel a
+float file as a theorem by editing its status string alone.
+
+The `3×8` witness kills only `C = 1`. It is a computational certificate
+in `SmallInstanceChecks.lean`, not outcome 2, until the inverse-norm
+lower bound is a public theorem past the named polynomial.
+
 ## What this skill may claim
 
 - Census numbers are witnesses, not theorems.

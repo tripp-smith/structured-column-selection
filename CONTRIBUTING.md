@@ -23,9 +23,18 @@ export PATH="$HOME/.elan/bin:$PATH"
 bash scripts/verify.sh
 ```
 
-That runs `lake build`, a `sorry` scan, a public-theorem axiom audit,
-and `pytest`. Axiom prints use `lake env lean --stdin`, never `--run`.
-Allowed defaults: `propext`, `Classical.choice`, `Quot.sound`.
+That runs `lake build`, `scripts/check_lean_hygiene.py`,
+`scripts/check_axioms.sh`, `scripts/CompletionContract.lean`, and
+`pytest`. Axiom prints go through `scripts/AxiomAudit.lean`, never
+`lake env lean --run`. Allowed defaults: `propext`, `Classical.choice`,
+`Quot.sound`. Computational witnesses are allowed only in
+`SmallInstanceChecks.lean`. A public SPEC §9 counterexample has to be a
+theorem in `Theorems.lean`.
+
+The original-SPEC obligation ledger is the table at the top of
+`RESEARCH.md`. Census files are frozen in `experiments/manifest.json`.
+Writing a new canonical experiment file requires a clean worktree
+(`structselect.provenance.require_clean_worktree`).
 
 Install (`.cursor/install.sh`) must terminate and must not run tests
 or change git config.

@@ -4,31 +4,43 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  verify:
+  lean:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install elan
-        run: |
-          curl -fsSL https://elan.lean-lang.org/elan-init.sh | sh -s -- -y --default-toolchain none
-          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - uses: leanprover/lean-action@v1
+        with:
+          build: true
+          use-mathlib-cache: true
 
-      - name: Install ripgrep
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ripgrep
+      - name: Lean hygiene
+        run: python3 scripts/check_lean_hygiene.py
+
+      - name: Axiom audit
+        run: bash scripts/check_axioms.sh
+
+      - name: Public expected-type contracts
+        run: lake env lean scripts/CompletionContract.lean
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
       - name: Python environment
         run: |
-          python3 -m venv .venv
+          python -m venv .venv
           .venv/bin/python -m pip install -U pip
           .venv/bin/python -m pip install -e ".[dev]"
-          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
-      - name: Mathlib cache
-        run: lake exe cache get
-
-      - name: Verify
-        run: bash scripts/verify.sh
+      - name: Pytest
+        run: .venv/bin/python -m pytest

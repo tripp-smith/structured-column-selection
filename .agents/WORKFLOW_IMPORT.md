@@ -11,7 +11,8 @@ completion contracts or use its package names here.
 Bindings when composing these skills with the local phase cadence:
 - GECPKernelStructure → StructuredColumnSelection.
 - scripts/AxiomAudit.lean and scripts/check_axioms.sh →
-  StructuredColumnSelection/AxiomAudit.lean and scripts/verify.sh.
+  the same paths. `scripts/verify.sh` calls them, then the completion
+  contract and pytest.
 - Python kernelgecp / uv checks → structselect / python3 -m pytest.
 - Branch prefix codex/ supersedes the older cursor/ convention.
 - A phase is locally checked after root verification; `verified` requires

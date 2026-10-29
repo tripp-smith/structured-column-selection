@@ -12,5 +12,7 @@ alwaysApply: true
 - A CPQR counterexample is a first-class result only after it is certified: `AAᵀ = I`, every pivot, and the inverse-norm lower bound.
 - Public structural theorems must depend only on `propext`, `Classical.choice`, and `Quot.sound`. Do not export `native_decide` results as public theorems.
 - Milestone F (CSSP bridge) is separate from Milestone E.
+- The original-SPEC obligation ledger is the table at the top of `RESEARCH.md`. A proved lemma closes an E outcome only when that row says so.
+- Census files are numeric unless `experiments/manifest.json` says otherwise. The `3×8` witness stays a computational certificate until it is a theorem in `Theorems.lean`.
 
-Canonical milestone language: `SPEC.md` §16 and §19.
+Canonical milestone language: `SPEC.md` §16 and §19. The ledger is the reading of those sections.

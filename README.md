@@ -97,6 +97,11 @@ Not yet claimed:
 - CSSP perturbation bridge
 - a solution of all of Problem 4.1
 
+The original-SPEC obligation ledger is the table at the top of `RESEARCH.md`.
+Proved Milestone E lemmas stay in the module map below and do not close that
+table's three E outcomes. Frozen census files are indexed by
+`experiments/manifest.json`.
+
 The formal Milestone C statement uses adjugates. That is the correct
 finite identity: `det(A_J)² (A_J A_Jᵀ)⁻¹` agrees with
 `adj(A_J A_Jᵀ)` on invertible blocks, and the adjugate supplies the
@@ -154,6 +159,9 @@ drop.
   (`native_decide`, not a public structural theorem).
 - `StructuredColumnSelection/Theorems.lean`:
   public theorem exports.
+- `StructuredColumnSelection/MathlibReady.lean`:
+  expected-type checks for the Cauchy–Binet, volume, and finite Markov
+  candidates. Not a mathlib pull request.
 
 ## Cloud Agent environment
 
@@ -226,7 +234,7 @@ triangular block with a polynomial-width Parseval completion (RESEARCH.md).
 Reverse-sampling phase and canonical verification/delivery receipt:
 [#15](https://github.com/tripp-smith/structured-column-selection/pull/15).
 
-Current bounded phase: **E wide completion and prefix core — implemented**;
+Completed bounded phase: **E wide completion and prefix core — verified (PR #16)**;
 verification and delivery status are in the phase PR receipt. Public outputs:
 `milestoneE_wide_completion_orthogonal`,
 `milestoneE_triangular_prefix_projector`,
@@ -241,3 +249,8 @@ overall completion stays about 60%. Randomized volume sampling is separate.
 
 Phase PR and canonical verification/delivery receipt:
 [#16](https://github.com/tripp-smith/structured-column-selection/pull/16).
+
+Current phase: **E explicit adverse family — in progress**. Target: an all-m
+orthogonal-row family with the actual CPQR set, explicit inverse-growth witness,
+and a no-joint-polynomial conclusion. The contract is in RESEARCH.md; overall
+completion remains about 60% until the original E obligation is established.

@@ -2,8 +2,9 @@
 
 Current audit correction (2026-10-24): C/D historical completion labels mean
 adjugate cores, not the unconditional actual-inverse equality (false).
+The original-SPEC obligation ledger is the table at the top of `RESEARCH.md`.
 The actual inequality/probability phase and remaining original obligations
-are recorded at the end of this file and in RESEARCH.md. The current reverse-volume phase implements the efficient sampler; its
+are recorded at the end of this file and in that ledger. The current reverse-volume phase implements the efficient sampler; its
 verification/delivery receipt is linked from README. E and F remain open.
 
 
