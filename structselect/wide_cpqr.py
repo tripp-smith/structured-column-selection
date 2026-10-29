@@ -78,7 +78,7 @@ def compressed_certificate(m, *, max_dimension=64):
             'minimum_pivot_margin':min_margin,'inverse_energy':sum(v*v for v in x),
             'witness':x,'inverse_entry':x[0],
             'scope':'exact compressed completion and coordinate-tail comparisons; '
-                    'all-parameter Lean adverse-family theorem remains open'}
+                    'this certificate is not the Lean adverse-family theorem'}
 
 
 def growth_parameters(m):

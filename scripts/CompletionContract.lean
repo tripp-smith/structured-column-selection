@@ -110,12 +110,42 @@ example {m : ℕ} (hm : 2 ≤ m) {i : ℕ} (hi : i < m*m) :
   milestoneE_wide_parameter_diagonal_lower hm hi
 
 /-!
-SPEC §16 Milestone E consumers below keep the extra hypotheses in the type.
-They do not assert a joint polynomial inverse bound for every orthogonal-row
-matrix. Outcome 2 has no consumer here: the 3×8 witness stays in
-`SmallInstanceChecks.lean` and is not re-exported. Outcome 3 needs that
-witness to pass the named polynomial, which it does not. Milestone F is
-not asserted.
+Outcome 2 is the adverse family below. These consumers do not assert a
+polynomial inverse bound for every orthogonal-row matrix, a static class,
+or the CSSP comparison. `frame38` stays in `SmallInstanceChecks.lean`.
+-/
+
+example {m : ℕ} (hm : 2 ≤ m) :
+    ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
+      ∃ x : Fin (widePrefix (wideWidth m) (wideDim m)).card → ℝ,
+        A * Aᵀ = 1 ∧
+        (∀ i j : Fin (wideDim m),
+          A i (j.castAdd (wideDim m * wideRepeats m)) = wideTriangular m i j) ∧
+        cpqrSet A = widePrefix (wideWidth m) (wideDim m) ∧
+        (∑ i, (selectedCols A (widePrefix (wideWidth m) (wideDim m)) *ᵥ x) i ^ 2) = 1 ∧
+        ((2 * (m : ℝ) / 3) * ((4 : ℝ) / 3) ^ (m - 1)) ^ 2 ≤ ∑ i, x i ^ 2 :=
+  milestoneE_wide_adverse_family hm
+
+example (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        A * Aᵀ = 1 ∧
+        C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
+          (∑ i, (selectedCols A (cpqrSet A) *ᵥ x) i ^ 2) < ∑ i, x i ^ 2 :=
+  milestoneE_cpqr_no_joint_polynomial d hC
+
+example :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        A * Aᵀ = 1 ∧
+        (max ((n : ℝ) ^ 3) (max ((k : ℝ) ^ 3)
+          (((k : ℝ) * ((n - k + 1 : ℕ) : ℝ)) ^ 2))) ^ 2 *
+          (∑ i, (selectedCols A (cpqrSet A) *ᵥ x) i ^ 2) < ∑ i, x i ^ 2 :=
+  milestoneE_cpqr_named_polynomial_obstruction
+
+/-!
+The consumers below keep extra hypotheses. They are not outcome 1.
+Milestone F is not asserted.
 -/
 
 example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :

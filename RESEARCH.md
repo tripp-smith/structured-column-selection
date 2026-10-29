@@ -13,19 +13,19 @@ not close an open row. Historical thread entries below are delivery logs.
 | D. All-frame actual inverse expectation | the unconditional equality is false | `milestoneD_actual_expectation_equality_obstruction`, the inequality `milestoneD_actual_expected_inv_trace_le`, and `milestoneD_actual_inverse_energy_good_mass` | the original boxed equality |
 | D. Efficient reverse sampler | closed as a finite kernel law | `milestoneD_reverse_sampler_law` | a claim that Python draws are formally extracted |
 | E outcome 1. Polynomial CPQR bound for every orthogonal-row matrix | open | a `Theorems.lean` statement whose hypotheses are only row orthogonality and whose bound is polynomial in `n` and `k` | `4^k` trace, binomial `C(n,k)`, `k = 1`, `k = 2`, bidiagonal `U`, column budget, or `MinDimLe` |
-| E outcome 2. Machine-checked counterexample past the named polynomial | open | SPEC §9: exact `AAᵀ = I`, every pivot, and an inverse-norm lower bound above `max(n³, k³, (k(n-k+1))²)`, exported from `Theorems.lean` | `frame38` (kills only `C = 1`; about `4.37` against `512`) and the float `4×12` record |
+| E outcome 2. Machine-checked counterexample past the named polynomial | closed | `milestoneE_wide_adverse_family`, `milestoneE_cpqr_no_joint_polynomial`, and `milestoneE_cpqr_named_polynomial_obstruction`: for every `m ≥ 2`, exact `AAᵀ = I`, CPQR set equal to the leading prefix, image energy `1`, and `‖x‖² ≥ ((2m/3)(4/3)^(m-1))²`; for every `d` and `C > 0`, `C(n+k+1)^{2d} ‖A_J x‖² < ‖x‖²`; and the `d = 4`, `C = 1` case `max(n³, k³, (k(n-k+1))²)² ‖A_J x‖² < ‖x‖²` | `frame38` (kills only `C = 1`; about `4.37` against `512`), the float `4×12` record, and scalar crossings with `frame_certified = False` |
 | E outcome 3. That counterexample plus a weaker static class with a polynomial theorem | open | outcome 2 together with a class read from `A` alone | Path 3 `milestoneE_cpqr_inv_energy_le_of_minDim`, which has no named-polynomial counterexample beside it |
-| F. CSSP perturbation bridge | open | the SPEC §11 inequality | starting F before E closes, unless the user asks |
+| F. CSSP perturbation bridge | open | the SPEC §11 inequality | starting F before an E row closes, unless the user asks |
 
 Census files are listed in `experiments/manifest.json`. They are numeric
 unless that manifest says the `3×8` witness, and that witness is still a
 computational certificate in `SmallInstanceChecks.lean`. Expected-type
 consumers for the weaker E hypotheses live in `scripts/CompletionContract.lean`.
 
-Current audit (2026-10-24): historical C/D completion entries below refer to
+Current audit (2026-10-29): historical C/D completion entries below refer to
 adjugate cores. The original all-frame actual-inverse equality is false.
-See the current actual-inverse contract and obstruction at the end of this
-file; general E characterization and F remain open.
+Outcome 2 of Milestone E is the adverse-family delivery at the end of this
+file. Outcome 1, outcome 3, and F remain open.
 
 ## Thread 1 — Milestone A (completed)
 
@@ -650,3 +650,27 @@ all of Simons Problem 4.1, no novelty claim for prescribed-block completion,
 and no replacement of the randomized result by the CPQR obstruction. A full
 qualifying obstruction requires both the actual-family and all-polynomial
 quantifiers; finite scalar crossings alone do not close E.
+
+## Phase E explicit adverse family (2026-10-29, delivery)
+
+`milestoneE_wide_adverse_family` proves, for every natural `m ≥ 2`, an
+orthogonal-row frame of width `k + 32 k⁴` with `k = m²`, leading block
+`wideTriangular m`, CPQR set equal to the first `k` indices, a selected
+coordinate of image energy `1`, and inverse energy at least
+`((2m/3)(4/3)^(m-1))²`. `milestoneE_cpqr_no_joint_polynomial` consumes that
+family: for every degree `d` and every `C > 0`, some actual CPQR block
+satisfies `C(n+k+1)^{2d} ‖A_J x‖² < ‖x‖²`.
+`milestoneE_cpqr_named_polynomial_obstruction` instantiates `d = 4` and
+`C = 1`, which puts the squared inverse energy above
+`max(n³, k³, (k(n-k+1))²)²`. This closes outcome 2 only. It is not a
+polynomial bound for every orthogonal-row matrix, not outcome 3, and not a
+CSSP theorem. The randomized quasi-optimal sentence stays in force. Problem
+4.1 is not claimed solved.
+
+Independent check: `tests/test_wide_cpqr.py` recomputes bordered-Gram
+residuals, multiplies the closed-form witness, and cross-multiplies the
+closed head against the scale at `m = 2, 3, 4`. Scalar
+`growth_parameters` stays `frame_certified = False`.
+
+Phase PR and verification receipt:
+[#18](https://github.com/tripp-smith/structured-column-selection/pull/18).

@@ -87,6 +87,22 @@ def test_inverse_witness_by_closed_form_and_direct_multiplication(m):
     assert result['inverse_entry'] >= wide_cpqr.growth_parameters(m)['inverse_lower_candidate']
 
 
+@pytest.mark.parametrize('m', [2, 3, 4])
+def test_closed_form_head_beats_scale_by_cross_multiplication(m):
+    """Integer comparison of the closed head with `(2m/3)*(4/3)^(m-1)`.
+
+    This does not build the frame or certify a pivot sequence.
+    """
+    k = m * m
+    head_num = 4 * m * k * (4 * k + 2 * m + 1) ** (k - 2)
+    head_den = (4 * k - 1) ** (k - 1)
+    # (2m/3)*(4/3)^(m-1) = 2*m*4^(m-1) / 3^m
+    scale_num = 2 * m * 4 ** (m - 1)
+    scale_den = 3 ** m
+    assert head_num * scale_den >= scale_num * head_den
+    assert wide_cpqr.growth_parameters(m)['frame_certified'] is False
+
+
 def test_canonical_result_is_deterministic():
     first = json.dumps(wide_cpqr.compressed_certificate(2), default=str, sort_keys=True)
     second = json.dumps(wide_cpqr.compressed_certificate(2), default=str, sort_keys=True)

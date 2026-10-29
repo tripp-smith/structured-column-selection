@@ -1,5 +1,6 @@
 import StructuredColumnSelection.WideCPQR
 import StructuredColumnSelection.WideCPQRParameters
+import StructuredColumnSelection.WideCPQRGrowth
 import StructuredColumnSelection.VolumeSampling
 import StructuredColumnSelection.ActualInverseExpectation
 import StructuredColumnSelection.ColumnBudget
@@ -476,5 +477,37 @@ theorem milestoneE_triangular_prefix_pivots {k n : ℕ} (hkn : k ≤ n)
 theorem milestoneE_wide_parameter_diagonal_lower {m : ℕ} (hm : 2 ≤ m)
     {i : ℕ} (hi : i < wideDim m) : wideAlpha m / 2 < wideDiagNat m i :=
   wideDiag_half_lower hm hi
+
+/-- For every `m ≥ 2`, a Parseval frame, its actual CPQR prefix, and a
+geometric inverse-energy witness. This is not a bound for every frame. -/
+theorem milestoneE_wide_adverse_family {m : ℕ} (hm : 2 ≤ m) :
+    ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
+      ∃ x : Fin (widePrefix (wideWidth m) (wideDim m)).card → ℝ,
+        OrthogonalRows A ∧
+        (∀ i j : Fin (wideDim m),
+          A i (j.castAdd (wideDim m * wideRepeats m)) = wideTriangular m i j) ∧
+        cpqrSet A = widePrefix (wideWidth m) (wideDim m) ∧
+        vecEnergy (selectedCols A (widePrefix (wideWidth m) (wideDim m)) *ᵥ x) = 1 ∧
+        wideGrowthLower m ^ 2 ≤ vecEnergy x :=
+  wide_adverse_family hm
+
+/-- Actual CPQR inverse energy beats every joint polynomial in `n` and `k`. -/
+theorem milestoneE_cpqr_no_joint_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        OrthogonalRows A ∧
+        C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
+  cpqr_no_joint_polynomial d hC
+
+/-- The same family beats `max(n³, k³, (k(n-k+1))²)` in squared inverse energy. -/
+theorem milestoneE_cpqr_named_polynomial_obstruction :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        OrthogonalRows A ∧
+        (max ((n : ℝ) ^ 3) (max ((k : ℝ) ^ 3)
+          (((k : ℝ) * ((n - k + 1 : ℕ) : ℝ)) ^ 2))) ^ 2 *
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
+  cpqr_named_polynomial_obstruction
 
 end StructuredColumnSelection

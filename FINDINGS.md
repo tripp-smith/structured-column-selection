@@ -316,4 +316,22 @@ every prefix at m=2,3; symbolic pair products certify row orthogonality without
 materializing the wide frame. Direct multiplication checks closed-form inverse
 witnesses at m=2,3,4. Larger scalar tests certify only scalar inequalities.
 No all-parameter adverse-family theorem or joint-polynomial obstruction is
-delivered. Milestone E, CSSP and the full Problem 4.1 remain open.
+delivered in this section. The later adverse-family section records outcome 2.
+CSSP and the full Problem 4.1 remain open.
+
+## Explicit adverse family (2026-10-29)
+
+For every integer `m ≥ 2`, `milestoneE_wide_adverse_family` gives a real
+`m² × (m² + 32 m⁸)` orthogonal-row frame whose CPQR set is the first `m²`
+columns and a selected coordinate with image energy exactly 1 and inverse
+energy at least `((2m/3)(4/3)^(m-1))²`.
+`milestoneE_cpqr_no_joint_polynomial` uses that frame: every positive
+multiple of every power of `n+k+1` is beaten in inverse energy.
+`milestoneE_cpqr_named_polynomial_obstruction` is the degree-4 case, so the
+squared inverse energy exceeds `max(n³, k³, (k(n-k+1))²)²`.
+
+This is a CPQR counterexample family. It does not say CPQR is polynomial on
+every orthogonal-row matrix, and it does not solve Problem 4.1. Outcome 1,
+outcome 3, and the CSSP bridge remain open. Exact Python checks recompute
+bordered-Gram residuals and cross-multiply the closed-form head against the
+scale; they are not the theorem.

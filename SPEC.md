@@ -796,9 +796,20 @@ exponential / not polynomial) and
 energy on the static class `min(k, n-k) ≤ d`). That class is
 checkable from the shape of `A` alone and is weaker than “every
 `k`-set is well-conditioned.” It is **not** a joint `poly(n,k)`
-theorem for every orthogonal-row matrix. None of the three
-characterization outcomes for general `k` is claimed.
-Milestone E remains **OPEN**.
+theorem for every orthogonal-row matrix.
+
+Status note (explicit adverse family): outcome 2 is delivered by
+`milestoneE_wide_adverse_family`,
+`milestoneE_cpqr_no_joint_polynomial`, and
+`milestoneE_cpqr_named_polynomial_obstruction`. For every `m ≥ 2`
+there is an orthogonal-row frame whose CPQR set is the leading
+prefix, with image energy `1` and inverse energy at least
+`((2m/3)(4/3)^(m-1))²`. For every degree `d` and every `C > 0`,
+some actual CPQR block satisfies
+`C(n+k+1)^{2d} ‖A_J x‖² < ‖x‖²`. The case `d = 4`, `C = 1` is
+`max(n³, k³, (k(n-k+1))²)² ‖A_J x‖² < ‖x‖²`. This is not a
+polynomial inverse bound for every orthogonal-row matrix.
+Outcomes 1 and 3 remain open. Milestone F is untouched here.
 
 Status note (hygiene): `scripts/verify.sh` runs `lake build`,
 `scripts/check_lean_hygiene.py`, `scripts/check_axioms.sh`

@@ -12,7 +12,9 @@ The current reverse-sampling phase supplies an exact rational executable
 sampler alongside the all-real finite kernel theorem. Python/RNG extraction
 into Lean is not claimed. Unconditional inverse-expectation equality is false with
 singular support; the audited inequality and probability theorem are listed
-below. General CPQR characterization and the CSSP bridge remain open.
+below. CPQR outcome 2 is the explicit adverse family below. A polynomial
+bound for every orthogonal-row matrix is not claimed. The CSSP bridge remains
+open.
 
 Phases completed:
 
@@ -224,12 +226,13 @@ Gram-determinant and score-ratio theorems connect the model to matrix quantities
 sum bound, not a machine runtime theorem. Tests use exact full-state propagation,
 independent determinants and LDLᵀ reconstruction, including failure paths.
 
-Estimated completion after verified delivery: **about 60%** of original
-obligations, with uncertain research effort. The sampler gap is addressed;
-general CPQR characterization, the CSSP bridge, remaining comparison APIs and
-the final full-contract audit remain open. The original unconditional inverse
-expectation equality remains refuted. Next research target: a prescribed
-triangular block with a polynomial-width Parseval completion (RESEARCH.md).
+Estimated completion after the adverse-family delivery: **about 70%** of
+original obligations, with uncertain research effort. The sampler gap is
+addressed. Outcome 2 of Milestone E is closed by the family and polynomial
+quantifiers below. Outcome 1, outcome 3, the CSSP bridge, remaining
+comparison APIs and the final full-contract audit remain open. The original
+unconditional inverse expectation equality remains refuted. Next research
+target: the SPEC §11 CSSP comparison, as its own phase.
 
 Reverse-sampling phase and canonical verification/delivery receipt:
 [#15](https://github.com/tripp-smith/structured-column-selection/pull/15).
@@ -244,13 +247,22 @@ verification and delivery status are in the phase PR receipt. Public outputs:
 These prove finite completion, coordinate residual identities, and an actual
 CPQR sequence under explicit strict tail-energy hypotheses. Exact compressed
 checks use independent bordered-Gram determinants and witness multiplication.
-The all-parameter adverse family and joint-polynomial obstruction remain open;
-overall completion stays about 60%. Randomized volume sampling is separate.
+The all-parameter adverse family is the next phase. Randomized volume
+sampling is separate.
 
 Phase PR and canonical verification/delivery receipt:
 [#16](https://github.com/tripp-smith/structured-column-selection/pull/16).
 
-Current phase: **E explicit adverse family — in progress**. Target: an all-m
-orthogonal-row family with the actual CPQR set, explicit inverse-growth witness,
-and a no-joint-polynomial conclusion. The contract is in RESEARCH.md; overall
-completion remains about 60% until the original E obligation is established.
+Current phase: **E explicit adverse family — outcome 2**. Outcome 2 is
+`milestoneE_wide_adverse_family` (every `m ≥ 2`: orthogonal rows, CPQR set
+equal to the leading `m²` columns, image energy `1`, inverse energy at least
+`((2m/3)(4/3)^(m-1))²`), consumed by
+`milestoneE_cpqr_no_joint_polynomial` (every degree `d` and every `C > 0`:
+`C(n+k+1)^{2d} ‖A_J x‖² < ‖x‖²`) and
+`milestoneE_cpqr_named_polynomial_obstruction`
+(`max(n³, k³, (k(n-k+1))²)² ‖A_J x‖² < ‖x‖²`). This is not a polynomial
+bound for every orthogonal-row matrix. Outcomes 1 and 3, and Milestone F,
+remain open. The contract and delivery note are in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#18](https://github.com/tripp-smith/structured-column-selection/pull/18).
