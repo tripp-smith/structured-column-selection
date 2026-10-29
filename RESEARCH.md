@@ -1150,7 +1150,40 @@ Independent check: `tests/test_equal_energy_three.py` uses exact
 arithmetic on the `3×3` identity. The inverse trace is `3` and the bound
 is `5`. It does not call the repository CPQR code. It is not the theorem.
 
+Non-claims: no polynomial CPQR bound for every equal-energy matrix when
+`k > 3`, no finished induction, no closure of outcome 1 or outcome 3, and
+no claim that Problem 4.1 is solved. Equal energy is stricter than the
+weakest SPEC §10 class. The outcome-2 family is outside it.
 `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#33](https://github.com/tripp-smith/structured-column-selection/pull/33).
+
+## Phase U equal-energy three-row CPQR (2026-10-29, contract)
+
+Iteration U. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Another prefix length does not discharge outcome 3.
+Feeding `λ_min ≥ 1 / trace` back into the inverse-trace step multiplies
+by a factor that unrolls exponentially in `k`. When `k = 3`, the
+three-column prefix is the whole CPQR set. Success is that
+identification: `milestoneE_equal_energy_cpqr_k3`. Exit if `cpqrSet` is
+not `cpqrIterate 3` at `k = 3`, or if `5n - 12 + 6/n` disagrees with the
+phase-T expression.
+
+Target in `StructuredColumnSelection/EqualEnergyPivot.lean`, re-exported
+as `milestoneE_equal_energy_cpqr_k3`: if the rows are orthogonal, every
+column energy is equal, `k = 3`, and `0 < n`, then the CPQR set has three
+columns, its inverse trace is at most `5n - 12 + 6/n`, and
+`‖x‖² ≤ (5n - 12 + 6/n) ‖A_J x‖²`.
+
+Independent check: `tests/test_equal_energy_k3.py` uses exact arithmetic
+on the `3×3` identity. The closed form equals the phase-T expression and
+equals `5`, and the inverse trace is `3`. It does not call the repository
+CPQR code. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound for equal-energy matrices of every
+`k`, no closure of outcome 1 or outcome 3, and no claim that Problem 4.1
+is solved. Equal energy is stricter than the weakest SPEC §10 class. The
+outcome-2 family has `k = m² ≥ 4`, so this three-row statement does not
+apply to it. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.

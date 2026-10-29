@@ -856,4 +856,58 @@ theorem equal_energy_cpqr_three_trace {k n : ℕ}
   rw [h3, ← hinsert, hinc, hfrac]
   exact add_le_add htr2 hratio'
 
+lemma equal_energy_k3_bound_eq {n : ℕ} (hn : 3 ≤ n) :
+    (2 : ℝ) * ((n : ℝ) - 1) / ((3 : ℝ) - 1) +
+      (1 + (2 * (3 : ℝ) * ((n : ℝ) - 1)) / ((n : ℝ) * ((3 : ℝ) - 1))) *
+        (((n : ℝ) - 2) / ((3 : ℝ) - 2)) =
+      (5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ) := by
+  have hn0 : (n : ℝ) ≠ 0 := by
+    exact_mod_cast (show n ≠ 0 by omega)
+  field_simp [hn0]
+  ring
+
+/-- For three rows, equal column energy makes the full CPQR set, not only a
+prefix, obey the three-column trace bound. This is not a bound for general
+`k` and does not close outcome 3. -/
+theorem equal_energy_cpqr_k3 {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : k = 3) (hn : 0 < n) :
+    (cpqrSet A).card = 3 ∧
+      (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            ((5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ)) := by
+  have hk3 : 3 ≤ k := by omega
+  have hn3 : 3 ≤ n := by
+    have hkn := orthogonalRows_le A hA
+    omega
+  have hpre := equal_energy_cpqr_three_trace A hA hE hk3 hn
+  have hset : cpqrSet A = cpqrIterate A 3 := by
+    simp [cpqrSet, hk]
+  have hcard : (cpqrSet A).card = 3 := by
+    rw [hset]
+    exact (cpqrIterate_invariant A hA 3 hk3).1
+  have hdet : (selectedColGram A (cpqrSet A)).det ≠ 0 := by
+    rw [hset]
+    exact hpre.1
+  have hnum :
+      (2 : ℝ) * ((n : ℝ) - 1) / ((k : ℝ) - 1) +
+        (1 + (2 * (k : ℝ) * ((n : ℝ) - 1)) / ((n : ℝ) * ((k : ℝ) - 1))) *
+          (((n : ℝ) - 2) / ((k : ℝ) - 2)) =
+        (5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ) := by
+    rw [hk]
+    exact equal_energy_k3_bound_eq hn3
+  have htr : ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+      (5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ) := by
+    rw [hset]
+    exact hpre.2.trans (le_of_eq hnum)
+  refine ⟨hcard, hdet, htr, ?_⟩
+  intro x
+  have henergy := selectedCols_energy_mul_inv_trace_ge A (cpqrSet A) hdet x
+  exact henergy.trans (mul_le_mul_of_nonneg_left htr (vecEnergy_nonneg _))
+
 end StructuredColumnSelection

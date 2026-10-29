@@ -403,11 +403,17 @@ outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#32](https://github.com/tripp-smith/structured-column-selection/pull/32).
 
-Current phase: **T equal-energy three-column trace — in progress**.
-Target: `milestoneE_equal_energy_cpqr_three_trace`. Equal column energy
+Completed phase: **T equal-energy three-column trace**.
+`milestoneE_equal_energy_cpqr_three_trace` says equal column energy
 makes the CPQR three-column inverse trace at most the two-column bound
 plus one Rayleigh-controlled step. This bounds only that prefix and does
 not close outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#33](https://github.com/tripp-smith/structured-column-selection/pull/33).
+
+Current phase: **U equal-energy three-row CPQR — in progress**.
+Target: `milestoneE_equal_energy_cpqr_k3`. When `k = 3`, equal column
+energy makes the full CPQR set obey `5n - 12 + 6/n` in inverse trace and
+in inverse energy. This is not a bound for general `k` and does not close
+outcome 3. The contract is in RESEARCH.md.

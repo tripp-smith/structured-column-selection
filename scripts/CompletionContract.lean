@@ -287,6 +287,19 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
             (((n : ℝ) - 2) / ((k : ℝ) - 2)) :=
   milestoneE_equal_energy_cpqr_three_trace A hA hE hk hn
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : k = 3) (hn : 0 < n) :
+    (cpqrSet A).card = 3 ∧
+      (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            ((5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ)) :=
+  milestoneE_equal_energy_cpqr_k3 A hA hE hk hn
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
