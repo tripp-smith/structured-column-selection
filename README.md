@@ -380,3 +380,6 @@ Target: `milestoneE_wide_not_incoherent_zero`. For every `m ≥ 2`, the
 outcome-2 frame has a nonzero column inner product, so the phase-P
 bound does not apply to it. This does not close outcome 3. The contract
 is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#30](https://github.com/tripp-smith/structured-column-selection/pull/30).
