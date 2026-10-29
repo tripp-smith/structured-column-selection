@@ -287,3 +287,6 @@ Current phase: **G wide leverage escape — in progress**. Target:
 large member of that family. This is not a polynomial bound on the
 leverage-ratio class, and it does not close outcome 3. The contract is in
 RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#20](https://github.com/tripp-smith/structured-column-selection/pull/20).
