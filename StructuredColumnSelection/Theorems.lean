@@ -1,3 +1,4 @@
+import StructuredColumnSelection.InvTraceInduction
 import StructuredColumnSelection.InvTraceGrowth
 import StructuredColumnSelection.BestColumnIncrement
 import StructuredColumnSelection.InvTraceStep
@@ -604,5 +605,16 @@ theorem milestoneE_inv_trace_growth_step {k n : ℕ}
           appendColumn (selectedCols A J) (fun i => A i j))⁻¹).trace ≤
         ((J.card : ℝ) + 1) * ((n : ℝ) - J.card) / ((k : ℝ) - J.card) :=
   inv_trace_growth_step A hA J hG ht hf
+
+/-- Some `k` columns chosen by the increment bound have inverse trace at
+most `k (n - k + 1)`.
+
+This is not a bound for the max-residual CPQR pivot and does not close
+outcome 3. -/
+theorem milestoneE_minimizing_inv_trace_le {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ∃ J : Finset (Fin n), J.card = k ∧ (selectedColGram A J).det ≠ 0 ∧
+      ((selectedColGram A J)⁻¹).trace ≤ (k : ℝ) * ((n : ℝ) - k + 1) :=
+  minimizing_inv_trace_le A hA
 
 end StructuredColumnSelection

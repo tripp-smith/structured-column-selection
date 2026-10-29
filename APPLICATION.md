@@ -194,6 +194,10 @@ CPQR obstruction or a replacement for the public randomized sampler.
 `A - A_J T = E - E_J T` and the squared Frobenius comparison against
 `(1 + |q|⁻¹)²`. It does not change the sampler.
 
+`tests/test_inv_trace_induction.py` checks that columns `{0, 2}` of the
+rational `2×3` frame have Gram inverse trace `1 + 25/16`, which is at
+most `k (n - k + 1) = 4`. It does not change the sampler.
+
 `tests/test_inv_trace_growth.py` checks that appending column 2 of the
 rational `2×3` frame to column 0 raises the inverse trace from a value
 at most `3/2` to `1 + 25/16`, which is at most `4`. It does not change
