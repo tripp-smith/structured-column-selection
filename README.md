@@ -296,3 +296,6 @@ Current phase: **H inverse-trace step — in progress**. Target:
 Gram inverse trace by `(1 + ‖G⁻¹ Bᵀ v‖²) / residual`. This is not the
 standard CPQR pivot, not a polynomial inverse bound, and it does not
 close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#21](https://github.com/tripp-smith/structured-column-selection/pull/21).
