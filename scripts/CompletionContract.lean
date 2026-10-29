@@ -216,6 +216,17 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
             vecEnergy (selectedCols A J *ᵥ x) :=
   milestoneE_minimizing_inv_spectral_le A hA
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    (incrementSet A).card = k ∧
+      (selectedColGram A (incrementSet A)).det ≠ 0 ∧
+      ((selectedColGram A (incrementSet A))⁻¹).trace ≤
+        (k : ℝ) * ((n : ℝ) - k + 1) ∧
+      ∀ x : Fin (incrementSet A).card → ℝ,
+        vecEnergy x ≤
+          (1 + (k : ℝ) * ((n : ℝ) - k)) *
+            vecEnergy (selectedCols A (incrementSet A) *ᵥ x) :=
+  milestoneE_increment_set_bound A hA
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,

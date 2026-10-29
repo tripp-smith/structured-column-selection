@@ -351,6 +351,17 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Increment set (2026-10-29)
+
+`milestoneE_increment_set_bound` names the least-index column that
+minimizes the inverse-trace increment and iterates it from the empty
+block. The resulting set has `k` columns, invertible Gram, inverse trace
+at most `k (n - k + 1)`, and satisfies
+`‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`. Max-residual CPQR is a different
+rule. This does not close outcome 3. On the rational `2×3` frame the
+empty-block scores are `1`, `25/9`, and `25/16`, so the first column is
+`0`; the next scores pick column `2`. That check is not the theorem.
+
 ## Inverse spectral bound (2026-10-29)
 
 `milestoneE_minimizing_inv_spectral_le` says that an orthogonal-row
