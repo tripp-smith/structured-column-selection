@@ -806,3 +806,33 @@ meets the estimate, no closure of outcome 3, and no claim that Problem
 
 Phase PR and verification receipt:
 [#22](https://github.com/tripp-smith/structured-column-selection/pull/22).
+
+## Phase J inverse-trace growth step (2026-10-29, contract)
+
+Iteration J. Outcome 3 stays open. Outcome 1 is not the target.
+
+Route checkpoint. Phase I supplies a column whose inverse-trace increment
+is at most `((n - t) + trace(G⁻¹) - t) / (k - t)`. Phase H turns that
+increment into the trace of the appended Gram. The one-step consequence is
+that a block whose inverse trace is already at most
+`t (n - t + 1) / (k - t + 1)` can be extended by one column so the new
+inverse trace is at most `(t + 1) (n - t) / (k - t)`. Carrying the
+induction from the empty set through `k` columns is the next phase, not
+this one. The pivot is not max-residual CPQR.
+
+Target in `StructuredColumnSelection/InvTraceGrowth.lean`, re-exported as
+`milestoneE_inv_trace_growth_step`: for orthogonal rows, an invertible
+selected Gram, `t = #J < k`, and
+`trace(G⁻¹) ≤ t (n - t + 1) / (k - t + 1)`, some column outside `J`
+makes the appended Gram inverse trace at most
+`(t + 1) (n - t) / (k - t)`.
+
+Independent check: `tests/test_inv_trace_growth.py` appends column 2 of
+the rational `2×3` frame to column 0. The `1×1` trace is `1`, which is at
+most `3/2`, and the appended `2×2` inverse trace is `1 + 25/16`, which is
+at most `4`. It does not call CPQR. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound, no claim that the max-residual pivot
+obeys the step, no closure of the induction, no closure of outcome 3, and
+no claim that Problem 4.1 is solved. `MinDimLe`, `k = 1`, and `k = 2` stay
+outside outcome 3.

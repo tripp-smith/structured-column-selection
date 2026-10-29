@@ -351,6 +351,20 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Inverse-trace growth step (2026-10-29)
+
+`milestoneE_inv_trace_growth_step` says that if an invertible selected
+Gram on `t < k` columns already has inverse trace at most
+`t (n - t + 1) / (k - t + 1)`, some column outside the block can be
+appended so the new inverse trace is at most
+`(t + 1) (n - t) / (k - t)`. The step uses the best unused increment
+from phase I and the one-column update from phase H. It does not say
+that the max-residual CPQR pivot takes this step, and it does not
+finish the induction from the empty block. This is not a polynomial
+inverse bound and it does not close outcome 3. On the rational `2×3`
+frame, column 0 has trace `1 ≤ 3/2`, and appending column 2 produces
+trace `1 + 25/16 ≤ 4`; that check is not the theorem.
+
 ## Best-column increment (2026-10-29)
 
 `milestoneE_best_column_increment_le` says that if the selected Gram is

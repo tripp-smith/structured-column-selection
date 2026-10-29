@@ -78,3 +78,4 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_wide_leverage_escape
 #print axioms StructuredColumnSelection.milestoneE_append_inv_trace_increment
 #print axioms StructuredColumnSelection.milestoneE_best_column_increment_le
+#print axioms StructuredColumnSelection.milestoneE_inv_trace_growth_step

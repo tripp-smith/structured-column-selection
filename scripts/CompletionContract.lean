@@ -191,6 +191,18 @@ example {k n : ℕ}
           ((k : ℝ) - J.card) :=
   milestoneE_best_column_increment_le A hA J hG ht
 
+example {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (J : Finset (Fin n)) (hG : (selectedColGram A J).det ≠ 0)
+    (ht : J.card < k)
+    (hf : ((selectedColGram A J)⁻¹).trace ≤
+      (J.card : ℝ) * ((n : ℝ) - J.card + 1) / ((k : ℝ) - J.card + 1)) :
+    ∃ j, j ∉ J ∧
+      (((appendColumn (selectedCols A J) (fun i => A i j))ᵀ *
+          appendColumn (selectedCols A J) (fun i => A i j))⁻¹).trace ≤
+        ((J.card : ℝ) + 1) * ((n : ℝ) - J.card) / ((k : ℝ) - J.card) :=
+  milestoneE_inv_trace_growth_step A hA J hG ht hf
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
