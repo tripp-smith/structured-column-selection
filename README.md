@@ -277,3 +277,6 @@ invertible `Q_J`, and `T = (Q_Jᵀ)⁻¹ Qᵀ`. The first norm is spectral and t
 second is Frobenius; the coefficient is spectral in both. The factor is
 supplied. This is not a polynomial CPQR bound, and it does not solve
 Problem 4.1. Outcomes 1 and 3 stay open. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#19](https://github.com/tripp-smith/structured-column-selection/pull/19).

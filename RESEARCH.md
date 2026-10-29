@@ -706,3 +706,6 @@ the statements in the contract. Both call the coefficient identity
 `A - A_J T = E - E_J T`. The factor `Q` is supplied; the proof does not
 construct a truncated SVD. The exact Python check is the rank-1 identity
 in `tests/test_cssp_bridge.py`. It is not the theorem.
+
+Phase PR and verification receipt:
+[#19](https://github.com/tripp-smith/structured-column-selection/pull/19).
