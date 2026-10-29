@@ -202,6 +202,11 @@ change the sampler.
 the max-residual scores select column `1` after column `0` and the
 increment scores select column `2`. It does not change the sampler.
 
+`tests/test_equal_energy_pivot.py` checks that the rational `2×4`
+Hadamard frame has column energy `1/2`, that both scores then select
+column `1`, and that the inverse trace `4` is at most `6`. It does not
+change the sampler.
+
 `tests/test_wide_incoherent.py` checks that the `m = 2` triangular
 prefix inner product is `-(4/17) * (1/8)^2`. It does not change the
 sampler.

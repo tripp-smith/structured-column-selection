@@ -66,6 +66,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Zero coefficient, same pivot | **PROVED** (does not close outcome 3) | `milestoneE_zero_coeff_same_pivot` |
 | Orthogonal-column CPQR bound | **PROVED** (does not close outcome 3) | `milestoneE_incoherent_zero_cpqr_bound` |
 | Adverse family outside orthogonal columns | **PROVED** (does not close outcome 3) | `milestoneE_wide_not_incoherent_zero` |
+| Equal-energy second CPQR pivot | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_cpqr_prefix_trace` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

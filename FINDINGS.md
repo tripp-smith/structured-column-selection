@@ -351,6 +351,17 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Equal-energy second pivot (2026-10-29)
+
+`milestoneE_equal_energy_cpqr_prefix_trace` says that equal column energy
+forces every column energy to `k / n`. The first CPQR pivot is column `0`.
+On that singleton the inverse-trace ratio decreases as the residual
+grows, so the second CPQR pivot equals the increment pivot. The
+two-column inverse trace is at most `2 (n - 1) / (k - 1)`. The estimate
+`‖G⁻¹ v‖² ≤ trace(G⁻¹) · q` does not close later pivots. Equal energy is
+leverage ratio `1`, stricter than the weakest SPEC §10 class, and the
+adverse family is outside it. This does not close outcome 3.
+
 ## Adverse family outside orthogonal columns (2026-10-29)
 
 `milestoneE_wide_not_incoherent_zero` says that for every `m ≥ 2` the

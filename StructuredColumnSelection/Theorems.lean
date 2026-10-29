@@ -1,3 +1,4 @@
+import StructuredColumnSelection.EqualEnergyPivot
 import StructuredColumnSelection.WideIncoherent
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
@@ -708,5 +709,22 @@ theorem milestoneE_wide_not_incoherent_zero {m : ℕ} (hm : 2 ≤ m) :
     ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
       OrthogonalRows A ∧ ¬ ColumnIncoherent A 0 :=
   wide_not_incoherent_zero hm
+
+/-- Equal column energy makes the second CPQR pivot agree with the
+increment pivot, and the two-column inverse trace is at most
+`2 (n - 1) / (k - 1)`.
+
+This is leverage ratio `1`. It does not bound later pivots and does
+not close outcome 3. -/
+theorem milestoneE_equal_energy_cpqr_prefix_trace {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : 2 ≤ k) (hn : 0 < n) :
+    cpqrPivot A ∅ = some ⟨0, hn⟩ ∧
+    cpqrPivot A {⟨0, hn⟩} = incrementPivot A {⟨0, hn⟩} ∧
+    (selectedColGram A (cpqrIterate A 2)).det ≠ 0 ∧
+    ((selectedColGram A (cpqrIterate A 2))⁻¹).trace ≤
+      (2 : ℝ) * ((n : ℝ) - 1) / ((k : ℝ) - 1) :=
+  equal_energy_cpqr_prefix_trace A hA hE hk hn
 
 end StructuredColumnSelection

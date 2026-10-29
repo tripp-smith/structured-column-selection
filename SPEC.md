@@ -817,6 +817,12 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (equal-energy second pivot):
+`milestoneE_equal_energy_cpqr_prefix_trace` says that equal column energy
+makes the second CPQR pivot agree with the increment pivot and bounds
+the two-column inverse trace by `2 (n - 1) / (k - 1)`. Later pivots stay
+open. Outcome 3 stays open.
+
 Status note (adverse family outside orthogonal columns):
 `milestoneE_wide_not_incoherent_zero` says that for every `m ≥ 2` the
 outcome-2 frame fails `ColumnIncoherent A 0`. The phase-P bound does
