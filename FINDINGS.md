@@ -351,6 +351,18 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Best-column increment (2026-10-29)
+
+`milestoneE_best_column_increment_le` says that if the selected Gram is
+invertible and fewer than `k` columns are selected, some unused column has
+positive residual and inverse-trace increment at most
+`((n - t) + trace(G⁻¹) - t) / (k - t)`. The estimate averages the
+numerators `1 + ‖G⁻¹ Bᵀ a_j‖²` over the unused columns whose residuals are
+positive. Standard CPQR maximizes the residual and does not minimize this
+ratio. This is not a polynomial inverse bound and it does not close
+outcome 3. On the rational `2×3` frame with `J = {0}`, column 2 has ratio
+`25/16` and the comparison is `2`; that check is not the theorem.
+
 ## Inverse-trace increment (2026-10-29)
 
 `milestoneE_append_inv_trace_increment` says that appending a column `v`

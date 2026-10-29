@@ -817,6 +817,11 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (best-column increment): `milestoneE_best_column_increment_le`
+says some unused column has positive residual and inverse-trace increment
+at most `((n - t) + trace(G⁻¹) - t) / (k - t)`. It is not a CPQR bound.
+Outcome 3 stays open.
+
 Status note (inverse-trace step): `milestoneE_append_inv_trace_increment`
 is the one-column Gram inverse-trace update
 `(1 + ‖G⁻¹ Bᵀ v‖²) / residual`. It is not a CPQR bound. Outcome 3 stays open.

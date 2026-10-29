@@ -780,3 +780,29 @@ stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#21](https://github.com/tripp-smith/structured-column-selection/pull/21).
+
+## Phase I best-column increment (2026-10-29, contract)
+
+Iteration I. Outcome 3 stays open. Outcome 1 is not the target.
+
+Route checkpoint. Phase H identifies the inverse-trace increment as
+`(1 + ‖G⁻¹ Bᵀ a_j‖²) / residualSq`. Standard CPQR does not minimize that
+ratio. The bound below is the comparison a minimizing rule would use. It
+is not yet that rule, and it is not an induction.
+
+Target in `StructuredColumnSelection/BestColumnIncrement.lean`, re-exported
+as `milestoneE_best_column_increment_le`: for orthogonal rows, an
+invertible selected Gram, and `t = #J < k`, some column outside `J` has
+positive residual and
+`(1 + ‖G⁻¹ Bᵀ a_j‖²) / residual ≤ ((n - t) + trace(G⁻¹) - t) / (k - t)`.
+
+Independent check: `tests/test_best_column_increment.py` uses the rational
+`2×3` frame and `J = {0}`. Column 2 has ratio `25/16`, and the comparison
+is `2`. It does not call CPQR. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound, no claim that the max-residual pivot
+meets the estimate, no closure of outcome 3, and no claim that Problem
+4.1 is solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#22](https://github.com/tripp-smith/structured-column-selection/pull/22).
