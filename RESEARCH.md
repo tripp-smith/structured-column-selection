@@ -1031,3 +1031,30 @@ outcome 3. Problem 4.1 is not solved.
 
 Phase PR and verification receipt:
 [#29](https://github.com/tripp-smith/structured-column-selection/pull/29).
+
+## Phase Q adverse family outside orthogonal columns (2026-10-29, contract)
+
+Iteration Q. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase P bounds max-residual CPQR on
+`ColumnIncoherent A 0`. That class is too narrow to close outcome 3.
+This phase shows the outcome-2 frame is outside it. Success is
+`milestoneE_wide_not_incoherent_zero`. Exit if the leading triangular
+columns of that frame are orthogonal.
+
+Target in `StructuredColumnSelection/WideIncoherent.lean`, re-exported
+as `milestoneE_wide_not_incoherent_zero`: for every `m ≥ 2` there is an
+orthogonal-row matrix of the outcome-2 shape with
+`¬ ColumnIncoherent A 0`. The leading columns have inner product
+`-wideC m * (wideDiagNat m 0) ^ 2`.
+
+Independent check: `tests/test_wide_incoherent.py` recomputes that
+scalar for `m = 2` as `-(4/17) * (1/8)^2`. It does not call the
+repository CPQR code. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound on a SPEC §10 class, no closure
+of outcome 1 or outcome 3, and no claim that Problem 4.1 is solved.
+`MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#30](https://github.com/tripp-smith/structured-column-selection/pull/30).

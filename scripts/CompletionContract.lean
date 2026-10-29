@@ -254,6 +254,11 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
             vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) :=
   milestoneE_incoherent_zero_cpqr_bound A hA hC
 
+example {m : ℕ} (hm : 2 ≤ m) :
+    ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
+      OrthogonalRows A ∧ ¬ ColumnIncoherent A 0 :=
+  milestoneE_wide_not_incoherent_zero hm
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,

@@ -202,6 +202,10 @@ change the sampler.
 the max-residual scores select column `1` after column `0` and the
 increment scores select column `2`. It does not change the sampler.
 
+`tests/test_wide_incoherent.py` checks that the `m = 2` triangular
+prefix inner product is `-(4/17) * (1/8)^2`. It does not change the
+sampler.
+
 `tests/test_orthogonal_columns.py` checks that the `2×4` partial
 permutation has orthogonal columns, that both scores select `{0, 1}`,
 and that the inverse trace `2` is at most `6`. It does not change the

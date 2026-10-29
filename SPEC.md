@@ -817,6 +817,11 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (adverse family outside orthogonal columns):
+`milestoneE_wide_not_incoherent_zero` says that for every `m ≥ 2` the
+outcome-2 frame fails `ColumnIncoherent A 0`. The phase-P bound does
+not apply to it. Outcome 3 stays open.
+
 Status note (orthogonal-column CPQR): `milestoneE_incoherent_zero_cpqr_bound`
 says that `ColumnIncoherent A 0` makes max-residual CPQR select `k`
 columns with inverse trace at most `k (n - k + 1)` and
