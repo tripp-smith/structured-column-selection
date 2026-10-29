@@ -351,6 +351,16 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Equal-energy three-row CPQR (2026-10-29)
+
+`milestoneE_equal_energy_cpqr_k3` says that when `k = 3`, equal column
+energy makes the full CPQR set have three columns, inverse trace at most
+`5n - 12 + 6/n`, and `‖x‖² ≤ (5n - 12 + 6/n) ‖A_J x‖²`. The three-column
+prefix is the whole set in this case. The same trace estimate, iterated
+with `λ_min ≥ 1 / trace`, unrolls exponentially in `k`, so this does not
+extend to general `k` and does not close outcome 3. Equal energy is
+leverage ratio `1`, stricter than the weakest SPEC §10 class.
+
 ## Equal-energy three-column trace (2026-10-29)
 
 `milestoneE_equal_energy_cpqr_three_trace` says that equal column energy

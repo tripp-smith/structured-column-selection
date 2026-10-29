@@ -212,6 +212,10 @@ It does not change the sampler.
 inverse trace `3`, at most the three-column bound `5`. It does not change
 the sampler.
 
+`tests/test_equal_energy_k3.py` checks that `5n - 12 + 6/n` agrees with
+that three-column expression at `k = 3` and that the identity satisfies
+`‖x‖² ≤ 5 ‖A_J x‖²`. It does not change the sampler.
+
 `tests/test_wide_incoherent.py` checks that the `m = 2` triangular
 prefix inner product is `-(4/17) * (1/8)^2`. It does not change the
 sampler.

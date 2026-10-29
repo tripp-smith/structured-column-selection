@@ -757,4 +757,23 @@ theorem milestoneE_equal_energy_cpqr_three_trace {k n : ℕ}
             (((n : ℝ) - 2) / ((k : ℝ) - 2)) :=
   equal_energy_cpqr_three_trace A hA hE hk hn
 
+/-- For three rows, equal column energy makes the full CPQR set obey
+`5n - 12 + 6/n` in inverse trace and in inverse energy.
+
+This is the phase-T prefix identified with `cpqrSet` at `k = 3`. It is
+not a bound for general `k` and does not close outcome 3. -/
+theorem milestoneE_equal_energy_cpqr_k3 {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : k = 3) (hn : 0 < n) :
+    (cpqrSet A).card = 3 ∧
+      (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            ((5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ)) :=
+  equal_energy_cpqr_k3 A hA hE hk hn
+
 end StructuredColumnSelection

@@ -817,6 +817,11 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (equal-energy three-row CPQR):
+`milestoneE_equal_energy_cpqr_k3` says that when `k = 3`, equal column
+energy makes the full CPQR set obey `5n - 12 + 6/n` in inverse trace and
+in inverse energy. This is not a bound for general `k`. Outcome 3 stays open.
+
 Status note (equal-energy three-column trace):
 `milestoneE_equal_energy_cpqr_three_trace` says that equal column energy
 makes the CPQR three-column inverse trace at most the two-column bound
