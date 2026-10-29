@@ -356,11 +356,18 @@ outcome 1 or outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#27](https://github.com/tripp-smith/structured-column-selection/pull/27).
 
-Current phase: **O zero-coefficient pivot — in progress**. Target:
-`milestoneE_zero_coeff_same_pivot`. If every positive-residual unused
-column has coefficient zero, the increment pivot and max-residual CPQR
-return the same column. This does not close outcome 3. The contract is
-in RESEARCH.md.
+Completed phase: **O zero-coefficient pivot**.
+`milestoneE_zero_coeff_same_pivot` says that a zero coefficient on every
+positive-residual unused column makes the increment pivot and
+max-residual CPQR return the same column. This does not close
+outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#28](https://github.com/tripp-smith/structured-column-selection/pull/28).
+
+Current phase: **P orthogonal-column CPQR — in progress**. Target:
+`milestoneE_incoherent_zero_cpqr_bound`. Pairwise orthogonal columns
+make max-residual CPQR select `k` columns with inverse trace at most
+`k (n - k + 1)` and squared inverse operator norm at most
+`1 + k (n - k)`. This class is stricter than the SPEC §10 target and
+does not close outcome 3. The contract is in RESEARCH.md.

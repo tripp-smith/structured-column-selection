@@ -202,6 +202,11 @@ change the sampler.
 the max-residual scores select column `1` after column `0` and the
 increment scores select column `2`. It does not change the sampler.
 
+`tests/test_orthogonal_columns.py` checks that the `2×4` partial
+permutation has orthogonal columns, that both scores select `{0, 1}`,
+and that the inverse trace `2` is at most `6`. It does not change the
+sampler.
+
 `tests/test_zero_coeff_pivot.py` checks that, on the rational `2×3`
 frame, column `0` is orthogonal to the other columns and both scores
 then select column `2`. It does not change the sampler.

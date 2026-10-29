@@ -817,6 +817,12 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (orthogonal-column CPQR): `milestoneE_incoherent_zero_cpqr_bound`
+says that `ColumnIncoherent A 0` makes max-residual CPQR select `k`
+columns with inverse trace at most `k (n - k + 1)` and
+`‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`. The class is stricter than the
+SPEC §10 target. Outcome 3 stays open.
+
 Status note (zero-coefficient pivot): `milestoneE_zero_coeff_same_pivot`
 says that a zero coefficient on every positive-residual unused column
 makes the increment pivot and max-residual CPQR return the same column.

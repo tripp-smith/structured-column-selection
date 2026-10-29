@@ -1,3 +1,4 @@
+import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
 import StructuredColumnSelection.IncrementSet
@@ -676,5 +677,25 @@ theorem milestoneE_zero_coeff_same_pivot {k n : ℕ}
           ((selectedCols A J)ᵀ *ᵥ fun i => A i j))) = 0) :
     incrementPivot A J = cpqrPivot A J :=
   zero_coeff_same_pivot A J hG hzero
+
+/-- On pairwise orthogonal columns, max-residual CPQR selects `k` columns
+with inverse trace at most `k (n - k + 1)` and
+`‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`.
+
+`ColumnIncoherent A 0` is read from `A`. It is stricter than the SPEC §10
+target, and the adverse family is outside it. This does not close
+outcome 3. -/
+theorem milestoneE_incoherent_zero_cpqr_bound {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hC : ColumnIncoherent A 0) :
+    (cpqrSet A).card = k ∧
+      (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (k : ℝ) * ((n : ℝ) - k + 1) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          (1 + (k : ℝ) * ((n : ℝ) - k)) *
+            vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) :=
+  incoherent_zero_cpqr_bound A hA hC
 
 end StructuredColumnSelection
