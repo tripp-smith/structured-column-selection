@@ -371,3 +371,6 @@ make max-residual CPQR select `k` columns with inverse trace at most
 `k (n - k + 1)` and squared inverse operator norm at most
 `1 + k (n - k)`. This class is stricter than the SPEC §10 target and
 does not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#29](https://github.com/tripp-smith/structured-column-selection/pull/29).

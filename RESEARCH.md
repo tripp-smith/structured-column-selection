@@ -1028,3 +1028,6 @@ Non-claims: this does not close outcome 1 or outcome 3.
 stricter than the weakest SPEC §10 class. The adverse family is not
 incoherent at `0`. `MinDimLe`, `k = 1`, and `k = 2` stay outside
 outcome 3. Problem 4.1 is not solved.
+
+Phase PR and verification receipt:
+[#29](https://github.com/tripp-smith/structured-column-selection/pull/29).
