@@ -291,11 +291,18 @@ outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#20](https://github.com/tripp-smith/structured-column-selection/pull/20).
 
-Current phase: **H inverse-trace step — in progress**. Target:
-`milestoneE_append_inv_trace_increment`. Appending a column increases the
-Gram inverse trace by `(1 + ‖G⁻¹ Bᵀ v‖²) / residual`. This is not the
-standard CPQR pivot, not a polynomial inverse bound, and it does not
-close outcome 3. The contract is in RESEARCH.md.
+Completed phase: **H inverse-trace step**. `milestoneE_append_inv_trace_increment`
+says that appending a column increases the Gram inverse trace by
+`(1 + ‖G⁻¹ Bᵀ v‖²) / residual`. This is not the standard CPQR pivot, not a
+polynomial inverse bound, and it does not close outcome 3. The contract is
+in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#21](https://github.com/tripp-smith/structured-column-selection/pull/21).
+
+Current phase: **I best-column increment — in progress**. Target:
+`milestoneE_best_column_increment_le`. For an invertible selected Gram
+with fewer than `k` columns, some unused column has positive residual and
+inverse-trace increment at most
+`((n - t) + trace(G⁻¹) - t) / (k - t)`. This is not a CPQR bound and it
+does not close outcome 3. The contract is in RESEARCH.md.

@@ -178,6 +178,19 @@ example {k t : ℕ} (B : Matrix (Fin k) (Fin t) ℝ) (v : Fin k → ℝ)
           (v ⬝ᵥ v - ((Bᵀ *ᵥ v) ⬝ᵥ ((Bᵀ * B)⁻¹ *ᵥ (Bᵀ *ᵥ v)))) :=
   milestoneE_append_inv_trace_increment B v hG hs
 
+example {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (J : Finset (Fin n)) (hG : (selectedColGram A J).det ≠ 0)
+    (ht : J.card < k) :
+    ∃ j, j ∉ J ∧ 0 < residualSq A J j ∧
+      (1 + (((selectedColGram A J)⁻¹ *ᵥ
+          ((selectedCols A J)ᵀ *ᵥ fun i => A i j)) ⬝ᵥ
+        ((selectedColGram A J)⁻¹ *ᵥ
+          ((selectedCols A J)ᵀ *ᵥ fun i => A i j)))) / residualSq A J j ≤
+        (((n : ℝ) - J.card) + ((selectedColGram A J)⁻¹).trace - J.card) /
+          ((k : ℝ) - J.card) :=
+  milestoneE_best_column_increment_le A hA J hG ht
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
