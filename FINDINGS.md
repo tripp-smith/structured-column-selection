@@ -351,6 +351,17 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Inverse-trace induction (2026-10-29)
+
+`milestoneE_minimizing_inv_trace_le` says that an orthogonal-row matrix
+has some set of `k` columns whose Gram is invertible and whose inverse
+trace is at most `k (n - k + 1)`. The set is built by starting from the
+empty block and appending a column that meets the increment bound at
+each step. Max-residual CPQR is a different rule. This is not a spectral
+bound and it does not close outcome 3. On the rational `2×3` frame,
+columns `{0, 2}` have inverse trace `1 + 25/16`, which is at most `4`;
+that check is not the theorem.
+
 ## Inverse-trace growth step (2026-10-29)
 
 `milestoneE_inv_trace_growth_step` says that if an invertible selected

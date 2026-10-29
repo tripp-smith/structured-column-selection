@@ -839,3 +839,33 @@ outside outcome 3.
 
 Phase PR and verification receipt:
 [#23](https://github.com/tripp-smith/structured-column-selection/pull/23).
+
+## Phase K inverse-trace induction (2026-10-29, contract)
+
+Iteration K. Outcome 3 stays open. Outcome 1 is not the target.
+
+Route checkpoint. Phase J is one growth step for a block that already
+meets `t (n - t + 1) / (k - t + 1)`. The empty Gram has inverse trace
+`0`, which meets the `t = 0` case. Iterating the step through `k`
+columns produces a `k`-set whose inverse trace is at most
+`k (n - k + 1)`. The column at each step meets the phase-I increment
+bound. It is not the max-residual CPQR pivot. The spectral norm bound is
+a later phase.
+
+Target in `StructuredColumnSelection/InvTraceInduction.lean`, re-exported
+as `milestoneE_minimizing_inv_trace_le`: for orthogonal rows, some
+`J` with `#J = k` has invertible selected Gram and
+`trace(G⁻¹) ≤ k (n - k + 1)`.
+
+Independent check: `tests/test_inv_trace_induction.py` inverts the Gram
+of columns `{0, 2}` of the rational `2×3` frame by cofactors. The trace
+is `1 + 25/16`, and `k (n - k + 1) = 4`. It does not call CPQR. It is
+not the theorem.
+
+Non-claims: no polynomial CPQR bound, no claim that CPQR selects this
+set, no spectral-norm bound, no closure of outcome 3, and no claim that
+Problem 4.1 is solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3.
+
+Phase PR and verification receipt:
+[#24](https://github.com/tripp-smith/structured-column-selection/pull/24).

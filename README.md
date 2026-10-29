@@ -310,11 +310,20 @@ does not close outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#22](https://github.com/tripp-smith/structured-column-selection/pull/22).
 
-Current phase: **J inverse-trace growth step — in progress**. Target:
-`milestoneE_inv_trace_growth_step`. If the selected inverse trace is at
-most `t (n - t + 1) / (k - t + 1)`, some appended column brings it to at
-most `(t + 1) (n - t) / (k - t)`. This is not a CPQR bound and it does
-not close outcome 3. The contract is in RESEARCH.md.
+Completed phase: **J inverse-trace growth step**.
+`milestoneE_inv_trace_growth_step` says that if the selected inverse
+trace is at most `t (n - t + 1) / (k - t + 1)`, some appended column
+brings it to at most `(t + 1) (n - t) / (k - t)`. This is not a CPQR
+bound and it does not close outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#23](https://github.com/tripp-smith/structured-column-selection/pull/23).
+
+Current phase: **K inverse-trace induction — in progress**. Target:
+`milestoneE_minimizing_inv_trace_le`. Some `k`-column submatrix has
+invertible Gram and inverse trace at most `k (n - k + 1)`. The columns
+are chosen by the increment bound, not by max-residual CPQR. This does
+not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#24](https://github.com/tripp-smith/structured-column-selection/pull/24).
