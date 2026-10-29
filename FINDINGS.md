@@ -232,7 +232,7 @@ binomial volume bound, and the triangular trace bound are proved;
 the latter two are exponential in `k` and none of them closes E.
 The Path 2 ladder through `k = 8` is a witness, not a theorem.
 The `k = 1` volume bound is a genuine special case and also does
-not close E. Milestone F (CSSP bridge) is untouched.
+not close E. The later sections record outcome 2 and the CSSP bridge.
 This repository does not claim to have solved all of Problem 4.1.
 See `CHECKPOINT.md` for the reasoning log and the next-work queue.
 
@@ -331,7 +331,22 @@ multiple of every power of `n+k+1` is beaten in inverse energy.
 squared inverse energy exceeds `max(n³, k³, (k(n-k+1))²)²`.
 
 This is a CPQR counterexample family. It does not say CPQR is polynomial on
-every orthogonal-row matrix, and it does not solve Problem 4.1. Outcome 1,
-outcome 3, and the CSSP bridge remain open. Exact Python checks recompute
-bordered-Gram residuals and cross-multiply the closed-form head against the
-scale; they are not the theorem.
+every orthogonal-row matrix, and it does not solve Problem 4.1. Outcome 1
+and outcome 3 remain open. Exact Python checks recompute bordered-Gram
+residuals and cross-multiply the closed-form head against the scale; they
+are not the theorem.
+
+## CSSP bridge (2026-10-29)
+
+`milestoneF_cssp_spectral` and `milestoneF_cssp_frobenius` compare the
+coefficient reconstruction `A_J T`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, to `A`. For a
+supplied factorization `A = U S Qᵀ + E` with `Qᵀ Q = 1` and invertible
+`Q_J`, both norms satisfy `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`. The left-hand
+norm is spectral or Frobenius; the coefficient is the spectral norm of
+`Q_J⁻¹` in both theorems. The argument is the identity
+`A - A_J T = E - E_J T`. It does not build a truncated SVD.
+
+One exact rational example checks that identity and the squared Frobenius
+comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
+Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
+every orthogonal-row matrix.

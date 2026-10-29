@@ -5,7 +5,8 @@ adjugate cores, not the unconditional actual-inverse equality (false).
 The original-SPEC obligation ledger is the table at the top of `RESEARCH.md`.
 The actual inequality/probability phase and remaining original obligations
 are recorded at the end of this file and in that ledger. The current reverse-volume phase implements the efficient sampler; its
-verification/delivery receipt is linked from README. E and F remain open.
+verification/delivery receipt is linked from README. Outcome 2 and the CSSP
+bridge are proved; outcomes 1 and 3 remain open.
 
 
 This is the working memory for the next agent or human. It records
@@ -53,7 +54,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone E §9 certificate automation | **SHIPPED** (does not close E) | `structselect/certify.py`; re-certifies `frame38` |
 | Milestone E outcome 2 adverse family | **PROVED** | `milestoneE_wide_adverse_family`, `milestoneE_cpqr_no_joint_polynomial`, `milestoneE_cpqr_named_polynomial_obstruction` |
 | Milestone E outcomes 1 and 3 | **OPEN** | no polynomial bound for every orthogonal-row matrix, and no static class beside outcome 2 |
-| Milestone F CSSP bridge | **UNTOUCHED** | start only after outcome 2 is merged |
+| Milestone F CSSP bridge | **PROVED** | `milestoneF_cssp_spectral`, `milestoneF_cssp_frobenius` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.
@@ -575,7 +576,11 @@ does not count.
 
 ---
 
-## 5. Milestone F (leave it)
+## 5. Milestone F
+
+Delivered by `milestoneF_cssp_spectral` and `milestoneF_cssp_frobenius`
+for a supplied orthonormal factor. The historical instruction below was
+not to start this row before an E outcome closed.
 
 SPEC §11 / §16: if `A = B + E` with `B` rank `k` and `Q` the right
 singular frame of `B`, then
@@ -832,6 +837,16 @@ public quantifier calls `wide_adverse_family`; the named-polynomial corollary
 calls the quantifier at degree 4 and coefficient 1. Outcome 2 is that pair
 of statements. Outcome 1 is still absent: there is no polynomial inverse
 bound whose only hypothesis is `AAᵀ = I`. Outcome 3 is still absent: no
-static class is attached. Milestone F stays untouched until this row is
-merged. The randomized sentence remains the status line for the sampling
-theorem. Problem 4.1 is not solved.
+static class is attached. The randomized sentence remains the status line for
+the sampling theorem. Problem 4.1 is not solved.
+
+## 2026-10-29 CSSP bridge
+
+`milestoneF_cssp_spectral` and `milestoneF_cssp_frobenius` prove the SPEC
+§11 comparison for a supplied factor `A = U S Qᵀ + E` with `Qᵀ Q = 1`.
+For an invertible row submatrix `Q_J` and `T = (Q_Jᵀ)⁻¹ Qᵀ`,
+`‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖` in spectral norm and in Frobenius norm.
+The coefficient is spectral in both. The proof uses the identity
+`A - A_J T = E - E_J T` and does not construct a truncated SVD. Outcomes 1
+and 3 stay open. This is not a polynomial CPQR bound, and Problem 4.1 is
+not solved.

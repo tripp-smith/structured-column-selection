@@ -1,3 +1,4 @@
+import StructuredColumnSelection.CSSPBridge
 import StructuredColumnSelection.WideCPQR
 import StructuredColumnSelection.WideCPQRParameters
 import StructuredColumnSelection.WideCPQRGrowth
@@ -509,5 +510,33 @@ theorem milestoneE_cpqr_named_polynomial_obstruction :
           (((k : ℝ) * ((n - k + 1 : ℕ) : ℝ)) ^ 2))) ^ 2 *
           vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
   cpqr_named_polynomial_obstruction
+
+/-- SPEC §11 in spectral norm, for a supplied orthonormal factor. -/
+theorem milestoneF_cssp_spectral {m n k : ℕ}
+    (A E : Matrix (Fin m) (Fin n) ℝ)
+    (U : Matrix (Fin m) (Fin k) ℝ) (S : Matrix (Fin k) (Fin k) ℝ)
+    (Q : Matrix (Fin n) (Fin k) ℝ) (hQ : Qᵀ * Q = 1)
+    (J : Finset (Fin n)) (hJ : J.card = k)
+    (hInv : IsUnit (Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id).det)
+    (hA : A = U * S * Qᵀ + E) :
+    spectralNorm (A - (A * colEmbed (J.orderEmbOfFin hJ).toEmbedding) *
+        (((Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id)ᵀ)⁻¹ * Qᵀ)) ≤
+      (1 + spectralNorm (Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id)⁻¹) *
+        spectralNorm E :=
+  cssp_spectral A E U S Q hQ J hJ hInv hA
+
+/-- SPEC §11 in Frobenius norm. The coefficient remains the spectral norm. -/
+theorem milestoneF_cssp_frobenius {m n k : ℕ}
+    (A E : Matrix (Fin m) (Fin n) ℝ)
+    (U : Matrix (Fin m) (Fin k) ℝ) (S : Matrix (Fin k) (Fin k) ℝ)
+    (Q : Matrix (Fin n) (Fin k) ℝ) (hQ : Qᵀ * Q = 1)
+    (J : Finset (Fin n)) (hJ : J.card = k)
+    (hInv : IsUnit (Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id).det)
+    (hA : A = U * S * Qᵀ + E) :
+    frobeniusNorm (A - (A * colEmbed (J.orderEmbOfFin hJ).toEmbedding) *
+        (((Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id)ᵀ)⁻¹ * Qᵀ)) ≤
+      (1 + spectralNorm (Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id)⁻¹) *
+        frobeniusNorm E :=
+  cssp_frobenius A E U S Q hQ J hJ hInv hA
 
 end StructuredColumnSelection

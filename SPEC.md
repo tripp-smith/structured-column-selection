@@ -809,7 +809,13 @@ some actual CPQR block satisfies
 `C(n+k+1)^{2d} ‖A_J x‖² < ‖x‖²`. The case `d = 4`, `C = 1` is
 `max(n³, k³, (k(n-k+1))²)² ‖A_J x‖² < ‖x‖²`. This is not a
 polynomial inverse bound for every orthogonal-row matrix.
-Outcomes 1 and 3 remain open. Milestone F is untouched here.
+Outcomes 1 and 3 remain open.
+
+Status note (CSSP bridge): `milestoneF_cssp_spectral` and
+`milestoneF_cssp_frobenius` are the SPEC §11 comparison for a supplied
+orthonormal factor `Q`. Both state
+`‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
+norm spectral or Frobenius, and the coefficient spectral in both.
 
 Status note (hygiene): `scripts/verify.sh` runs `lake build`,
 `scripts/check_lean_hygiene.py`, `scripts/check_axioms.sh`

@@ -13,8 +13,11 @@ sampler alongside the all-real finite kernel theorem. Python/RNG extraction
 into Lean is not claimed. Unconditional inverse-expectation equality is false with
 singular support; the audited inequality and probability theorem are listed
 below. CPQR outcome 2 is the explicit adverse family below. A polynomial
-bound for every orthogonal-row matrix is not claimed. The CSSP bridge remains
-open.
+bound for every orthogonal-row matrix is not claimed. The CSSP comparison is
+`milestoneF_cssp_spectral` and `milestoneF_cssp_frobenius`: for a supplied
+factor `A = U S Qᵀ + E` with `Qᵀ Q = 1` and invertible `Q_J`,
+`‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖` in spectral norm and in Frobenius norm,
+where `T = (Q_Jᵀ)⁻¹ Qᵀ`.
 
 Phases completed:
 
@@ -226,13 +229,13 @@ Gram-determinant and score-ratio theorems connect the model to matrix quantities
 sum bound, not a machine runtime theorem. Tests use exact full-state propagation,
 independent determinants and LDLᵀ reconstruction, including failure paths.
 
-Estimated completion after the adverse-family delivery: **about 70%** of
-original obligations, with uncertain research effort. The sampler gap is
-addressed. Outcome 2 of Milestone E is closed by the family and polynomial
-quantifiers below. Outcome 1, outcome 3, the CSSP bridge, remaining
-comparison APIs and the final full-contract audit remain open. The original
-unconditional inverse expectation equality remains refuted. Next research
-target: the SPEC §11 CSSP comparison, as its own phase.
+Estimated completion after the CSSP delivery: **about 80%** of original
+obligations, with uncertain research effort. The sampler gap is addressed.
+Outcome 2 of Milestone E is closed by the family and polynomial quantifiers
+below. Milestone F is closed by `milestoneF_cssp_spectral` and
+`milestoneF_cssp_frobenius`. Outcome 1, outcome 3, remaining comparison APIs
+and the final full-contract audit remain open. The original unconditional
+inverse expectation equality remains refuted.
 
 Reverse-sampling phase and canonical verification/delivery receipt:
 [#15](https://github.com/tripp-smith/structured-column-selection/pull/15).
@@ -253,7 +256,7 @@ sampling is separate.
 Phase PR and canonical verification/delivery receipt:
 [#16](https://github.com/tripp-smith/structured-column-selection/pull/16).
 
-Current phase: **E explicit adverse family — outcome 2**. Outcome 2 is
+Completed phase: **E explicit adverse family — outcome 2**. Outcome 2 is
 `milestoneE_wide_adverse_family` (every `m ≥ 2`: orthogonal rows, CPQR set
 equal to the leading `m²` columns, image energy `1`, inverse energy at least
 `((2m/3)(4/3)^(m-1))²`), consumed by
@@ -261,8 +264,16 @@ equal to the leading `m²` columns, image energy `1`, inverse energy at least
 `C(n+k+1)^{2d} ‖A_J x‖² < ‖x‖²`) and
 `milestoneE_cpqr_named_polynomial_obstruction`
 (`max(n³, k³, (k(n-k+1))²)² ‖A_J x‖² < ‖x‖²`). This is not a polynomial
-bound for every orthogonal-row matrix. Outcomes 1 and 3, and Milestone F,
-remain open. The contract and delivery note are in RESEARCH.md.
+bound for every orthogonal-row matrix. Outcomes 1 and 3 remain open. The
+contract and delivery note are in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#18](https://github.com/tripp-smith/structured-column-selection/pull/18).
+
+Completed phase: **F CSSP bridge**. `milestoneF_cssp_spectral` and
+`milestoneF_cssp_frobenius` prove
+`‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖` for `A = U S Qᵀ + E`, `Qᵀ Q = 1`,
+invertible `Q_J`, and `T = (Q_Jᵀ)⁻¹ Qᵀ`. The first norm is spectral and the
+second is Frobenius; the coefficient is spectral in both. The factor is
+supplied. This is not a polynomial CPQR bound, and it does not solve
+Problem 4.1. Outcomes 1 and 3 stay open. The contract is in RESEARCH.md.

@@ -73,3 +73,5 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_wide_adverse_family
 #print axioms StructuredColumnSelection.milestoneE_cpqr_no_joint_polynomial
 #print axioms StructuredColumnSelection.milestoneE_cpqr_named_polynomial_obstruction
+#print axioms StructuredColumnSelection.milestoneF_cssp_spectral
+#print axioms StructuredColumnSelection.milestoneF_cssp_frobenius
