@@ -175,6 +175,9 @@ represented algebraically as L(:,q)√(Dq/t), repeated t=32k³ times; the report
 width is k+32k⁴. Pair products, tail-energy margins and the back-substitution
 witness use Fraction arithmetic. The result's `certified=True` concerns these
 finite compressed checks; it does not assert an all-parameter Lean family.
+Its scope text says so. A separate integer cross-multiplication compares the
+closed-form head `4mk(4k+2m+1)^(k-2)/(4k-1)^(k-1)` with `(2m/3)(4/3)^(m-1)`
+at `m=2,3,4`. That comparison is not a whole-frame certificate.
 
 If k exceeds the budget, the function returns `dimension_budget_exhausted` with
 `certified=False` before factorization. Invalid inputs raise ValueError; a failed

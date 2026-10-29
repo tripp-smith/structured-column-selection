@@ -51,8 +51,9 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Milestone E Wave 1 census | **NUMERICALLY OBSERVED** | ETF / clustered / Haar-growth / block; `experiments/census_wave1_*_seed1.json` |
 | Milestone E Path 2 adverse ladder | **NUMERICALLY OBSERVED** (polynomial-looking through `k=8`; no superpoly family) | `structselect/adverse.py`, `experiments/cpqr_adverse_ladder_seed20260816.json` |
 | Milestone E §9 certificate automation | **SHIPPED** (does not close E) | `structselect/certify.py`; re-certifies `frame38` |
-| Milestone E characterization | **OPEN** | still needs one of the three SPEC §16 outcomes |
-| Milestone F CSSP bridge | **UNTOUCHED** | do not start unless E is closed or the user asks |
+| Milestone E outcome 2 adverse family | **PROVED** | `milestoneE_wide_adverse_family`, `milestoneE_cpqr_no_joint_polynomial`, `milestoneE_cpqr_named_polynomial_obstruction` |
+| Milestone E outcomes 1 and 3 | **OPEN** | no polynomial bound for every orthogonal-row matrix, and no static class beside outcome 2 |
+| Milestone F CSSP bridge | **UNTOUCHED** | start only after outcome 2 is merged |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.
@@ -821,3 +822,16 @@ bordered-Gram and closed-form witness tests. Full family/pivot instantiation,
 inverse-growth transport and the all-polynomial quantifier remain open.
 Milestone E is not closed; completion remains about 60%. The phase PR receipt
 linked in README is authoritative for verification and remote delivery.
+
+## 2026-10-29 explicit adverse family
+
+The wide-completion core is instantiated for every `m ≥ 2`. The triangular
+witness solves `R x = e_last`, its head meets `((2m/3)(4/3)^(m-1))`, and
+`n+k+1 ≤ 35 m⁸` lets `(16/9)^m` beat every polynomial in that width. The
+public quantifier calls `wide_adverse_family`; the named-polynomial corollary
+calls the quantifier at degree 4 and coefficient 1. Outcome 2 is that pair
+of statements. Outcome 1 is still absent: there is no polynomial inverse
+bound whose only hypothesis is `AAᵀ = I`. Outcome 3 is still absent: no
+static class is attached. Milestone F stays untouched until this row is
+merged. The randomized sentence remains the status line for the sampling
+theorem. Problem 4.1 is not solved.

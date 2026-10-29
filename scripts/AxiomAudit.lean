@@ -70,3 +70,6 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_triangular_prefix_residual
 #print axioms StructuredColumnSelection.milestoneE_triangular_prefix_pivots
 #print axioms StructuredColumnSelection.milestoneE_wide_parameter_diagonal_lower
+#print axioms StructuredColumnSelection.milestoneE_wide_adverse_family
+#print axioms StructuredColumnSelection.milestoneE_cpqr_no_joint_polynomial
+#print axioms StructuredColumnSelection.milestoneE_cpqr_named_polynomial_obstruction
