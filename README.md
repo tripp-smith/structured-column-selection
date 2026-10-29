@@ -384,8 +384,8 @@ is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#30](https://github.com/tripp-smith/structured-column-selection/pull/30).
 
-Current phase: **R equal-energy second pivot — in progress**.
-Target: `milestoneE_equal_energy_cpqr_prefix_trace`. Equal column energy
+Completed phase: **R equal-energy second pivot**.
+`milestoneE_equal_energy_cpqr_prefix_trace` says equal column energy
 makes the first CPQR pivot column `0`, makes the second CPQR pivot agree
 with the increment pivot, and bounds the two-column inverse trace by
 `2 (n - 1) / (k - 1)`. This does not close outcome 3. The contract is in
@@ -393,3 +393,12 @@ RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#31](https://github.com/tripp-smith/structured-column-selection/pull/31).
+
+Current phase: **S equal-energy prefix Rayleigh — in progress**.
+Target: `milestoneE_equal_energy_cpqr_prefix_rayleigh`. Equal column energy
+makes the two-column CPQR Rayleigh quotient at least
+`(k - 1) / (2 (n - 1))`. This bounds only that prefix and does not close
+outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#32](https://github.com/tripp-smith/structured-column-selection/pull/32).

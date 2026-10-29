@@ -817,6 +817,11 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (equal-energy prefix Rayleigh):
+`milestoneE_equal_energy_cpqr_prefix_rayleigh` says that equal column energy
+makes the two-column CPQR Rayleigh quotient at least
+`(k - 1) / (2 (n - 1))`. This bounds only that prefix. Outcome 3 stays open.
+
 Status note (equal-energy second pivot):
 `milestoneE_equal_energy_cpqr_prefix_trace` says that equal column energy
 makes the second CPQR pivot agree with the increment pivot and bounds

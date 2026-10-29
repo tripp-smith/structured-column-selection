@@ -269,6 +269,14 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
       (2 : ℝ) * ((n : ℝ) - 1) / ((k : ℝ) - 1) :=
   milestoneE_equal_energy_cpqr_prefix_trace A hA hE hk hn
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : 2 ≤ k) (hn : 0 < n)
+    (x : Fin (cpqrIterate A 2).card → ℝ) :
+    ((k : ℝ) - 1) / (2 * ((n : ℝ) - 1)) * vecEnergy x ≤
+      vecEnergy (selectedCols A (cpqrIterate A 2) *ᵥ x) :=
+  milestoneE_equal_energy_cpqr_prefix_rayleigh A hA hE hk hn x
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,

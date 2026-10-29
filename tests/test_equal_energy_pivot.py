@@ -1,9 +1,10 @@
-"""Equal column energy, second pivot, on a rational 2×4 Hadamard frame.
+"""Equal column energy on a rational 2×4 Hadamard frame.
 
 Rows are orthonormal and every column energy is 1/2. Both pivot scores
 select column 0, then column 1. The two-column inverse trace is 4, and
-2 (n - 1) / (k - 1) = 6. This arithmetic does not call repository CPQR.
-It is not the theorem.
+2 (n - 1) / (k - 1) = 6. On columns {0, 1} the image energy is
+(1/2) ‖x‖², which is at least (1/6) ‖x‖². This arithmetic does not call
+repository CPQR. It is not the theorem.
 """
 
 from fractions import Fraction as F
@@ -41,3 +42,23 @@ def test_equal_energy_second_pivot():
     gram_inv_trace = 2 + 2
     assert gram_inv_trace == 4
     assert gram_inv_trace <= 2 * (4 - 1) / (2 - 1)
+
+
+def test_equal_energy_prefix_rayleigh():
+    scale = F(1, 2)
+    col0 = (scale, scale)
+    col1 = (scale, -scale)
+    assert dot(col0, col1) == 0
+    x0, x1 = F(3), F(4)
+    image = (
+        x0 * col0[0] + x1 * col1[0],
+        x0 * col0[1] + x1 * col1[1],
+    )
+    vec_energy = x0 * x0 + x1 * x1
+    image_energy = dot(image, image)
+    assert vec_energy == 25
+    assert image_energy == F(25, 2)
+    assert image_energy == F(1, 2) * vec_energy
+    rayleigh = (F(2) - 1) / (2 * (F(4) - 1))
+    assert rayleigh == F(1, 6)
+    assert rayleigh * vec_energy <= image_energy

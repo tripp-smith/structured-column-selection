@@ -441,4 +441,226 @@ theorem equal_energy_cpqr_prefix_trace {k n : ℕ}
     rw [h2]
     exact hbound
 
+lemma singleton_residual_of_equal_energy {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (p j : Fin n) (he : 0 < colInner A p p) :
+    residualSq A {p} j =
+      colInner A p p - colInner A p j ^ 2 / colInner A p p := by
+  have hGdet : (selectedColGram A {p}).det ≠ 0 :=
+    selectedColGram_singleton_det_ne_zero A p (by
+      rw [← colInner_eq_residualSq]
+      exact he)
+  have hv : (fun i => A i j) ⬝ᵥ (fun i => A i j) = colInner A j j := rfl
+  rw [residualSq_eq_schur A {p} j hGdet, hv, hE j p, singleton_proj A p j (ne_of_gt he)]
+
+lemma energy_sub_abs_ge_half_residual {e s r : ℝ}
+    (he : 0 < e) (hr : r = e - s ^ 2 / e) (hr0 : 0 ≤ r) :
+    r / 2 ≤ e - |s| := by
+  have hmul : r * e = e ^ 2 - s ^ 2 := by
+    rw [hr]
+    field_simp [ne_of_gt he]
+  have hprod : (e - |s|) * (e + |s|) = e ^ 2 - s ^ 2 := by
+    calc
+      (e - |s|) * (e + |s|) = e ^ 2 - |s| ^ 2 := by ring
+      _ = e ^ 2 - s ^ 2 := by rw [sq_abs]
+  have hsle : |s| ≤ e := by
+    have hsq : s ^ 2 ≤ e ^ 2 := by nlinarith [hmul, hr0, he.le]
+    exact abs_le_of_sq_le_sq hsq he.le
+  have hr' : r = (e - |s|) * (e + |s|) / e :=
+    (eq_div_iff (ne_of_gt he)).mpr (hmul.trans hprod.symm)
+  have hgap : 0 ≤ e - |s| := sub_nonneg.mpr hsle
+  rw [hr', div_div, div_le_iff₀ (mul_pos he (by norm_num : (0 : ℝ) < 2))]
+  exact mul_le_mul_of_nonneg_left (by linarith [abs_nonneg s]) hgap
+
+lemma rayleigh_fin_two {e s x0 x1 : ℝ} :
+    (e - |s|) * (x0 ^ 2 + x1 ^ 2) ≤
+      e * (x0 ^ 2 + x1 ^ 2) + 2 * s * x0 * x1 := by
+  rcases le_total s 0 with hs | hs
+  · rw [abs_of_nonpos hs]
+    have : 0 ≤ -s * (x0 - x1) ^ 2 := mul_nonneg (neg_nonneg.mpr hs) (sq_nonneg _)
+    nlinarith
+  · rw [abs_of_nonneg hs]
+    have : 0 ≤ s * (x0 + x1) ^ 2 := mul_nonneg hs (sq_nonneg _)
+    nlinarith
+
+lemma selectedColGram_apply_inner {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
+    (a b : Fin J.card) :
+    selectedColGram A J a b =
+      colInner A (J.orderEmbOfFin rfl a) (J.orderEmbOfFin rfl b) := by
+  simp only [selectedColGram, Matrix.mul_apply, Matrix.transpose_apply, selectedCols,
+    Matrix.submatrix_apply, colInner, id_eq]
+
+lemma sum_card_two {m : ℕ} (hm : m = 2) (f : Fin m → ℝ) :
+    ∑ i : Fin m, f i = f (Fin.cast hm.symm 0) + f (Fin.cast hm.symm 1) := by
+  subst hm
+  simp [Fin.sum_univ_two, Fin.cast]
+
+theorem equal_energy_cpqr_prefix_rayleigh {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : 2 ≤ k) (hn : 0 < n)
+    (x : Fin (cpqrIterate A 2).card → ℝ) :
+    ((k : ℝ) - 1) / (2 * ((n : ℝ) - 1)) * vecEnergy x ≤
+      vecEnergy (selectedCols A (cpqrIterate A 2) *ᵥ x) := by
+  set z : Fin n := ⟨0, hn⟩
+  have hfirst := equal_energy_first_pivot A hA hE hk hn
+  have hez : colInner A z z = (k : ℝ) / n := equal_column_energy A hA hE hn z
+  have hepos : 0 < colInner A z z := by
+    rw [hez]
+    exact div_pos (by exact_mod_cast (show 0 < k by omega)) (by exact_mod_cast hn)
+  have hn2 : 2 ≤ n := by
+    have hkn := orthogonalRows_le A hA
+    omega
+  have hdet : (selectedColGram A {z}).det ≠ 0 :=
+    selectedColGram_singleton_det_ne_zero A z (by
+      rw [← colInner_eq_residualSq]
+      exact hepos)
+  have hcard1 : ({z} : Finset (Fin n)).card < n := by
+    rw [card_singleton]
+    omega
+  have hmax : ((k : ℝ) - 1) / ((n : ℝ) - 1) ≤ maxResidual A {z} := by
+    simpa [card_singleton, Nat.cast_one] using nextResidual_ge A hA {z} hdet hcard1
+  have havgpos : 0 < ((k : ℝ) - 1) / ((n : ℝ) - 1) := by
+    have hk1 : (0 : ℝ) < (k : ℝ) - 1 := by
+      have : (1 : ℝ) < (k : ℝ) := by exact_mod_cast (show 1 < k by omega)
+      linarith
+    have hn1 : (0 : ℝ) < (n : ℝ) - 1 := by
+      have : (1 : ℝ) < (n : ℝ) := by exact_mod_cast (show 1 < n by omega)
+      linarith
+    exact div_pos hk1 hn1
+  have hmaxpos : 0 < maxResidual A {z} := lt_of_lt_of_le havgpos hmax
+  have hunused : (unused ({z} : Finset (Fin n))).Nonempty := by
+    refine card_pos.mp ?_
+    have : 0 < n - 1 := by omega
+    simpa [unused_card, card_singleton] using this
+  obtain ⟨j0, hj0, hj0eq⟩ := Finset.exists_mem_eq_sup' hunused (residualSq A {z})
+  have hmaxeq : maxResidual A {z} = residualSq A {z} j0 := by
+    unfold maxResidual
+    rw [dif_pos hunused]
+    exact hj0eq
+  have hpos0 : 0 < residualSq A {z} j0 := by
+    rw [← hmaxeq]
+    exact hmaxpos
+  let s := (unused ({z} : Finset (Fin n))).filter fun j =>
+    residualSq A {z} j = maxResidual A {z} ∧ 0 < residualSq A {z} j
+  have hs : s.Nonempty := by
+    refine ⟨j0, mem_filter.mpr ⟨hj0, ?_, hpos0⟩⟩
+    rw [hmaxeq]
+  have hP : cpqrPivot A {z} = some (s.min' hs) := by
+    unfold cpqrPivot
+    simp only [s]
+    rw [dif_pos hs]
+  set j : Fin n := s.min' hs
+  have hmem : j ∈ s := min'_mem _ hs
+  have hresj : residualSq A {z} j = maxResidual A {z} := (mem_filter.mp hmem).2.1
+  have hposj : 0 < residualSq A {z} j := (mem_filter.mp hmem).2.2
+  have hjn : j ∉ ({z} : Finset (Fin n)) := by
+    have hunused : j ∈ unused ({z} : Finset (Fin n)) := (mem_filter.mp hmem).1
+    rw [unused] at hunused
+    exact (mem_sdiff.mp hunused).2
+  have hzlt : z < j := by
+    refine lt_of_le_of_ne ?_ ?_
+    · simp [z, Fin.le_def]
+    · intro h
+      exact hjn (mem_singleton.mpr h.symm)
+  let J : Finset (Fin n) := insert j ({z} : Finset (Fin n))
+  have hJcard : J.card = 2 := by
+    rw [card_insert_of_notMem hjn, card_singleton]
+  have h0 : cpqrIterate A 0 = (∅ : Finset (Fin n)) := rfl
+  have h1 : cpqrIterate A 1 = ({z} : Finset (Fin n)) := by
+    conv_lhs => unfold cpqrIterate
+    rw [h0, hfirst]
+    rfl
+  have h2 : cpqrIterate A 2 = J := by
+    conv_lhs => unfold cpqrIterate
+    rw [h1, hP]
+  revert x
+  rw [h2]
+  intro x
+  have hzcard : 0 < J.card := by
+    rw [hJcard]
+    exact Nat.zero_lt_two
+  let i0 : Fin J.card := Fin.cast hJcard.symm 0
+  let i1 : Fin J.card := Fin.cast hJcard.symm 1
+  have hi0 : i0 = ⟨0, hzcard⟩ := Fin.ext (by simp [i0, Fin.cast])
+  have hembed0 : J.orderEmbOfFin rfl i0 = J.min' (card_pos.mp hzcard) := by
+    simpa [hi0] using orderEmbOfFin_zero (s := J) rfl hzcard
+  have hmin : J.min' (card_pos.mp hzcard) = z := by
+    rw [min'_eq_iff]
+    refine ⟨mem_insert.mpr (Or.inr (mem_singleton_self _)), ?_⟩
+    intro b hb
+    rcases mem_insert.mp hb with rfl | hb
+    · exact le_of_lt hzlt
+    · rw [mem_singleton.mp hb]
+  have hlast : J.orderEmbOfFin rfl ⟨J.card - 1, Nat.sub_lt hzcard (Nat.succ_pos 0)⟩ =
+      J.max' (card_pos.mp hzcard) :=
+    orderEmbOfFin_last (s := J) rfl hzcard
+  have hi1 : (⟨J.card - 1, Nat.sub_lt hzcard (Nat.succ_pos 0)⟩ : Fin J.card) = i1 := by
+    apply Fin.ext
+    simp [i1, Fin.cast, hJcard]
+  have hembed1 : J.orderEmbOfFin rfl i1 = J.max' (card_pos.mp hzcard) := by
+    simpa [hi1] using hlast
+  have hmaxj : J.max' (card_pos.mp hzcard) = j := by
+    rw [max'_eq_iff]
+    refine ⟨mem_insert_self _ _, ?_⟩
+    intro b hb
+    rcases mem_insert.mp hb with rfl | hb
+    · exact le_rfl
+    · rw [mem_singleton.mp hb]
+      exact le_of_lt hzlt
+  have hsum2 (f : Fin J.card → ℝ) : ∑ i, f i = f i0 + f i1 := by
+    simpa [i0, i1] using sum_card_two hJcard f
+  set G := selectedColGram A J
+  set e : ℝ := colInner A z z
+  set sᵢ : ℝ := colInner A z j
+  have hG00 : G i0 i0 = e := by
+    unfold G
+    rw [selectedColGram_apply_inner, hembed0, hmin]
+  have hG11 : G i1 i1 = e := by
+    unfold G
+    rw [selectedColGram_apply_inner, hembed1, hmaxj, equal_column_energy A hA hE hn j, ← hez]
+  have hG01 : G i0 i1 = sᵢ := by
+    unfold G
+    rw [selectedColGram_apply_inner, hembed0, hmin, hembed1, hmaxj]
+  have hG10 : G i1 i0 = sᵢ := by
+    unfold G
+    rw [selectedColGram_apply_inner, hembed1, hmaxj, hembed0, hmin, colInner_comm]
+  have hmul (i : Fin J.card) :
+      (G *ᵥ x) i = G i i0 * x i0 + G i i1 * x i1 := by
+    rw [Matrix.mulVec_apply_eq_sum, hsum2]
+  have hdot : x ⬝ᵥ (G *ᵥ x) =
+      x i0 * (G *ᵥ x) i0 + x i1 * (G *ᵥ x) i1 := by
+    rw [dotProduct, hsum2]
+  have hexpand : x ⬝ᵥ (G *ᵥ x) =
+      e * (x i0 ^ 2 + x i1 ^ 2) + 2 * sᵢ * x i0 * x i1 := by
+    rw [hdot, hmul, hmul, hG00, hG11, hG01, hG10]
+    ring
+  have hvx : vecEnergy x = x i0 ^ 2 + x i1 ^ 2 := by
+    rw [vecEnergy, hsum2]
+  have hray := rayleigh_fin_two (e := e) (s := sᵢ) (x0 := x i0) (x1 := x i1)
+  have hform : (e - |sᵢ|) * vecEnergy x ≤ x ⬝ᵥ (G *ᵥ x) := by
+    rw [hexpand, hvx]
+    exact hray
+  have hres := singleton_residual_of_equal_energy A hE z j hepos
+  have hhalf := energy_sub_abs_ge_half_residual hepos hres (residualSq_nonneg A {z} j)
+  have hresge : ((k : ℝ) - 1) / ((n : ℝ) - 1) ≤ residualSq A {z} j := by
+    rw [hresj]
+    exact hmax
+  have hgap : ((k : ℝ) - 1) / (2 * ((n : ℝ) - 1)) ≤ e - |sᵢ| := by
+    have hdiv : ((k : ℝ) - 1) / (2 * ((n : ℝ) - 1)) =
+        (((k : ℝ) - 1) / ((n : ℝ) - 1)) / 2 := by
+      rw [div_div]
+      congr 1
+      ring
+    rw [hdiv]
+    exact le_trans (div_le_div_of_nonneg_right hresge (by norm_num)) hhalf
+  have hscale : ((k : ℝ) - 1) / (2 * ((n : ℝ) - 1)) * vecEnergy x ≤
+      (e - |sᵢ|) * vecEnergy x :=
+    mul_le_mul_of_nonneg_right hgap (vecEnergy_nonneg x)
+  have hquad : x ⬝ᵥ (G *ᵥ x) = vecEnergy (selectedCols A J *ᵥ x) :=
+    (vecEnergy_selectedCols A J x).symm
+  exact hscale.trans (hform.trans (le_of_eq hquad))
+
 end StructuredColumnSelection
