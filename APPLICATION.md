@@ -202,6 +202,10 @@ change the sampler.
 the max-residual scores select column `1` after column `0` and the
 increment scores select column `2`. It does not change the sampler.
 
+`tests/test_zero_coeff_pivot.py` checks that, on the rational `2×3`
+frame, column `0` is orthogonal to the other columns and both scores
+then select column `2`. It does not change the sampler.
+
 `tests/test_inv_spectral_bound.py` checks that columns `{0, 2}` of the
 rational `2×3` frame send `(0, 1)` to a vector of energy `16/25`, which
 is at least `1/3` of the input energy. It does not change the sampler.

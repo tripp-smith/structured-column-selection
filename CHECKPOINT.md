@@ -63,6 +63,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Increment-pivot squared spectral bound | **PROVED** (does not close outcome 3) | `milestoneE_minimizing_inv_spectral_le` |
 | Least-index increment set | **PROVED** (does not close outcome 3) | `milestoneE_increment_set_bound` |
 | Increment pivot differs from CPQR | **PROVED** (does not close outcome 3) | `milestoneE_increment_set_ne_cpqr` |
+| Zero coefficient, same pivot | **PROVED** (does not close outcome 3) | `milestoneE_zero_coeff_same_pivot` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

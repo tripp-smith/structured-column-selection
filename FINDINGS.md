@@ -351,6 +351,15 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Zero-coefficient pivot (2026-10-29)
+
+`milestoneE_zero_coeff_same_pivot` says that if the selected Gram is
+invertible and every positive-residual unused column has coefficient
+zero, the increment pivot and max-residual CPQR return the same column.
+The ratio is then the reciprocal of the residual. Phase N shows that a
+nonzero coefficient can separate the rules. This does not close
+outcome 3.
+
 ## Pivot split (2026-10-29)
 
 `milestoneE_increment_set_ne_cpqr` says there is an orthogonal-row

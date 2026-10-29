@@ -965,3 +965,31 @@ is a separation of two pivots. `k = 2` stays outside outcome 3.
 
 Phase PR and verification receipt:
 [#27](https://github.com/tripp-smith/structured-column-selection/pull/27).
+
+## Phase O zero-coefficient pivot (2026-10-29, contract)
+
+Iteration O. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase N shows that a nonzero coefficient can make
+the increment pivot and max-residual CPQR select different columns.
+This phase proves the complementary step: a zero coefficient makes the
+increment the reciprocal of the residual, so the two least-index rules
+return the same column. Success is `milestoneE_zero_coeff_same_pivot`.
+Exit if a zero coefficient still leaves the argmin of the ratio
+different from the argmax of the residual.
+
+Target in `StructuredColumnSelection/ZeroCoeffPivot.lean`, re-exported
+as `milestoneE_zero_coeff_same_pivot`: when the selected Gram is
+invertible and every positive-residual unused column has coefficient
+zero, `incrementPivot A J = cpqrPivot A J`.
+
+Independent check: `tests/test_zero_coeff_pivot.py` recomputes the
+rational `2×3` frame. Column 0 is orthogonal to columns 1 and 2, the
+residuals are `9/25` and `16/25`, and both least-index scores pick
+column 2. It does not call the repository CPQR code. It is not the
+theorem.
+
+Non-claims: no polynomial CPQR bound, no claim that the rules agree on
+every orthogonal-row matrix, no closure of outcome 1 or outcome 3, and
+no claim that Problem 4.1 is solved. Phase N remains the separation.
+`MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.

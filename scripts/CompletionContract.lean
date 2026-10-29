@@ -232,6 +232,16 @@ example :
       OrthogonalRows A ∧ incrementSet A ≠ cpqrSet A :=
   milestoneE_increment_set_ne_cpqr
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
+    (hG : (selectedColGram A J).det ≠ 0)
+    (hzero : ∀ j ∈ incrementCandidates A J,
+      (((selectedColGram A J)⁻¹ *ᵥ
+          ((selectedCols A J)ᵀ *ᵥ fun i => A i j)) ⬝ᵥ
+        ((selectedColGram A J)⁻¹ *ᵥ
+          ((selectedCols A J)ᵀ *ᵥ fun i => A i j))) = 0) :
+    incrementPivot A J = cpqrPivot A J :=
+  milestoneE_zero_coeff_same_pivot A J hG hzero
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
