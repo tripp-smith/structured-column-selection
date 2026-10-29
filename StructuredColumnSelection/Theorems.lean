@@ -741,4 +741,20 @@ theorem milestoneE_equal_energy_cpqr_prefix_rayleigh {k n : ℕ}
       vecEnergy (selectedCols A (cpqrIterate A 2) *ᵥ x) :=
   equal_energy_cpqr_prefix_rayleigh A hA hE hk hn x
 
+/-- Equal column energy makes the CPQR three-column inverse trace at most
+the two-column bound plus one Rayleigh-controlled step.
+
+This bounds only that prefix. It does not bound a `k`-set for `k > 3`
+and does not close outcome 3. -/
+theorem milestoneE_equal_energy_cpqr_three_trace {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : 3 ≤ k) (hn : 0 < n) :
+    (selectedColGram A (cpqrIterate A 3)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A 3))⁻¹).trace ≤
+        (2 : ℝ) * ((n : ℝ) - 1) / ((k : ℝ) - 1) +
+          (1 + (2 * (k : ℝ) * ((n : ℝ) - 1)) / ((n : ℝ) * ((k : ℝ) - 1))) *
+            (((n : ℝ) - 2) / ((k : ℝ) - 2)) :=
+  equal_energy_cpqr_three_trace A hA hE hk hn
+
 end StructuredColumnSelection

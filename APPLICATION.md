@@ -208,6 +208,10 @@ column `1`, and that the inverse trace `4` is at most `6`. The same frame
 compares image energy `(1/2) ‖x‖²` with `(1/6) ‖x‖²` on columns `{0, 1}`.
 It does not change the sampler.
 
+`tests/test_equal_energy_three.py` checks that the `3×3` identity has
+inverse trace `3`, at most the three-column bound `5`. It does not change
+the sampler.
+
 `tests/test_wide_incoherent.py` checks that the `m = 2` triangular
 prefix inner product is `-(4/17) * (1/8)^2`. It does not change the
 sampler.

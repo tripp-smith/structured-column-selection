@@ -351,6 +351,17 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Equal-energy three-column trace (2026-10-29)
+
+`milestoneE_equal_energy_cpqr_three_trace` says that equal column energy
+makes the CPQR three-column inverse trace at most
+`2 (n - 1) / (k - 1)` plus one step controlled by the phase-S Rayleigh
+quotient. The third residual is at least `(k - 2) / (n - 2)`, and the
+coefficient `‖G⁻¹ v‖²` is at most `(k / n)` divided by that quotient.
+This does not bound a `k`-set for `k > 3` and does not close outcome 3.
+Equal energy is leverage ratio `1`, stricter than the weakest SPEC §10
+class, and the adverse family is outside it.
+
 ## Equal-energy prefix Rayleigh (2026-10-29)
 
 `milestoneE_equal_energy_cpqr_prefix_rayleigh` says that equal column
