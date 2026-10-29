@@ -3,18 +3,18 @@ import StructuredColumnSelection.Theorems
 /-!
 # Public-theorem axiom audit
 
-This module is a verification companion, not a source of theorems.
+This file is a verification companion, not a source of theorems.
 It `#print axioms` every public name in `Theorems.lean`. Run it with
 
 ```
-lake env lean --stdin < StructuredColumnSelection/AxiomAudit.lean
+bash scripts/check_axioms.sh
 ```
 
-or via `bash scripts/verify.sh`. Do **not** use `lake env lean --run`.
+Do **not** use `lake env lean --run`.
 
 Public structural theorems may depend only on `propext`,
-`Classical.choice`, and `Quot.sound`. `native_decide` witnesses stay in
-`SmallInstanceChecks.lean` and are not listed here.
+`Classical.choice`, and `Quot.sound`. Computational witnesses in
+`SmallInstanceChecks.lean` are not listed here.
 -/
 
 #print axioms StructuredColumnSelection.milestoneA_transpose_correspondence
@@ -47,49 +47,26 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_sigma_min_ge_inv_sqrt_trace
 #print axioms StructuredColumnSelection.milestoneE_gsR_mul_transpose
 #print axioms StructuredColumnSelection.milestoneE_bidiagonal_U_inv_trace_le
-
 #print axioms StructuredColumnSelection.milestoneE_cpqr_inv_energy_le_choose
-
 #print axioms StructuredColumnSelection.milestoneE_cpqr_inv_energy_le_of_minDim
-
 #print axioms StructuredColumnSelection.milestoneE_column_budget_S_abs_le_one
-
 #print axioms StructuredColumnSelection.milestoneE_column_budget_inv_trace_le
-
 #print axioms StructuredColumnSelection.milestoneD_actual_expected_inv_trace_le
-
 #print axioms StructuredColumnSelection.milestoneD_actual_expected_inv_trace_eq_of_full_support
-
 #print axioms StructuredColumnSelection.milestoneD_singular_volume_mass_zero
-
 #print axioms StructuredColumnSelection.milestoneD_actual_inv_trace_good_mass
-
 #print axioms StructuredColumnSelection.milestoneD_actual_inverse_energy_good_mass
-
 #print axioms StructuredColumnSelection.milestoneD_actual_expectation_equality_obstruction
-
 #print axioms StructuredColumnSelection.milestoneB_retained_volume_eq_det_gram
-
 #print axioms StructuredColumnSelection.milestoneB_reverse_score_eq_volume_ratio
-
 #print axioms StructuredColumnSelection.milestoneB_reverse_score_bounds
-
 #print axioms StructuredColumnSelection.milestoneB_reverse_deletion_mass
-
 #print axioms StructuredColumnSelection.milestoneB_reverse_transition_normalization
-
 #print axioms StructuredColumnSelection.milestoneD_reverse_sampler_law
-
 #print axioms StructuredColumnSelection.milestoneD_reverse_inverse_energy_good_mass
-
 #print axioms StructuredColumnSelection.milestoneD_reverse_fast_proposal_sum_le
-
 #print axioms StructuredColumnSelection.milestoneE_wide_completion_orthogonal
-
 #print axioms StructuredColumnSelection.milestoneE_triangular_prefix_projector
-
 #print axioms StructuredColumnSelection.milestoneE_triangular_prefix_residual
-
 #print axioms StructuredColumnSelection.milestoneE_triangular_prefix_pivots
-
 #print axioms StructuredColumnSelection.milestoneE_wide_parameter_diagonal_lower

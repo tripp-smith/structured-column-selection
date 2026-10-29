@@ -1,9 +1,9 @@
 ---
 name: phase-cadence
-description: Execute one bounded GECP Kernel Structure phase from specification through implementation, verification, documentation, and a draft pull request. Use when asked to execute or close a phase, milestone, theorem contract, research obstruction, or release-readiness step in this repository.
+description: Execute one bounded phase from specification through implementation, verification, documentation, and a draft pull request. Use when asked to execute or close a phase, milestone, theorem contract, research obstruction, or release-readiness step in this repository.
 ---
 
-# GECP phase cadence
+# Phase cadence
 
 Deliver exactly one scoped phase from `SPEC.md`. Do not reopen a completed
 phase unless the user explicitly asks. Keep theorem claims, experiments, and
@@ -21,8 +21,9 @@ README phase to `in progress`.
 - Map the SPEC milestone to exact Lean identifiers and Python artifacts.
 - Record statements, files, independent checks, and explicit non-claims.
 - Identify dependencies on earlier verified results.
-- Maintain the affected original-SPEC obligations in `RESEARCH.md`, linking
-  existing audit records rather than creating a competing ledger. For each,
+- Maintain the affected original-SPEC obligations in the ledger at the top of
+  `RESEARCH.md`, linking existing audit records rather than creating a
+  competing ledger. For each,
   retain the original scope/quantifiers, assumptions, delivered evidence and
   acceptance test. Distinguish mandatory outcomes from proposed proof routes
   and conditional extensions; a weaker result does not close the original item.
@@ -41,7 +42,7 @@ its route-level checkpoint before investing in more auxiliary abstractions.
 
 - Keep every library module free of `sorry` and undeclared axioms.
 - Prefer exact finite algebra before analytic or asymptotic corollaries.
-- Re-export public Lean results through `GECPKernelStructure/Theorems.lean`.
+- Re-export public Lean results through `StructuredColumnSelection/Theorems.lean`.
 - Keep numerical factorization solve-based; do not form explicit inverses.
 - Return convergence, stop reason, conditioning, and certification status.
 - Store canonical high-precision quantities as decimal strings.
@@ -73,7 +74,7 @@ uncertified result, not success.
 Execute the fail-closed wrapper `scripts/check_axioms.sh`. As original-SPEC public
 theorem interfaces become available, add expected-type consumers to
 `scripts/CompletionContract.lean`
-importing only `GECPKernelStructure.Theorems`. Check the required quantifiers and
+importing only `StructuredColumnSelection.Theorems`. Check the required quantifiers and
 absence of extra assumptions, not just that the exported name compiles.
 
 When adding/changing verification gates or closing a release, read

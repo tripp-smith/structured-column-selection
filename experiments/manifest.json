@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "require_clean_revision_for_new_runs": true,
+  "note": "Frozen evidence inventory. Numeric files are behavior records. The 3x8 witness is a computational certificate in SmallInstanceChecks and is not a public theorem. None of these files closes Milestone E. New canonical writes require a clean git worktree.",
+  "artifacts": [
+    {
+      "path": "experiments/census_seed0.json",
+      "kind": "census",
+      "evidence": "numeric",
+      "container": "list",
+      "provenance": "historical",
+      "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/census_wave1_etf_seed1.json",
+      "kind": "census",
+      "evidence": "numeric",
+      "container": "object",
+      "provenance": "recorded_revision",
+      "seed": 1,
+      "revision": "e302093",
+      "any_above_named_poly": false,
+      "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/census_wave1_clustered_seed1.json",
+      "kind": "census",
+      "evidence": "numeric",
+      "container": "object",
+      "provenance": "recorded_revision",
+      "seed": 1,
+      "revision": "e302093",
+      "any_above_named_poly": false,
+      "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/census_wave1_growth_seed1.json",
+      "kind": "census",
+      "evidence": "numeric",
+      "container": "object",
+      "provenance": "recorded_revision",
+      "seed": 1,
+      "revision": "e302093",
+      "any_above_named_poly": false,
+      "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/census_wave1_block_seed1.json",
+      "kind": "census",
+      "evidence": "numeric",
+      "container": "object",
+      "provenance": "recorded_revision",
+      "seed": 1,
+      "revision": "e302093",
+      "any_above_named_poly": false,
+      "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/census_wave1_summary_seed1.json",
+      "kind": "census",
+      "evidence": "numeric",
+      "container": "object",
+      "provenance": "recorded_revision",
+      "seed": 1,
+      "revision": "e302093",
+      "every_track_any_above_named_poly": false,
+      "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/census_static_class_seed1.json",
+      "kind": "census",
+      "evidence": "numeric",
+      "container": "object",
+      "provenance": "historical_label",
+      "seed": 1,
+      "revision": "cursor/phase-e-static-class-e353",
+      "any_above_named_poly": false,
+      "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/cpqr_adverse_ladder_seed20260816.json",
+      "kind": "adverse_ladder",
+      "evidence": "numeric",
+      "container": "object",
+      "provenance": "recorded_revision",
+      "seed": 20260816,
+      "revision": "8562578",
+      "any_r_gt_1": true,
+      "any_above_named_poly": false,
+      "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/cpqr_r_gt_1_numeric_4_12.json",
+      "kind": "numeric_witness",
+      "evidence": "numeric",
+      "container": "object",
+      "provenance": "recorded_revision",
+      "seed": "rerun_412.py seeds 12345,111,...,999; best from seed 111",
+      "revision": "50ab604",
+      "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/cpqr_r_gt_1_witness_3_8.json",
+      "kind": "computational_witness",
+      "evidence": "certified_native_decide",
+      "container": "object",
+      "provenance": "recorded_revision",
+      "seed": "strict_search eta=0.002 seeds 11/22/33",
+      "revision": "50ab604",
+      "lean_file": "StructuredColumnSelection/SmallInstanceChecks.lean",
+      "lean_names": [
+        "frame38_mul_transpose",
+        "frame38_cpqr_set",
+        "frame38_inv_norm_lb"
+      ],
+      "closes_milestone_e": false
+    }
+  ]
+}

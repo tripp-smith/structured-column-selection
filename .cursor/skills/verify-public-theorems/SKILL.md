@@ -17,7 +17,9 @@ Or run the pieces:
 
 ```bash
 lake build
-rg sorry --glob '*.lean'
+python3 scripts/check_lean_hygiene.py
+bash scripts/check_axioms.sh
+lake env lean scripts/CompletionContract.lean
 python3 -m pytest
 ```
 

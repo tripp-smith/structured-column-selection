@@ -1,4 +1,9 @@
-"""SPEC §8 CPQR census. Witnesses only; not a polynomial bound."""
+"""SPEC §8 CPQR census. Witnesses only; not a polynomial bound.
+
+Canonical JSON under ``experiments/`` is indexed by
+``experiments/manifest.json``. New writes of those files require a clean
+worktree.
+"""
 
 from __future__ import annotations
 

@@ -1,9 +1,31 @@
 # Research threads
 
+## Original-SPEC obligation ledger
+
+This is the canonical reading of SPEC §16 and §19. A later phase note does
+not close an open row. Historical thread entries below are delivery logs.
+
+| Obligation | State | What counts | What does not count |
+| --- | --- | --- | --- |
+| A. Transpose correspondence and selected-column algebra | closed | `milestoneA_*` | |
+| B. Volume weights sum to 1 | closed | `milestoneB_cauchyBinet`, `milestoneB_volume_normalization` | |
+| C. Finite inverse-Gram identity | closed as the adjugate sum | `milestoneC_adjugate_sum`, `milestoneC_inverse_gram_expectation` | a naive inverse that drops singular blocks |
+| D. All-frame actual inverse expectation | the unconditional equality is false | `milestoneD_actual_expectation_equality_obstruction`, the inequality `milestoneD_actual_expected_inv_trace_le`, and `milestoneD_actual_inverse_energy_good_mass` | the original boxed equality |
+| D. Efficient reverse sampler | closed as a finite kernel law | `milestoneD_reverse_sampler_law` | a claim that Python draws are formally extracted |
+| E outcome 1. Polynomial CPQR bound for every orthogonal-row matrix | open | a `Theorems.lean` statement whose hypotheses are only row orthogonality and whose bound is polynomial in `n` and `k` | `4^k` trace, binomial `C(n,k)`, `k = 1`, `k = 2`, bidiagonal `U`, column budget, or `MinDimLe` |
+| E outcome 2. Machine-checked counterexample past the named polynomial | open | SPEC §9: exact `AAᵀ = I`, every pivot, and an inverse-norm lower bound above `max(n³, k³, (k(n-k+1))²)`, exported from `Theorems.lean` | `frame38` (kills only `C = 1`; about `4.37` against `512`) and the float `4×12` record |
+| E outcome 3. That counterexample plus a weaker static class with a polynomial theorem | open | outcome 2 together with a class read from `A` alone | Path 3 `milestoneE_cpqr_inv_energy_le_of_minDim`, which has no named-polynomial counterexample beside it |
+| F. CSSP perturbation bridge | open | the SPEC §11 inequality | starting F before E closes, unless the user asks |
+
+Census files are listed in `experiments/manifest.json`. They are numeric
+unless that manifest says the `3×8` witness, and that witness is still a
+computational certificate in `SmallInstanceChecks.lean`. Expected-type
+consumers for the weaker E hypotheses live in `scripts/CompletionContract.lean`.
+
 Current audit (2026-10-24): historical C/D completion entries below refer to
 adjugate cores. The original all-frame actual-inverse equality is false.
 See the current actual-inverse contract and obstruction at the end of this
-file; the efficient sampler, general E characterization and F remain open.
+file; general E characterization and F remain open.
 
 ## Thread 1 — Milestone A (completed)
 
@@ -587,3 +609,44 @@ Workflow synchronization: upstream GECP main was checked at
 `f06a46300156ce2f645fa3413a7919f8e1b81229`. All four imported skill/reference
 blobs and the saved CI workflow source match that revision exactly; no newer
 skill content needed copying. CSSP bindings remain in `.agents/WORKFLOW_IMPORT.md`.
+
+## Phase E explicit adverse family (2026-10-24, contract)
+
+Previous turn: progress. PR #16 is merged at 410d51a; main CI passed and the
+local tree is clean. Its algebraic core is complete; this phase consumes it.
+Original SPEC §9 / §16 E scope and the proposed no-joint-polynomial type above
+are retained. Remaining original obligations keep the estimate near 60%.
+
+Target `WideCPQRFamily.lean` and `WideCPQRGrowth.lean`, re-exported/audited with
+public-only literal consumers:
+
+- `milestoneE_wide_adverse_family`: for every natural m≥2, k=m² and
+  n=k+32k⁴, there exists an actual real k×n Parseval frame A whose CPQR set is
+  the first k indices, whose leading block is `wideTriangular m`, and an
+  explicit nonzero selected-coordinate vector with inverse-energy ratio at
+  least `((2m/3)*(4/3)^(m-1))²`. No tail-dominance or factor assumption is
+  left on the public statement.
+- `milestoneE_cpqr_no_joint_polynomial`: for every d:ℕ and C>0, some real
+  orthogonal-row frame A and selected-coordinate x satisfy
+  `C*(n+k+1)^(2*d)*vecEnergy(selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x`.
+  This quantifies actual CPQR selections, not an arbitrary triangular factor.
+
+Small exact core: instantiate the Frobenius and strict tail-energy conditions,
+then use the already-proved completion and prefix law. Prove a finite geometric
+sum for the explicit triangular witness and an explicit growth lower bound
+before using geometric-over-polynomial limits. The observable route criterion
+is the all-m frame/pivot theorem; if it fails, isolate the exact missing bridge
+or independently recertified failure instead of adding another unused layer.
+
+Independent Python: retain the existing compressed determinant oracle. Extend
+`wide_cpqr.py` / `tests/test_wide_cpqr.py` only where the new finite growth
+certificate needs evidence: independently recompute the geometric witness,
+quantitative lower scale, and any explicit threshold; keep scalar-only checks
+distinct from whole-frame checks, with fixed deterministic inputs and explicit
+budget failures. No explicit inverse or floating pivot claim.
+
+Non-claims: no polynomial CPQR upper bound, no CSSP theorem, no conclusion for
+all of Simons Problem 4.1, no novelty claim for prescribed-block completion,
+and no replacement of the randomized result by the CPQR obstruction. A full
+qualifying obstruction requires both the actual-family and all-polynomial
+quantifiers; finite scalar crossings alone do not close E.

@@ -108,3 +108,43 @@ example {m : ℕ} (hm : 2 ≤ m) {i : ℕ} (hi : i < m*m) :
       (1 / (2 * ((m*m : ℕ) : ℝ))) *
         ((4*(m : ℝ)^2-1)/(4*(m : ℝ)^2+1))^i :=
   milestoneE_wide_parameter_diagonal_lower hm hi
+
+/-!
+SPEC §16 Milestone E consumers below keep the extra hypotheses in the type.
+They do not assert a joint polynomial inverse bound for every orthogonal-row
+matrix. Outcome 2 has no consumer here: the 3×8 witness stays in
+`SmallInstanceChecks.lean` and is not re-exported. Outcome 3 needs that
+witness to pass the named polynomial, which it does not. Milestone F is
+not asserted.
+-/
+
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ((pivotGram A hA)⁻¹).trace ≤
+      ((n : ℝ) - k + 1) * ((4 : ℝ)^k + 6*k - 1) / 9 :=
+  milestoneE_pivot_gram_inv_trace_le A hA
+
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hbi : gsUBidiagonal A hA) :
+    ((pivotGram A hA)⁻¹).trace ≤
+      ((k : ℝ) * (k + 1) / 2) * ((n : ℝ) - k + 1) :=
+  milestoneE_bidiagonal_U_inv_trace_le A hA hbi
+
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hb : gsUColumnBudget A hA) :
+    ((pivotGram A hA)⁻¹).trace ≤
+      ((k : ℝ) * (k + 1) / 2) * ((n : ℝ) - k + 1) :=
+  milestoneE_column_budget_inv_trace_le A hA hb
+
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (x : Fin (cpqrSet A).card → ℝ) :
+    vecEnergy x ≤
+      (k : ℝ) * (n.choose k : ℝ) *
+        vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) :=
+  milestoneE_cpqr_inv_energy_le_choose A hA x
+
+example {k n d : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hd : MinDimLe k n d) (x : Fin (cpqrSet A).card → ℝ) :
+    vecEnergy x ≤
+      (k : ℝ) * (n : ℝ) ^ d *
+        vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) :=
+  milestoneE_cpqr_inv_energy_le_of_minDim A hA hd x

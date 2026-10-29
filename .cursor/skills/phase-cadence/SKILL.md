@@ -114,8 +114,9 @@ Open or update a **draft** PR against `main`.
 ## Definition of done
 
 - Milestone contract has named theorem outputs
-- `lake build` passes
-- `rg sorry --glob '*.lean'` is empty
+- The `RESEARCH.md` obligation ledger still matches SPEC §16
+- `bash scripts/verify.sh` passes
 - Public structural theorem axioms are Lean defaults
+- Weaker E hypotheses stay visible in `scripts/CompletionContract.lean`
 - Docs reflect delivered vs open work accurately
 - Branch is pushed and has a draft PR

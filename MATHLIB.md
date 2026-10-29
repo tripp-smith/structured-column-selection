@@ -1,5 +1,8 @@
 # Mathlib-facing notes
 
+`StructuredColumnSelection/MathlibReady.lean` checks the current upstream
+candidates. Importing that module is not a mathlib pull request.
+
 ## Already reusable
 
 Phase 2 proves a Fin-indexed Cauchy–Binet formula:
@@ -171,3 +174,14 @@ for the complementary Gram; finite sum reindexing for repeated columns;
 projector/Gram insert lemmas to prove coordinate-prefix identities and the
 actual pivot sequence. No new generic QR or triangular inverse abstraction.
 The parameter-family pivot instantiation and inverse-growth bridge remain open.
+
+## Explicit wide-family search (2026-10-24)
+
+Candidates: `Nat.decreasingInduction` for strict column-tail domination;
+`Finset.sum_range_reflect`, `geom_sum_mul`, `mul_geom_sum` for the triangular
+witness; `Finset.orderEmbOfFin_unique` and existing
+`orderEmbOfFin_comp_finCongr` for actual selected coordinates. For the final
+quantifier, `tendsto_pow_const_div_const_pow_of_one_lt` in
+`Analysis.SpecificLimits.Normed` supplies geometric-over-polynomial domination
+after the explicit finite family theorem. Reuse completion/prefix results;
+do not create another QR algorithm abstraction.

@@ -20,6 +20,7 @@ import numpy as np
 from scipy.optimize import minimize
 
 from structselect.census import evaluate, named_poly_scale
+from structselect.provenance import require_clean_worktree
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_SEED = 20260816
@@ -655,6 +656,7 @@ def write_experiment(
     payload = run_path2(
         seed=seed, k_max=k_max, ratios=ratios, verbose=verbose
     )
+    payload["revision"] = require_clean_worktree(ROOT)
     out = path or default_json_path(seed)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, indent=2))

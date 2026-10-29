@@ -19,6 +19,7 @@ import StructuredColumnSelection.RowOrthoConstraints
 import StructuredColumnSelection.StaticClass
 import StructuredColumnSelection.SmallInstanceChecks
 import StructuredColumnSelection.Theorems
+import StructuredColumnSelection.MathlibReady
 
 /-!
 # StructuredColumnSelection
@@ -33,4 +34,5 @@ bidiagonal hypothesis on `U`, not for every orthogonal-row matrix.
 A Path 3 inverse-energy bound holds on the static class
 `min(k, n-k) ≤ d`; that is not a joint `poly(n,k)` theorem for every
 orthogonal-row matrix. Milestone E remains open.
+`MathlibReady.lean` checks upstream candidates and is not a pull request.
 -/
