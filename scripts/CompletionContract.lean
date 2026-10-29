@@ -169,6 +169,24 @@ example {m n k : ℕ}
         frobeniusNorm E :=
   milestoneF_cssp_frobenius A E U S Q hQ J hJ hInv hA
 
+example {τ : ℝ} (hτ : 0 ≤ τ) :
+    ∃ m : ℕ, 2 ≤ m ∧
+      ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
+        A * Aᵀ = 1 ∧
+        cpqrSet A = widePrefix (wideWidth m) (wideDim m) ∧
+        ∃ jMin jMax : Fin (wideWidth m),
+          τ * (∑ i, A i jMin ^ 2) < ∑ i, A i jMax ^ 2 ∧
+          (8 * ((m * m : ℕ) : ℝ)) * (∑ i, A i jMin ^ 2) < ∑ i, A i jMax ^ 2 := by
+  obtain ⟨m, hm, A, horth, hcpqr, jMin, jMax, hτe, h8⟩ :=
+    milestoneE_wide_leverage_escape hτ
+  refine ⟨m, hm, A, ?_, ?_, jMin, jMax, ?_, ?_⟩
+  · simpa [OrthogonalRows] using horth
+  · simpa [wideDim] using hcpqr
+  · simpa [residualSq_empty] using hτe
+  · have hcoeff :
+        (8 * ((m * m : ℕ) : ℝ)) * residualSq A ∅ jMin < residualSq A ∅ jMax := h8
+    simpa [residualSq_empty] using hcoeff
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

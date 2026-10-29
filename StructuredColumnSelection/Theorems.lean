@@ -1,4 +1,5 @@
 import StructuredColumnSelection.CSSPBridge
+import StructuredColumnSelection.WideLeverage
 import StructuredColumnSelection.WideCPQR
 import StructuredColumnSelection.WideCPQRParameters
 import StructuredColumnSelection.WideCPQRGrowth
@@ -538,5 +539,19 @@ theorem milestoneF_cssp_frobenius {m n k : ℕ}
       (1 + spectralNorm (Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id)⁻¹) *
         frobeniusNorm E :=
   cssp_frobenius A E U S Q hQ J hJ hInv hA
+
+/-- The outcome-2 family leaves every fixed column-energy ratio.
+
+This is not a polynomial bound for the leverage-ratio class, and it does
+not close outcome 3. -/
+theorem milestoneE_wide_leverage_escape {τ : ℝ} (hτ : 0 ≤ τ) :
+    ∃ m : ℕ, 2 ≤ m ∧
+      ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
+        OrthogonalRows A ∧
+        cpqrSet A = widePrefix (wideWidth m) (wideDim m) ∧
+        ∃ jMin jMax : Fin (wideWidth m),
+          τ * residualSq A ∅ jMin < residualSq A ∅ jMax ∧
+          (8 * (wideDim m : ℝ)) * residualSq A ∅ jMin < residualSq A ∅ jMax :=
+  wide_leverage_escape hτ
 
 end StructuredColumnSelection
