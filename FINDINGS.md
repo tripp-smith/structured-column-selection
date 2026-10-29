@@ -351,6 +351,16 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Pivot split (2026-10-29)
+
+`milestoneE_increment_set_ne_cpqr` says there is an orthogonal-row
+`2×5` matrix on which `incrementSet` and `cpqrSet` differ. Both rules
+take column `0` first. CPQR then takes column `1`, because the residual
+`2/5` is tied and the least index wins. The increment ratios are
+`17/5` at column `1` and `29/10` at column `2`, so the increment pivot
+takes column `2`. The sets are `{0, 1}` and `{0, 2}`. This does not
+close outcome 1 or outcome 3.
+
 ## Increment set (2026-10-29)
 
 `milestoneE_increment_set_bound` names the least-index column that
