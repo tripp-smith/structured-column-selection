@@ -817,6 +817,12 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (inverse-trace growth step): `milestoneE_inv_trace_growth_step`
+says that a block with inverse trace at most
+`t (n - t + 1) / (k - t + 1)` can be extended by one column to inverse
+trace at most `(t + 1) (n - t) / (k - t)`. It is not a CPQR bound.
+Outcome 3 stays open.
+
 Status note (best-column increment): `milestoneE_best_column_increment_le`
 says some unused column has positive residual and inverse-trace increment
 at most `((n - t) + trace(G⁻¹) - t) / (k - t)`. It is not a CPQR bound.

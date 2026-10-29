@@ -300,12 +300,21 @@ in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#21](https://github.com/tripp-smith/structured-column-selection/pull/21).
 
-Current phase: **I best-column increment — in progress**. Target:
-`milestoneE_best_column_increment_le`. For an invertible selected Gram
-with fewer than `k` columns, some unused column has positive residual and
-inverse-trace increment at most
+Completed phase: **I best-column increment**.
+`milestoneE_best_column_increment_le` says that for an invertible selected
+Gram with fewer than `k` columns, some unused column has positive residual
+and inverse-trace increment at most
 `((n - t) + trace(G⁻¹) - t) / (k - t)`. This is not a CPQR bound and it
 does not close outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#22](https://github.com/tripp-smith/structured-column-selection/pull/22).
+
+Current phase: **J inverse-trace growth step — in progress**. Target:
+`milestoneE_inv_trace_growth_step`. If the selected inverse trace is at
+most `t (n - t + 1) / (k - t + 1)`, some appended column brings it to at
+most `(t + 1) (n - t) / (k - t)`. This is not a CPQR bound and it does
+not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#23](https://github.com/tripp-smith/structured-column-selection/pull/23).

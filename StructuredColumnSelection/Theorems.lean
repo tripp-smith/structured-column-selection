@@ -1,3 +1,4 @@
+import StructuredColumnSelection.InvTraceGrowth
 import StructuredColumnSelection.BestColumnIncrement
 import StructuredColumnSelection.InvTraceStep
 import StructuredColumnSelection.CSSPBridge
@@ -587,5 +588,21 @@ theorem milestoneE_best_column_increment_le {k n : ℕ}
         (((n : ℝ) - J.card) + ((selectedColGram A J)⁻¹).trace - J.card) /
           ((k : ℝ) - J.card) :=
   best_column_increment_le A hA J hG ht
+
+/-- One appended column preserves the inductive inverse-trace bound.
+
+This is not a bound for the max-residual CPQR pivot and does not close
+outcome 3. -/
+theorem milestoneE_inv_trace_growth_step {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (J : Finset (Fin n)) (hG : (selectedColGram A J).det ≠ 0)
+    (ht : J.card < k)
+    (hf : ((selectedColGram A J)⁻¹).trace ≤
+      (J.card : ℝ) * ((n : ℝ) - J.card + 1) / ((k : ℝ) - J.card + 1)) :
+    ∃ j, j ∉ J ∧
+      (((appendColumn (selectedCols A J) (fun i => A i j))ᵀ *
+          appendColumn (selectedCols A J) (fun i => A i j))⁻¹).trace ≤
+        ((J.card : ℝ) + 1) * ((n : ℝ) - J.card) / ((k : ℝ) - J.card) :=
+  inv_trace_growth_step A hA J hG ht hf
 
 end StructuredColumnSelection
