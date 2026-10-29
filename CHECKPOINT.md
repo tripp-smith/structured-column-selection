@@ -70,6 +70,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Equal-energy prefix Rayleigh | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_cpqr_prefix_rayleigh` |
 | Equal-energy three-column trace | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_cpqr_three_trace` |
 | Equal-energy three-row CPQR | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_cpqr_k3` |
+| Leverage-ratio pivot split | **PROVED** (does not close outcome 3) | `milestoneE_leverage_ratio_pivot_split` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

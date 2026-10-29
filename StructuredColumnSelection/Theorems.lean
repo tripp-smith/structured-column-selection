@@ -3,6 +3,7 @@ import StructuredColumnSelection.WideIncoherent
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
+import StructuredColumnSelection.LeverageRatioSplit
 import StructuredColumnSelection.IncrementSet
 import StructuredColumnSelection.InvSpectralBound
 import StructuredColumnSelection.InvTraceInduction
@@ -663,6 +664,23 @@ theorem milestoneE_increment_set_ne_cpqr :
     ∃ A : Matrix (Fin 2) (Fin 5) ℝ,
       OrthogonalRows A ∧ incrementSet A ≠ cpqrSet A :=
   increment_set_ne_cpqr
+
+/-- An orthogonal-row `2×5` frame with column energies in `[13/50, 16/25]`
+has leverage ratio `32/13`, and on it max-residual CPQR and the increment
+pivot select different columns.
+
+Equal column energy still makes the second pivots agree. This witness does
+not close outcome 1 or outcome 3. -/
+theorem milestoneE_leverage_ratio_pivot_split :
+    ∃ A : Matrix (Fin 2) (Fin 5) ℝ,
+      OrthogonalRows A ∧
+        (∀ j : Fin 5, (13 : ℝ) / 50 ≤ residualSq A ∅ j ∧
+          residualSq A ∅ j ≤ (16 : ℝ) / 25) ∧
+        residualSq A ∅ (0 : Fin 5) = (16 : ℝ) / 25 ∧
+        residualSq A ∅ (2 : Fin 5) = (13 : ℝ) / 50 ∧
+        ((16 : ℝ) / 25) / ((13 : ℝ) / 50) = 32 / 13 ∧
+        incrementSet A ≠ cpqrSet A :=
+  leverage_ratio_pivot_split
 
 /-- If every positive-residual unused column has coefficient zero, the
 increment pivot and max-residual CPQR return the same column.

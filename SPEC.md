@@ -817,6 +817,13 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (leverage-ratio pivot split):
+`milestoneE_leverage_ratio_pivot_split` gives an orthogonal-row `2×5`
+frame with column energies in `[13/50, 16/25]`, leverage ratio `32/13`,
+on which max-residual CPQR and the increment pivot select different
+columns. Equal energy still makes the second pivots agree. Outcome 3
+stays open.
+
 Status note (equal-energy three-row CPQR):
 `milestoneE_equal_energy_cpqr_k3` says that when `k = 3`, equal column
 energy makes the full CPQR set obey `5n - 12 + 6/n` in inverse trace and

@@ -232,6 +232,17 @@ example :
       OrthogonalRows A ∧ incrementSet A ≠ cpqrSet A :=
   milestoneE_increment_set_ne_cpqr
 
+example :
+    ∃ A : Matrix (Fin 2) (Fin 5) ℝ,
+      OrthogonalRows A ∧
+        (∀ j : Fin 5, (13 : ℝ) / 50 ≤ residualSq A ∅ j ∧
+          residualSq A ∅ j ≤ (16 : ℝ) / 25) ∧
+        residualSq A ∅ (0 : Fin 5) = (16 : ℝ) / 25 ∧
+        residualSq A ∅ (2 : Fin 5) = (13 : ℝ) / 50 ∧
+        ((16 : ℝ) / 25) / ((13 : ℝ) / 50) = 32 / 13 ∧
+        incrementSet A ≠ cpqrSet A :=
+  milestoneE_leverage_ratio_pivot_split
+
 example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
     (hG : (selectedColGram A J).det ≠ 0)
     (hzero : ∀ j ∈ incrementCandidates A J,

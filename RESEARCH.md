@@ -1190,3 +1190,37 @@ apply to it. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#34](https://github.com/tripp-smith/structured-column-selection/pull/34).
+
+## Phase V leverage-ratio pivot split (2026-10-29, contract)
+
+Iteration V. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Another equal-energy prefix length does not discharge
+outcome 3, and the `λ_min ≥ 1 / trace` recurrence unrolls exponentially
+in `k`. Phase R's second-pivot agreement uses equal column energy, which
+is leverage ratio `1`. The question for this phase is whether a leverage
+ratio strictly above `1` keeps that agreement. Success is a certified
+orthogonal-row witness whose column-energy ratio is `32/13` and whose
+CPQR set differs from the increment set:
+`milestoneE_leverage_ratio_pivot_split`. Exit if the energies leave
+`[13/50, 16/25]` or the two selected sets agree.
+
+Target in `StructuredColumnSelection/LeverageRatioSplit.lean`, re-exported
+as `milestoneE_leverage_ratio_pivot_split`: there is an orthogonal-row
+`2×5` matrix whose column energies lie in `[13/50, 16/25]`, attain both
+endpoints, hence have ratio `(16/25) / (13/50) = 32/13`, and on which
+`incrementSet ≠ cpqrSet`.
+
+Independent check: `tests/test_leverage_ratio_split.py` recomputes the
+row dots, the five energies, the common residual `1/4`, and the four
+increment ratios from the integer columns. It does not call the
+repository CPQR code. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound on the leverage-ratio class, no
+claim that every matrix of ratio `32/13` splits, and no closure of
+outcome 1 or outcome 3. Equal energy remains the case in which the
+second pivots agree. Problem 4.1 is not solved. `MinDimLe`, `k = 1`,
+and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#35](https://github.com/tripp-smith/structured-column-selection/pull/35).
