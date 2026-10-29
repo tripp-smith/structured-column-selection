@@ -361,3 +361,6 @@ Current phase: **O zero-coefficient pivot — in progress**. Target:
 column has coefficient zero, the increment pivot and max-residual CPQR
 return the same column. This does not close outcome 3. The contract is
 in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#28](https://github.com/tripp-smith/structured-column-selection/pull/28).

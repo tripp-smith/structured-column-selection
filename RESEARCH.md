@@ -993,3 +993,6 @@ Non-claims: no polynomial CPQR bound, no claim that the rules agree on
 every orthogonal-row matrix, no closure of outcome 1 or outcome 3, and
 no claim that Problem 4.1 is solved. Phase N remains the separation.
 `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#28](https://github.com/tripp-smith/structured-column-selection/pull/28).
