@@ -319,11 +319,16 @@ bound and it does not close outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#23](https://github.com/tripp-smith/structured-column-selection/pull/23).
 
-Current phase: **K inverse-trace induction — in progress**. Target:
-`milestoneE_minimizing_inv_trace_le`. Some `k`-column submatrix has
-invertible Gram and inverse trace at most `k (n - k + 1)`. The columns
-are chosen by the increment bound, not by max-residual CPQR. This does
-not close outcome 3. The contract is in RESEARCH.md.
+Completed phase: **K inverse-trace induction**.
+`milestoneE_minimizing_inv_trace_le` says some `k` columns chosen by the
+increment bound have invertible Gram and inverse trace at most
+`k (n - k + 1)`. This is not a CPQR bound and it does not close
+outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#24](https://github.com/tripp-smith/structured-column-selection/pull/24).
+
+Current phase: **L inverse spectral bound — in progress**. Target:
+`milestoneE_minimizing_inv_spectral_le`. The same increment-pivot set
+satisfies `‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`. This is not a CPQR bound
+and it does not close outcome 3. The contract is in RESEARCH.md.

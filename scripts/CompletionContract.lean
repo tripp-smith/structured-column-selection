@@ -208,6 +208,14 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
       ((selectedColGram A J)⁻¹).trace ≤ (k : ℝ) * ((n : ℝ) - k + 1) :=
   milestoneE_minimizing_inv_trace_le A hA
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ∃ J : Finset (Fin n), J.card = k ∧ (selectedColGram A J).det ≠ 0 ∧
+      ∀ x : Fin J.card → ℝ,
+        vecEnergy x ≤
+          (1 + (k : ℝ) * ((n : ℝ) - k)) *
+            vecEnergy (selectedCols A J *ᵥ x) :=
+  milestoneE_minimizing_inv_spectral_le A hA
+
 example {τ : ℝ} (hτ : 0 ≤ τ) :
     ∃ m : ℕ, 2 ≤ m ∧
       ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,

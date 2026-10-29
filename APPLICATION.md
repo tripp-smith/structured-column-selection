@@ -194,6 +194,10 @@ CPQR obstruction or a replacement for the public randomized sampler.
 `A - A_J T = E - E_J T` and the squared Frobenius comparison against
 `(1 + |q|⁻¹)²`. It does not change the sampler.
 
+`tests/test_inv_spectral_bound.py` checks that columns `{0, 2}` of the
+rational `2×3` frame send `(0, 1)` to a vector of energy `16/25`, which
+is at least `1/3` of the input energy. It does not change the sampler.
+
 `tests/test_inv_trace_induction.py` checks that columns `{0, 2}` of the
 rational `2×3` frame have Gram inverse trace `1 + 25/16`, which is at
 most `k (n - k + 1) = 4`. It does not change the sampler.

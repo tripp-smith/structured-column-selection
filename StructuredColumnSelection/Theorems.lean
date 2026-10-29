@@ -1,3 +1,4 @@
+import StructuredColumnSelection.InvSpectralBound
 import StructuredColumnSelection.InvTraceInduction
 import StructuredColumnSelection.InvTraceGrowth
 import StructuredColumnSelection.BestColumnIncrement
@@ -616,5 +617,19 @@ theorem milestoneE_minimizing_inv_trace_le {k n : ℕ}
     ∃ J : Finset (Fin n), J.card = k ∧ (selectedColGram A J).det ≠ 0 ∧
       ((selectedColGram A J)⁻¹).trace ≤ (k : ℝ) * ((n : ℝ) - k + 1) :=
   minimizing_inv_trace_le A hA
+
+/-- Some `k` columns chosen by the increment bound satisfy
+`‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`.
+
+This is not a bound for the max-residual CPQR pivot and does not close
+outcome 3. -/
+theorem milestoneE_minimizing_inv_spectral_le {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
+    ∃ J : Finset (Fin n), J.card = k ∧ (selectedColGram A J).det ≠ 0 ∧
+      ∀ x : Fin J.card → ℝ,
+        vecEnergy x ≤
+          (1 + (k : ℝ) * ((n : ℝ) - k)) *
+            vecEnergy (selectedCols A J *ᵥ x) :=
+  minimizing_inv_spectral_le A hA
 
 end StructuredColumnSelection

@@ -351,6 +351,19 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Inverse spectral bound (2026-10-29)
+
+`milestoneE_minimizing_inv_spectral_le` says that an orthogonal-row
+matrix has some set of `k` columns whose Gram is invertible and which
+satisfies `‖x‖² ≤ (1 + k (n - k)) ‖A_J x‖²`. The set is the increment
+pivot from the inverse-trace induction. The argument uses that every
+column submatrix is a contraction, so `G⁻¹ - I` is positive semidefinite
+and the inverse trace drops by `k - 1` before it bounds the squared
+operator norm. Max-residual CPQR is a different rule. This does not
+close outcome 3. On the rational `2×3` frame, columns `{0, 2}` send
+`(0, 1)` to a vector of energy `16/25`, and `1 + 2 · 1 = 3`; that check
+is not the theorem.
+
 ## Inverse-trace induction (2026-10-29)
 
 `milestoneE_minimizing_inv_trace_le` says that an orthogonal-row matrix
