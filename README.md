@@ -365,8 +365,8 @@ outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#28](https://github.com/tripp-smith/structured-column-selection/pull/28).
 
-Current phase: **P orthogonal-column CPQR — in progress**. Target:
-`milestoneE_incoherent_zero_cpqr_bound`. Pairwise orthogonal columns
+Completed phase: **P orthogonal-column CPQR**.
+`milestoneE_incoherent_zero_cpqr_bound` says pairwise orthogonal columns
 make max-residual CPQR select `k` columns with inverse trace at most
 `k (n - k + 1)` and squared inverse operator norm at most
 `1 + k (n - k)`. This class is stricter than the SPEC §10 target and
@@ -374,3 +374,9 @@ does not close outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#29](https://github.com/tripp-smith/structured-column-selection/pull/29).
+
+Current phase: **Q adverse family outside orthogonal columns — in progress**.
+Target: `milestoneE_wide_not_incoherent_zero`. For every `m ≥ 2`, the
+outcome-2 frame has a nonzero column inner product, so the phase-P
+bound does not apply to it. This does not close outcome 3. The contract
+is in RESEARCH.md.

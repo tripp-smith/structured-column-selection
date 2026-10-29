@@ -1,3 +1,4 @@
+import StructuredColumnSelection.WideIncoherent
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -697,5 +698,15 @@ theorem milestoneE_incoherent_zero_cpqr_bound {k n : ℕ}
           (1 + (k : ℝ) * ((n : ℝ) - k)) *
             vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) :=
   incoherent_zero_cpqr_bound A hA hC
+
+/-- For every `m ≥ 2`, the outcome-2 frame is orthogonal across rows and
+is not pairwise orthogonal across columns.
+
+Phase P's CPQR bound does not apply to that frame. This does not close
+outcome 3. -/
+theorem milestoneE_wide_not_incoherent_zero {m : ℕ} (hm : 2 ≤ m) :
+    ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
+      OrthogonalRows A ∧ ¬ ColumnIncoherent A 0 :=
+  wide_not_incoherent_zero hm
 
 end StructuredColumnSelection

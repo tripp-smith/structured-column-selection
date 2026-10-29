@@ -351,6 +351,14 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Adverse family outside orthogonal columns (2026-10-29)
+
+`milestoneE_wide_not_incoherent_zero` says that for every `m ≥ 2` the
+outcome-2 frame is orthogonal across rows and has two leading columns
+whose inner product is `-wideC m * (wideDiagNat m 0) ^ 2 ≠ 0`. The
+phase-P CPQR bound does not apply to that frame. This does not close
+outcome 3.
+
 ## Orthogonal-column CPQR (2026-10-29)
 
 `milestoneE_incoherent_zero_cpqr_bound` says that pairwise orthogonal
