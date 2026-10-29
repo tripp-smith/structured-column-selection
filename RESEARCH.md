@@ -671,3 +671,6 @@ Independent check: `tests/test_wide_cpqr.py` recomputes bordered-Gram
 residuals, multiplies the closed-form witness, and cross-multiplies the
 closed head against the scale at `m = 2, 3, 4`. Scalar
 `growth_parameters` stays `frame_certified = False`.
+
+Phase PR and verification receipt:
+[#18](https://github.com/tripp-smith/structured-column-selection/pull/18).

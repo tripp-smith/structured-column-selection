@@ -253,8 +253,7 @@ sampling is separate.
 Phase PR and canonical verification/delivery receipt:
 [#16](https://github.com/tripp-smith/structured-column-selection/pull/16).
 
-Current phase: **E explicit adverse family — local verification pending the
-PR receipt**. Outcome 2 is
+Current phase: **E explicit adverse family — outcome 2**. Outcome 2 is
 `milestoneE_wide_adverse_family` (every `m ≥ 2`: orthogonal rows, CPQR set
 equal to the leading `m²` columns, image energy `1`, inverse energy at least
 `((2m/3)(4/3)^(m-1))²`), consumed by
@@ -264,3 +263,6 @@ equal to the leading `m²` columns, image energy `1`, inverse energy at least
 (`max(n³, k³, (k(n-k+1))²)² ‖A_J x‖² < ‖x‖²`). This is not a polynomial
 bound for every orthogonal-row matrix. Outcomes 1 and 3, and Milestone F,
 remain open. The contract and delivery note are in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#18](https://github.com/tripp-smith/structured-column-selection/pull/18).
