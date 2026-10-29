@@ -315,3 +315,6 @@ Current phase: **J inverse-trace growth step — in progress**. Target:
 most `t (n - t + 1) / (k - t + 1)`, some appended column brings it to at
 most `(t + 1) (n - t) / (k - t)`. This is not a CPQR bound and it does
 not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#23](https://github.com/tripp-smith/structured-column-selection/pull/23).
