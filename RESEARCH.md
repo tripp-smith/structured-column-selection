@@ -15,7 +15,7 @@ not close an open row. Historical thread entries below are delivery logs.
 | E outcome 1. Polynomial CPQR bound for every orthogonal-row matrix | open | a `Theorems.lean` statement whose hypotheses are only row orthogonality and whose bound is polynomial in `n` and `k` | `4^k` trace, binomial `C(n,k)`, `k = 1`, `k = 2`, bidiagonal `U`, column budget, or `MinDimLe` |
 | E outcome 2. Machine-checked counterexample past the named polynomial | closed | `milestoneE_wide_adverse_family`, `milestoneE_cpqr_no_joint_polynomial`, and `milestoneE_cpqr_named_polynomial_obstruction`: for every `m ≥ 2`, exact `AAᵀ = I`, CPQR set equal to the leading prefix, image energy `1`, and `‖x‖² ≥ ((2m/3)(4/3)^(m-1))²`; for every `d` and `C > 0`, `C(n+k+1)^{2d} ‖A_J x‖² < ‖x‖²`; and the `d = 4`, `C = 1` case `max(n³, k³, (k(n-k+1))²)² ‖A_J x‖² < ‖x‖²` | `frame38` (kills only `C = 1`; about `4.37` against `512`), the float `4×12` record, and scalar crossings with `frame_certified = False` |
 | E outcome 3. That counterexample plus a weaker static class with a polynomial theorem | open | outcome 2 together with a class read from `A` alone | Path 3 `milestoneE_cpqr_inv_energy_le_of_minDim`, which has no named-polynomial counterexample beside it |
-| F. CSSP perturbation bridge | open | the SPEC §11 inequality | starting F before an E row closes, unless the user asks |
+| F. CSSP perturbation bridge | closed | `milestoneF_cssp_spectral` and `milestoneF_cssp_frobenius`: for `A = U S Qᵀ + E` with `Qᵀ Q = 1` and invertible `Q_J`, `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖` in spectral norm and in Frobenius norm, with `T = (Q_Jᵀ)⁻¹ Qᵀ` and the same spectral coefficient on the right | a truncated-SVD construction, or starting F before an E row closes |
 
 Census files are listed in `experiments/manifest.json`. They are numeric
 unless that manifest says the `3×8` witness, and that witness is still a
@@ -24,8 +24,8 @@ consumers for the weaker E hypotheses live in `scripts/CompletionContract.lean`.
 
 Current audit (2026-10-29): historical C/D completion entries below refer to
 adjugate cores. The original all-frame actual-inverse equality is false.
-Outcome 2 of Milestone E is the adverse-family delivery at the end of this
-file. Outcome 1, outcome 3, and F remain open.
+Outcome 2 of Milestone E is the adverse-family delivery. Milestone F is
+the CSSP delivery at the end of this file. Outcomes 1 and 3 remain open.
 
 ## Thread 1 — Milestone A (completed)
 
@@ -674,3 +674,38 @@ closed head against the scale at `m = 2, 3, 4`. Scalar
 
 Phase PR and verification receipt:
 [#18](https://github.com/tripp-smith/structured-column-selection/pull/18).
+
+## Phase F CSSP bridge (2026-10-29, contract)
+
+Target `StructuredColumnSelection/CSSPBridge.lean`, re-exported and audited:
+
+- `milestoneF_cssp_spectral`
+- `milestoneF_cssp_frobenius`
+
+For `A = U S Qᵀ + E` with `Qᵀ Q = 1`, and a column index set `J` of size `k`
+whose row submatrix `Q_J` is invertible, set `T = (Q_Jᵀ)⁻¹ Qᵀ`. Both theorems
+state
+
+`‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`
+
+with the left-hand norm spectral in the first theorem and Frobenius in the
+second. The coefficient on the right is the spectral norm in both. This is
+the SPEC §11 comparison for a supplied orthonormal factor. It does not
+construct a truncated SVD.
+
+Independent check: `tests/test_cssp_bridge.py` recomputes
+`A - A_J T = E - E_J T` in exact rationals and compares squared Frobenius
+energy with `(1 + |q|⁻¹)²` on one fixed rank-1 example. No floating pivot.
+
+Non-claims: no polynomial bound for every orthogonal-row matrix, no outcome 3
+static class, no replacement of the randomized theorem, and no claim that
+Problem 4.1 is solved.
+
+Delivered: `milestoneF_cssp_spectral` and `milestoneF_cssp_frobenius` are
+the statements in the contract. Both call the coefficient identity
+`A - A_J T = E - E_J T`. The factor `Q` is supplied; the proof does not
+construct a truncated SVD. The exact Python check is the rank-1 identity
+in `tests/test_cssp_bridge.py`. It is not the theorem.
+
+Phase PR and verification receipt:
+[#19](https://github.com/tripp-smith/structured-column-selection/pull/19).

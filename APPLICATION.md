@@ -189,3 +189,7 @@ bit growth remains possible within a dimension budget.
 `frame_certified=False`. Its proposed inverse lower scale and polynomial
 comparison are conditional research diagnostics. They are not a certified
 CPQR obstruction or a replacement for the public randomized sampler.
+
+`tests/test_cssp_bridge.py` checks one exact rank-1 identity
+`A - A_J T = E - E_J T` and the squared Frobenius comparison against
+`(1 + |q|⁻¹)²`. It does not change the sampler.

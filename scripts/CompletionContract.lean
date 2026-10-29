@@ -143,9 +143,34 @@ example :
           (∑ i, (selectedCols A (cpqrSet A) *ᵥ x) i ^ 2) < ∑ i, x i ^ 2 :=
   milestoneE_cpqr_named_polynomial_obstruction
 
+example {m n k : ℕ}
+    (A E : Matrix (Fin m) (Fin n) ℝ)
+    (U : Matrix (Fin m) (Fin k) ℝ) (S : Matrix (Fin k) (Fin k) ℝ)
+    (Q : Matrix (Fin n) (Fin k) ℝ) (hQ : Qᵀ * Q = 1)
+    (J : Finset (Fin n)) (hJ : J.card = k)
+    (hInv : IsUnit (Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id).det)
+    (hA : A = U * S * Qᵀ + E) :
+    spectralNorm (A - (A * colEmbed (J.orderEmbOfFin hJ).toEmbedding) *
+        (((Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id)ᵀ)⁻¹ * Qᵀ)) ≤
+      (1 + spectralNorm (Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id)⁻¹) *
+        spectralNorm E :=
+  milestoneF_cssp_spectral A E U S Q hQ J hJ hInv hA
+
+example {m n k : ℕ}
+    (A E : Matrix (Fin m) (Fin n) ℝ)
+    (U : Matrix (Fin m) (Fin k) ℝ) (S : Matrix (Fin k) (Fin k) ℝ)
+    (Q : Matrix (Fin n) (Fin k) ℝ) (hQ : Qᵀ * Q = 1)
+    (J : Finset (Fin n)) (hJ : J.card = k)
+    (hInv : IsUnit (Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id).det)
+    (hA : A = U * S * Qᵀ + E) :
+    frobeniusNorm (A - (A * colEmbed (J.orderEmbOfFin hJ).toEmbedding) *
+        (((Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id)ᵀ)⁻¹ * Qᵀ)) ≤
+      (1 + spectralNorm (Q.submatrix (J.orderEmbOfFin hJ).toEmbedding id)⁻¹) *
+        frobeniusNorm E :=
+  milestoneF_cssp_frobenius A E U S Q hQ J hJ hInv hA
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
-Milestone F is not asserted.
 -/
 
 example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A) :
