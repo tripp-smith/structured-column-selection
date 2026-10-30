@@ -171,6 +171,18 @@ example {m : ℕ} (hm : 2 ≤ m) {N : ℕ}
         ((2 * (m : ℝ) / 3) * ((4 : ℝ) / 3) ^ (m - 1)) ^ 2 ≤ ∑ i, x i ^ 2 :=
   milestoneE_design_adverse_family hm C hCC W hW hcol
 
+example {k : ℕ} (R : Matrix (Fin k) (Fin k) ℝ) (hR : (∑ i, ∑ j, R i j ^ 2) ≤ 1) :
+    ∃ C : Matrix (Fin k) (Fin k) ℝ,
+      Cᵀ = C ∧ R * Rᵀ + C * Cᵀ = 1 ∧
+      (∀ w v : Fin k → ℝ,
+        (C *ᵥ w) ⬝ᵥ (C *ᵥ v) = w ⬝ᵥ v - (Rᵀ *ᵥ w) ⬝ᵥ (Rᵀ *ᵥ v)) ∧
+      (∀ w : Fin k → ℝ,
+        (1 - ∑ i, ∑ j, R i j ^ 2) * (∑ i, w i ^ 2) ≤ ∑ i, (C *ᵥ w) i ^ 2 ∧
+          (∑ i, (C *ᵥ w) i ^ 2) ≤ ∑ i, w i ^ 2) ∧
+      ∀ v : Fin k → ℝ,
+        (∑ i, ((C - 1) *ᵥ v) i ^ 2) ≤ (∑ i, ∑ j, R i j ^ 2) ^ 2 * ∑ i, v i ^ 2 :=
+  milestoneE_symmetric_completion R hR
+
 example :
     ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
       ∃ x : Fin (cpqrSet A).card → ℝ,

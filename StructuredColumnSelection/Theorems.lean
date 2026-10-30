@@ -3,6 +3,7 @@ import StructuredColumnSelection.WideIncoherent
 import StructuredColumnSelection.WideIncoherentEscape
 import StructuredColumnSelection.NormalizedCoherence
 import StructuredColumnSelection.DesignFrame
+import StructuredColumnSelection.SymmetricCompletion
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -849,6 +850,25 @@ theorem milestoneE_design_adverse_family {m : ℕ} (hm : 2 ≤ m) {N : ℕ}
         vecEnergy (selectedCols A (widePrefix (wideDim m + N) (wideDim m)) *ᵥ x) = 1 ∧
         wideGrowthLower m ^ 2 ≤ vecEnergy x :=
   wide_design_adverse_family hm C hCC W hW hcol
+
+/-- A symmetric completion of any `R` with `‖R‖_F² ≤ 1`:
+`Cᵀ = C`, `R Rᵀ + C Cᵀ = 1`, `⟨C w, C v⟩ = ⟨w, v⟩ - ⟨Rᵀ w, Rᵀ v⟩`,
+`(1 - ‖R‖_F²) ‖w‖² ≤ ‖C w‖² ≤ ‖w‖²`, and `‖(C - I) v‖² ≤ ‖R‖_F⁴ ‖v‖²`.
+
+This is the completion a later phase feeds into the design frame. No
+coherence bound on any frame is claimed. This does not close outcome 1
+or outcome 3. -/
+theorem milestoneE_symmetric_completion {k : ℕ} (R : Matrix (Fin k) (Fin k) ℝ)
+    (hR : frobEnergy R ≤ 1) :
+    ∃ C : Matrix (Fin k) (Fin k) ℝ,
+      Cᵀ = C ∧ R * Rᵀ + C * Cᵀ = 1 ∧
+      (∀ w v : Fin k → ℝ,
+        (C *ᵥ w) ⬝ᵥ (C *ᵥ v) = w ⬝ᵥ v - (Rᵀ *ᵥ w) ⬝ᵥ (Rᵀ *ᵥ v)) ∧
+      (∀ w : Fin k → ℝ,
+        (1 - frobEnergy R) * vecEnergy w ≤ vecEnergy (C *ᵥ w) ∧
+          vecEnergy (C *ᵥ w) ≤ vecEnergy w) ∧
+      ∀ v : Fin k → ℝ, vecEnergy ((C - 1) *ᵥ v) ≤ frobEnergy R ^ 2 * vecEnergy v :=
+  symmetric_completion R hR
 
 /-- Equal column energy makes the second CPQR pivot agree with the
 increment pivot, and the two-column inverse trace is at most

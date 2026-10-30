@@ -216,6 +216,12 @@ the sampler.
 that three-column expression at `k = 3` and that the identity satisfies
 `‖x‖² ≤ 5 ‖A_J x‖²`. It does not change the sampler.
 
+`tests/test_symmetric_completion.py` checks, on two rational pairs
+`(R, C)` with `Cᵀ = C` and `C² = I - R Rᵀ`, the inner-product identity,
+the energy sandwich `(1 - ‖R‖_F²) ‖w‖² ≤ ‖C w‖² ≤ ‖w‖²`, and the
+perturbation bound `‖(C - I) v‖² ≤ ‖R‖_F⁴ ‖v‖²`. It does not change the
+sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

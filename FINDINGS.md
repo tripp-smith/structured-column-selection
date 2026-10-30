@@ -351,6 +351,19 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Symmetric completion bounds (2026-10-30)
+
+`milestoneE_symmetric_completion` says that every `R` with `‖R‖_F² ≤ 1`
+has a symmetric completion `C` with `R Rᵀ + C Cᵀ = I` such that
+`⟨C w, C v⟩ = ⟨w, v⟩ - ⟨Rᵀ w, Rᵀ v⟩`,
+`(1 - ‖R‖_F²) ‖w‖² ≤ ‖C w‖² ≤ ‖w‖²`, and
+`‖(C - I) v‖² ≤ ‖R‖_F⁴ ‖v‖²`. The matrix is the positive semidefinite
+square root of `I - R Rᵀ`; the perturbation bound comes from
+`(C + I)(C - I) = -R Rᵀ` and `‖(C + I) u‖² ≥ ‖u‖²` for `C ⪰ 0`, with
+no spectral decomposition. This is a completion for the design frame.
+No coherence bound on any frame is proved. This does not close
+outcome 3.
+
 ## Design-padded adverse family (2026-10-30)
 
 `milestoneE_design_adverse_family` says that the outcome-2 construction

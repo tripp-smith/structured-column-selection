@@ -817,6 +817,14 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (symmetric completion):
+`milestoneE_symmetric_completion` gives every `R` with `‖R‖_F² ≤ 1` a
+symmetric completion `R Rᵀ + C Cᵀ = 1` with the inner-product identity
+`⟨C w, C v⟩ = ⟨w, v⟩ - ⟨Rᵀ w, Rᵀ v⟩`, the energy sandwich
+`(1 - ‖R‖_F²) ‖w‖² ≤ ‖C w‖² ≤ ‖w‖²`, and the perturbation bound
+`‖(C - I) v‖² ≤ ‖R‖_F⁴ ‖v‖²`. No coherence bound on any frame is
+claimed. Outcome 3 stays open.
+
 Status note (design-padded adverse family):
 `milestoneE_design_adverse_family` replaces the repeated filler block of
 the outcome-2 frame by any tight design `W` with `W Wᵀ = 1` and column
