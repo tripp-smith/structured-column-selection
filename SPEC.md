@@ -817,6 +817,12 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (absolute incoherence escape):
+`milestoneE_incoherent_no_joint_polynomial` says that for every `ρ > 0`,
+`ColumnIncoherent A ρ` contains an orthogonal-row frame whose CPQR block
+beats `C (n + k + 1)^{2d}`. The predicate bounds absolute inner products,
+not the normalized coherence ratio. Outcome 3 stays open.
+
 Status note (equal-energy third pivot):
 `milestoneE_equal_energy_third_pivot_split` gives an orthogonal-row
 `3×6` frame with equal column energy on which both rules take columns

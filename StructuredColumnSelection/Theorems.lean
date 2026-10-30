@@ -1,5 +1,6 @@
 import StructuredColumnSelection.EqualEnergyPivot
 import StructuredColumnSelection.WideIncoherent
+import StructuredColumnSelection.WideIncoherentEscape
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -784,6 +785,23 @@ theorem milestoneE_wide_not_incoherent_zero {m : ℕ} (hm : 2 ≤ m) :
     ∃ A : Matrix (Fin (wideDim m)) (Fin (wideWidth m)) ℝ,
       OrthogonalRows A ∧ ¬ ColumnIncoherent A 0 :=
   wide_not_incoherent_zero hm
+
+/-- For every `ρ > 0`, absolute inner-product incoherence does not restore
+a polynomial CPQR bound.
+
+Some orthogonal-row frame in `ColumnIncoherent A ρ` has a CPQR block whose
+inverse energy exceeds `C (n + k + 1)^{2d}`. The predicate bounds absolute
+inner products, not the normalized coherence ratio in SPEC §10. The case
+`ρ = 0` is unchanged. This does not close outcome 1 or outcome 3. -/
+theorem milestoneE_incoherent_no_joint_polynomial {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ)
+    {C : ℝ} (hC : 0 < C) :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        OrthogonalRows A ∧
+        ColumnIncoherent A ρ ∧
+        C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
+  incoherent_no_joint_polynomial hρ d hC
 
 /-- Equal column energy makes the second CPQR pivot agree with the
 increment pivot, and the two-column inverse trace is at most
