@@ -635,3 +635,6 @@ Rayleigh quotient is `1`, because `λ_max ≤ trace`. The bound is not sharp.
 It does not bound later pivots. It does not close outcome 3. It is not a
 polynomial bound for every orthogonal-row matrix. The contract is in
 RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#51](https://github.com/tripp-smith/structured-column-selection/pull/51).
