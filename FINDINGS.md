@@ -351,6 +351,34 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## CPQR trace step (2026-10-30)
+
+`milestoneE_joint_cpqr_step` moves a CPQR prefix of length `t` to length
+`t + 1`. Orthogonal rows, `1 ≤ t < k`, `t < n`, a leverage ratio at most
+`τ`, and an inverse-trace bound `B` on `cpqrIterate A t` give an
+invertible Gram at `t + 1` whose inverse trace is at most
+
+`B + (1 + (τ k / n) B) · (n - t) / (k - t)`.
+
+The constant was not weakened. The current inverse trace `T` is positive,
+so `μ = 1 / T` is a Rayleigh lower bound. `T ≤ B` and the Schur form `q`
+is nonnegative, so the later upper bound may replace `T` by `B`. The
+residual average is `(k - t) / (n - t)`, and the pivot column energy is
+at most `τ k / n`. Coherence is not a hypothesis. It was used only to
+start a recurrence at length 2.
+
+`tests/test_cpqr_step.py` runs `structselect.cpqr` on the `3×3` identity.
+The length-2 Gram is `I₂` and its inverse trace is `2`. At `B = 2`,
+`τ = 1`, `k = 3`, `n = 3`, `t = 2` the step bound equals `5`. The
+length-3 inverse trace is `3`, and `3 ≤ 5`. The check does not assert
+equality. It is not the theorem.
+
+Iterating the step multiplies by a factor of size `O(τ k)`. This phase
+does not iterate the recurrence and does not produce a polynomial. It
+does not bound the full `k`-set. It does not close outcome 3. Problem
+4.1 is not solved, and this phase does not claim that CPQR is polynomial
+on orthogonal-row matrices.
+
 ## Joint three-row CPQR (2026-10-30)
 
 `milestoneE_joint_cpqr_k3` specializes `milestoneE_joint_cpqr_three_trace`

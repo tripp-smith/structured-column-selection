@@ -585,6 +585,17 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
               (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) * ((n : ℝ) - 2)) :=
   milestoneE_joint_cpqr_k3 A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
 
+example {k n t : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (ht1 : 1 ≤ t) (htk : t < k) (htn : t < n) (τ B : ℝ)
+    (hτ : 1 ≤ τ) (hB : 0 ≤ B)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (htr : ((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤ B) :
+    (selectedColGram A (cpqrIterate A (t + 1))).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A (t + 1)))⁻¹).trace ≤
+        B + (1 + (τ * (k : ℝ) / (n : ℝ)) * B) *
+          (((n : ℝ) - t) / ((k : ℝ) - t)) :=
+  milestoneE_joint_cpqr_step A hA ht1 htk htn τ B hτ hB hlev htr
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

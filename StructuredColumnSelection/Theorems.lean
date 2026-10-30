@@ -1190,4 +1190,19 @@ theorem milestoneE_joint_cpqr_k3 {k n : ℕ}
               (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) * ((n : ℝ) - 2)) :=
   joint_cpqr_k3 A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
 
+/-- One CPQR pivot step under a leverage-ratio bound, assuming a trace
+bound on the current prefix. Not a bound on the full `k`-set. Not a
+polynomial bound. Does not close outcome 3. Coherence is not used. -/
+theorem milestoneE_joint_cpqr_step {k n t : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (ht1 : 1 ≤ t) (htk : t < k) (htn : t < n) (τ B : ℝ)
+    (hτ : 1 ≤ τ) (hB : 0 ≤ B)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (htr : ((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤ B) :
+    (selectedColGram A (cpqrIterate A (t + 1))).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A (t + 1)))⁻¹).trace ≤
+        B + (1 + (τ * (k : ℝ) / (n : ℝ)) * B) *
+          (((n : ℝ) - t) / ((k : ℝ) - t)) :=
+  joint_cpqr_step A hA ht1 htk htn τ B hτ hB hlev htr
+
 end StructuredColumnSelection

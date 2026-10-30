@@ -2164,3 +2164,72 @@ stays outside outcome 3.
 
 Phase PR and verification receipt:
 [#53](https://github.com/tripp-smith/structured-column-selection/pull/53).
+
+## Phase AO CPQR trace step (2026-10-30, contract)
+
+Iteration AO. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AN bounds the full CPQR set only for `k = 3`.
+This phase is the one-step recurrence that moves a prefix of length `t`
+to length `t + 1`. The recurrence is not iterated here. No closed form
+is derived. A product of `k` factors is not claimed.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_cpqr_step`. Hypotheses: `OrthogonalRows A`, `1 ≤ t`,
+`t < k`, `t < n`, `1 ≤ τ`, `0 ≤ B`,
+`∀ i j, residualSq A ∅ i ≤ τ * residualSq A ∅ j`, and
+`((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤ B`.
+Coherence is not a hypothesis. It was used only to start the recurrence
+at length 2.
+
+Conclude:
+
+```text
+(selectedColGram A (cpqrIterate A (t + 1))).det ≠ 0 ∧
+((selectedColGram A (cpqrIterate A (t + 1)))⁻¹).trace ≤
+  B + (1 + (τ * (k : ℝ) / (n : ℝ)) * B) * (((n : ℝ) - t) / ((k : ℝ) - t))
+```
+
+The constant is that expression. It is not replaced by a looser one.
+It is not claimed sharp: on the `3×3` identity the length-2 Gram is
+`I₂` with inverse trace `2`. At `B = 2`, `τ = 1`, `k = 3`, `n = 3`,
+`t = 2` the step bound equals `5`. The length-3 inverse trace is `3`,
+and `3 ≤ 5`.
+
+Proof shape, matching `equal_energy_cpqr_three_trace` with `t` and `B`
+in place of the length-2 special case. `cpqrIterate_invariant` gives
+`(cpqrIterate A t).card = t` and invertibility of that Gram when
+`t ≤ k`, and invertibility of the length-`t + 1` Gram. Pivot selection
+is not rebuilt. `selectedCols_energy_mul_inv_trace_ge` gives
+`‖x‖² ≤ T ‖A_J x‖²` with `T` the current inverse trace. The Gram is
+invertible and positive semidefinite, so `T > 0`. Then `μ = 1 / T` is a
+Rayleigh lower bound. `T ≤ B` and the Schur quadratic form `q` is
+nonnegative, so replacing `T` by `B` only increases the later upper
+bound. `nextResidual_ge` gives `maxResidual A J ≥ (k - t) / (n - t)`.
+The CPQR pivot attains that maximum and is strictly positive, so
+`cpqrIterate A (t + 1) = insert j J`. `milestoneE_leverage_sum` gives
+`n · min ≤ k`, hence `min ≤ k / n`, and the leverage hypothesis gives
+`max ≤ τ · min`, so the pivot column energy is at most `τ k / n`.
+`residualSq_eq_schur` writes the residual as `ℓ_j - q` with `q ≥ 0`, so
+`q ≤ ℓ_j`. `inv_norm_sq_le_of_quad_lower` gives
+`c ≤ q / μ = q · T ≤ ℓ_j · B ≤ (τ k / n) · B`.
+`append_inv_trace_increment` and `append_inv_trace_eq_insert` are the
+lemmas used for the length-3 step. The increment is at most
+`(1 + (τ k / n) B) · (n - t) / (k - t)`.
+
+Independent check: `tests/test_cpqr_step.py`, in `fractions.Fraction`,
+calling `structselect.cpqr`. On the `3×3` identity, the length-2 Gram is
+`I₂` with inverse trace `2`. At `B = 2`, `τ = 1`, `k = 3`, `n = 3`,
+`t = 2` the step bound equals `5`. The length-3 inverse trace is `3`,
+and `3 ≤ 5`. The test does not assert equality. It is not the theorem.
+
+Non-claims: one CPQR pivot step under a leverage-ratio bound, assuming
+a trace bound on the current prefix. Not a bound on the full `k`-set.
+Not a polynomial bound. Does not close outcome 3. Coherence is not used.
+The recurrence is not iterated here. Iterating the step multiplies by a
+factor of size `O(τ k)`. This phase does not produce a polynomial. The
+census did not prove this. Problem 4.1 is not solved. `MinDimLe`,
+`k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+pending.
