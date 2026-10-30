@@ -538,6 +538,15 @@ When `n > k`, the factor `(n - s) / (k - s)` is not a polynomial bound.
 The loose recurrence is unchanged. Phase AR remains the square
 equal-leverage closed form. Outcome 3 stays open.
 
+Status note (tight majorant growth):
+`milestoneE_joint_trace_majorant_not_polynomial` lower-bounds
+`jointTraceBoundTight` along `n = k`, `τ = 2`, `ρ = 0` by `2^{k+1}`.
+That power beats every `C (2k + 1)^{2d}`. At `k = 4` the majorant is
+`35` and `2^5 = 32`. This is not a CPQR inverse trace. The identity at
+`τ = 1` still has inverse trace `k`. The phase-AI census did not see
+`r_CPQR` growth. The loose majorant is untouched. Outcome 1 and
+outcome 3 stay open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.
