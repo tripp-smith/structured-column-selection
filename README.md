@@ -684,3 +684,6 @@ so `3 ≤ 5`. The check does not assert equality. This is one step from
 length `t` to length `t + 1`. The recurrence is not iterated here. This
 is not a bound on the full `k`-set. It is not a polynomial bound. It does
 not close outcome 3. Coherence is not used. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#54](https://github.com/tripp-smith/structured-column-selection/pull/54).

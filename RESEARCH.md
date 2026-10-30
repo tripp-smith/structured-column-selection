@@ -2232,4 +2232,4 @@ census did not prove this. Problem 4.1 is not solved. `MinDimLe`,
 `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
-pending.
+[#54](https://github.com/tripp-smith/structured-column-selection/pull/54).
