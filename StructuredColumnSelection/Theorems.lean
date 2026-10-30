@@ -9,6 +9,7 @@ import StructuredColumnSelection.ScaledDesignFrame
 import StructuredColumnSelection.FrameCoherence
 import StructuredColumnSelection.LeadingCoherence
 import StructuredColumnSelection.BoundedCoherence
+import StructuredColumnSelection.JointPairGram
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -1087,5 +1088,28 @@ theorem milestoneE_equal_energy_cpqr_k3 {k n : ℕ}
           vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
             ((5 : ℝ) * (n : ℝ) - 12 + 6 / (n : ℝ)) :=
   equal_energy_cpqr_k3 A hA hE hk hn
+
+/-- Every 2-column Gram is invertible, and its inverse trace is at most
+`2 τ^2 n / (k (1 - ρ^2))`, when orthogonal rows have leverage ratio at
+most `τ` and normalized coherence at most `ρ < 1`.
+
+This bounds every 2-column Gram under a leverage-ratio and coherence
+hypothesis. It does not bound a `k`-set for `k > 2`. It does not close
+outcome 3. It is not a polynomial CPQR bound for every orthogonal-row
+matrix. The census did not prove this. It does not identify
+`cpqrIterate A 2`. -/
+theorem milestoneE_joint_pair_inv_trace {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hn : 1 ≤ n) (τ ρ : ℝ)
+    (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    ∀ i j : Fin n, i ≠ j →
+      (selectedColGram A {i, j}).det ≠ 0 ∧
+        ((selectedColGram A {i, j})⁻¹).trace ≤
+          (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) :=
+  joint_pair_inv_trace A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
 
 end StructuredColumnSelection

@@ -351,6 +351,31 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Joint pair Gram (2026-10-30)
+
+`milestoneE_joint_pair_inv_trace` bounds every two-column Gram of an
+orthogonal-row matrix whose leverage ratio is at most `τ ≥ 1` and whose
+normalized coherence is at most `ρ` with `0 ≤ ρ < 1`. For `i ≠ j`,
+`selectedColGram A {i, j}` is invertible and
+
+```text
+((selectedColGram A {i, j})⁻¹).trace ≤ 2 τ^2 n / (k (1 - ρ^2)).
+```
+
+Column energies sum to `k`, so some energy is at least `k/n`. The
+leverage hypothesis lifts that to a positive floor `(k/n)/τ` on every
+energy. Coherence makes the Gram determinant at least
+`ℓ_i ℓ_j (1 - ρ^2)`, and the inverse trace of that symmetric `2×2` is
+`(ℓ_i + ℓ_j) / det`. The constant was not weakened. On the `2×2`
+identity it equals `2`, and on `ℓ = 2/3`, `|c| = 1/3` it equals `4`.
+Those checks are in `tests/test_joint_pair.py`. They are not the theorem.
+
+The phase AI census motivated the question. It is not an input to the
+proof. The statement does not identify `cpqrIterate A 2`. A bound on
+2-column Grams is not a bound on a `k`-set for `k > 2`. Outcome 3 stays
+open. Problem 4.1 is not solved, and CPQR is not claimed to be
+polynomial on every orthogonal-row matrix.
+
 ## Joint leverage-coherence census (2026-10-30)
 
 `experiments/census_joint_seed1.json` is a float census, not a theorem.

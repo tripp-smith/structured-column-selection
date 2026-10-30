@@ -513,6 +513,19 @@ example {τ : ℝ} (hτ : 0 ≤ τ) :
         (8 * ((wideDim m : ℕ) : ℝ)) * residualSq A ∅ jMin < residualSq A ∅ jMax := h8
     simpa [residualSq_empty] using hcoeff
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hn : 1 ≤ n) (τ ρ : ℝ) (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ)
+    (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    ∀ i j : Fin n, i ≠ j →
+      (selectedColGram A {i, j}).det ≠ 0 ∧
+        ((selectedColGram A {i, j})⁻¹).trace ≤
+          (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) :=
+  milestoneE_joint_pair_inv_trace A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

@@ -1869,3 +1869,62 @@ and does not prove it grows.
 
 Phase PR and verification receipt:
 [#48](https://github.com/tripp-smith/structured-column-selection/pull/48).
+
+## Phase AJ joint pair Gram (2026-10-30, contract)
+
+Iteration AJ. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AI's seed-1 census motivated a positive
+two-column question on the joint leverage-ratio and coherence class.
+That census is numeric. It is not a hypothesis of the theorem below,
+and it is not an input to the proof.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_pair_inv_trace`. For `A : Matrix (Fin k) (Fin n) ℝ`
+with `OrthogonalRows A`, integers `2 ≤ k` and `1 ≤ n`, and reals
+`1 ≤ τ` and `0 ≤ ρ < 1`, if
+
+```
+∀ i j, residualSq A ∅ i ≤ τ * residualSq A ∅ j
+```
+
+and
+
+```
+∀ i ≠ j, |colInner A i j| ≤ ρ * sqrt(residualSq A ∅ i) * sqrt(residualSq A ∅ j),
+```
+
+then for all `i ≠ j` the Gram `selectedColGram A {i, j}` is invertible and
+
+```
+((selectedColGram A {i, j})⁻¹).trace ≤
+  2 * τ ^ 2 * n / (k * (1 - ρ ^ 2)).
+```
+
+The constant is that expression. It is not replaced by a looser one.
+Column energies sum to `k`, so some energy is at least `k/n`, the
+leverage hypothesis puts every energy at least `(k/n)/τ`, and the
+coherence hypothesis makes the Gram determinant at least
+`ℓ_i ℓ_j (1 - ρ^2)`. The inverse trace of the symmetric `2×2` is
+`(ℓ_i + ℓ_j) / det`.
+
+`cpqrIterate A 2` is not part of the statement. A bound on every pair
+does not identify the CPQR pivots.
+
+Independent check: `tests/test_joint_pair.py`, in `fractions.Fraction`.
+The `2×2` identity has inverse trace `2`, equal to the formula at
+`τ = 1`, `ρ = 0`, `k = 2`, `n = 2`. The parameters `ℓ_i = ℓ_j = 2/3`
+and `c = ±1/3` have determinant `1/3` and inverse trace `4`, equal to
+the formula at `τ = 1`, `ρ = 1/2`, `k = 2`, `n = 3`. The test does not
+call the repository CPQR code. It is not the theorem.
+
+Non-claims: this bounds every 2-column Gram under a leverage-ratio and
+coherence hypothesis. It does not bound a `k`-set for `k > 2`. It does
+not close outcome 3. It is not a polynomial CPQR bound for every
+orthogonal-row matrix. The hypothesis is not equivalent to every
+`k`-subset being well-conditioned. The census did not prove this.
+Problem 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3.
+
+Phase PR and verification receipt:
+[#49](https://github.com/tripp-smith/structured-column-selection/pull/49).
