@@ -264,6 +264,13 @@ coherence at most 0.9. The largest recorded `r_CPQR` is
 `0.866025403784439`. The file is numeric. It does not close Milestone E,
 and it does not change the sampler.
 
+`tests/test_joint_pair.py` checks the two-column inverse-trace constant
+in exact rationals. The `2×2` identity has inverse trace `2`, and the
+parameters `ℓ = 2/3`, `c = ±1/3` have determinant `1/3` and inverse
+trace `4`. Both meet `2 τ^2 n / (k (1 - ρ^2))` at the stated
+parameters. The check is not a theorem and it does not run CPQR. It does
+not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

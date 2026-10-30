@@ -459,6 +459,11 @@ The largest recorded `r_CPQR` is `0.866025403784439`. This census does
 not close §8 or §10, and it does not close outcome 3. A recorded ratio
 is not a theorem.
 
+Status note (joint pair Gram): under leverage ratio at most `τ` and
+coherence at most `ρ` with `0 ≤ ρ < 1`, every 2-column Gram is invertible
+and its inverse trace is at most `2 τ^2 n / (k (1 - ρ^2))`. This is a
+2-column bound. It is not a `k`-column bound. Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

@@ -597,3 +597,13 @@ The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#48](https://github.com/tripp-smith/structured-column-selection/pull/48).
+
+Completed phase: **AJ joint pair Gram**.
+`milestoneE_joint_pair_inv_trace` bounds every 2-column Gram under a
+leverage ratio at most `τ` and normalized coherence at most `ρ < 1`.
+For orthogonal rows with `2 ≤ k` and `1 ≤ n`, the Gram
+`selectedColGram A {i, j}` is invertible and its inverse trace is at
+most `2 τ^2 n / (k (1 - ρ^2))`. The constant was not weakened. This is
+not a bound on a `k`-set for `k > 2`, and it does not identify
+`cpqrIterate A 2`. This does not close outcome 3. The contract is in
+RESEARCH.md.
