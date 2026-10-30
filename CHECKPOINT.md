@@ -79,6 +79,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Design-padded adverse family | **PROVED** (does not close outcome 3) | `milestoneE_design_adverse_family` |
 | Symmetric completion bounds | **PROVED** (does not close outcome 3) | `milestoneE_symmetric_completion` |
 | Weighted signed triple design | **PROVED** (does not close outcome 3) | `milestoneE_triple_design` |
+| Scaled triple-design frame | **PROVED** (does not close outcome 3) | `milestoneE_scaled_triple_frame` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

@@ -192,6 +192,41 @@ example (n : ℕ) :
           13 / 14 * (Real.sqrt (∑ i, W i a ^ 2) * Real.sqrt (∑ i, W i b ^ 2)) :=
   milestoneE_triple_design n
 
+example {m : ℕ} (hm : 3 ≤ m) :
+    ∃ A : Matrix (Fin (wideDim m)) (Fin (wideDim m + 4 * ((wideDim m - 3 + 3) * (wideDim m - 3 + 2) * (wideDim m - 3 + 1)))) ℝ,
+    ∃ C : Matrix (Fin (wideDim m)) (Fin (wideDim m)) ℝ,
+    ∃ W : Matrix (Fin (wideDim m)) (Fin (4 * ((wideDim m - 3 + 3) * (wideDim m - 3 + 2) * (wideDim m - 3 + 1)))) ℝ,
+    ∃ x : Fin (widePrefix (wideDim m + 4 * ((wideDim m - 3 + 3) * (wideDim m - 3 + 2) * (wideDim m - 3 + 1)))
+      (wideDim m)).card → ℝ,
+      A * Aᵀ = 1 ∧
+      (∀ i j : Fin (wideDim m), A i (j.castAdd _) = ((3 : ℝ) • wideTriangular m) i j) ∧
+      (∀ (i : Fin (wideDim m)) (j : Fin (4 * ((wideDim m - 3 + 3) * (wideDim m - 3 + 2) * (wideDim m - 3 + 1)))),
+        A i (j.natAdd (wideDim m)) = (C * W) i j) ∧
+      Cᵀ = C ∧ ((3 : ℝ) • wideTriangular m) * ((3 : ℝ) • wideTriangular m)ᵀ + C * Cᵀ = 1 ∧
+      (∑ i, ∑ j, ((3 : ℝ) • wideTriangular m) i j ^ 2) ≤ 45 / (16 * ((wideDim m : ℕ) : ℝ)) ∧
+      (∀ w v : Fin (wideDim m) → ℝ,
+        (C *ᵥ w) ⬝ᵥ (C *ᵥ v) = w ⬝ᵥ v -
+          (((3 : ℝ) • wideTriangular m)ᵀ *ᵥ w) ⬝ᵥ (((3 : ℝ) • wideTriangular m)ᵀ *ᵥ v)) ∧
+      (∀ w : Fin (wideDim m) → ℝ,
+        (1 - ∑ i, ∑ j, ((3 : ℝ) • wideTriangular m) i j ^ 2) * (∑ i, w i ^ 2) ≤
+            ∑ i, (C *ᵥ w) i ^ 2 ∧
+          (∑ i, (C *ᵥ w) i ^ 2) ≤ ∑ i, w i ^ 2) ∧
+      (∀ v : Fin (wideDim m) → ℝ,
+        (∑ i, ((C - 1) *ᵥ v) i ^ 2) ≤
+          (∑ i, ∑ j, ((3 : ℝ) • wideTriangular m) i j ^ 2) ^ 2 * ∑ i, v i ^ 2) ∧
+      W * Wᵀ = 1 ∧
+      (∀ j, (∑ i, W i j ^ 2) =
+        1 / (4 * ((((wideDim m : ℕ) : ℝ) - 1) * (((wideDim m : ℕ) : ℝ) - 2)))) ∧
+      (∀ a b, a ≠ b → |∑ i, W i a * W i b| ≤
+        13 / 14 * (Real.sqrt (∑ i, W i a ^ 2) * Real.sqrt (∑ i, W i b ^ 2))) ∧
+      cpqrSet A = widePrefix (wideDim m + 4 * ((wideDim m - 3 + 3) * (wideDim m - 3 + 2) * (wideDim m - 3 + 1)))
+        (wideDim m) ∧
+      (∑ i, (selectedCols A
+        (widePrefix (wideDim m + 4 * ((wideDim m - 3 + 3) * (wideDim m - 3 + 2) * (wideDim m - 3 + 1)))
+          (wideDim m)) *ᵥ x) i ^ 2) = 1 ∧
+      ((2 * (m : ℝ) / 3) * ((4 : ℝ) / 3) ^ (m - 1)) ^ 2 / 9 ≤ ∑ i, x i ^ 2 :=
+  milestoneE_scaled_triple_frame hm
+
 example :
     ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
       ∃ x : Fin (cpqrSet A).card → ℝ,
@@ -405,7 +440,7 @@ example {τ : ℝ} (hτ : 0 ≤ τ) :
         cpqrSet A = widePrefix (wideWidth m) (wideDim m) ∧
         ∃ jMin jMax : Fin (wideWidth m),
           τ * (∑ i, A i jMin ^ 2) < ∑ i, A i jMax ^ 2 ∧
-          (8 * ((m * m : ℕ) : ℝ)) * (∑ i, A i jMin ^ 2) < ∑ i, A i jMax ^ 2 := by
+          (8 * ((wideDim m : ℕ) : ℝ)) * (∑ i, A i jMin ^ 2) < ∑ i, A i jMax ^ 2 := by
   obtain ⟨m, hm, A, horth, hcpqr, jMin, jMax, hτe, h8⟩ :=
     milestoneE_wide_leverage_escape hτ
   refine ⟨m, hm, A, ?_, ?_, jMin, jMax, ?_, ?_⟩
@@ -413,7 +448,7 @@ example {τ : ℝ} (hτ : 0 ≤ τ) :
   · simpa [wideDim] using hcpqr
   · simpa [residualSq_empty] using hτe
   · have hcoeff :
-        (8 * ((m * m : ℕ) : ℝ)) * residualSq A ∅ jMin < residualSq A ∅ jMax := h8
+        (8 * ((wideDim m : ℕ) : ℝ)) * residualSq A ∅ jMin < residualSq A ∅ jMax := h8
     simpa [residualSq_empty] using hcoeff
 
 /-!

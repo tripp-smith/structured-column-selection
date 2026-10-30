@@ -526,3 +526,16 @@ close outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#43](https://github.com/tripp-smith/structured-column-selection/pull/43).
+
+Completed phase: **AE scaled leading block**.
+`milestoneE_scaled_triple_frame` gives, for every `m ≥ 3`, the
+orthogonal-row frame `[3 R₀ | C W]` with `R₀ = wideTriangular m`, the
+symmetric completion `C` of `3 R₀`, and the triple design `W`: CPQR set
+equal to the leading prefix, image energy `1`, and inverse energy at
+least `((2m/3)(4/3)^(m-1))² / 9`. The inputs are the row-structure bound
+`‖R₀‖_F² ≤ 5 / (16 k)` and the contraction `‖C w‖² ≤ ‖w‖²`, which put
+the design energy `1 / (4 (k-1)(k-2))` under the scaled threshold
+`9 / (16 k²)` for `k ≥ 5`. The statement records the completion
+identities of `C` and the design properties of `W`. No coherence bound
+on the columns of the frame is claimed. This does not close outcome 3.
+The contract is in RESEARCH.md.

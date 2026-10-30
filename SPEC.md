@@ -817,6 +817,15 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (scaled triple-design frame):
+`milestoneE_scaled_triple_frame` gives, for every `m ≥ 3`, an
+orthogonal-row frame `[3 R₀ | C W]` with the triple design `W` and the
+symmetric completion `C`: CPQR set equal to the leading prefix, image
+energy `1`, inverse energy at least `wideGrowthLower m ^ 2 / 9`, with
+`‖3 R₀‖_F² ≤ 45 / (16 k)`. The filler directions are pairwise
+non-parallel design columns, but no coherence bound on the frame's
+columns is claimed. Outcome 3 stays open.
+
 Status note (weighted signed triple design):
 `milestoneE_triple_design` gives, for every `n`, a tight design
 `W Wᵀ = 1` in `ℝ^(n+3)` with `4 (n+3)(n+2)(n+1)` columns, equal column

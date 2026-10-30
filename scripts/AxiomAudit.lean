@@ -95,6 +95,7 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_design_adverse_family
 #print axioms StructuredColumnSelection.milestoneE_symmetric_completion
 #print axioms StructuredColumnSelection.milestoneE_triple_design
+#print axioms StructuredColumnSelection.milestoneE_scaled_triple_frame
 #print axioms StructuredColumnSelection.milestoneE_equal_energy_cpqr_prefix_trace
 #print axioms StructuredColumnSelection.milestoneE_equal_energy_cpqr_prefix_rayleigh
 #print axioms StructuredColumnSelection.milestoneE_equal_energy_cpqr_three_trace
