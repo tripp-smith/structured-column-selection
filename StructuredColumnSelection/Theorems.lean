@@ -6,6 +6,7 @@ import StructuredColumnSelection.DesignFrame
 import StructuredColumnSelection.SymmetricCompletion
 import StructuredColumnSelection.TripleDesign
 import StructuredColumnSelection.ScaledDesignFrame
+import StructuredColumnSelection.FrameCoherence
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -934,6 +935,55 @@ theorem milestoneE_scaled_triple_frame {m : ℕ} (hm : 3 ≤ m) :
         (widePrefix (wideDim m + tripleCount (wideDim m - 3)) (wideDim m)) *ᵥ x) = 1 ∧
       wideGrowthLower m ^ 2 / 9 ≤ vecEnergy x :=
   scaled_triple_frame hm
+
+/-- Filler–filler and leading–filler normalized coherence of the scaled
+triple-design frame. For every `m ≥ 3` and `ε = 45 / (16 k)`, distinct filler
+columns have normalized coherence at most `(13/14 + ε)/(1 - ε)`, and each
+leading column against each filler has normalized coherence at most
+`(3(1 + 1/m)/√14 + ε)/√(1 - ε)`.
+
+No leading–leading bound is proved. No coherence bound on the whole frame is
+claimed. This is not a polynomial CPQR bound, and outcome 3 stays open. -/
+theorem milestoneE_scaled_triple_frame_filler_coherence {m : ℕ} (hm : 3 ≤ m) :
+    ∃ A : Matrix (Fin (wideDim m)) (Fin (wideDim m + tripleCount (wideDim m - 3))) ℝ,
+    ∃ C : Matrix (Fin (wideDim m)) (Fin (wideDim m)) ℝ,
+    ∃ W : Matrix (Fin (wideDim m)) (Fin (tripleCount (wideDim m - 3))) ℝ,
+    ∃ x : Fin (widePrefix (wideDim m + tripleCount (wideDim m - 3)) (wideDim m)).card → ℝ,
+      OrthogonalRows A ∧
+      (∀ i j : Fin (wideDim m), A i (j.castAdd _) = scaledBlock m i j) ∧
+      (∀ (i : Fin (wideDim m)) (j : Fin (tripleCount (wideDim m - 3))),
+        A i (j.natAdd (wideDim m)) = (C * W) i j) ∧
+      Cᵀ = C ∧ scaledBlock m * (scaledBlock m)ᵀ + C * Cᵀ = 1 ∧
+      frobEnergy (scaledBlock m) ≤ 45 / (16 * (wideDim m : ℝ)) ∧
+      (∀ w v : Fin (wideDim m) → ℝ,
+        (C *ᵥ w) ⬝ᵥ (C *ᵥ v) = w ⬝ᵥ v - ((scaledBlock m)ᵀ *ᵥ w) ⬝ᵥ ((scaledBlock m)ᵀ *ᵥ v)) ∧
+      (∀ w : Fin (wideDim m) → ℝ,
+        (1 - frobEnergy (scaledBlock m)) * vecEnergy w ≤ vecEnergy (C *ᵥ w) ∧
+          vecEnergy (C *ᵥ w) ≤ vecEnergy w) ∧
+      (∀ v : Fin (wideDim m) → ℝ,
+        vecEnergy ((C - 1) *ᵥ v) ≤ frobEnergy (scaledBlock m) ^ 2 * vecEnergy v) ∧
+      W * Wᵀ = 1 ∧
+      (∀ j, vecEnergy (fun i => W i j) =
+        1 / (4 * (((wideDim m : ℝ) - 1) * ((wideDim m : ℝ) - 2)))) ∧
+      (∀ a b, a ≠ b → |∑ i, W i a * W i b| ≤
+        13 / 14 * (Real.sqrt (vecEnergy (fun i => W i a)) *
+          Real.sqrt (vecEnergy (fun i => W i b)))) ∧
+      cpqrSet A = widePrefix (wideDim m + tripleCount (wideDim m - 3)) (wideDim m) ∧
+      vecEnergy (selectedCols A
+        (widePrefix (wideDim m + tripleCount (wideDim m - 3)) (wideDim m)) *ᵥ x) = 1 ∧
+      wideGrowthLower m ^ 2 / 9 ≤ vecEnergy x ∧
+      (∀ a b : Fin (tripleCount (wideDim m - 3)), a ≠ b →
+        |∑ i, A i (a.natAdd (wideDim m)) * A i (b.natAdd (wideDim m))| ≤
+          (13 / 14 + 45 / (16 * (wideDim m : ℝ))) / (1 - 45 / (16 * (wideDim m : ℝ))) *
+            (Real.sqrt (vecEnergy (fun i => A i (a.natAdd (wideDim m)))) *
+              Real.sqrt (vecEnergy (fun i => A i (b.natAdd (wideDim m)))))) ∧
+      ∀ (j : Fin (wideDim m)) (a : Fin (tripleCount (wideDim m - 3))),
+        |∑ i, A i (j.castAdd _) * A i (a.natAdd (wideDim m))| ≤
+          (3 * (1 + 1 / (m : ℝ)) / Real.sqrt 14 + 45 / (16 * (wideDim m : ℝ))) /
+              Real.sqrt (1 - 45 / (16 * (wideDim m : ℝ))) *
+            (Real.sqrt (vecEnergy (fun i => A i (j.castAdd _))) *
+              Real.sqrt (vecEnergy (fun i => A i (a.natAdd (wideDim m))))) :=
+  scaled_triple_frame_filler_coherence hm
 
 /-- Equal column energy makes the second CPQR pivot agree with the
 increment pivot, and the two-column inverse trace is at most

@@ -227,6 +227,49 @@ example {m : ℕ} (hm : 3 ≤ m) :
       ((2 * (m : ℝ) / 3) * ((4 : ℝ) / 3) ^ (m - 1)) ^ 2 / 9 ≤ ∑ i, x i ^ 2 :=
   milestoneE_scaled_triple_frame hm
 
+example {m : ℕ} (hm : 3 ≤ m) :
+    ∃ A : Matrix (Fin (wideDim m)) (Fin (wideDim m + tripleCount (wideDim m - 3))) ℝ,
+    ∃ C : Matrix (Fin (wideDim m)) (Fin (wideDim m)) ℝ,
+    ∃ W : Matrix (Fin (wideDim m)) (Fin (tripleCount (wideDim m - 3))) ℝ,
+    ∃ x : Fin (widePrefix (wideDim m + tripleCount (wideDim m - 3)) (wideDim m)).card → ℝ,
+      A * Aᵀ = 1 ∧
+      (∀ i j : Fin (wideDim m), A i (j.castAdd _) = scaledBlock m i j) ∧
+      (∀ (i : Fin (wideDim m)) (j : Fin (tripleCount (wideDim m - 3))),
+        A i (j.natAdd (wideDim m)) = (C * W) i j) ∧
+      Cᵀ = C ∧ scaledBlock m * (scaledBlock m)ᵀ + C * Cᵀ = 1 ∧
+      (∑ i, ∑ j, scaledBlock m i j ^ 2) ≤ 45 / (16 * (wideDim m : ℝ)) ∧
+      (∀ w v : Fin (wideDim m) → ℝ,
+        (C *ᵥ w) ⬝ᵥ (C *ᵥ v) = w ⬝ᵥ v -
+          ((scaledBlock m)ᵀ *ᵥ w) ⬝ᵥ ((scaledBlock m)ᵀ *ᵥ v)) ∧
+      (∀ w : Fin (wideDim m) → ℝ,
+        (1 - ∑ i, ∑ j, scaledBlock m i j ^ 2) * (∑ i, w i ^ 2) ≤
+            ∑ i, (C *ᵥ w) i ^ 2 ∧
+          (∑ i, (C *ᵥ w) i ^ 2) ≤ ∑ i, w i ^ 2) ∧
+      (∀ v : Fin (wideDim m) → ℝ,
+        (∑ i, ((C - 1) *ᵥ v) i ^ 2) ≤
+          (∑ i, ∑ j, scaledBlock m i j ^ 2) ^ 2 * ∑ i, v i ^ 2) ∧
+      W * Wᵀ = 1 ∧
+      (∀ j, (∑ i, W i j ^ 2) =
+        1 / (4 * (((wideDim m : ℝ) - 1) * ((wideDim m : ℝ) - 2)))) ∧
+      (∀ a b, a ≠ b → |∑ i, W i a * W i b| ≤
+        13 / 14 * (Real.sqrt (∑ i, W i a ^ 2) * Real.sqrt (∑ i, W i b ^ 2))) ∧
+      cpqrSet A = widePrefix (wideDim m + tripleCount (wideDim m - 3)) (wideDim m) ∧
+      (∑ i, (selectedCols A
+        (widePrefix (wideDim m + tripleCount (wideDim m - 3)) (wideDim m)) *ᵥ x) i ^ 2) = 1 ∧
+      ((2 * (m : ℝ) / 3) * ((4 : ℝ) / 3) ^ (m - 1)) ^ 2 / 9 ≤ ∑ i, x i ^ 2 ∧
+      (∀ a b : Fin (tripleCount (wideDim m - 3)), a ≠ b →
+        |∑ i, A i (a.natAdd (wideDim m)) * A i (b.natAdd (wideDim m))| ≤
+          (13 / 14 + 45 / (16 * (wideDim m : ℝ))) / (1 - 45 / (16 * (wideDim m : ℝ))) *
+            (Real.sqrt (∑ i, A i (a.natAdd (wideDim m)) ^ 2) *
+              Real.sqrt (∑ i, A i (b.natAdd (wideDim m)) ^ 2))) ∧
+      ∀ (j : Fin (wideDim m)) (a : Fin (tripleCount (wideDim m - 3))),
+        |∑ i, A i (j.castAdd _) * A i (a.natAdd (wideDim m))| ≤
+          (3 * (1 + 1 / (m : ℝ)) / Real.sqrt 14 + 45 / (16 * (wideDim m : ℝ))) /
+              Real.sqrt (1 - 45 / (16 * (wideDim m : ℝ))) *
+            (Real.sqrt (∑ i, A i (j.castAdd _) ^ 2) *
+              Real.sqrt (∑ i, A i (a.natAdd (wideDim m)) ^ 2)) :=
+  milestoneE_scaled_triple_frame_filler_coherence hm
+
 example :
     ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
       ∃ x : Fin (cpqrSet A).card → ℝ,

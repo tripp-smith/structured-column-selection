@@ -80,6 +80,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Symmetric completion bounds | **PROVED** (does not close outcome 3) | `milestoneE_symmetric_completion` |
 | Weighted signed triple design | **PROVED** (does not close outcome 3) | `milestoneE_triple_design` |
 | Scaled triple-design frame | **PROVED** (does not close outcome 3) | `milestoneE_scaled_triple_frame` |
+| Frame coherence, filler pairs | **PROVED** (does not close outcome 3) | `milestoneE_scaled_triple_frame_filler_coherence` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

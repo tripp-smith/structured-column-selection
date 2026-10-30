@@ -237,6 +237,15 @@ filler energy is below every scaled leading residual and that greedy
 residual pivoting returns the leading prefix. It does not change the
 sampler.
 
+`tests/test_frame_coherence.py` builds the `m = 3` frame as in
+`tests/test_scaled_block.py`, with `ε = 9 ‖R₀‖_F²` in exact rationals,
+and checks every filler–filler normalized ratio against
+`(13/14 + ε)/(1 - ε)` and every leading–filler ratio against
+`(3(1 + 1/3)/√14 + ε)/√(1 - ε)`. It also checks that those ratios are
+strictly below `1` on this instance. The displayed bounds may exceed
+`1` for `m = 3`. Leading–leading pairs are not checked. It does not
+change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler
