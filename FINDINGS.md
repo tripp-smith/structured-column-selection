@@ -351,6 +351,25 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Frame coherence for filler pairs (2026-10-30)
+
+`milestoneE_scaled_triple_frame_filler_coherence` gives, for every
+`m ≥ 3`, the frame of `milestoneE_scaled_triple_frame` together with
+normalized coherence of the filler pairs and of each leading column
+against each filler. With `ε = 45 / (16 k)` and `k = m²`, distinct
+filler columns `C w_a`, `C w_b` satisfy
+`|⟨C w_a, C w_b⟩| ≤ (13/14 + ε)/(1 - ε) · ‖C w_a‖ ‖C w_b‖`, and a leading
+column `r_j` against a filler satisfies
+`|⟨r_j, C w⟩| ≤ (3(1 + 1/m)/√14 + ε)/√(1 - ε) · ‖r_j‖ ‖C w‖`. The first
+bound is the design ratio `13/14` plus the completion inner-product error
+`ε`, divided by the contraction `1 - ε`. The second uses the three-point
+support of a design column (weights `1, 2, 3`) against the triangular
+column, whose diagonal entry dominates the off-diagonal entries by a
+factor `m`. Leading–leading pairs are not bounded. No coherence bound on
+the whole frame is claimed. This does not close outcome 3. Problem 4.1
+is not solved, and CPQR is not claimed to be polynomial on every
+orthogonal-row matrix.
+
 ## Scaled leading block and the triple-design frame (2026-10-30)
 
 `milestoneE_scaled_triple_frame` gives, for every `m ≥ 3`, the frame

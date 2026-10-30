@@ -817,6 +817,15 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (frame coherence, filler pairs):
+`milestoneE_scaled_triple_frame_filler_coherence` gives, for every
+`m ≥ 3`, the scaled triple-design frame together with filler–filler
+normalized coherence at most `(13/14 + ε)/(1 - ε)` and leading–filler
+normalized coherence at most `(3(1 + 1/m)/√14 + ε)/√(1 - ε)`, where
+`ε = 45 / (16 k)`. Leading–leading pairs are not bounded, and no
+coherence bound on the whole frame is claimed. This is not a polynomial
+inverse-norm bound for CPQR. Outcome 3 stays open.
+
 Status note (scaled triple-design frame):
 `milestoneE_scaled_triple_frame` gives, for every `m ≥ 3`, an
 orthogonal-row frame `[3 R₀ | C W]` with the triple design `W` and the

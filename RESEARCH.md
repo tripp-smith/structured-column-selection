@@ -1368,6 +1368,62 @@ closure of outcome 1 or outcome 3. Problem 4.1 is not solved.
 Phase PR and verification receipt:
 [#44](https://github.com/tripp-smith/structured-column-selection/pull/44).
 
+## Phase AF frame coherence, filler pairs (2026-10-30, contract)
+
+Iteration AF. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AE builds the orthogonal-row frame `[3 R₀ | C W]`
+and records the completion identities of `C` and the `13/14` coherence of
+the design `W`. Those facts do not yet bound inner products of columns of
+the frame. Two filler columns are `C w_a` and `C w_b`. The inner-product
+identity writes `⟨C w_a, C w_b⟩ - ⟨w_a, w_b⟩` as `-⟨Rᵀ w_a, Rᵀ w_b⟩`, and
+Cauchy–Schwarz with `‖Rᵀ w‖² ≤ ε ‖w‖²` bounds that error by
+`ε √(‖w_a‖² ‖w_b‖²)`. The energy lower bound
+`(1 - ε) ‖w‖² ≤ ‖C w‖²` turns the design ratio `13/14` into the normalized
+filler ratio `(13/14 + ε)/(1 - ε)`. A leading column `r_j` meets a filler
+through `⟨r_j, C w⟩ = ⟨r_j, w⟩ + ⟨r_j, (C - I) w⟩`. The design column is
+supported on three coordinates with weights `1, 2, 3`, and the triangular
+column `r_j = 3 R₀ e_j` is `3 diag_j` on the diagonal and at most
+`3 c α` off it, with `c α ≤ diag_j / m`. At most one support coordinate is
+the diagonal, so `⟨r_j, w⟩` is at most `3(1 + 1/m)/√14` times the product
+of the norms, and the normalized leading–filler ratio is at most
+`(3(1 + 1/m)/√14 + ε)/√(1 - ε)`, where `ε = 45/(16 k)`. The row reindexing
+of the design moves the three support coordinates by `e.symm` and does not
+change the weights. Leading–leading pairs use a different inner-product
+formula and are not bounded in this phase. Exit if `ε ≥ 1` (it is not:
+`k ≥ 9`) or if the three support coordinates fail to stay distinct after
+reindexing.
+
+Targets in `StructuredColumnSelection/FrameCoherence.lean`:
+`completion_inner_perturb`, `filler_filler_ratio`, `leading_filler_ratio`,
+`triple_column_inner_le` (and its transfers to `tripleDesignFin` and to the
+row-reindexed submatrix), the leading-column ratio
+`scaledBlock_design_inner_le`, and the instantiation
+`scaled_triple_frame_filler_coherence`: for every `m ≥ 3`, the data of
+`scaled_triple_frame` together with filler–filler normalized coherence at
+most `(13/14 + ε)/(1 - ε)` and leading–filler normalized coherence at most
+`(3(1 + 1/m)/√14 + ε)/√(1 - ε)`, with `ε = 45 / (16 k)`. Re-exported as
+`milestoneE_scaled_triple_frame_filler_coherence`.
+
+Independent check: `tests/test_frame_coherence.py` builds the `m = 3` frame
+as in `tests/test_scaled_block.py`, with `ε = 9 ‖R₀‖_F²` computed in exact
+rationals, and checks every filler–filler ratio against
+`(13/14 + ε)/(1 - ε)` and every leading–filler ratio against
+`(3(1 + 1/3)/√14 + ε)/√(1 - ε)`. It also checks that those ratios are
+strictly below `1` on this instance. The displayed bounds may exceed `1`
+for `m = 3`; the test checks the formulas. It does not call the repository
+CPQR code. It is not the theorem.
+
+Non-claims: leading–leading pairs are not bounded; no coherence bound on
+the whole frame is claimed; the proved filler–filler and leading–filler
+expressions are not claimed to be strictly less than `1` for every
+`m ≥ 3`; no polynomial CPQR bound; no closure of outcome 1 or outcome 3.
+Problem 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3.
+
+Phase PR and verification receipt:
+[#45](https://github.com/tripp-smith/structured-column-selection/pull/45).
+
 Phase PR and verification receipt:
 [#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
 
