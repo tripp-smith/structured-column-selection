@@ -326,6 +326,20 @@ matrices or for `τ > 1`. For `τ > 1` the recurrence `T ↦ 1 + τ T` is
 still exponential. The wide adverse family is outside this class. It
 does not close outcome 3. It does not change the sampler.
 
+`tests/test_cpqr_recurrence_tight.py` runs `structselect.cpqr` on square
+identities at `τ = 1` and `ρ = 0`. Column energies are equal and
+off-diagonal inner products are `0`. At `k = n = 3` the tight bounds and
+the prefix inverse traces are `2` then `3`. The loose successor at length
+`3` is `5`, and `3 < 5`. At `k = n = 4` the tight bounds and the inverse
+traces are `2`, `3`, `4`. The loose value at length `4` is `11`, and
+`4 < 11`. This rational check is not the theorem. The recurrence is not a
+polynomial in `k`. When `n = k` and `τ > 1`, each pivot sends `B` to
+`1 + τ B`, which is still exponential in the number of pivots. When
+`n > k`, the factor `(n - s) / (k - s)` is not a polynomial bound. It
+does not close outcome 3. The loose recurrence is unchanged. Phase AR
+remains the square equal-leverage closed form. It does not change the
+sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

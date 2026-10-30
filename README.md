@@ -747,3 +747,21 @@ bound is not claimed sharp for `ρ > 0`. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#57](https://github.com/tripp-smith/structured-column-selection/pull/57).
+
+Completed phase: **AS tight CPQR trace recurrence**.
+`milestoneE_joint_cpqr_trace_bound_tight` iterates `joint_cpqr_step_tight`
+from the length-2 prefix up to any prefix length `2 ≤ t ≤ k`.
+`jointTraceBoundTight` uses the tight step
+`(1 + (τ k / n) B) (n - s) / (k - s)` with no added copy of `B`.
+At `τ = 1`, `ρ = 0`, and `k = n = 3` the bounds are `2` then `3` (the
+loose recurrence was `2` then `5`). At `k = n = 4` the bounds are `2`,
+`3`, `4` (the loose recurrence ended at `11`). The recurrence is not a
+polynomial in `k`. When `n = k` and `τ > 1`, each pivot sends `B` to
+`1 + τ B`, which is still exponential in the number of pivots. When
+`n > k`, the factor `(n - s) / (k - s)` is not a polynomial bound. This
+does not close outcome 3. The loose recurrence `jointTraceBound` is
+unchanged. Phase AR remains the square equal-leverage closed form. The
+contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#58](https://github.com/tripp-smith/structured-column-selection/pull/58).

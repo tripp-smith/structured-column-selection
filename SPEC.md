@@ -526,6 +526,18 @@ recurrence `T ↦ 1 + τ T` is still exponential. The wide adverse family
 is outside this class. A square-only bound does not close outcome 3.
 The bound is not claimed sharp for `ρ > 0`. Outcome 3 stays open.
 
+Status note (tight CPQR trace recurrence):
+`milestoneE_joint_cpqr_trace_bound_tight` iterates the tight step
+`(1 + (τ k / n) B) (n - s) / (k - s)`, with no added copy of `B`, from
+the length-2 prefix up to any `2 ≤ t ≤ k`. The majorant is
+`jointTraceBoundTight`. On the identity at `τ = 1`, `ρ = 0`, `n = k`,
+the values are `2, 3, 4, ...` while the loose values are `2, 5, 11, ...`.
+The recurrence is not a polynomial in `k`. When `n = k`, each step sends
+`B` to `1 + τ B`, so `τ > 1` is still exponential in the number of pivots.
+When `n > k`, the factor `(n - s) / (k - s)` is not a polynomial bound.
+The loose recurrence is unchanged. Phase AR remains the square
+equal-leverage closed form. Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

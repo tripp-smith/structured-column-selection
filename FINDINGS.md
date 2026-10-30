@@ -351,6 +351,37 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Tight CPQR trace recurrence (2026-10-30)
+
+`milestoneE_joint_cpqr_trace_bound_tight` iterates `joint_cpqr_step_tight`,
+not the loose step, from the length-2 prefix up to any `2 ≤ t ≤ k`.
+Orthogonal rows, `2 ≤ k`, `2 ≤ n`, a leverage ratio at most `τ`, and
+normalized coherence at most `ρ < 1` give an invertible Gram
+`selectedColGram A (cpqrIterate A t)` whose inverse trace is at most
+`jointTraceBoundTight k n τ ρ t`, and the same factor bounds the Rayleigh
+form. The successor is `(1 + (τ k / n) B) (n - s) / (k - s)` with no
+added copy of `B`. Coherence is used only at length 2.
+
+On the identity at `τ = 1`, `ρ = 0`, `n = k`, the tight values are
+`2, 3, 4, ...` while the loose values are `2, 5, 11, ...`. At
+`k = n = 3` the bounds are `2` then `3` and the prefix inverse traces are
+`2` and `3`. The loose successor at `t = 3` is `5`, and `3 < 5`. At
+`k = n = 4` the bounds are `2`, `3`, `4` and the inverse traces equal
+those numbers. The loose value at `t = 4` is `11`, and `4 < 11`. Equality
+of trace and bound is asserted only for those identity checks, not in
+general.
+
+`tests/test_cpqr_recurrence_tight.py` checks those rationals with
+`structselect.cpqr`. The check is not the theorem.
+
+The recurrence is not a polynomial in `k`. When `n = k` and `τ > 1`, each
+pivot sends `B` to `1 + τ B`, which is still exponential in the number of
+pivots. When `n > k`, the factor `(n - s) / (k - s)` is not a polynomial
+bound. This does not close outcome 3. The loose recurrence
+`jointTraceBound` is unchanged. Phase AR remains the square equal-leverage
+closed form. Problem 4.1 is not solved, and this phase does not claim
+that CPQR is polynomial on orthogonal-row matrices.
+
 ## Square equal-leverage CPQR trace (2026-10-30)
 
 `milestoneE_joint_square_equal_trace` is square and equal-leverage only.
