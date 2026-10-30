@@ -623,3 +623,15 @@ not bound later pivots. A 2-column CPQR prefix is not a `k`-set for
 
 Phase PR and canonical verification/delivery receipt:
 [#50](https://github.com/tripp-smith/structured-column-selection/pull/50).
+
+Completed phase: **AL joint CPQR Rayleigh**.
+`milestoneE_joint_cpqr_prefix_rayleigh` is the Rayleigh form of the length-2
+CPQR prefix under the joint leverage-ratio and coherence hypothesis. For
+every `x` on `cpqrIterate A 2`,
+`k (1 - ρ^2) / (2 τ^2 n) · ‖x‖² ≤ ‖selectedCols A (cpqrIterate A 2) x‖²`.
+The coefficient is the reciprocal of the phase-AK inverse-trace bound and
+was not weakened. On the `2×2` identity the coefficient is `1/2` while the
+Rayleigh quotient is `1`, because `λ_max ≤ trace`. The bound is not sharp.
+It does not bound later pivots. It does not close outcome 3. It is not a
+polynomial bound for every orthogonal-row matrix. The contract is in
+RESEARCH.md.

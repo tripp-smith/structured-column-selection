@@ -276,6 +276,13 @@ identity. CPQR returns both columns, and the inverse trace of that Gram
 is `2`, matching `2 τ^2 n / (k (1 - ρ^2))` at `τ = 1`, `ρ = 0`, `k = 2`,
 `n = 2`. The check is not the theorem. It does not change the sampler.
 
+`tests/test_joint_rayleigh.py` runs `structselect.cpqr` on the same
+`2×2` identity. CPQR returns both columns. For `x = (1, 0)`,
+`‖A_J x‖² = ‖x‖²`. The coefficient `k (1 - ρ^2) / (2 τ^2 n)` equals
+`1/2` at `τ = 1`, `ρ = 0`, `k = 2`, `n = 2`, and `1/2 · ‖x‖² ≤ ‖A_J x‖²`.
+The check does not assert that the coefficient meets the quotient. It is
+not the theorem. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

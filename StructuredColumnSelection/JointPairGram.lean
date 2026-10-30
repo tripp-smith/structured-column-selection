@@ -23,6 +23,11 @@ orthogonal-row matrix. The census did not prove this.
 joint leverage-ratio and coherence hypothesis. It does not bound later
 pivots. It does not close outcome 3. It is not a polynomial bound for
 every orthogonal-row matrix.
+
+`joint_cpqr_prefix_rayleigh` is the Rayleigh form of that length-2 prefix.
+The coefficient is the reciprocal of the inverse-trace bound. It is not
+sharp. It does not bound later pivots. It does not close outcome 3. It
+is not a polynomial bound for every orthogonal-row matrix.
 -/
 
 namespace StructuredColumnSelection
@@ -359,5 +364,268 @@ theorem joint_cpqr_prefix_trace {k n : ℕ}
     exact hpair.1
   · rw [hset]
     exact hpair.2
+
+lemma quadForm_submatrix_finCongr {t m : ℕ}
+    (M : Matrix (Fin t) (Fin t) ℝ) (h : t = m) (x : Fin t → ℝ) :
+    x ⬝ᵥ (M *ᵥ x) =
+      (fun i : Fin m => x ((finCongr h.symm) i)) ⬝ᵥ
+        ((M.submatrix (finCongr h.symm) (finCongr h.symm)) *ᵥ
+          fun i : Fin m => x ((finCongr h.symm) i)) := by
+  let e : Fin m ≃ Fin t := finCongr h.symm
+  let y : Fin m → ℝ := fun i => x (e i)
+  let M2 : Matrix (Fin m) (Fin m) ℝ := M.submatrix e e
+  have hmul (i : Fin m) : (M *ᵥ x) (e i) = (M2 *ᵥ y) i := by
+    rw [mulVec_apply_eq_sum, mulVec_apply_eq_sum]
+    refine (Fintype.sum_equiv e
+      (fun k => M2 i k * y k)
+      (fun j => M (e i) j * x j) ?_).symm
+    intro k
+    simp [M2, y, Matrix.submatrix_apply]
+  refine (Fintype.sum_equiv e
+    (fun i => y i * (M2 *ᵥ y) i)
+    (fun j => x j * (M *ᵥ x) j) ?_).symm
+  intro i
+  rw [hmul]
+
+/-- For `H = !![a, c; c, b]` with positive diagonal and positive determinant,
+`‖x‖² ≤ tr(H) · (xᵀ H⁻¹ x)`. The numerator of the difference is
+`(b x₁ - c x₂)² + (a x₂ - c x₁)²`. -/
+lemma symm_fin_two_spd_rayleigh (a c b : ℝ) (x : Fin 2 → ℝ)
+    (_ha : 0 < a) (_hb : 0 < b) (hdet : 0 < a * b - c ^ 2) :
+    vecEnergy x ≤
+      (!![a, c; c, b]).trace *
+        (x ⬝ᵥ ((!![a, c; c, b])⁻¹ *ᵥ x)) := by
+  set H : Matrix (Fin 2) (Fin 2) ℝ := !![a, c; c, b]
+  set Δ : ℝ := a * b - c ^ 2
+  have hΔ : 0 < Δ := hdet
+  have hΔne : Δ ≠ 0 := ne_of_gt hΔ
+  have hHdet : H.det = Δ := by
+    rw [show H = !![a, c; c, b] from rfl, det_fin_two_of]
+    simp only [Δ, pow_two]
+  set M : Matrix (Fin 2) (Fin 2) ℝ := !![b, -c; -c, a]
+  have hinv : H⁻¹ = Δ⁻¹ • M := by
+    rw [Matrix.inv_def, hHdet, Ring.inverse_eq_inv]
+    simp [H, M]
+  have h00 : M 0 0 = b := by simp [M]
+  have h01 : M 0 1 = -c := by simp [M]
+  have h10 : M 1 0 = -c := by simp [M]
+  have h11 : M 1 1 = a := by simp [M]
+  set x0 : ℝ := x 0
+  set x1 : ℝ := x 1
+  set Q : ℝ := b * x0 ^ 2 - 2 * c * x0 * x1 + a * x1 ^ 2
+  have h0 : (M *ᵥ x) 0 = b * x0 - c * x1 := by
+    rw [mulVec_apply_eq_sum, Fin.sum_univ_two, h00, h01]
+    simp [x0, x1]
+    ring
+  have h1 : (M *ᵥ x) 1 = a * x1 - c * x0 := by
+    rw [mulVec_apply_eq_sum, Fin.sum_univ_two, h10, h11]
+    simp [x0, x1]
+    ring
+  have hdotM : x ⬝ᵥ (M *ᵥ x) = Q := by
+    rw [dotProduct, Fin.sum_univ_two, h0, h1]
+    simp [x0, x1, Q]
+    ring
+  have hquad : x ⬝ᵥ (H⁻¹ *ᵥ x) = Δ⁻¹ * Q := by
+    rw [hinv, smul_mulVec, dotProduct_smul, smul_eq_mul, hdotM]
+  have henergy : vecEnergy x = x0 ^ 2 + x1 ^ 2 := by
+    rw [vecEnergy, Fin.sum_univ_two]
+  have htrace : H.trace = a + b := by
+    rw [show H = !![a, c; c, b] from rfl, trace_fin_two_of]
+  have hnum : (a + b) * Q - Δ * (x0 ^ 2 + x1 ^ 2) =
+      (b * x0 - c * x1) ^ 2 + (a * x1 - c * x0) ^ 2 := by
+    simp only [Q, Δ]
+    ring
+  have hsplit : (a + b) * (Δ⁻¹ * Q) - (x0 ^ 2 + x1 ^ 2) =
+      ((a + b) * Q - Δ * (x0 ^ 2 + x1 ^ 2)) / Δ := by
+    field_simp [hΔne]
+  have hdiff : (a + b) * (x ⬝ᵥ (H⁻¹ *ᵥ x)) - vecEnergy x =
+      ((b * x0 - c * x1) ^ 2 + (a * x1 - c * x0) ^ 2) / Δ := by
+    rw [hquad, henergy, hsplit, hnum]
+  have hnn : 0 ≤ (b * x0 - c * x1) ^ 2 + (a * x1 - c * x0) ^ 2 :=
+    add_nonneg (sq_nonneg _) (sq_nonneg _)
+  have hnonneg : 0 ≤ (a + b) * (x ⬝ᵥ (H⁻¹ *ᵥ x)) - vecEnergy x := by
+    rw [hdiff]
+    exact div_nonneg hnn hΔ.le
+  have hle : vecEnergy x ≤ (a + b) * (x ⬝ᵥ (H⁻¹ *ᵥ x)) := by
+    linarith
+  simpa [htrace] using hle
+
+/-- Rayleigh form of the length-2 CPQR prefix under the joint leverage-ratio
+and coherence hypothesis. Not sharp. Does not bound later pivots. Does not
+close outcome 3. Not a polynomial bound for every orthogonal-row matrix. -/
+theorem joint_cpqr_prefix_rayleigh {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hn : 2 ≤ n) (τ ρ : ℝ)
+    (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j))
+    (x : Fin (cpqrIterate A 2).card → ℝ) :
+    ((k : ℝ) * (1 - ρ ^ 2)) / ((2 : ℝ) * τ ^ 2 * (n : ℝ)) * vecEnergy x ≤
+      vecEnergy (selectedCols A (cpqrIterate A 2) *ᵥ x) := by
+  let J : Finset (Fin n) := cpqrIterate A 2
+  obtain ⟨j0, j1, hjne, hset, -, htr⟩ :=
+    joint_cpqr_prefix_trace A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
+  have hn1 : 1 ≤ n := by omega
+  have hpair :=
+    joint_pair_inv_trace A hA hk hn1 τ ρ hτ hρ0 hρ hlev hcoh j0 j1 hjne
+  have hcard : J.card = 2 := by
+    unfold J
+    rw [hset]
+    exact Finset.card_pair hjne
+  let G : Matrix (Fin J.card) (Fin J.card) ℝ := selectedColGram A J
+  have hGdet : G.det ≠ 0 := by
+    unfold G J
+    rw [hset]
+    exact hpair.1
+  have hdet_nn : 0 ≤ G.det := by
+    unfold G selectedColGram
+    exact det_colGram_nonneg (selectedCols A J)
+  have hdet_pos : 0 < G.det := lt_of_le_of_ne hdet_nn (Ne.symm hGdet)
+  let G2 : Matrix (Fin 2) (Fin 2) ℝ := selectedColGramCast A J hcard
+  have hG2det_eq : G2.det = G.det := selectedColGramCast_det A J hcard
+  have hG2pos : 0 < G2.det := by
+    rw [hG2det_eq]
+    exact hdet_pos
+  let p0 : Fin n := J.orderEmbOfFin hcard 0
+  let p1 : Fin n := J.orderEmbOfFin hcard 1
+  let ℓ0 : ℝ := residualSq A ∅ p0
+  let ℓ1 : ℝ := residualSq A ∅ p1
+  let c : ℝ := colInner A p0 p1
+  have h00 : G2 0 0 = ℓ0 := by
+    unfold G2 ℓ0 p0
+    rw [selectedColGramCast_apply, ← colInner_eq_residualSq]
+    simp [colInner]
+  have h11 : G2 1 1 = ℓ1 := by
+    unfold G2 ℓ1 p1
+    rw [selectedColGramCast_apply, ← colInner_eq_residualSq]
+    simp [colInner]
+  have h01 : G2 0 1 = c := by
+    unfold G2 c p0 p1
+    rw [selectedColGramCast_apply]
+    simp [colInner]
+  have h10 : G2 1 0 = c := by
+    unfold G2 c p0 p1
+    rw [selectedColGramCast_apply]
+    change colInner A (J.orderEmbOfFin hcard 1) (J.orderEmbOfFin hcard 0) =
+      colInner A (J.orderEmbOfFin hcard 0) (J.orderEmbOfFin hcard 1)
+    exact colInner_comm A _ _
+  have hG2 : G2 = !![ℓ0, c; c, ℓ1] := by
+    ext i j
+    fin_cases i <;> fin_cases j
+    · simp [h00]
+    · simp [h01]
+    · simp [h10]
+    · simp [h11]
+  set Δ : ℝ := ℓ0 * ℓ1 - c ^ 2
+  have hΔeq : G2.det = Δ := by
+    rw [hG2, det_fin_two_of]
+    simp only [Δ, pow_two]
+  have hΔpos : 0 < Δ := by
+    rw [← hΔeq]
+    exact hG2pos
+  have hℓ0nn : 0 ≤ ℓ0 := residualSq_nonneg A ∅ p0
+  have hℓ1nn : 0 ≤ ℓ1 := residualSq_nonneg A ∅ p1
+  have hℓ0pos : 0 < ℓ0 := by
+    by_contra hbad
+    have hzero : ℓ0 = 0 := le_antisymm (not_lt.mp hbad) hℓ0nn
+    have hle : Δ ≤ 0 := by
+      have : Δ = -(c ^ 2) := by
+        simp only [Δ, hzero]
+        ring
+      rw [this]
+      exact neg_nonpos.mpr (sq_nonneg c)
+    exact not_lt_of_ge hle hΔpos
+  have hℓ1pos : 0 < ℓ1 := by
+    by_contra hbad
+    have hzero : ℓ1 = 0 := le_antisymm (not_lt.mp hbad) hℓ1nn
+    have hle : Δ ≤ 0 := by
+      have : Δ = -(c ^ 2) := by
+        simp only [Δ, hzero]
+        ring
+      rw [this]
+      exact neg_nonpos.mpr (sq_nonneg c)
+    exact not_lt_of_ge hle hΔpos
+  have hΔne : Δ ≠ 0 := ne_of_gt hΔpos
+  set aH : ℝ := Δ⁻¹ * ℓ1
+  set bH : ℝ := Δ⁻¹ * ℓ0
+  set cH : ℝ := Δ⁻¹ * (-c)
+  have haH : 0 < aH := mul_pos (inv_pos.mpr hΔpos) hℓ1pos
+  have hbH : 0 < bH := mul_pos (inv_pos.mpr hΔpos) hℓ0pos
+  have hdetH : 0 < aH * bH - cH ^ 2 := by
+    have hform : aH * bH - cH ^ 2 = Δ⁻¹ := by
+      unfold aH bH cH Δ
+      field_simp [hΔne]
+    rw [hform]
+    exact inv_pos.mpr hΔpos
+  have hInvExpr : G2⁻¹ = Δ⁻¹ • !![ℓ1, -c; -c, ℓ0] := by
+    rw [Matrix.inv_def, hΔeq, Ring.inverse_eq_inv, hG2, adjugate_fin_two_of]
+  have hH : G2⁻¹ = !![aH, cH; cH, bH] := by
+    rw [hInvExpr]
+    ext i j
+    fin_cases i <;> fin_cases j
+    · simp [aH, Matrix.smul_apply, smul_eq_mul]
+    · simp [cH, Matrix.smul_apply, smul_eq_mul]
+    · simp [cH, Matrix.smul_apply, smul_eq_mul]
+    · simp [bH, Matrix.smul_apply, smul_eq_mul]
+  let e : Fin 2 ≃ Fin J.card := finCongr hcard.symm
+  let y : Fin 2 → ℝ := fun i => x (e i)
+  have hray := symm_fin_two_spd_rayleigh aH cH bH y haH hbH hdetH
+  have htraceEq : (!![aH, cH; cH, bH]).trace = (G⁻¹).trace := by
+    rw [← hH]
+    exact selectedColGramCast_inv_trace A J hcard hGdet
+  have hG2det : G2.det ≠ 0 := by
+    rw [hG2det_eq]
+    exact hGdet
+  have hInvBack : (!![aH, cH; cH, bH])⁻¹ = G2 := by
+    rw [← hH]
+    exact nonsing_inv_nonsing_inv G2 (Ne.isUnit hG2det)
+  have hreindex := quadForm_submatrix_finCongr G hcard x
+  have hquad_energy : y ⬝ᵥ (G2 *ᵥ y) =
+      vecEnergy (selectedCols A J *ᵥ x) := by
+    have hform : y ⬝ᵥ (G2 *ᵥ y) = x ⬝ᵥ (G *ᵥ x) := by
+      unfold y e G2 selectedColGramCast
+      exact hreindex.symm
+    rw [hform]
+    exact (vecEnergy_selectedCols A J x).symm
+  have hq : y ⬝ᵥ ((!![aH, cH; cH, bH])⁻¹ *ᵥ y) =
+      vecEnergy (selectedCols A J *ᵥ x) := by
+    rw [hInvBack, hquad_energy]
+  have hv : vecEnergy x = vecEnergy y := by
+    simpa [vecEnergy, y, e] using
+      (Equiv.sum_comp e (fun j => x j ^ 2)).symm
+  set B : ℝ := (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2))
+  have hBge : (G⁻¹).trace ≤ B := by
+    unfold G J B
+    exact htr
+  have hδ : 0 < (1 : ℝ) - ρ ^ 2 := by
+    have : ρ ^ 2 < 1 := (sq_lt_one_iff₀ hρ0).2 hρ
+    linarith
+  have hBpos : 0 < B := by
+    have hkpos : (0 : ℝ) < k := by exact_mod_cast (show 0 < k by omega)
+    have hnpos : (0 : ℝ) < n := by exact_mod_cast (show 0 < n by omega)
+    have hτpos : 0 < τ := lt_of_lt_of_le zero_lt_one hτ
+    have hnum : 0 < (2 : ℝ) * τ ^ 2 * (n : ℝ) := by positivity
+    exact div_pos hnum (mul_pos hkpos hδ)
+  have hstep : vecEnergy x ≤
+      (G⁻¹).trace * vecEnergy (selectedCols A J *ᵥ x) := by
+    rw [hv, ← htraceEq, ← hq]
+    exact hray
+  have hle : vecEnergy x ≤ B * vecEnergy (selectedCols A J *ᵥ x) :=
+    hstep.trans (mul_le_mul_of_nonneg_right hBge (vecEnergy_nonneg _))
+  have hdiv : vecEnergy x / B ≤ vecEnergy (selectedCols A J *ᵥ x) := by
+    rw [div_le_iff₀ hBpos, mul_comm]
+    exact hle
+  have hcoeff : ((k : ℝ) * (1 - ρ ^ 2)) / ((2 : ℝ) * τ ^ 2 * (n : ℝ)) * vecEnergy x =
+      vecEnergy x / B := by
+    have hk0 : (k : ℝ) ≠ 0 := by exact_mod_cast (show k ≠ 0 by omega)
+    have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (show n ≠ 0 by omega)
+    have hτne : τ ≠ 0 := (lt_of_lt_of_le zero_lt_one hτ).ne'
+    have hδ0 : (1 : ℝ) - ρ ^ 2 ≠ 0 := hδ.ne'
+    unfold B
+    field_simp [hk0, hn0, hτne, hδ0]
+  rw [hcoeff]
+  exact hdiv
 
 end StructuredColumnSelection
