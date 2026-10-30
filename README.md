@@ -607,3 +607,6 @@ most `2 τ^2 n / (k (1 - ρ^2))`. The constant was not weakened. This is
 not a bound on a `k`-set for `k > 2`, and it does not identify
 `cpqrIterate A 2`. This does not close outcome 3. The contract is in
 RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#49](https://github.com/tripp-smith/structured-column-selection/pull/49).
