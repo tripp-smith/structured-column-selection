@@ -1547,7 +1547,7 @@ It is not a polynomial bound for every orthogonal-row matrix. Problem 4.1
 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
-(pending)
+[#47](https://github.com/tripp-smith/structured-column-selection/pull/47).
 
 Phase PR and verification receipt:
 [#37](https://github.com/tripp-smith/structured-column-selection/pull/37).

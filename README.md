@@ -577,3 +577,6 @@ coherence at most `19/20`, and CPQR inverse energy strictly above
 coherence at most `19/20` implies coherence at most `ρ`. A stricter cap
 is not ruled out. The constant `19/20` was not weakened. This does not
 close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#47](https://github.com/tripp-smith/structured-column-selection/pull/47).
