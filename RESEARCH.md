@@ -1928,3 +1928,62 @@ outcome 3.
 
 Phase PR and verification receipt:
 [#49](https://github.com/tripp-smith/structured-column-selection/pull/49).
+
+## Phase AK joint CPQR prefix (2026-10-30, contract)
+
+Iteration AK. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AJ bounds every 2-column Gram. That theorem does
+not mention CPQR. This phase specializes the same bound to the CPQR
+prefix of length 2.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_cpqr_prefix_trace`. Same hypotheses as
+`joint_pair_inv_trace`, plus `2 ≤ n`: `OrthogonalRows A`, `2 ≤ k`,
+`2 ≤ n`, `1 ≤ τ`, `0 ≤ ρ < 1`, the leverage comparison
+`residualSq A ∅ i ≤ τ * residualSq A ∅ j` for all `i, j`, and the
+coherence bound on `colInner` for `i ≠ j`.
+
+Conclude:
+
+```text
+∃ j0 j1 : Fin n, j0 ≠ j1 ∧
+  cpqrIterate A 2 = {j0, j1} ∧
+  (selectedColGram A (cpqrIterate A 2)).det ≠ 0 ∧
+  ((selectedColGram A (cpqrIterate A 2))⁻¹).trace ≤
+    (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2))
+```
+
+The constant is that expression. It is not replaced by a looser one.
+`j0` is not identified with index 0. Ties are broken by `cpqrPivot`;
+the statement only needs existence.
+
+Proof shape. `milestoneE_leverage_sum` says the empty residuals sum to
+`k > 0`, so some column has `0 < residualSq A ∅ j`. The filter in
+`cpqrPivot` requires a strictly positive residual equal to the max, so
+`cpqrPivot A ∅ = some j0` and `cpqrIterate A 1 = {j0}`. The singleton
+Gram of `{j0}` has nonzero determinant because that energy is positive
+(`selectedColGram_singleton_det_ne_zero`). For every `j ≠ j0`,
+`residualSq_eq_schur` gives
+`residualSq A {j0} j = ℓ_j - c² / ℓ_j0`, which equals
+`det(selectedColGram A {j0, j}) / ℓ_j0`. `joint_pair_inv_trace` says
+that determinant is nonzero, and the energy is positive, so the Schur
+residual is positive. Every unused column therefore has positive
+residual, `cpqrPivot A {j0} = some j1` with `j1 ≠ j0`, and
+`cpqrIterate A 2 = {j0, j1}`. Apply `joint_pair_inv_trace` to that pair.
+
+Independent check: `tests/test_joint_cpqr_prefix.py`, in
+`fractions.Fraction`, calling `structselect.cpqr`. On the `2×2`
+identity, CPQR returns both columns and the inverse trace of that Gram
+is `2`, equal to the formula at `τ = 1`, `ρ = 0`, `k = 2`, `n = 2`.
+The test is not the theorem.
+
+Non-claims: this is the CPQR prefix of length 2 under the joint
+leverage-ratio and coherence hypothesis. It does not bound later pivots.
+A 2-column CPQR prefix is not a `k`-set for `k > 2`. It does not close
+outcome 3. It is not a polynomial bound for every orthogonal-row matrix.
+The census did not prove this. Problem 4.1 is not solved. `MinDimLe`,
+`k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#50](https://github.com/tripp-smith/structured-column-selection/pull/50).

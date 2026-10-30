@@ -16,8 +16,13 @@ is at most `2 τ² n / (k (1 - ρ²))`.
 
 This bounds every pair. It does not bound a `k`-set for `k > 2`. It does
 not close outcome 3. It is not a polynomial CPQR bound for every
-orthogonal-row matrix. The census did not prove this. The statement does
-not identify `cpqrIterate A 2`.
+orthogonal-row matrix. The census did not prove this.
+`joint_pair_inv_trace` does not identify `cpqrIterate A 2`.
+
+`joint_cpqr_prefix_trace` is the CPQR prefix of length 2 under the same
+joint leverage-ratio and coherence hypothesis. It does not bound later
+pivots. It does not close outcome 3. It is not a polynomial bound for
+every orthogonal-row matrix.
 -/
 
 namespace StructuredColumnSelection
@@ -231,5 +236,128 @@ theorem joint_pair_inv_trace {k n : ℕ}
       hratio.trans (hμstep.trans heq.le)
     rw [← htrace_eq] at hle
     simpa [J] using hle
+
+/-- The CPQR prefix of length 2 under the joint leverage-ratio and
+coherence hypothesis. It does not bound later pivots. It does not close
+outcome 3. It is not a polynomial bound for every orthogonal-row matrix. -/
+theorem joint_cpqr_prefix_trace {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hn : 2 ≤ n) (τ ρ : ℝ)
+    (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    ∃ j0 j1 : Fin n, j0 ≠ j1 ∧
+      cpqrIterate A 2 = {j0, j1} ∧
+      (selectedColGram A (cpqrIterate A 2)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A 2))⁻¹).trace ≤
+        (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) := by
+  have hn1 : 1 ≤ n := by omega
+  have hsum := leverageSum A hA
+  have hkpos : (0 : ℝ) < k := by exact_mod_cast (show 0 < k by omega)
+  have hsome : ∃ j : Fin n, 0 < residualSq A ∅ j := by
+    by_contra hnone
+    have hle : ∀ j : Fin n, residualSq A ∅ j ≤ 0 :=
+      fun j => not_lt.mp ((not_exists.mp hnone) j)
+    have hzero : ∑ j : Fin n, residualSq A ∅ j = 0 := by
+      refine Finset.sum_eq_zero fun j _ => residualSq_eq_zero_of_nonpos A ∅ j (hle j)
+    rw [hsum] at hzero
+    exact hkpos.ne' hzero
+  have hempty : ∃ j ∈ unused (∅ : Finset (Fin n)), 0 < residualSq A ∅ j := by
+    obtain ⟨j, hj⟩ := hsome
+    exact ⟨j, by simp [unused], hj⟩
+  obtain ⟨j0, hj0⟩ := cpqrPivot_exists_of_pos A hempty
+  have hpos0 : 0 < residualSq A ∅ j0 := (cpqrPivot_spec hj0).2.2
+  have hG0 : (selectedColGram A {j0}).det ≠ 0 :=
+    selectedColGram_singleton_det_ne_zero A j0 hpos0
+  have he0 : colInner A j0 j0 ≠ 0 := by
+    rw [colInner_eq_residualSq]
+    exact hpos0.ne'
+  have hdet0 : (selectedColGram A {j0}).det = residualSq A ∅ j0 := by
+    have hmul := residualSq_mul_gram A (J := (∅ : Finset (Fin n))) (j := j0)
+      (notMem_empty _) (Or.inl card_empty)
+    rw [if_pos card_empty, mul_one] at hmul
+    have hsing : insert j0 (∅ : Finset (Fin n)) = {j0} := by
+      ext x
+      simp only [mem_insert, mem_singleton]
+      constructor
+      · rintro (rfl | hx)
+        · rfl
+        · exact (notMem_empty x hx).elim
+      · exact Or.inl
+    rw [hsing] at hmul
+    exact Eq.symm hmul
+  have hres_pos : ∀ j : Fin n, j ≠ j0 → 0 < residualSq A {j0} j := by
+    intro j hj
+    have hschur : residualSq A {j0} j =
+        residualSq A ∅ j - colInner A j0 j ^ 2 / residualSq A ∅ j0 := by
+      have hdot : (fun i => A i j) ⬝ᵥ (fun i => A i j) = ∑ i, A i j * A i j := rfl
+      have hinner : colInner A j j = ∑ i, A i j * A i j := rfl
+      rw [residualSq_eq_schur A {j0} j hG0, singleton_proj A j0 j he0, hdot, ← hinner,
+        colInner_eq_residualSq A j, colInner_eq_residualSq A j0]
+    have hnotin : j ∉ ({j0} : Finset (Fin n)) := by
+      simpa [mem_singleton] using hj
+    have hmul := residualSq_mul_gram A hnotin (Or.inr hG0)
+    have hcard1 : ({j0} : Finset (Fin n)).card ≠ 0 := by
+      rw [card_singleton]
+      exact one_ne_zero
+    have hinsert : insert j ({j0} : Finset (Fin n)) = {j0, j} := by
+      ext x
+      simp only [mem_insert, mem_singleton]
+      rw [or_comm]
+    rw [if_neg hcard1, hdet0, hinsert] at hmul
+    have hquot : residualSq A {j0} j =
+        (selectedColGram A {j0, j}).det / residualSq A ∅ j0 :=
+      (eq_div_iff hpos0.ne').2 hmul
+    have hschur_eq :
+        residualSq A ∅ j - colInner A j0 j ^ 2 / residualSq A ∅ j0 =
+          (selectedColGram A {j0, j}).det / residualSq A ∅ j0 := by
+      rw [← hschur, hquot]
+    have hdet_ne :=
+      (joint_pair_inv_trace A hA hk hn1 τ ρ hτ hρ0 hρ hlev hcoh j0 j hj.symm).1
+    have hdet_nn : 0 ≤ (selectedColGram A {j0, j}).det := by
+      simpa [selectedColGram] using det_colGram_nonneg (selectedCols A {j0, j})
+    have hdet_pos : 0 < (selectedColGram A {j0, j}).det :=
+      lt_of_le_of_ne hdet_nn hdet_ne.symm
+    rw [hschur, hschur_eq]
+    exact div_pos hdet_pos hpos0
+  have hex : ∃ j : Fin n, j ≠ j0 := by
+    by_cases hzero : j0 = ⟨0, by omega⟩
+    · refine ⟨⟨1, by omega⟩, ?_⟩
+      intro h
+      rw [hzero] at h
+      have : (1 : ℕ) = 0 := by simpa using congrArg Fin.val h
+      omega
+    · exact ⟨⟨0, by omega⟩, Ne.symm hzero⟩
+  have hpos_unused : ∃ j ∈ unused ({j0} : Finset (Fin n)),
+      0 < residualSq A {j0} j := by
+    obtain ⟨j, hj⟩ := hex
+    refine ⟨j, ?_, hres_pos j hj⟩
+    simp [unused, mem_singleton, hj]
+  obtain ⟨j1, hj1⟩ := cpqrPivot_exists_of_pos A hpos_unused
+  have hjne : j0 ≠ j1 := by
+    intro h
+    have hnot : j1 ∉ ({j0} : Finset (Fin n)) := (cpqrPivot_spec hj1).1
+    exact hnot (mem_singleton.mpr h.symm)
+  have h0 : cpqrIterate A 0 = (∅ : Finset (Fin n)) := rfl
+  have h1 : cpqrIterate A 1 = ({j0} : Finset (Fin n)) := by
+    conv_lhs => unfold cpqrIterate
+    rw [h0, hj0]
+    rfl
+  have h2 : cpqrIterate A 2 = insert j1 ({j0} : Finset (Fin n)) := by
+    conv_lhs => unfold cpqrIterate
+    rw [h1, hj1]
+  have hset : cpqrIterate A 2 = {j0, j1} := by
+    rw [h2]
+    ext x
+    simp only [mem_insert, mem_singleton]
+    rw [or_comm]
+  have hpair := joint_pair_inv_trace A hA hk hn1 τ ρ hτ hρ0 hρ hlev hcoh j0 j1 hjne
+  refine ⟨j0, j1, hjne, hset, ?_, ?_⟩
+  · rw [hset]
+    exact hpair.1
+  · rw [hset]
+    exact hpair.2
 
 end StructuredColumnSelection

@@ -610,3 +610,16 @@ RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#49](https://github.com/tripp-smith/structured-column-selection/pull/49).
+
+Completed phase: **AK joint CPQR prefix**.
+`milestoneE_joint_cpqr_prefix_trace` specializes the two-column inverse-trace
+bound to the CPQR prefix of length 2. Under the same leverage-ratio and
+coherence hypotheses, plus `2 ≤ n`, there are distinct columns `j0` and
+`j1` with `cpqrIterate A 2 = {j0, j1}`, the Gram
+`selectedColGram A (cpqrIterate A 2)` invertible, and its inverse trace at
+most `2 τ^2 n / (k (1 - ρ^2))`. The constant was not weakened. This does
+not bound later pivots. A 2-column CPQR prefix is not a `k`-set for
+`k > 2`. This does not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#50](https://github.com/tripp-smith/structured-column-selection/pull/50).

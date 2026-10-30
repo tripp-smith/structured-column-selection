@@ -1112,4 +1112,22 @@ theorem milestoneE_joint_pair_inv_trace {k n : ℕ}
           (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) :=
   joint_pair_inv_trace A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
 
+/-- The CPQR prefix of length 2 under the joint leverage-ratio and
+coherence hypothesis. It does not bound later pivots. It does not close
+outcome 3. It is not a polynomial bound for every orthogonal-row matrix. -/
+theorem milestoneE_joint_cpqr_prefix_trace {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hn : 2 ≤ n) (τ ρ : ℝ)
+    (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    ∃ j0 j1 : Fin n, j0 ≠ j1 ∧
+      cpqrIterate A 2 = {j0, j1} ∧
+      (selectedColGram A (cpqrIterate A 2)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A 2))⁻¹).trace ≤
+        (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) :=
+  joint_cpqr_prefix_trace A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
+
 end StructuredColumnSelection
