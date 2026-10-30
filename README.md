@@ -620,3 +620,6 @@ coherence hypotheses, plus `2 ≤ n`, there are distinct columns `j0` and
 most `2 τ^2 n / (k (1 - ρ^2))`. The constant was not weakened. This does
 not bound later pivots. A 2-column CPQR prefix is not a `k`-set for
 `k > 2`. This does not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#50](https://github.com/tripp-smith/structured-column-selection/pull/50).
