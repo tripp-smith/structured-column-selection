@@ -216,6 +216,11 @@ the sampler.
 that three-column expression at `k = 3` and that the identity satisfies
 `‖x‖² ≤ 5 ‖A_J x‖²`. It does not change the sampler.
 
+`tests/test_equal_energy_block_split.py` checks that the integer `3×6`
+columns have row Gram `100 I`, energy ratio `1`, block inner product
+`31`, and that the `2×2` inverse sends the max residual to column `5`
+and the min ratio to column `3`. It does not change the sampler.
+
 `tests/test_orthogonal_block_pivot.py` checks that the `3×3` identity
 ratio matches `(2e - r) / (e r)` and that `13/8 > 37/24` at `k = 3`,
 `n = 6`, and `λ_min = 2/5`. That comparison is a failed estimate. It

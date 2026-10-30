@@ -1266,3 +1266,50 @@ not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#36](https://github.com/tripp-smith/structured-column-selection/pull/36).
+
+## Phase X equal-energy block split (2026-10-29, contract)
+
+Iteration X. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase W shows that an orthogonal equal-energy block
+makes the next pivots agree. Dropping orthogonality is a different
+question from extending the CPQR prefix. A search of the integer tight
+frames with column squared length `25` and `50` found no split along a
+CPQR path. One ordering of a squared-length `17` frame numerically
+separates the third pivot; that search is not a certificate. The
+length-`50` frames do separate the two rules on a non-orthogonal
+block, and that separation is the theorem below. Success is a
+certified equal-energy witness of that block separation:
+`milestoneE_equal_energy_block_pivot_split`. Exit if columns `0` and `1`
+are orthogonal, or if the two pivots on `{0, 1}` agree.
+
+Target in `StructuredColumnSelection/EqualEnergyBlockSplit.lean`,
+re-exported as `milestoneE_equal_energy_block_pivot_split`: the columns
+
+```
+(-7, -4, -4, -3, -3, -1),
+(-1, -3, -3,  4,  4,  7),
+( 0, -5,  5, -5,  5,  0)
+```
+
+divided by `10` have orthogonal rows and column energy `1/2`. Columns
+`0` and `1` have inner product `31/100`. After that block, CPQR takes
+column `5` and the increment pivot takes column `3`. Column `5` is
+orthogonal to column `0`.
+
+Independent check: `tests/test_equal_energy_block_split.py` recomputes
+the integer row Gram, the common squared length `50`, the block inner
+product `31`, the orthogonality `dot(c0, c5) = 0`, and the `2×2` inverse
+residuals and ratios. It does not call the repository CPQR code. It is
+not the theorem.
+
+Non-claims: no polynomial CPQR bound on equal-energy matrices, and no
+closure of outcome 1 or outcome 3. This witness does not say
+`cpqrSet ≠ incrementSet`. The disagreeing block is not pairwise
+orthogonal, so it is outside phase W, and column `5` being orthogonal
+to column `0` means `{0, 1}` is not the two-column CPQR prefix. Problem
+4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3.
+
+Phase PR and verification receipt:
+[#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
