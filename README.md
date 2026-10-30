@@ -845,3 +845,4 @@ factor bounds the Rayleigh form. For fixed `r` this is a polynomial in
 in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
+[#64](https://github.com/tripp-smith/structured-column-selection/pull/64).
