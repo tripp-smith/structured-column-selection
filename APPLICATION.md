@@ -216,6 +216,11 @@ the sampler.
 that three-column expression at `k = 3` and that the identity satisfies
 `‖x‖² ≤ 5 ‖A_J x‖²`. It does not change the sampler.
 
+`tests/test_normalized_coherence.py` checks that two copies of one
+nonzero rational column have coherence ratio `1`, and that the `m = 2`
+triangular Frobenius energy is at most `1/4` while the row count exceeds
+that energy. It does not change the sampler.
+
 `tests/test_wide_incoherent_escape.py` checks that the `m = 2`
 triangular block has column energy at most `1 / (2k)` and that its
 off-diagonal inner products obey the same bound. It does not change the

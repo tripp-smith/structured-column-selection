@@ -351,6 +351,17 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Outcome-2 normalized coherence is 1 (2026-10-29)
+
+`milestoneE_normalized_coherence_one` says that the outcome-2 frame
+repeats a positive completion column. Two distinct columns are equal,
+their normalized coherence is `1`, and the CPQR block still beats
+`C (n + k + 1)^{2d}`. A class that requires every normalized ratio to
+be at most some `ρ < 1` excludes this frame. The theorem does not give
+a polynomial CPQR bound on a stricter ratio. Absolute inner-product
+incoherence remains the phase-Z predicate. This does not close
+outcome 3.
+
 ## Absolute incoherence does not restore a polynomial (2026-10-29)
 
 `milestoneE_incoherent_no_joint_polynomial` says that for every `ρ > 0`,

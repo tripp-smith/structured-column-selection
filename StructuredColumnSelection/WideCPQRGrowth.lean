@@ -521,7 +521,7 @@ theorem wide_adverse_family {m : ℕ} (hm : 2 ≤ m) :
         cpqrSet A = widePrefix (wideWidth m) (wideDim m) ∧
         vecEnergy (selectedCols A (widePrefix (wideWidth m) (wideDim m)) *ᵥ x) = 1 ∧
         wideGrowthLower m ^ 2 ≤ vecEnergy x := by
-  obtain ⟨A, hA, hR, hset, _hE⟩ := wide_frame_pivots hm
+  obtain ⟨A, hA, hR, hset, _hE, _hDup⟩ := wide_frame_pivots hm
   have hkn : wideDim m ≤ wideWidth m := Nat.le_add_right _ _
   let J := widePrefix (wideWidth m) (wideDim m)
   let hcard : J.card = wideDim m := widePrefix_card hkn

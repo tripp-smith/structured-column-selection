@@ -474,3 +474,15 @@ in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#39](https://github.com/tripp-smith/structured-column-selection/pull/39).
+
+Completed phase: **AA normalized coherence**.
+`milestoneE_normalized_coherence_one` says that the outcome-2 frame has
+two equal positive columns, so their normalized coherence is `1`, and
+that frame still beats `C (n + k + 1)^{2d}`. A class that requires every
+normalized ratio to be at most some `ρ < 1` excludes this frame. The
+theorem does not give a polynomial CPQR bound on a stricter ratio.
+Absolute inner-product incoherence is a different predicate. This does
+not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#40](https://github.com/tripp-smith/structured-column-selection/pull/40).

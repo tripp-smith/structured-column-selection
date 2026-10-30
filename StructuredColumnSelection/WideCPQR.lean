@@ -135,6 +135,66 @@ theorem wide_completion_orthogonal {k : ℕ} (R : Matrix (Fin k) (Fin k) ℝ)
   · exact (paddedFrame_mul_transpose R C t ht).trans hCC
   · exact paddedFrame_right_energy_le R C t ht hC
 
+/-- The repeated filler block contains two equal columns of positive energy
+whenever the leading block does not already fill the identity. -/
+theorem wide_completion_with_repeat {k : ℕ} (R : Matrix (Fin k) (Fin k) ℝ)
+    (hR : frobEnergy R ≤ 1) (t : ℕ) (ht : 2 ≤ t) (hk : 2 ≤ k) :
+    ∃ A : Matrix (Fin k) (Fin (k + k * t)) ℝ,
+      OrthogonalRows A ∧
+      (∀ i j : Fin k, A i (j.castAdd (k * t)) = R i j) ∧
+      (∀ j : Fin (k * t),
+        vecEnergy (fun i => A i (j.natAdd k)) ≤ (k : ℝ) / t) ∧
+      ∃ j1 j2 : Fin (k + k * t),
+        j1 ≠ j2 ∧ (∀ i, A i j1 = A i j2) ∧
+          0 < vecEnergy (fun i => A i j1) := by
+  have ht0 : 0 < t := by omega
+  obtain ⟨C, hCC, hCbound⟩ := exists_gram_completion R hR
+  have htrace : frobEnergy R + frobEnergy C = (k : ℝ) := by
+    have htr := congrArg Matrix.trace hCC
+    simpa [Matrix.trace_add, ← frobEnergy_eq_trace, Matrix.trace_one,
+      Fintype.card_fin] using htr
+  have hCpos : 0 < frobEnergy C := by
+    have hkR : (2 : ℝ) ≤ k := by exact_mod_cast hk
+    linarith
+  have hsum : frobEnergy C = ∑ j, vecEnergy (fun i => C i j) := by
+    unfold frobEnergy vecEnergy
+    exact sum_comm
+  have hqpos : ∃ q : Fin k, 0 < vecEnergy (fun i => C i q) := by
+    by_contra hnone
+    push Not at hnone
+    have : frobEnergy C ≤ 0 := by
+      rw [hsum]
+      exact Finset.sum_nonpos fun j _ => hnone j
+    linarith
+  obtain ⟨q, hq⟩ := hqpos
+  let s0 : Fin t := ⟨0, by omega⟩
+  let s1 : Fin t := ⟨1, by omega⟩
+  let p0 : Fin (k * t) := finProdFinEquiv (q, s0)
+  let p1 : Fin (k * t) := finProdFinEquiv (q, s1)
+  have hp : p0 ≠ p1 := by
+    intro h
+    have := finProdFinEquiv.injective h
+    simp [s0, s1] at this
+  let j1 : Fin (k + k * t) := p0.natAdd k
+  let j2 : Fin (k + k * t) := p1.natAdd k
+  have hj : j1 ≠ j2 := by
+    intro h
+    exact hp ((Fin.natAdd_inj k).mp h)
+  have hsame : ∀ i, paddedFrame R C t i j1 = paddedFrame R C t i j2 := by
+    intro i
+    simp [j1, j2, p0, p1, s0, s1, paddedFrame_right]
+  have henergy : vecEnergy (fun i => paddedFrame R C t i j1) =
+      vecEnergy (fun i => C i q) / (t : ℝ) := by
+    have htR : (0 : ℝ) ≤ t := by exact_mod_cast ht0.le
+    simp only [vecEnergy, j1, p0, paddedFrame_right, div_pow, Real.sq_sqrt htR, sum_div]
+    simp [s0]
+  refine ⟨paddedFrame R C t, ?_, paddedFrame_left R C t,
+      paddedFrame_right_energy_le R C t ht0 hCbound, ?_⟩
+  · exact (paddedFrame_mul_transpose R C t ht0).trans hCC
+  · exact ⟨j1, j2, hj, hsame, by
+      rw [henergy]
+      exact div_pos hq (by exact_mod_cast ht0)⟩
+
 /-- The first t column labels, with no hidden pivot criterion. -/
 def widePrefix (n t : ℕ) : Finset (Fin n) := univ.filter fun j => (j : ℕ) < t
 

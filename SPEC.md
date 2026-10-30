@@ -817,6 +817,14 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (normalized coherence):
+`milestoneE_normalized_coherence_one` says that the outcome-2 frame has
+two equal positive columns, so their normalized coherence is `1`, and
+the CPQR block still beats `C (n + k + 1)^{2d}`. A class that requires
+every normalized ratio to be at most some `ρ < 1` excludes this frame.
+The theorem does not give a polynomial CPQR bound on a stricter ratio.
+Outcome 3 stays open.
+
 Status note (absolute incoherence escape):
 `milestoneE_incoherent_no_joint_polynomial` says that for every `ρ > 0`,
 `ColumnIncoherent A ρ` contains an orthogonal-row frame whose CPQR block
