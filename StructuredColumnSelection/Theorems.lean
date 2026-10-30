@@ -2,6 +2,7 @@ import StructuredColumnSelection.EqualEnergyPivot
 import StructuredColumnSelection.WideIncoherent
 import StructuredColumnSelection.WideIncoherentEscape
 import StructuredColumnSelection.NormalizedCoherence
+import StructuredColumnSelection.DesignFrame
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -823,6 +824,31 @@ theorem milestoneE_normalized_coherence_one (d : ℕ) {C : ℝ} (hC : 0 < C) :
         C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
           vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
   normalized_coherence_one d hC
+
+/-- The design-padded adverse family. For every `m ≥ 2`, every completion
+`C` of the triangular block, and every tight design `W` with `W Wᵀ = 1`
+and column energy at most `1 / wideRepeats m`, the frame `[R | C W]` has
+orthogonal rows, CPQR takes the leading prefix, the image energy is `1`,
+and the inverse energy is at least `wideGrowthLower m ^ 2`.
+
+The repeated frame is the design `(1/√t)[I ⋯ I]`. No coherence bound on
+the resulting columns is claimed. This does not close outcome 1 or
+outcome 3. -/
+theorem milestoneE_design_adverse_family {m : ℕ} (hm : 2 ≤ m) {N : ℕ}
+    (C : Matrix (Fin (wideDim m)) (Fin (wideDim m)) ℝ)
+    (hCC : wideTriangular m * (wideTriangular m)ᵀ + C * Cᵀ = 1)
+    (W : Matrix (Fin (wideDim m)) (Fin N) ℝ) (hW : W * Wᵀ = 1)
+    (hcol : ∀ j : Fin N, vecEnergy (fun q => W q j) ≤ 1 / (wideRepeats m : ℝ)) :
+    ∃ A : Matrix (Fin (wideDim m)) (Fin (wideDim m + N)) ℝ,
+      ∃ x : Fin (widePrefix (wideDim m + N) (wideDim m)).card → ℝ,
+        OrthogonalRows A ∧
+        (∀ i j : Fin (wideDim m), A i (j.castAdd N) = wideTriangular m i j) ∧
+        (∀ (i : Fin (wideDim m)) (j : Fin N),
+          A i (j.natAdd (wideDim m)) = (C * W) i j) ∧
+        cpqrSet A = widePrefix (wideDim m + N) (wideDim m) ∧
+        vecEnergy (selectedCols A (widePrefix (wideDim m + N) (wideDim m)) *ᵥ x) = 1 ∧
+        wideGrowthLower m ^ 2 ≤ vecEnergy x :=
+  wide_design_adverse_family hm C hCC W hW hcol
 
 /-- Equal column energy makes the second CPQR pivot agree with the
 increment pivot, and the two-column inverse trace is at most

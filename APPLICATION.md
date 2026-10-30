@@ -216,6 +216,12 @@ the sampler.
 that three-column expression at `k = 3` and that the identity satisfies
 `‖x‖² ≤ 5 ‖A_J x‖²`. It does not change the sampler.
 
+`tests/test_design_frame.py` checks that a rational `2×2` leading block,
+a rational completion, and a design of four rational orthonormal bases
+scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler
+energies at most `k ‖w‖²`, and pairwise non-parallel filler columns. It
+does not change the sampler.
+
 `tests/test_normalized_coherence.py` checks that two copies of one
 nonzero rational column have coherence ratio `1`, and that the `m = 2`
 triangular Frobenius energy is at most `1/4` while the row count exceeds

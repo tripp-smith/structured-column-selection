@@ -351,6 +351,19 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Design-padded adverse family (2026-10-30)
+
+`milestoneE_design_adverse_family` says that the outcome-2 construction
+does not need the repeated filler block. For every `m ≥ 2`, every
+completion `C` with `R Rᵀ + C Cᵀ = I` of the triangular block `R`, and
+every tight design `W` with `W Wᵀ = I` and column energy at most
+`1 / wideRepeats m`, the frame `[R | C W]` has orthogonal rows, CPQR
+takes the leading prefix, the image energy is `1`, and the inverse
+energy is at least `wideGrowthLower m ^ 2`. The filler energy bound is
+`‖C w‖² ≤ ‖C‖_F² ‖w‖² ≤ k ‖w‖²`. The repeated frame is the design
+`(1/√t)[I ⋯ I]`. No bound on the normalized coherence of the resulting
+columns is proved. This does not close outcome 3.
+
 ## Outcome-2 normalized coherence is 1 (2026-10-29)
 
 `milestoneE_normalized_coherence_one` says that the outcome-2 frame

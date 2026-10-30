@@ -1426,3 +1426,48 @@ solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#40](https://github.com/tripp-smith/structured-column-selection/pull/40).
+
+## Phase AB design-padded adverse family (2026-10-30, contract)
+
+Iteration AB. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Of the SPEC §10 candidates, the outcome-2 family
+leaves every leverage ratio (phase G), enters every absolute
+incoherence `ρ > 0` (phase Z), and has normalized coherence exactly `1`
+(phase AA) because the filler block repeats columns. The open question
+for the normalized ratio is whether some orthogonal-row frame with every
+ratio at most a fixed `ρ < 1` still beats every polynomial. The repeated
+filler is the only reason the current frame has ratio `1`. This phase
+replaces the repeat `(1/√t)[I ⋯ I]` by an arbitrary tight design
+`W` with `W Wᵀ = 1`: the filler block is `C W` for any completion
+`R Rᵀ + C Cᵀ = 1`. The CPQR prefix only needs every filler energy below
+the smallest squared diagonal, and `‖C w‖² ≤ ‖C‖_F² ‖w‖² ≤ k ‖w‖²`
+gives that from a per-column energy cap on `W`. Success is
+`milestoneE_design_adverse_family`: for every `m ≥ 2`, every completion
+`C`, and every design `W` with `W Wᵀ = 1` and column energy at most
+`1 / wideRepeats m`, the design frame has orthogonal rows, leading
+block `wideTriangular m`, filler block `C W`, CPQR set equal to the
+leading prefix, image energy `1`, and inverse energy at least
+`wideGrowthLower m ^ 2`. Downstream consumer: a later phase chooses `W`
+and `C` to bound the normalized coherence of every column pair below
+`1`. Exit if the prefix argument needs the repeated structure.
+
+Target in `StructuredColumnSelection/DesignFrame.lean`, re-exported as
+`milestoneE_design_adverse_family`. The repeated frame is the design
+`W = (1/√t)[I ⋯ I]`; `milestoneE_wide_adverse_family` is unchanged.
+
+Independent check: `tests/test_design_frame.py` builds a rational `2×2`
+leading block, a rational completion, and a design made of four
+rational orthonormal bases scaled by `1/2`. It checks `W Wᵀ = I`,
+`A Aᵀ = I` for `[R | C W]`, the filler energy cap `k ‖w‖²`, and that
+no two filler columns are parallel. It does not call the repository
+CPQR code. It is not the theorem.
+
+Non-claims: no coherence bound is proved in this phase; the design is
+arbitrary, and the frame with the repeated design still has normalized
+coherence `1`. No polynomial CPQR bound, and no closure of outcome 1 or
+outcome 3. Problem 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2`
+stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#41](https://github.com/tripp-smith/structured-column-selection/pull/41).
