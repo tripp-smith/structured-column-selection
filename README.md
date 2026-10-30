@@ -707,3 +707,6 @@ trace and the bound is asserted only for the `2×2` identity. This does not
 close outcome 3. It is not a bound for matrices outside the leverage-ratio
 and coherence hypotheses. Coherence is used only at length 2. The contract
 is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#55](https://github.com/tripp-smith/structured-column-selection/pull/55).
