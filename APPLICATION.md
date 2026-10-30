@@ -246,6 +246,11 @@ strictly below `1` on this instance. The displayed bounds may exceed
 `1` for `m = 3`. Leading–leading pairs are not checked. It does not
 change the sampler.
 
+`tests/test_leading_coherence.py` builds `wideTriangular m` in exact
+rationals for `m = 2, 3, 4` and checks every pair `i < j` by comparing
+squares, `inner^2 * 1 ≤ (1/2 + 1/m)^2 * energy_i * energy_j`, and the
+same comparison for `3 * wideTriangular m`. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

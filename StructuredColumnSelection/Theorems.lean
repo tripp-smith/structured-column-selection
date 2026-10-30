@@ -7,6 +7,7 @@ import StructuredColumnSelection.SymmetricCompletion
 import StructuredColumnSelection.TripleDesign
 import StructuredColumnSelection.ScaledDesignFrame
 import StructuredColumnSelection.FrameCoherence
+import StructuredColumnSelection.LeadingCoherence
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -984,6 +985,21 @@ theorem milestoneE_scaled_triple_frame_filler_coherence {m : ℕ} (hm : 3 ≤ m)
             (Real.sqrt (vecEnergy (fun i => A i (j.castAdd _))) *
               Real.sqrt (vecEnergy (fun i => A i (a.natAdd (wideDim m))))) :=
   scaled_triple_frame_filler_coherence hm
+
+/-- Leading–leading normalized coherence of `scaledBlock m = (3 : ℝ) • wideTriangular m`.
+For every `m ≥ 2` and all `i ≠ j`, the absolute inner product of those columns
+is at most `(1/2 + 1/m)` times the product of their Euclidean norms.
+
+This does not bound filler pairs. This does not bound the whole frame: a
+leading–leading ratio `≤ 1/2 + 1/m` is not a coherence bound on the whole
+frame. This does not close outcome 3. This is not a polynomial CPQR bound. -/
+theorem milestoneE_scaled_block_leading_coherence {m : ℕ} (hm : 2 ≤ m)
+    {i j : Fin (wideDim m)} (hij : i ≠ j) :
+    |∑ row, scaledBlock m row i * scaledBlock m row j| ≤
+      (1 / 2 + 1 / (m : ℝ)) *
+        (Real.sqrt (vecEnergy (fun row => scaledBlock m row i)) *
+          Real.sqrt (vecEnergy (fun row => scaledBlock m row j))) :=
+  leading_leading_ratio hm hij
 
 /-- Equal column energy makes the second CPQR pivot agree with the
 increment pivot, and the two-column inverse trace is at most

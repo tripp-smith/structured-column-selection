@@ -270,6 +270,13 @@ example {m : ℕ} (hm : 3 ≤ m) :
               Real.sqrt (∑ i, A i (a.natAdd (wideDim m)) ^ 2)) :=
   milestoneE_scaled_triple_frame_filler_coherence hm
 
+example {m : ℕ} (hm : 2 ≤ m) {i j : Fin (wideDim m)} (hij : i ≠ j) :
+    |∑ row, scaledBlock m row i * scaledBlock m row j| ≤
+      (1 / 2 + 1 / (m : ℝ)) *
+        (Real.sqrt (vecEnergy (fun row => scaledBlock m row i)) *
+          Real.sqrt (vecEnergy (fun row => scaledBlock m row j))) :=
+  milestoneE_scaled_block_leading_coherence hm hij
+
 example :
     ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
       ∃ x : Fin (cpqrSet A).card → ℝ,

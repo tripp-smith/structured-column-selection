@@ -351,6 +351,21 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Leading–leading coherence (2026-10-30)
+
+`milestoneE_scaled_block_leading_coherence` gives, for every `m ≥ 2` and
+all distinct columns of `scaledBlock m = (3 : ℝ) • wideTriangular m`,
+`|⟨col i, col j⟩| ≤ (1/2 + 1/m) ‖col i‖ ‖col j‖`. The constant is
+`1/2 + 1/m`; it was not weakened. Column `t` of `wideTriangular m` is
+supported on rows `l ≤ t`, the inner product of columns `i < j` is
+`-wideC m * diag_i ^ 2 + S_i`, and `S_i ≤ wideAlpha m ^ 2 / 4` together
+with `diag > wideAlpha m / 2` and `2 * wideC m ≤ 1/m` produce the ratio.
+Scaling by `3` multiplies inner products and energies by `9`. This does
+not bound filler pairs. A leading–leading ratio `≤ 1/2 + 1/m` is not a
+coherence bound on the whole frame. This does not close outcome 3.
+Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
+every orthogonal-row matrix.
+
 ## Frame coherence for filler pairs (2026-10-30)
 
 `milestoneE_scaled_triple_frame_filler_coherence` gives, for every
@@ -365,7 +380,8 @@ bound is the design ratio `13/14` plus the completion inner-product error
 `ε`, divided by the contraction `1 - ε`. The second uses the three-point
 support of a design column (weights `1, 2, 3`) against the triangular
 column, whose diagonal entry dominates the off-diagonal entries by a
-factor `m`. Leading–leading pairs are not bounded. No coherence bound on
+factor `m`. Leading–leading pairs are bounded by
+`milestoneE_scaled_block_leading_coherence`. No coherence bound on
 the whole frame is claimed. This does not close outcome 3. Problem 4.1
 is not solved, and CPQR is not claimed to be polynomial on every
 orthogonal-row matrix.

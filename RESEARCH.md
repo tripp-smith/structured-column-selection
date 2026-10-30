@@ -1424,6 +1424,61 @@ outcome 3.
 Phase PR and verification receipt:
 [#45](https://github.com/tripp-smith/structured-column-selection/pull/45).
 
+## Phase AG leading–leading coherence (2026-10-30, contract)
+
+Iteration AG. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AF bounds filler–filler pairs and each leading
+column against each filler of the scaled triple-design frame. Leading
+columns of `wideTriangular m` were left open. Column `t` is supported on
+rows `l ≤ t`: the diagonal entry is `diag_t = wideDiagNat m t`, and the
+entry in row `l < t` is `-wideC m * diag_l`. For `(i : ℕ) < (j : ℕ)`,
+
+```
+S_i = wideC m ^ 2 * ∑_{l < i} (wideDiagNat m l) ^ 2
+⟨col i, col j⟩ = -wideC m * diag_i ^ 2 + S_i
+vecEnergy (col i) = diag_i ^ 2 + S_i
+vecEnergy (col j) = diag_j ^ 2 + S_j
+```
+
+with `S_j ≥ S_i`. `wideDiag_half_lower` gives `wideAlpha m / 2 < diag` on
+indices below `k = wideDim m`, so `diag ^ 2 > wideAlpha m ^ 2 / 4`, and
+`wideDiag_le_alpha` gives `diag ≤ wideAlpha m`. `wide_kc_sq_le` gives
+`k * wideC m ^ 2 ≤ 1/4`, hence `S_i ≤ wideAlpha m ^ 2 / 4`. The absolute
+inner product is at most `wideC m * wideAlpha m ^ 2 + S_i`, while the
+product of the norms is strictly above `wideAlpha m ^ 2 / 4 + S_i`.
+Writing `u = S_i / wideAlpha m ^ 2 ∈ [0, 1/4]`, the ratio is strictly
+below `(wideC m + u) / (1/4 + u)`. For `0 ≤ wideC m ≤ 1/4` this increases
+in `u`, and the value at `u = 1/4` is `2 * wideC m + 1/2`. Since
+`wideC m = 2m / (4m^2 + 1) ≤ 1/(2m)`, one has
+`2 * wideC m + 1/2 ≤ 1/2 + 1/m`. The diagonal lower bound is strict, so
+the non-strict comparison holds. Symmetry covers `j < i`. The factor `3`
+on `scaledBlock m = (3 : ℝ) • wideTriangular m` multiplies inner products
+by `9` and energies by `9`, and the ratio is unchanged. Exit if
+`wideC m > 1/4` for some `m ≥ 2` (it is not: `wideC m ≤ 1/(2m) ≤ 1/4`)
+or if a leading diagonal fails `wideAlpha m / 2 < diag`.
+
+Target in `StructuredColumnSelection/LeadingCoherence.lean`, re-exported
+as `milestoneE_scaled_block_leading_coherence`: for every `m ≥ 2` and all
+`i ≠ j` in `Fin (wideDim m)`,
+
+`|∑ row, scaledBlock m row i * scaledBlock m row j| ≤ (1/2 + 1/(m : ℝ)) * Real.sqrt (vecEnergy (fun row => scaledBlock m row i)) * Real.sqrt (vecEnergy (fun row => scaledBlock m row j))`.
+
+Independent check: `tests/test_leading_coherence.py` builds
+`wideTriangular m` in exact rationals for `m = 2, 3, 4` and checks every
+pair `i < j` by comparing squares,
+`inner^2 * 1 ≤ (1/2 + 1/m)^2 * energy_i * energy_j`, and the same
+comparison for `scaledBlock = 3 * wideTriangular m`. It does not call the
+repository CPQR code. It is not the theorem.
+
+Non-claims: this does not bound filler pairs; a leading–leading ratio
+`≤ 1/2 + 1/m` is not a coherence bound on the whole frame; no polynomial
+CPQR bound; no closure of outcome 1 or outcome 3. Problem 4.1 is not
+solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+(pending)
+
 Phase PR and verification receipt:
 [#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
 

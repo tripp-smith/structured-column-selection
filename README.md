@@ -549,9 +549,17 @@ Completed phase: **AF frame coherence, filler pairs**.
 normalized-coherence bounds: distinct filler columns at most
 `(13/14 + ε)/(1 - ε)`, and each leading column against each filler at
 most `(3(1 + 1/m)/√14 + ε)/√(1 - ε)`, where `ε = 45/(16 k)`.
-Leading–leading pairs are not bounded, and no coherence bound on the
-whole frame is claimed. This does not close outcome 3. The contract is
-in RESEARCH.md.
+This phase does not bound leading–leading pairs, and no coherence bound
+on the whole frame is claimed. This does not close outcome 3. The contract
+is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#45](https://github.com/tripp-smith/structured-column-selection/pull/45).
+
+Completed phase: **AG leading–leading coherence**.
+`milestoneE_scaled_block_leading_coherence` gives, for every `m ≥ 2` and
+all distinct columns of `scaledBlock m = (3 : ℝ) • wideTriangular m`,
+normalized coherence at most `1/2 + 1/m`. The constant was not weakened.
+This does not bound filler pairs, and a leading–leading ratio
+`≤ 1/2 + 1/m` is not a coherence bound on the whole frame. This does not
+close outcome 3. The contract is in RESEARCH.md.
