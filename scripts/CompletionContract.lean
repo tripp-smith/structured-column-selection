@@ -669,6 +669,15 @@ example (d : ℕ) {C : ℝ} (hC : 0 < C) :
         jointTraceBoundTight k (2 * k) (1 : ℝ) (0 : ℝ) k :=
   milestoneE_joint_equal_majorant_not_polynomial d hC
 
+example {k : ℕ} (A : Matrix (Fin k) (Fin k) ℝ) (hA : OrthogonalRows A) :
+    cpqrSet A = Finset.univ ∧
+      selectedColGram A (cpqrSet A) = 1 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace = (k : ℝ) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) =
+          vecEnergy x :=
+  milestoneE_square_cpqr_trace_eq A hA
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

@@ -351,6 +351,27 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Square CPQR trace (2026-10-30)
+
+`milestoneE_square_cpqr_trace_eq` is square only. For an orthogonal-row
+`k × k` matrix, `cpqrSet` is every column, `selectedColGram` is `1`, and
+the inverse trace equals `k`. The selected columns preserve Euclidean
+energy. Phase AR's bound `(k : ℝ) - 2 + 2 / (1 - ρ ^ 2)` equals this
+value at `ρ = 0`, which is admissible because column inner products
+vanish. Phase AR stays an inequality.
+
+`tests/test_square_trace_eq.py` checks the `k = 2` and `k = 3` identities
+and a `2 × 2` rotation with rows `(3/5, -4/5)` and `(4/5, 3/5)`, using
+`fractions.Fraction` and `structselect.cpqr`. The rows of the rotation
+are orthonormal and the column inner product is `0`. The check is not
+the theorem.
+
+Rectangular matrices are not included. The equal-leverage majorant at
+`n = 2k` is still not a polynomial. A square-only bound does not close
+outcome 3. This does not close outcome 1. Problem 4.1 is not solved, and
+this phase does not claim that CPQR is polynomial on orthogonal-row
+matrices.
+
 ## Equal-leverage majorant (2026-10-30)
 
 `milestoneE_joint_equal_majorant_not_polynomial` lower-bounds

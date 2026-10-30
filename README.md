@@ -794,3 +794,15 @@ solved. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#60](https://github.com/tripp-smith/structured-column-selection/pull/60).
+
+Completed phase: **AV square CPQR trace**.
+`milestoneE_square_cpqr_trace_eq` is square only. For a square
+orthogonal-row matrix, `cpqrSet` is every column, `selectedColGram` is
+`1`, and the inverse trace equals `k`. The selected columns preserve
+Euclidean energy. Phase AR's bound equals this value at `ρ = 0`.
+Rectangular matrices are not included. The equal-leverage majorant at
+`n = 2k` is still not a polynomial. Outcome 3 stays open. This does not
+close outcome 1. Problem 4.1 is not solved. The contract is in
+RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
