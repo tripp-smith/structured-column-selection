@@ -1509,3 +1509,59 @@ is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#42](https://github.com/tripp-smith/structured-column-selection/pull/42).
+
+## Phase AD weighted triple design (2026-10-30, contract)
+
+Iteration AD. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phases AB and AC reduce a bounded-coherence adverse
+frame to one missing ingredient: an explicit tight design
+`W Wᵀ = 1` in `ℝ^k` with many columns, every column of small energy,
+and every pair of distinct columns at normalized inner product bounded
+away from `1`. Counting fixes the size: the filler block carries total
+energy `k - ‖R‖_F²`, and every filler must stay below the smallest
+leading residual, so the number of pairwise non-parallel filler
+directions must grow at least like `k²` (after rescaling the leading
+block) and like `k³` without rescaling. Repeating columns, as in the
+outcome-2 frame, gives normalized coherence exactly `1`
+(`milestoneE_normalized_coherence_one`), so repetition is not allowed.
+
+The design used here is the weighted signed triple design. For
+`k = n + 3`, index columns by `(p, q, r, σ, τ)` with `p : Fin (n+3)`,
+`q : Fin (n+2)`, `r : Fin (n+1)`, `σ τ : Bool`. Put
+`q' = p.succAbove q` and `r' = p.succAbove (q.succAbove r)`, so
+`p, q', r'` are three distinct coordinates, and set
+
+```
+v = e_p + 2σ e_{q'} + 3τ e_{r'},      W = v / √(56 (n+2)(n+1)).
+```
+
+Sign sums kill every cross term, so `W Wᵀ = 1`. Every column has energy
+`14 / (56 (n+2)(n+1)) = 1 / (4 (n+2)(n+1))`. The integer inner product of
+two distinct columns has absolute value at most `13` (it is an integer,
+Cauchy–Schwarz gives at most `14`, and `±14` forces `v_a = ±v_b`, which
+the coefficient `+1` at `p` rules out), so the normalized coherence of
+two distinct columns is at most `13/14`. The constant `13/14` is
+attained (swap the weights `1` and `2`); it is not claimed to be
+optimal.
+
+Target in `StructuredColumnSelection/TripleDesign.lean`, re-exported
+as `milestoneE_triple_design`: for every `n`, a matrix
+`W : Matrix (Fin (n+3)) (Fin (4 (n+3)(n+2)(n+1))) ℝ` with `W Wᵀ = 1`,
+every column energy equal to `1 / (4 (n+2)(n+1))`, and
+`|⟨w_a, w_b⟩| ≤ (13/14) √(‖w_a‖²) √(‖w_b‖²)` for all `a ≠ b`.
+
+Independent check: `tests/test_triple_design.py` builds the design for
+`k = 3, 4, 5, 6` in exact rationals (the normalization is kept as the
+square `56 (n+2)(n+1)` so no square roots are needed), checks
+`W Wᵀ = I`, the column energy, pairwise non-parallelism, and the
+integer inner-product bound `13`. It does not call the repository CPQR
+code. It is not the theorem.
+
+Non-claims: no adverse frame is built in this phase; the design column
+energy `1 / (4 (n+2)(n+1))` is above the `1 / wideRepeats` cap of
+`wide_design_pivots`, so `milestoneE_design_adverse_family` is not
+instantiated here; no coherence bound on any orthogonal-row frame; no
+polynomial CPQR bound; no closure of outcome 1 or outcome 3. Problem
+4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3.

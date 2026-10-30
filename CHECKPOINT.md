@@ -78,6 +78,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Normalized coherence of the outcome-2 frame | **PROVED** (does not close outcome 3) | `milestoneE_normalized_coherence_one` |
 | Design-padded adverse family | **PROVED** (does not close outcome 3) | `milestoneE_design_adverse_family` |
 | Symmetric completion bounds | **PROVED** (does not close outcome 3) | `milestoneE_symmetric_completion` |
+| Weighted signed triple design | **PROVED** (does not close outcome 3) | `milestoneE_triple_design` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

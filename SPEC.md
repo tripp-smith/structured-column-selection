@@ -817,6 +817,15 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (weighted signed triple design):
+`milestoneE_triple_design` gives, for every `n`, a tight design
+`W Wᵀ = 1` in `ℝ^(n+3)` with `4 (n+3)(n+2)(n+1)` columns, equal column
+energy `1 / (4 (n+2)(n+1))`, and pairwise normalized inner product at
+most `13/14`. The design is an input for the design frame of
+`milestoneE_design_adverse_family`; its column energy is above that
+theorem's `1 / wideRepeats` cap, so no adverse frame and no coherence
+bound on any orthogonal-row frame is claimed. Outcome 3 stays open.
+
 Status note (symmetric completion):
 `milestoneE_symmetric_completion` gives every `R` with `‖R‖_F² ≤ 1` a
 symmetric completion `R Rᵀ + C Cᵀ = 1` with the inner-product identity
