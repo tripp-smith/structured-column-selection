@@ -1224,3 +1224,42 @@ and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#35](https://github.com/tripp-smith/structured-column-selection/pull/35).
+
+## Phase W orthogonal equal-energy block (2026-10-29, contract)
+
+Iteration W. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Transferring `milestoneE_increment_set_bound` to CPQR
+would need the CPQR column's increment ratio to stay at most
+`((n - t) + trace(G⁻¹) - t) / (k - t)`. The estimate
+`‖G⁻¹ w‖² ≤ q / λ_min`, using `λ_min ≥ (k - 1) / (2 (n - 1))` and
+residual at least `(k - 2) / (n - 2)`, does not prove that. At `k = 3`,
+`n = 6`, and `λ_min = 2/5`, which is feasible for the second-residual
+constraint, the left side is `13/8` and the allowance is `37/24`, and
+`13/8 > 37/24`. The two sides meet when the two-column Gram is a scalar
+multiple of the identity. That overshoot is an obstruction to this
+estimate. It is not a theorem that the true CPQR ratio exceeds the
+average.
+
+Target in `StructuredColumnSelection/OrthogonalBlockPivot.lean`,
+re-exported as `milestoneE_equal_energy_orthogonal_block_same_pivot`:
+if the rows are orthogonal, every column has the same energy, and the
+selected columns in `J` are pairwise orthogonal, then
+`cpqrPivot A J = incrementPivot A J`. The Gram is `(k / n)` times the
+identity, so the increment ratio equals `(2e - r) / (e r)` and is
+strictly decreasing in the residual. A one-column block is the
+agreement half of phase R. Blocks of size at least `2` are the new case.
+
+Independent check: `tests/test_orthogonal_block_pivot.py` checks the
+`3×3` identity ratio `(2e - r) / (e r)` and the exact comparison
+`13/8 > 37/24`. The comparison is a failed estimate, not a certificate
+that CPQR exceeds the increment average. The test does not call the
+repository CPQR code. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound on equal-energy matrices or on the
+leverage-ratio class, and no closure of outcome 1 or outcome 3. The
+orthogonal-block hypothesis is a condition on the selected set `J`. It
+is not the SPEC §10 class `ColumnIncoherent A 0`, which asks every pair
+of columns to be orthogonal and is already phase P. This theorem does
+not say every equal-energy CPQR prefix is orthogonal. Problem 4.1 is
+not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.

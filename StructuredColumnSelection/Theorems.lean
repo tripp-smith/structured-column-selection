@@ -4,6 +4,7 @@ import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
 import StructuredColumnSelection.LeverageRatioSplit
+import StructuredColumnSelection.OrthogonalBlockPivot
 import StructuredColumnSelection.IncrementSet
 import StructuredColumnSelection.InvSpectralBound
 import StructuredColumnSelection.InvTraceInduction
@@ -681,6 +682,22 @@ theorem milestoneE_leverage_ratio_pivot_split :
         ((16 : ℝ) / 25) / ((13 : ℝ) / 50) = 32 / 13 ∧
         incrementSet A ≠ cpqrSet A :=
   leverage_ratio_pivot_split
+
+/-- Equal column energy and a pairwise-orthogonal selected block make the
+next max-residual CPQR pivot agree with the increment pivot.
+
+A one-column block is the agreement half of
+`milestoneE_equal_energy_cpqr_prefix_trace`. The estimate
+`‖G⁻¹ w‖² ≤ q / λ_min`, fed with the residual lower bound, sits above
+the increment allowance except at this orthogonal endpoint, so it does
+not finish the induction. This does not close outcome 3. -/
+theorem milestoneE_equal_energy_orthogonal_block_same_pivot {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : 0 < k) (hn : 0 < n) (J : Finset (Fin n))
+    (horth : ∀ i ∈ J, ∀ j ∈ J, i ≠ j → colInner A i j = 0) :
+    cpqrPivot A J = incrementPivot A J :=
+  equal_energy_orthogonal_block_same_pivot A hA hE hk hn J horth
 
 /-- If every positive-residual unused column has coefficient zero, the
 increment pivot and max-residual CPQR return the same column.

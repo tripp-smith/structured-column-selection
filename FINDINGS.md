@@ -351,6 +351,18 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Orthogonal equal-energy block, same next pivot (2026-10-29)
+
+`milestoneE_equal_energy_orthogonal_block_same_pivot` says that equal
+column energy and a pairwise-orthogonal selected block make the next
+max-residual CPQR pivot agree with the increment pivot. The selected
+Gram is `(k / n)` times the identity, and the increment ratio
+`(2e - r) / (e r)` decreases as the residual grows. A one-column block
+is the agreement half of the equal-energy second pivot. The estimate
+`‖G⁻¹ w‖² ≤ q / λ_min` exceeds the increment allowance at
+`k = 3`, `n = 6`, `λ_min = 2/5` (`13/8 > 37/24`), so that estimate
+does not finish a polynomial induction. This does not close outcome 3.
+
 ## Leverage ratio `32/13` splits the second pivot (2026-10-29)
 
 `milestoneE_leverage_ratio_pivot_split` gives an orthogonal-row `2×5`
