@@ -1165,4 +1165,29 @@ theorem milestoneE_joint_cpqr_three_trace {k n : ℕ}
             (((n : ℝ) - 2) / ((k : ℝ) - 2)) :=
   joint_cpqr_three_trace A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
 
+/-- For three rows, the joint leverage-ratio and coherence hypothesis bounds
+the full CPQR set, not only a prefix.
+
+This is the phase-AM prefix identified with `cpqrSet` at `k = 3`. It is
+not a bound for general `k`. It does not close outcome 3. It is not sharp. -/
+theorem milestoneE_joint_cpqr_k3 {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : k = 3) (hn : 0 < n) (τ ρ : ℝ)
+    (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    (cpqrSet A).card = 3 ∧
+      (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((3 : ℝ) * (1 - ρ ^ 2)) +
+          (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) * ((n : ℝ) - 2) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            ((2 : ℝ) * τ ^ 2 * (n : ℝ) / ((3 : ℝ) * (1 - ρ ^ 2)) +
+              (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) * ((n : ℝ) - 2)) :=
+  joint_cpqr_k3 A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
+
 end StructuredColumnSelection

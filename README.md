@@ -653,3 +653,16 @@ The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#52](https://github.com/tripp-smith/structured-column-selection/pull/52).
+
+Completed phase: **AN joint three-row CPQR**.
+`milestoneE_joint_cpqr_k3` says that when `k = 3`, the joint
+leverage-ratio and coherence hypothesis bounds the full CPQR set, not
+only a length-3 prefix. The set has three columns,
+`selectedColGram A (cpqrSet A)` is invertible, its inverse trace is at
+most `2 τ^2 n / (3 (1 - ρ^2)) + (1 + 2 τ^3 / (1 - ρ^2)) · (n - 2)`, and
+`‖x‖² ≤ B ‖selectedCols A (cpqrSet A) x‖²` for that same `B`. The
+constant was not weakened. On the `3×3` identity the inverse trace is
+`3` and `B` at `τ = 1`, `ρ = 0`, `n = 3` equals `5`. The bound is not
+sharp. This is not a bound for general `k`. Fixing `k = 3` does not
+close outcome 3. It is not a polynomial bound for every orthogonal-row
+matrix. The contract is in RESEARCH.md.
