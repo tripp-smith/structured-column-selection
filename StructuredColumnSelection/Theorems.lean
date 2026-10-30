@@ -1300,4 +1300,16 @@ theorem milestoneE_joint_trace_majorant_not_polynomial
         jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) k :=
   joint_trace_majorant_not_polynomial d hC
 
+/-- Lower bound on `jointTraceBoundTight` only. Not a CPQR inverse trace.
+Not a matrix in the joint class. Does not close outcome 3. The square
+`τ = 1` CPQR bound of phase AR stays polynomial and is a different regime
+(`n = k`). The majorant at aspect 2 cannot be used as an outcome-3
+polynomial. -/
+theorem milestoneE_joint_equal_majorant_not_polynomial
+    (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+        jointTraceBoundTight k (2 * k) (1 : ℝ) (0 : ℝ) k :=
+  joint_equal_majorant_not_polynomial d hC
+
 end StructuredColumnSelection

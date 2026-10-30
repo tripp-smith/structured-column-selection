@@ -4,6 +4,8 @@ import Mathlib.Analysis.Real.Sqrt
 import Mathlib.LinearAlgebra.Matrix.Adjugate
 import Mathlib.Data.Finset.Max
 import Mathlib.Algebra.Order.Archimedean.Real.Basic
+import Mathlib.Algebra.BigOperators.Intervals
+import Mathlib.Data.Nat.Choose.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity
@@ -80,6 +82,14 @@ along `n = k`, `τ = 2`, and `ρ = 0` by `2^(k+1)`. That power beats every
 `C (2k + 1)^(2d)`. This is a lower bound on the majorant, not on a CPQR
 inverse trace. It does not place a matrix in the joint class. It does not
 close outcome 3. The loose majorant is untouched.
+
+`joint_equal_majorant_not_polynomial` lower-bounds `jointTraceBoundTight`
+along `n = 2k`, `τ = 1`, and `ρ = 0` by `2^k / k`. That quantity beats
+every `C (3k + 1)^(2d)`. This is a lower bound on the majorant, not on a
+CPQR inverse trace. It does not place a matrix in the joint class. It
+does not close outcome 3. The square `τ = 1` CPQR bound stays polynomial
+and is a different regime (`n = k`). The majorant at aspect 2 cannot be
+used as an outcome-3 polynomial.
 -/
 
 namespace StructuredColumnSelection
@@ -2117,5 +2127,543 @@ theorem joint_trace_majorant_not_polynomial
         = C * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d) := by rw [hsum]
     _ < (2 : ℝ) ^ (k + 1) := hpoly
     _ ≤ jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) k := hmaj
+
+/-- Partial product `∏_{s=2}^{t-1} ((2k - s) / (k - s))`. At `t ≤ 2` the
+product is empty and the value is `1`. -/
+noncomputable def jointEqualRectProd (k t : ℕ) : ℝ :=
+  ∏ s ∈ Finset.Ico 2 t, (((2 * k - s : ℕ) : ℝ) / ((k - s : ℕ) : ℝ))
+
+lemma choose_central_sq (m : ℕ) :
+    (m + 1) ^ 2 * Nat.choose (2 * (m + 1)) (m + 1) =
+      (2 * m + 2) * (2 * m + 1) * Nat.choose (2 * m) m := by
+  have hhalf : Nat.choose (2 * m + 1) (m + 1) = Nat.choose (2 * m + 1) m :=
+    Nat.choose_symm_half m
+  have hstep1 : Nat.choose (2 * m + 1) (m + 1) * (m + 1) =
+      (2 * m + 1) * Nat.choose (2 * m) m :=
+    (Nat.add_one_mul_choose_eq (2 * m) m).symm
+  have hstep2 : Nat.choose (2 * (m + 1)) (m + 1) * (m + 1) =
+      (2 * m + 2) * Nat.choose (2 * m + 1) m := by
+    have hmul : 2 * (m + 1) = 2 * m + 2 := by omega
+    rw [hmul]
+    have h := (Nat.add_one_mul_choose_eq (2 * m + 1) m).symm
+    have hcoeff : 2 * m + 1 + 1 = 2 * m + 2 := by omega
+    rw [hcoeff] at h
+    exact h
+  calc
+    (m + 1) ^ 2 * Nat.choose (2 * (m + 1)) (m + 1)
+        = (m + 1) * (Nat.choose (2 * (m + 1)) (m + 1) * (m + 1)) := by
+          rw [pow_two]
+          ac_rfl
+    _ = (m + 1) * ((2 * m + 2) * Nat.choose (2 * m + 1) m) := by rw [hstep2]
+    _ = (m + 1) * ((2 * m + 2) * Nat.choose (2 * m + 1) (m + 1)) := by rw [hhalf]
+    _ = (2 * m + 2) * (Nat.choose (2 * m + 1) (m + 1) * (m + 1)) := by ac_rfl
+    _ = (2 * m + 2) * ((2 * m + 1) * Nat.choose (2 * m) m) := by rw [hstep1]
+    _ = (2 * m + 2) * (2 * m + 1) * Nat.choose (2 * m) m := by ac_rfl
+
+lemma choose_central_ge (m : ℕ) :
+    (4 : ℝ) ^ m / ((2 * m + 1 : ℕ) : ℝ) ≤ (Nat.choose (2 * m) m : ℝ) := by
+  induction m with
+  | zero =>
+    simp [Nat.choose_self]
+  | succ m ih =>
+    have hnat := choose_central_sq m
+    have hcast :
+        ((m + 1 : ℕ) : ℝ) ^ 2 * (Nat.choose (2 * (m + 1)) (m + 1) : ℝ) =
+          ((2 * m + 2 : ℕ) : ℝ) * ((2 * m + 1 : ℕ) : ℝ) *
+            (Nat.choose (2 * m) m : ℝ) := by
+      exact_mod_cast hnat
+    have hsq : ((m + 1 : ℕ) : ℝ) ^ 2 ≠ 0 := by positivity
+    have hnext : (Nat.choose (2 * (m + 1)) (m + 1) : ℝ) =
+        (((2 * m + 2 : ℕ) : ℝ) * ((2 * m + 1 : ℕ) : ℝ) *
+          (Nat.choose (2 * m) m : ℝ)) / ((m + 1 : ℕ) : ℝ) ^ 2 := by
+      rw [eq_div_iff hsq, mul_comm]
+      exact hcast
+    have hden1 : (0 : ℝ) < ((2 * m + 1 : ℕ) : ℝ) := by positivity
+    have hcoeff : 0 ≤ ((2 * m + 2 : ℕ) : ℝ) * ((2 * m + 1 : ℕ) : ℝ) /
+        ((m + 1 : ℕ) : ℝ) ^ 2 := by positivity
+    have heq : ((2 * m + 2 : ℕ) : ℝ) * ((2 * m + 1 : ℕ) : ℝ) /
+          ((m + 1 : ℕ) : ℝ) ^ 2 * (Nat.choose (2 * m) m : ℝ) =
+        ((2 * m + 2 : ℕ) : ℝ) * ((2 * m + 1 : ℕ) : ℝ) *
+          (Nat.choose (2 * m) m : ℝ) / ((m + 1 : ℕ) : ℝ) ^ 2 := by
+      field_simp [hsq]
+    have hlow : ((2 * m + 2 : ℕ) : ℝ) * ((2 * m + 1 : ℕ) : ℝ) /
+          ((m + 1 : ℕ) : ℝ) ^ 2 * ((4 : ℝ) ^ m / ((2 * m + 1 : ℕ) : ℝ)) ≤
+        (Nat.choose (2 * (m + 1)) (m + 1) : ℝ) := by
+      rw [hnext, ← heq]
+      exact mul_le_mul_of_nonneg_left ih hcoeff
+    have hsimp :
+        ((2 * m + 2 : ℕ) : ℝ) * ((2 * m + 1 : ℕ) : ℝ) /
+            ((m + 1 : ℕ) : ℝ) ^ 2 * ((4 : ℝ) ^ m / ((2 * m + 1 : ℕ) : ℝ)) =
+          (4 : ℝ) ^ (m + 1) / (2 * ((m + 1 : ℕ) : ℝ)) := by
+      have h2 : ((2 * m + 2 : ℕ) : ℝ) = 2 * ((m + 1 : ℕ) : ℝ) := by
+        norm_cast
+      have h4 : (4 : ℝ) ^ (m + 1) = (4 : ℝ) ^ m * 4 := by
+        rw [pow_succ]
+      field_simp [hden1.ne', hsq]
+      rw [h2, h4]
+      ring
+    have hden_le : 2 * ((m + 1 : ℕ) : ℝ) ≤ ((2 * (m + 1) + 1 : ℕ) : ℝ) := by
+      norm_cast
+      omega
+    have hpos4 : (0 : ℝ) ≤ (4 : ℝ) ^ (m + 1) := by positivity
+    have hpos2 : (0 : ℝ) < 2 * ((m + 1 : ℕ) : ℝ) := by positivity
+    have hdiv : (4 : ℝ) ^ (m + 1) / ((2 * (m + 1) + 1 : ℕ) : ℝ) ≤
+        (4 : ℝ) ^ (m + 1) / (2 * ((m + 1 : ℕ) : ℝ)) :=
+      div_le_div_of_nonneg_left hpos4 hpos2 hden_le
+    calc
+      (4 : ℝ) ^ (m + 1) / ((2 * (m + 1) + 1 : ℕ) : ℝ)
+          ≤ (4 : ℝ) ^ (m + 1) / (2 * ((m + 1 : ℕ) : ℝ)) := hdiv
+      _ ≤ (Nat.choose (2 * (m + 1)) (m + 1) : ℝ) := by
+          rw [← hsimp]
+          exact hlow
+
+lemma choose_rect_shift (k : ℕ) (hk : 2 ≤ k) :
+    (k : ℕ) * Nat.choose (2 * k - 2) (k - 2) =
+      (k - 1) * Nat.choose (2 * k - 2) (k - 1) := by
+  have h := Nat.choose_succ_right_eq (2 * k - 2) (k - 2)
+  have h1 : k - 2 + 1 = k - 1 := by omega
+  have hsub : 2 * k - 2 - (k - 2) = k := by omega
+  rw [h1, hsub] at h
+  calc
+    k * Nat.choose (2 * k - 2) (k - 2)
+        = Nat.choose (2 * k - 2) (k - 2) * k := Nat.mul_comm _ _
+    _ = Nat.choose (2 * k - 2) (k - 1) * (k - 1) := h.symm
+    _ = (k - 1) * Nat.choose (2 * k - 2) (k - 1) := Nat.mul_comm _ _
+
+lemma jointEqualRectProd_ratio (k t : ℕ) (ht : 2 ≤ t) :
+    t ≤ k →
+      jointEqualRectProd k t * (∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ)) =
+        ∏ s ∈ Finset.Ico 2 t, ((2 * k - s : ℕ) : ℝ) := by
+  induction t, ht using Nat.le_induction with
+  | base =>
+    intro _
+    unfold jointEqualRectProd
+    simp
+  | succ t ht ih =>
+    intro htk1
+    have htk : t ≤ k := Nat.le_of_succ_le htk1
+    have ih := ih htk
+    unfold jointEqualRectProd at ih ⊢
+    have hP := Finset.prod_Ico_succ_top (a := 2) (b := t) ht
+      (fun s : ℕ => (((2 * k - s : ℕ) : ℝ) / ((k - s : ℕ) : ℝ)))
+    have hD := Finset.prod_Ico_succ_top (a := 2) (b := t) ht
+      (fun s : ℕ => ((k - s : ℕ) : ℝ))
+    have hN := Finset.prod_Ico_succ_top (a := 2) (b := t) ht
+      (fun s : ℕ => ((2 * k - s : ℕ) : ℝ))
+    have hden : ((k - t : ℕ) : ℝ) ≠ 0 := by
+      exact_mod_cast (show k - t ≠ 0 by omega)
+    have hcancel :
+        (((2 * k - t : ℕ) : ℝ) / ((k - t : ℕ) : ℝ)) * ((k - t : ℕ) : ℝ) =
+          ((2 * k - t : ℕ) : ℝ) := by
+      field_simp [hden]
+    calc
+      (∏ s ∈ Finset.Ico 2 (t + 1),
+          (((2 * k - s : ℕ) : ℝ) / ((k - s : ℕ) : ℝ))) *
+          (∏ s ∈ Finset.Ico 2 (t + 1), ((k - s : ℕ) : ℝ))
+        = ((∏ s ∈ Finset.Ico 2 t,
+              (((2 * k - s : ℕ) : ℝ) / ((k - s : ℕ) : ℝ))) *
+            (((2 * k - t : ℕ) : ℝ) / ((k - t : ℕ) : ℝ))) *
+          ((∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ)) * ((k - t : ℕ) : ℝ)) := by
+          rw [hP, hD]
+      _ = (∏ s ∈ Finset.Ico 2 t,
+            (((2 * k - s : ℕ) : ℝ) / ((k - s : ℕ) : ℝ))) *
+          (∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ)) * ((2 * k - t : ℕ) : ℝ) := by
+          calc
+            ((∏ s ∈ Finset.Ico 2 t,
+                (((2 * k - s : ℕ) : ℝ) / ((k - s : ℕ) : ℝ))) *
+              (((2 * k - t : ℕ) : ℝ) / ((k - t : ℕ) : ℝ))) *
+            ((∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ)) * ((k - t : ℕ) : ℝ))
+              = (∏ s ∈ Finset.Ico 2 t,
+                  (((2 * k - s : ℕ) : ℝ) / ((k - s : ℕ) : ℝ))) *
+                (∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ)) *
+                ((((2 * k - t : ℕ) : ℝ) / ((k - t : ℕ) : ℝ)) *
+                  ((k - t : ℕ) : ℝ)) := by ac_rfl
+            _ = (∏ s ∈ Finset.Ico 2 t,
+                  (((2 * k - s : ℕ) : ℝ) / ((k - s : ℕ) : ℝ))) *
+                (∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ)) *
+                ((2 * k - t : ℕ) : ℝ) := by rw [hcancel]
+      _ = (∏ s ∈ Finset.Ico 2 t, ((2 * k - s : ℕ) : ℝ)) * ((2 * k - t : ℕ) : ℝ) := by
+          rw [ih]
+      _ = ∏ s ∈ Finset.Ico 2 (t + 1), ((2 * k - s : ℕ) : ℝ) := by
+          rw [hN]
+
+lemma jointEqualRectProd_nat (k t : ℕ) (hk : 2 ≤ k) (ht : 2 ≤ t) :
+    t ≤ k →
+      Nat.choose (k - 2) (t - 2) * ∏ s ∈ Finset.Ico 2 t, (2 * k - s) =
+        Nat.choose (2 * k - 2) (t - 2) * ∏ s ∈ Finset.Ico 2 t, (k - s) := by
+  induction t, ht using Nat.le_induction with
+  | base =>
+    intro _
+    simp [Nat.choose_zero_right]
+  | succ t ht ih =>
+    intro htk1
+    have htk : t ≤ k := Nat.le_of_succ_le htk1
+    have ih := ih htk
+    have hN := Finset.prod_Ico_succ_top (a := 2) (b := t) ht (fun s : ℕ => 2 * k - s)
+    have hD := Finset.prod_Ico_succ_top (a := 2) (b := t) ht (fun s : ℕ => k - s)
+    have hidx : (t + 1) - 2 = t - 1 := by omega
+    have h1 : t - 2 + 1 = t - 1 := by omega
+    have h2 : (k - 2) - (t - 2) = k - t := by omega
+    have h3 : (2 * k - 2) - (t - 2) = 2 * k - t := by omega
+    have hc := Nat.choose_succ_right_eq (k - 2) (t - 2)
+    have hd := Nat.choose_succ_right_eq (2 * k - 2) (t - 2)
+    rw [h1, h2] at hc
+    rw [h1, h3] at hd
+    simp only [hidx]
+    have htm : t - 1 ≠ 0 := by omega
+    rw [← Nat.mul_right_inj htm]
+    calc
+      (t - 1) * (Nat.choose (k - 2) (t - 1) *
+          ∏ s ∈ Finset.Ico 2 (t + 1), (2 * k - s))
+        = (Nat.choose (k - 2) (t - 1) * (t - 1)) *
+            ((∏ s ∈ Finset.Ico 2 t, (2 * k - s)) * (2 * k - t)) := by
+          rw [hN]
+          ac_rfl
+      _ = (Nat.choose (k - 2) (t - 2) * (k - t)) *
+            ((∏ s ∈ Finset.Ico 2 t, (2 * k - s)) * (2 * k - t)) := by
+          rw [hc]
+      _ = (2 * k - t) * (k - t) *
+            (Nat.choose (k - 2) (t - 2) * ∏ s ∈ Finset.Ico 2 t, (2 * k - s)) := by
+          ac_rfl
+      _ = (2 * k - t) * (k - t) *
+            (Nat.choose (2 * k - 2) (t - 2) * ∏ s ∈ Finset.Ico 2 t, (k - s)) := by
+          rw [ih]
+      _ = (Nat.choose (2 * k - 2) (t - 2) * (2 * k - t)) *
+            ((∏ s ∈ Finset.Ico 2 t, (k - s)) * (k - t)) := by
+          ac_rfl
+      _ = (Nat.choose (2 * k - 2) (t - 1) * (t - 1)) *
+            ((∏ s ∈ Finset.Ico 2 t, (k - s)) * (k - t)) := by
+          rw [hd]
+      _ = (t - 1) * (Nat.choose (2 * k - 2) (t - 1) *
+            ∏ s ∈ Finset.Ico 2 (t + 1), (k - s)) := by
+          rw [hD]
+          ac_rfl
+
+lemma jointEqualRectProd_choose (k t : ℕ) (hk : 2 ≤ k) (ht : 2 ≤ t) (htk : t ≤ k) :
+    (Nat.choose (k - 2) (t - 2) : ℝ) * jointEqualRectProd k t =
+      (Nat.choose (2 * k - 2) (t - 2) : ℝ) := by
+  have hratio := jointEqualRectProd_ratio k t ht htk
+  have hnat := jointEqualRectProd_nat k t hk ht htk
+  have hcast := congrArg (Nat.cast : ℕ → ℝ) hnat
+  rw [Nat.cast_mul, Nat.cast_mul, Nat.cast_prod, Nat.cast_prod] at hcast
+  rw [← hratio] at hcast
+  have hD : 0 < ∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ) := by
+    refine Finset.prod_pos ?_
+    intro s hs
+    have hs2 : 2 ≤ s := (Finset.mem_Ico.mp hs).1
+    have hst : s < t := (Finset.mem_Ico.mp hs).2
+    exact_mod_cast (show 0 < k - s by omega)
+  apply mul_right_cancel₀ hD.ne'
+  calc
+    (Nat.choose (k - 2) (t - 2) : ℝ) * jointEqualRectProd k t *
+        (∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ))
+      = (Nat.choose (k - 2) (t - 2) : ℝ) *
+          (jointEqualRectProd k t * ∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ)) := by
+        ac_rfl
+    _ = (Nat.choose (2 * k - 2) (t - 2) : ℝ) *
+          (∏ s ∈ Finset.Ico 2 t, ((k - s : ℕ) : ℝ)) := hcast
+
+lemma jointTraceBoundTight_equal_rect_prod_ge (k t : ℕ) (hk : 2 ≤ k) (ht2 : 2 ≤ t) :
+    t ≤ k →
+      (4 : ℝ) * ((1 : ℝ) / 2) ^ (t - 2) * jointEqualRectProd k t ≤
+        jointTraceBoundTight k (2 * k) (1 : ℝ) 0 t := by
+  induction t, ht2 using Nat.le_induction with
+  | base =>
+    intro _
+    unfold jointEqualRectProd
+    simp [pow_zero, mul_one]
+    rw [jointTraceBoundTight_two]
+    have hk0 : (k : ℝ) ≠ 0 := by exact_mod_cast (show k ≠ 0 by omega)
+    apply le_of_eq
+    have h0 : (0 : ℝ) ^ 2 = 0 := by norm_num
+    have h1 : (1 : ℝ) ^ 2 = 1 := by norm_num
+    rw [h0, h1, sub_zero]
+    have hn : ((2 * k : ℕ) : ℝ) = 2 * (k : ℝ) := by norm_cast
+    rw [hn]
+    field_simp [hk0]
+    ring
+  | succ t ht ih =>
+    intro htk1
+    have htk : t ≤ k := Nat.le_of_succ_le htk1
+    have ih := ih htk
+    have hBnn :=
+      jointTraceBoundTight_nonneg (k := k) (n := 2 * k) (τ := (1 : ℝ)) (ρ := 0)
+        hk (by omega) (by omega) le_rfl le_rfl (by norm_num) t ht htk
+    have hprod : jointEqualRectProd k (t + 1) =
+        jointEqualRectProd k t *
+          (((2 * k - t : ℕ) : ℝ) / ((k - t : ℕ) : ℝ)) := by
+      unfold jointEqualRectProd
+      simpa using
+        (Finset.prod_Ico_succ_top (a := 2) (b := t) ht
+          (fun s : ℕ => (((2 * k - s : ℕ) : ℝ) / ((k - s : ℕ) : ℝ))))
+    have hface :
+        (((2 * k : ℕ) : ℝ) - (t : ℝ)) / ((k : ℝ) - (t : ℝ)) =
+          ((2 * k - t : ℕ) : ℝ) / ((k - t : ℕ) : ℝ) := by
+      have ht2k : t ≤ 2 * k := by omega
+      rw [← Nat.cast_sub ht2k, ← Nat.cast_sub htk]
+    have hexp : (t + 1) - 2 = (t - 2) + 1 := by omega
+    have hcoeff : (1 : ℝ) * (k : ℝ) / ((2 * k : ℕ) : ℝ) = (1 : ℝ) / 2 := by
+      have hk0 : (k : ℝ) ≠ 0 := by exact_mod_cast (show k ≠ 0 by omega)
+      have hn : ((2 * k : ℕ) : ℝ) = 2 * (k : ℝ) := by norm_cast
+      rw [hn]
+      field_simp [hk0]
+    have hq : 0 ≤ (((2 * k : ℕ) : ℝ) - (t : ℝ)) / ((k : ℝ) - (t : ℝ)) := by
+      have hnum : 0 ≤ ((2 * k : ℕ) : ℝ) - (t : ℝ) :=
+        sub_nonneg.mpr (by exact_mod_cast (show t ≤ 2 * k by omega))
+      have hden : 0 ≤ (k : ℝ) - (t : ℝ) :=
+        sub_nonneg.mpr (by exact_mod_cast htk)
+      exact div_nonneg hnum hden
+    have hhalfB : ((1 : ℝ) / 2) * jointTraceBoundTight k (2 * k) (1 : ℝ) 0 t ≤
+        1 + ((1 : ℝ) / 2) * jointTraceBoundTight k (2 * k) (1 : ℝ) 0 t := by
+      linarith [hBnn]
+    rw [jointTraceBoundTight_succ ht, hprod, hexp, pow_succ]
+    calc
+      (4 : ℝ) * (((1 : ℝ) / 2) ^ (t - 2) * ((1 : ℝ) / 2)) *
+          (jointEqualRectProd k t * (((2 * k - t : ℕ) : ℝ) / ((k - t : ℕ) : ℝ)))
+        = ((1 : ℝ) / 2) *
+            ((4 : ℝ) * ((1 : ℝ) / 2) ^ (t - 2) * jointEqualRectProd k t) *
+            ((((2 * k : ℕ) : ℝ) - (t : ℝ)) / ((k : ℝ) - (t : ℝ))) := by
+          rw [← hface]
+          ring
+      _ ≤ ((1 : ℝ) / 2) * jointTraceBoundTight k (2 * k) (1 : ℝ) 0 t *
+            ((((2 * k : ℕ) : ℝ) - (t : ℝ)) / ((k : ℝ) - (t : ℝ))) := by
+          refine mul_le_mul_of_nonneg_right ?_ hq
+          exact mul_le_mul_of_nonneg_left ih (by norm_num)
+      _ ≤ (1 + ((1 : ℝ) * (k : ℝ) / ((2 * k : ℕ) : ℝ)) *
+            jointTraceBoundTight k (2 * k) (1 : ℝ) 0 t) *
+            ((((2 * k : ℕ) : ℝ) - (t : ℝ)) / ((k : ℝ) - (t : ℝ))) := by
+          rw [hcoeff]
+          exact mul_le_mul_of_nonneg_right hhalfB hq
+
+/-- For `2 ≤ k`, `jointTraceBoundTight k (2k) 1 0` is at least `2^k / k`.
+Lower bound on the majorant only. Not a CPQR inverse trace. -/
+lemma jointTraceBoundTight_equal_rect_ge (k : ℕ) (hk : 2 ≤ k) :
+    (2 : ℝ) ^ k / (k : ℝ) ≤ jointTraceBoundTight k (2 * k) (1 : ℝ) 0 k := by
+  have hprod := jointTraceBoundTight_equal_rect_prod_ge k k hk hk le_rfl
+  have hbin := jointEqualRectProd_choose k k hk hk le_rfl
+  have hone : Nat.choose (k - 2) (k - 2) = 1 := Nat.choose_self (k - 2)
+  rw [hone, Nat.cast_one, one_mul] at hbin
+  rw [hbin] at hprod
+  have hshift := choose_rect_shift k hk
+  have hshiftR :
+      (k : ℝ) * (Nat.choose (2 * k - 2) (k - 2) : ℝ) =
+        ((k - 1 : ℕ) : ℝ) * (Nat.choose (2 * k - 2) (k - 1) : ℝ) := by
+    exact_mod_cast hshift
+  have hcentral := choose_central_ge (k - 1)
+  have h2m : 2 * (k - 1) = 2 * k - 2 := by omega
+  rw [h2m] at hcentral
+  have hden : 2 * k - 2 + 1 = 2 * k - 1 := by omega
+  rw [hden] at hcentral
+  have hkpos : (0 : ℝ) < (k : ℝ) := by exact_mod_cast (show 0 < k by omega)
+  have hodd : (0 : ℝ) < ((2 * k - 1 : ℕ) : ℝ) := by
+    exact_mod_cast (show 0 < 2 * k - 1 by omega)
+  have hkm1 : (0 : ℝ) ≤ ((k - 1 : ℕ) : ℝ) := by positivity
+  have hcent : (4 : ℝ) ^ (k - 1) ≤
+      (Nat.choose (2 * k - 2) (k - 1) : ℝ) * ((2 * k - 1 : ℕ) : ℝ) :=
+    (div_le_iff₀ hodd).mp hcentral
+  have hmul : (4 : ℝ) ^ (k - 1) * ((k - 1 : ℕ) : ℝ) ≤
+      (Nat.choose (2 * k - 2) (k - 1) : ℝ) * ((2 * k - 1 : ℕ) : ℝ) *
+        ((k - 1 : ℕ) : ℝ) :=
+    mul_le_mul_of_nonneg_right hcent hkm1
+  have hre : (Nat.choose (2 * k - 2) (k - 1) : ℝ) * ((k - 1 : ℕ) : ℝ) =
+      (k : ℝ) * (Nat.choose (2 * k - 2) (k - 2) : ℝ) := by
+    calc
+      (Nat.choose (2 * k - 2) (k - 1) : ℝ) * ((k - 1 : ℕ) : ℝ)
+          = ((k - 1 : ℕ) : ℝ) * (Nat.choose (2 * k - 2) (k - 1) : ℝ) := by ac_rfl
+      _ = (k : ℝ) * (Nat.choose (2 * k - 2) (k - 2) : ℝ) := hshiftR.symm
+  have hchoose_ge :
+      (4 : ℝ) ^ (k - 1) * ((k - 1 : ℕ) : ℝ) /
+          ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) ≤
+        (Nat.choose (2 * k - 2) (k - 2) : ℝ) := by
+    rw [div_le_iff₀ (mul_pos hkpos hodd)]
+    calc
+      (4 : ℝ) ^ (k - 1) * ((k - 1 : ℕ) : ℝ)
+          ≤ (Nat.choose (2 * k - 2) (k - 1) : ℝ) * ((2 * k - 1 : ℕ) : ℝ) *
+              ((k - 1 : ℕ) : ℝ) := hmul
+      _ = ((2 * k - 1 : ℕ) : ℝ) *
+            ((Nat.choose (2 * k - 2) (k - 1) : ℝ) * ((k - 1 : ℕ) : ℝ)) := by ac_rfl
+      _ = ((2 * k - 1 : ℕ) : ℝ) *
+            ((k : ℝ) * (Nat.choose (2 * k - 2) (k - 2) : ℝ)) := by rw [hre]
+      _ = (Nat.choose (2 * k - 2) (k - 2) : ℝ) *
+            ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) := by ac_rfl
+  have hcoef : (0 : ℝ) ≤ (4 : ℝ) * ((1 : ℝ) / 2) ^ (k - 2) := by positivity
+  have hscaled := mul_le_mul_of_nonneg_left hchoose_ge hcoef
+  have hpow : (4 : ℝ) * ((1 : ℝ) / 2) ^ (k - 2) * (4 : ℝ) ^ (k - 1) =
+      (2 : ℝ) ^ (k + 2) := by
+    have h4pow : (4 : ℝ) ^ (k - 1) = (2 : ℝ) ^ (2 * (k - 1)) := by
+      rw [show (4 : ℝ) = (2 : ℝ) ^ 2 by norm_num, ← pow_mul]
+    have hhalf : ((1 : ℝ) / 2) ^ (k - 2) = 1 / (2 : ℝ) ^ (k - 2) := by
+      rw [div_pow, one_pow]
+    have hfour : (4 : ℝ) = (2 : ℝ) ^ 2 := by norm_num
+    calc
+      (4 : ℝ) * ((1 : ℝ) / 2) ^ (k - 2) * (4 : ℝ) ^ (k - 1)
+          = (2 : ℝ) ^ 2 * (1 / (2 : ℝ) ^ (k - 2)) * (2 : ℝ) ^ (2 * (k - 1)) := by
+            rw [h4pow, hhalf, hfour]
+      _ = (2 : ℝ) ^ 2 * (2 : ℝ) ^ (2 * (k - 1)) / (2 : ℝ) ^ (k - 2) := by
+            ring
+      _ = (2 : ℝ) ^ (2 + 2 * (k - 1)) / (2 : ℝ) ^ (k - 2) := by
+            rw [← pow_add]
+      _ = (2 : ℝ) ^ (k + 2) := by
+            rw [show 2 + 2 * (k - 1) = (k + 2) + (k - 2) by omega, pow_add]
+            field_simp
+  have hfrac :
+      (4 : ℝ) * ((1 : ℝ) / 2) ^ (k - 2) *
+          ((4 : ℝ) ^ (k - 1) * ((k - 1 : ℕ) : ℝ) /
+            ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ))) =
+        (2 : ℝ) ^ (k + 2) * ((k - 1 : ℕ) : ℝ) /
+          ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) := by
+    calc
+      (4 : ℝ) * ((1 : ℝ) / 2) ^ (k - 2) *
+            ((4 : ℝ) ^ (k - 1) * ((k - 1 : ℕ) : ℝ) /
+              ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)))
+          = ((4 : ℝ) * ((1 : ℝ) / 2) ^ (k - 2) * (4 : ℝ) ^ (k - 1)) *
+              ((k - 1 : ℕ) : ℝ) / ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) := by
+            field_simp [hkpos.ne', hodd.ne']
+      _ = (2 : ℝ) ^ (k + 2) * ((k - 1 : ℕ) : ℝ) /
+            ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) := by rw [hpow]
+  have hkhalf : (1 : ℝ) / 2 ≤ ((k - 1 : ℕ) : ℝ) / (k : ℝ) := by
+    rw [div_le_div_iff₀ (by norm_num) hkpos]
+    norm_cast
+    omega
+  have hodd_le : ((2 * k - 1 : ℕ) : ℝ) ≤ 2 * (k : ℝ) := by
+    norm_cast
+    omega
+  have hinv : (1 : ℝ) / (2 * (k : ℝ)) ≤ 1 / ((2 * k - 1 : ℕ) : ℝ) :=
+    one_div_le_one_div_of_le hodd hodd_le
+  have hratio : (1 : ℝ) / (4 * (k : ℝ)) ≤
+      ((k - 1 : ℕ) : ℝ) / ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) := by
+    have hsplit : ((k - 1 : ℕ) : ℝ) / ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) =
+        ((k - 1 : ℕ) : ℝ) / (k : ℝ) * (1 / ((2 * k - 1 : ℕ) : ℝ)) := by
+      field_simp [hkpos.ne', hodd.ne']
+    have hfour : ((1 : ℝ) / 2) * (1 / (2 * (k : ℝ))) = 1 / (4 * (k : ℝ)) := by
+      field_simp [hkpos.ne']
+      ring
+    rw [hsplit, ← hfour]
+    exact mul_le_mul hkhalf hinv (by positivity) (by positivity)
+  have hpowpos : (0 : ℝ) ≤ (2 : ℝ) ^ (k + 2) := by positivity
+  have htail : (2 : ℝ) ^ k / (k : ℝ) ≤
+      (2 : ℝ) ^ (k + 2) * ((k - 1 : ℕ) : ℝ) /
+        ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) := by
+    have hleft : (2 : ℝ) ^ k / (k : ℝ) =
+        (2 : ℝ) ^ (k + 2) * (1 / (4 * (k : ℝ))) := by
+      have h2 : (2 : ℝ) ^ (k + 2) = (2 : ℝ) ^ k * 4 := by
+        rw [pow_add]
+        norm_num
+      rw [h2]
+      field_simp [hkpos.ne']
+    rw [hleft]
+    have heq : (2 : ℝ) ^ (k + 2) * (((k - 1 : ℕ) : ℝ) /
+          ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ))) =
+        (2 : ℝ) ^ (k + 2) * ((k - 1 : ℕ) : ℝ) /
+          ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) := by
+      field_simp [hkpos.ne', hodd.ne']
+    exact (mul_le_mul_of_nonneg_left hratio hpowpos).trans_eq heq
+  calc
+    (2 : ℝ) ^ k / (k : ℝ)
+        ≤ (2 : ℝ) ^ (k + 2) * ((k - 1 : ℕ) : ℝ) /
+            ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ)) := htail
+    _ = (4 : ℝ) * ((1 : ℝ) / 2) ^ (k - 2) *
+          ((4 : ℝ) ^ (k - 1) * ((k - 1 : ℕ) : ℝ) /
+            ((k : ℝ) * ((2 * k - 1 : ℕ) : ℝ))) := by rw [hfrac]
+    _ ≤ (4 : ℝ) * ((1 : ℝ) / 2) ^ (k - 2) *
+          (Nat.choose (2 * k - 2) (k - 2) : ℝ) := hscaled
+    _ ≤ jointTraceBoundTight k (2 * k) (1 : ℝ) 0 k := hprod
+
+/-- Lower bound on `jointTraceBoundTight` only. Not a CPQR inverse trace.
+Not a matrix in the joint class. Does not close outcome 3. The square
+`τ = 1` CPQR bound of phase AR stays polynomial and is a different regime
+(`n = k`). The majorant at aspect 2 cannot be used as an outcome-3
+polynomial. -/
+theorem joint_equal_majorant_not_polynomial
+    (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+        jointTraceBoundTight k (2 * k) (1 : ℝ) (0 : ℝ) k := by
+  have hC' : 0 < C * (2 : ℝ) ^ (2 * d + 1) := by positivity
+  obtain ⟨k, hk, hpoly⟩ := exists_two_pow_beats_polynomial (d + 1) hC'
+  have hdeg : 2 * (d + 1) = 2 * d + 2 := by omega
+  rw [hdeg] at hpoly
+  have h3 : ((3 * k + 1 : ℕ) : ℝ) ≤ 2 * ((2 * k + 1 : ℕ) : ℝ) := by
+    have hleft : ((3 * k + 1 : ℕ) : ℝ) = 3 * (k : ℝ) + 1 := by norm_cast
+    have hright : ((2 * k + 1 : ℕ) : ℝ) = 2 * (k : ℝ) + 1 := by norm_cast
+    rw [hleft, hright]
+    linarith
+  have hkle : (k : ℝ) ≤ ((2 * k + 1 : ℕ) : ℝ) := by
+    have hright : ((2 * k + 1 : ℕ) : ℝ) = 2 * (k : ℝ) + 1 := by norm_cast
+    rw [hright]
+    linarith
+  have hx : (1 : ℝ) ≤ ((2 * k + 1 : ℕ) : ℝ) := by
+    have hright : ((2 * k + 1 : ℕ) : ℝ) = 2 * (k : ℝ) + 1 := by norm_cast
+    rw [hright]
+    linarith
+  have hkpos : (0 : ℝ) < (k : ℝ) := by exact_mod_cast (show 0 < k by omega)
+  have hpow3 : ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d) ≤
+      (2 * ((2 * k + 1 : ℕ) : ℝ)) ^ (2 * d) :=
+    pow_le_pow_left₀ (Nat.cast_nonneg _) h3 _
+  have hsplit : (2 * ((2 * k + 1 : ℕ) : ℝ)) ^ (2 * d) =
+      (2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d) := by
+    rw [mul_pow]
+  have hstep1 : (k : ℝ) * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d) ≤
+      (2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 1) := by
+    calc
+      (k : ℝ) * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d)
+          ≤ (k : ℝ) * (2 * ((2 * k + 1 : ℕ) : ℝ)) ^ (2 * d) :=
+            mul_le_mul_of_nonneg_left hpow3 (Nat.cast_nonneg _)
+      _ = (k : ℝ) * ((2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d)) := by
+            rw [hsplit]
+      _ ≤ ((2 * k + 1 : ℕ) : ℝ) *
+            ((2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d)) := by
+            refine mul_le_mul_of_nonneg_right hkle ?_
+            exact mul_nonneg (pow_nonneg (by norm_num) _) (pow_nonneg (by positivity) _)
+      _ = (2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 1) := by
+            rw [pow_succ]
+            ring
+  have hstep2 : (2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 1) ≤
+      (2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 2) := by
+    refine mul_le_mul_of_nonneg_left ?_ (pow_nonneg (by norm_num) _)
+    exact pow_le_pow_right₀ hx (by omega)
+  have hbound : C * (k : ℝ) * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d) ≤
+      (C * (2 : ℝ) ^ (2 * d + 1) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 2)) / 2 := by
+    have hle := hstep1.trans hstep2
+    have hmul : C * ((k : ℝ) * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d)) ≤
+        C * ((2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 2)) :=
+      mul_le_mul_of_nonneg_left hle hC.le
+    have hassoc : C * (k : ℝ) * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d) =
+        C * ((k : ℝ) * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d)) := by ring
+    have hdiv : C * ((2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 2)) =
+        (C * (2 : ℝ) ^ (2 * d + 1) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 2)) / 2 := by
+      have hpow : (2 : ℝ) ^ (2 * d + 1) = (2 : ℝ) ^ (2 * d) * 2 := by
+        rw [pow_succ]
+      rw [hpow]
+      field_simp
+    rw [hassoc]
+    exact hmul.trans_eq hdiv
+  have hstrict : (C * (2 : ℝ) ^ (2 * d + 1) *
+      ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 2)) / 2 < (2 : ℝ) ^ (k + 1) / 2 :=
+    div_lt_div_of_pos_right hpoly (by norm_num)
+  have hclear : C * (k : ℝ) * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d) < (2 : ℝ) ^ k := by
+    have hpowk : (2 : ℝ) ^ (k + 1) / 2 = (2 : ℝ) ^ k := by
+      rw [pow_succ]
+      field_simp
+    calc
+      C * (k : ℝ) * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d)
+          ≤ (C * (2 : ℝ) ^ (2 * d + 1) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d + 2)) / 2 :=
+            hbound
+      _ < (2 : ℝ) ^ (k + 1) / 2 := hstrict
+      _ = (2 : ℝ) ^ k := hpowk
+  have hdivk : C * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d) < (2 : ℝ) ^ k / (k : ℝ) := by
+    rw [lt_div_iff₀ hkpos]
+    calc
+      C * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d) * (k : ℝ)
+          = C * (k : ℝ) * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d) := by ring
+      _ < (2 : ℝ) ^ k := hclear
+  have hsum : 2 * k + k + 1 = 3 * k + 1 := by omega
+  have hmaj := jointTraceBoundTight_equal_rect_ge k hk
+  refine ⟨k, hk, ?_⟩
+  calc
+    C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d)
+        = C * ((3 * k + 1 : ℕ) : ℝ) ^ (2 * d) := by rw [hsum]
+    _ < (2 : ℝ) ^ k / (k : ℝ) := hdivk
+    _ ≤ jointTraceBoundTight k (2 * k) (1 : ℝ) (0 : ℝ) k := hmaj
 
 end StructuredColumnSelection
