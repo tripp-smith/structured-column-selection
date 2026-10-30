@@ -687,3 +687,23 @@ not close outcome 3. Coherence is not used. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#54](https://github.com/tripp-smith/structured-column-selection/pull/54).
+
+Completed phase: **AP CPQR trace recurrence**.
+`milestoneE_joint_cpqr_trace_bound` iterates the one-step CPQR trace
+recurrence from the length-2 prefix up to any prefix length `2 ≤ t ≤ k`.
+Under orthogonal rows, a leverage ratio at most `τ`, and normalized
+coherence at most `ρ < 1`, `selectedColGram A (cpqrIterate A t)` is
+invertible and its inverse trace is at most `jointTraceBound k n τ ρ t`.
+The same bound multiplies the image energy. The length-2 value is
+`2 τ^2 n / (k (1 - ρ^2))`. Each later step at length `s` adds
+`(1 + (τ k / n) B) · (n - s) / (k - s)`, which multiplies the previous
+bound by `1 + (τ k / n) (n - s) / (k - s)` and adds `(n - s) / (k - s)`.
+That factor is `O(τ k)` near the last pivot. The bound is not a polynomial
+in `k`. On the identity at `τ = 1` and `ρ = 0`, the bound at `k = n = 2`
+is `2` and the inverse trace is `2`; at `k = n = 3` the bounds are `2`
+then `5` and the inverse trace is `3 ≤ 5`; at `k = n = 4` the bounds are
+`2`, `5`, then `11` and the inverse trace is `4 ≤ 11`. Equality of the
+trace and the bound is asserted only for the `2×2` identity. This does not
+close outcome 3. It is not a bound for matrices outside the leverage-ratio
+and coherence hypotheses. Coherence is used only at length 2. The contract
+is in RESEARCH.md.

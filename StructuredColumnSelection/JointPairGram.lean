@@ -44,6 +44,13 @@ assuming a trace bound on the current prefix. It moves length `t` to
 length `t + 1`. It is not a bound on the full `k`-set. It is not a
 polynomial bound. It does not close outcome 3. Coherence is not used.
 The recurrence is not iterated here.
+
+`jointTraceBound` iterates that step from the length-2 bound up to any
+`2 ≤ t ≤ k`. Each step multiplies the previous bound by
+`1 + (τ k / n) (n - s) / (k - s)` and adds `(n - s) / (k - s)`. That
+factor is `O(τ k)` near the last pivot. The bound is not a polynomial in
+`k`. `joint_cpqr_trace_bound` records the iteration. It does not close
+outcome 3. Coherence is used only at length 2.
 -/
 
 namespace StructuredColumnSelection
@@ -1124,5 +1131,158 @@ theorem joint_cpqr_step {k n t : ℕ}
   refine ⟨hdet1, ?_⟩
   rw [hnext, ← hinsert, hinc, hfrac]
   exact add_le_add hTle hratio'
+
+/-- Iterated CPQR inverse-trace majorant. The value at `2` is the length-2
+prefix bound. For `s ≥ 2`, the value at `s + 1` is the one-step increment
+from `joint_cpqr_step`. Each step multiplies the previous bound by
+`1 + (τ k / n) (n - s) / (k - s)` and adds `(n - s) / (k - s)`. That factor
+is `O(τ k)` near the last pivot. This is not a polynomial in `k`. -/
+noncomputable def jointTraceBound (k n : ℕ) (τ ρ : ℝ) : ℕ → ℝ
+  | 0 => 0
+  | 1 => 0
+  | 2 => (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2))
+  | s + 1 =>
+      let B := jointTraceBound k n τ ρ s
+      B + (1 + (τ * (k : ℝ) / (n : ℝ)) * B) *
+        (((n : ℝ) - s) / ((k : ℝ) - s))
+
+lemma jointTraceBound_two (k n : ℕ) (τ ρ : ℝ) :
+    jointTraceBound k n τ ρ 2 =
+      (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) := by
+  rfl
+
+lemma jointTraceBound_succ {k n : ℕ} {τ ρ : ℝ} {s : ℕ} (hs : 2 ≤ s) :
+    jointTraceBound k n τ ρ (s + 1) =
+      jointTraceBound k n τ ρ s +
+        (1 + (τ * (k : ℝ) / (n : ℝ)) * jointTraceBound k n τ ρ s) *
+          (((n : ℝ) - s) / ((k : ℝ) - s)) := by
+  match s, hs with
+  | 0, hs => omega
+  | 1, hs => omega
+  | _ + 2, _ => rfl
+
+lemma jointTraceBound_two_nonneg {k n : ℕ} {τ ρ : ℝ}
+    (hk : 2 ≤ k) (hn : 2 ≤ n) (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1) :
+    0 ≤ (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) := by
+  have hk0 : (0 : ℝ) < (k : ℝ) := by exact_mod_cast (by omega : 0 < k)
+  have hn0 : (0 : ℝ) ≤ (n : ℝ) := by exact_mod_cast (show 0 ≤ n by omega)
+  have hτ0 : 0 ≤ τ := zero_le_one.trans hτ
+  have hsq : ρ ^ 2 < 1 := by
+    have hle : ρ ^ 2 ≤ ρ := by
+      calc
+        ρ ^ 2 = ρ * ρ := by rw [pow_two]
+        _ ≤ ρ * 1 := mul_le_mul_of_nonneg_left (le_of_lt hρ) hρ0
+        _ = ρ := mul_one ρ
+    exact lt_of_le_of_lt hle hρ
+  have hden : 0 < (k : ℝ) * (1 - ρ ^ 2) := mul_pos hk0 (by linarith)
+  have hnum : 0 ≤ (2 : ℝ) * τ ^ 2 * (n : ℝ) := by
+    have hτsq : 0 ≤ τ ^ 2 := sq_nonneg τ
+    have h2 : (0 : ℝ) ≤ 2 := by norm_num
+    exact mul_nonneg (mul_nonneg h2 hτsq) hn0
+  exact div_nonneg hnum hden.le
+
+lemma jointTraceBound_step_nonneg {k n : ℕ} {τ B : ℝ} {s : ℕ}
+    (hτ : 1 ≤ τ) (hB : 0 ≤ B) (hsk : s < k) (hsn : s < n) :
+    0 ≤ B + (1 + (τ * (k : ℝ) / (n : ℝ)) * B) *
+      (((n : ℝ) - s) / ((k : ℝ) - s)) := by
+  have hτ0 : 0 ≤ τ := zero_le_one.trans hτ
+  have hn0 : (0 : ℝ) < (n : ℝ) := by exact_mod_cast (by omega : 0 < n)
+  have hcoeff : 0 ≤ τ * (k : ℝ) / (n : ℝ) :=
+    div_nonneg (mul_nonneg hτ0 (Nat.cast_nonneg k)) (le_of_lt hn0)
+  have hfactor : 0 ≤ 1 + (τ * (k : ℝ) / (n : ℝ)) * B :=
+    add_nonneg zero_le_one (mul_nonneg hcoeff hB)
+  have hnum : 0 ≤ (n : ℝ) - s :=
+    sub_nonneg.mpr (by exact_mod_cast (le_of_lt hsn))
+  have hden : 0 ≤ (k : ℝ) - s :=
+    sub_nonneg.mpr (by exact_mod_cast (le_of_lt hsk))
+  exact add_nonneg hB (mul_nonneg hfactor (div_nonneg hnum hden))
+
+lemma jointTraceBound_nonneg {k n : ℕ} {τ ρ : ℝ}
+    (hk : 2 ≤ k) (hn : 2 ≤ n) (hkn : k ≤ n)
+    (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1) :
+    ∀ s, 2 ≤ s → s ≤ k → 0 ≤ jointTraceBound k n τ ρ s := by
+  intro s hs2 hsk
+  induction s with
+  | zero => omega
+  | succ s ih =>
+    by_cases htwo : s + 1 = 2
+    · rw [htwo, jointTraceBound_two]
+      exact jointTraceBound_two_nonneg hk hn hτ hρ0 hρ
+    · have hs2' : 2 ≤ s := by omega
+      have hsltk : s < k := by omega
+      have hslek : s ≤ k := le_of_lt hsltk
+      have hsn : s < n := lt_of_lt_of_le hsltk hkn
+      rw [jointTraceBound_succ hs2']
+      exact jointTraceBound_step_nonneg hτ (ih hs2' hslek) hsltk hsn
+
+/-- For every prefix length `2 ≤ t ≤ k`, the CPQR Gram inverse trace is at
+most `jointTraceBound`. The same bound controls the Rayleigh comparison.
+This is not a polynomial in `k`. It does not close outcome 3. It is not a
+bound for matrices outside the leverage-ratio and coherence hypotheses. -/
+theorem joint_cpqr_trace_bound {k n t : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hn : 2 ≤ n) (τ ρ : ℝ)
+    (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j))
+    (ht2 : 2 ≤ t) (htk : t ≤ k) :
+    (selectedColGram A (cpqrIterate A t)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤
+        jointTraceBound k n τ ρ t ∧
+      ∀ x : Fin (cpqrIterate A t).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrIterate A t) *ᵥ x) *
+            jointTraceBound k n τ ρ t := by
+  have hkn : k ≤ n := orthogonalRows_le A hA
+  suffices
+      ∀ t, 2 ≤ t → t ≤ k →
+        (selectedColGram A (cpqrIterate A t)).det ≠ 0 ∧
+          ((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤
+            jointTraceBound k n τ ρ t ∧
+          ∀ x : Fin (cpqrIterate A t).card → ℝ,
+            vecEnergy x ≤
+              vecEnergy (selectedCols A (cpqrIterate A t) *ᵥ x) *
+                jointTraceBound k n τ ρ t from this t ht2 htk
+  intro t ht2 htk
+  induction t with
+  | zero => omega
+  | succ s ih =>
+    by_cases htwo : s + 1 = 2
+    · rw [htwo]
+      obtain ⟨_, _, _, _, hdet, htr⟩ :=
+        joint_cpqr_prefix_trace A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
+      have htrb :
+          ((selectedColGram A (cpqrIterate A 2))⁻¹).trace ≤
+            jointTraceBound k n τ ρ 2 := by
+        rw [jointTraceBound_two]
+        exact htr
+      refine ⟨hdet, htrb, ?_⟩
+      intro x
+      have henergy :=
+        selectedCols_energy_mul_inv_trace_ge A (cpqrIterate A 2) hdet x
+      exact henergy.trans (mul_le_mul_of_nonneg_left htrb (vecEnergy_nonneg _))
+    · have hs2 : 2 ≤ s := by omega
+      have hsltk : s < k := by omega
+      have hslek : s ≤ k := le_of_lt hsltk
+      have hsn : s < n := lt_of_lt_of_le hsltk hkn
+      have hs1 : 1 ≤ s := by omega
+      have ihP := ih hs2 hslek
+      have hBnn : 0 ≤ jointTraceBound k n τ ρ s :=
+        jointTraceBound_nonneg hk hn hkn hτ hρ0 hρ s hs2 hslek
+      have hstep :=
+        joint_cpqr_step A hA hs1 hsltk hsn τ (jointTraceBound k n τ ρ s)
+          hτ hBnn hlev ihP.2.1
+      have htrb :
+          ((selectedColGram A (cpqrIterate A (s + 1)))⁻¹).trace ≤
+            jointTraceBound k n τ ρ (s + 1) := by
+        rw [jointTraceBound_succ hs2]
+        exact hstep.2
+      refine ⟨hstep.1, htrb, ?_⟩
+      intro x
+      have henergy :=
+        selectedCols_energy_mul_inv_trace_ge A (cpqrIterate A (s + 1)) hstep.1 x
+      exact henergy.trans (mul_le_mul_of_nonneg_left htrb (vecEnergy_nonneg _))
 
 end StructuredColumnSelection

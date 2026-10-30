@@ -596,6 +596,23 @@ example {k n t : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
           (((n : ℝ) - t) / ((k : ℝ) - t)) :=
   milestoneE_joint_cpqr_step A hA ht1 htk htn τ B hτ hB hlev htr
 
+example {k n t : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hn : 2 ≤ n) (τ ρ : ℝ) (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ)
+    (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j))
+    (ht2 : 2 ≤ t) (htk : t ≤ k) :
+    (selectedColGram A (cpqrIterate A t)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤
+        jointTraceBound k n τ ρ t ∧
+      ∀ x : Fin (cpqrIterate A t).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrIterate A t) *ᵥ x) *
+            jointTraceBound k n τ ρ t :=
+  milestoneE_joint_cpqr_trace_bound A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh ht2 htk
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

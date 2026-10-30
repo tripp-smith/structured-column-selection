@@ -500,6 +500,12 @@ weakened. The recurrence is not iterated here. This is not a bound on the
 full `k`-set and not a polynomial bound. Coherence is not used. Outcome 3
 stays open.
 
+Status note (CPQR trace recurrence): `milestoneE_joint_cpqr_trace_bound`
+iterates that one-step increment from the length-2 prefix up to any
+`2 ≤ t ≤ k`. The majorant is `jointTraceBound`. Each step multiplies by
+`1 + (τ k / n) (n - s) / (k - s)`, which is `O(τ k)` near the last pivot.
+The recurrence is not a polynomial in `k`. Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.
