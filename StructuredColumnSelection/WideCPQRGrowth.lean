@@ -521,7 +521,7 @@ theorem wide_adverse_family {m : ℕ} (hm : 2 ≤ m) :
         cpqrSet A = widePrefix (wideWidth m) (wideDim m) ∧
         vecEnergy (selectedCols A (widePrefix (wideWidth m) (wideDim m)) *ᵥ x) = 1 ∧
         wideGrowthLower m ^ 2 ≤ vecEnergy x := by
-  obtain ⟨A, hA, hR, hset⟩ := wide_frame_pivots hm
+  obtain ⟨A, hA, hR, hset, _hE⟩ := wide_frame_pivots hm
   have hkn : wideDim m ≤ wideWidth m := Nat.le_add_right _ _
   let J := widePrefix (wideWidth m) (wideDim m)
   let hcard : J.card = wideDim m := widePrefix_card hkn
@@ -700,8 +700,8 @@ lemma geometric_growth (p t : ℕ) :
             rw [pow_succ]
             ring
 
-lemma exists_scale_beats_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) :
-    ∃ m : ℕ, 2 ≤ m ∧
+lemma exists_scale_beats_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) (mMin : ℕ) :
+    ∃ m : ℕ, max mMin 2 ≤ m ∧
       C * ((wideWidth m + wideDim m + 1 : ℕ) : ℝ) ^ (2 * d) <
         wideGrowthLower m ^ 2 := by
   let p := 16 * d
@@ -715,7 +715,10 @@ lemma exists_scale_beats_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) :
   have hQ : 0 < Q := by
     dsimp [Q]
     positivity
-  obtain ⟨t, ht⟩ := exists_nat_gt (Q * 9 / 5)
+  obtain ⟨t0, ht0⟩ := exists_nat_gt (Q * 9 / 5)
+  let t := max t0 mMin
+  have ht : Q * 9 / 5 < (t : ℝ) :=
+    lt_of_lt_of_le ht0 (by exact_mod_cast le_max_left t0 mMin)
   have hgeom : ((14 : ℝ) / 9) ^ t > Q := by
     have hber := one_add_mul_le_pow (a := (5 : ℝ) / 9) (by norm_num) t
     have hlin : Q < 1 + (t : ℝ) * (5 / 9) := by
@@ -729,7 +732,10 @@ lemma exists_scale_beats_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) :
       simpa [hbase] using hber
     exact lt_of_lt_of_le hlin hpow
   let m := M + t
-  have hm : 2 ≤ m := le_trans hM2 (Nat.le_add_right _ _)
+  have hm2 : 2 ≤ m := le_trans hM2 (Nat.le_add_right _ _)
+  have hm : max mMin 2 ≤ m :=
+    max_le (le_trans (le_max_right t0 mMin) (Nat.le_add_left t M))
+      (le_trans hM2 (Nat.le_add_right M t))
   have hgrowth := geometric_growth p t
   have hu : K < ((16 : ℝ) / 9) ^ m / (m : ℝ) ^ p := by
     have hlower := hgrowth
@@ -762,7 +768,7 @@ lemma exists_scale_beats_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) :
     rw [lt_div_iff₀ hmpos] at hu
     exact hu
   have hcoef : (1 : ℝ) ≤ (m : ℝ) ^ 2 / 4 := by
-    have hm2 : (2 : ℝ) ≤ m := by exact_mod_cast hm
+    have h2 : (2 : ℝ) ≤ m := by exact_mod_cast hm2
     nlinarith
   have hsq : ((16 : ℝ) / 9) ^ m ≤ wideGrowthLower m ^ 2 := by
     rw [wideGrowthLower_sq (by omega)]
@@ -772,7 +778,7 @@ lemma exists_scale_beats_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) :
         mul_le_mul_of_nonneg_right hcoef (by positivity)
   have hN : ((wideWidth m + wideDim m + 1 : ℕ) : ℝ) ^ (2 * d) ≤
       (35 * (m : ℝ) ^ 8) ^ (2 * d) := by
-    exact pow_le_pow_left₀ (Nat.cast_nonneg _) (wide_total_le hm) _
+    exact pow_le_pow_left₀ (Nat.cast_nonneg _) (wide_total_le hm2) _
   have hsplit : (35 * (m : ℝ) ^ 8) ^ (2 * d) =
       (35 : ℝ) ^ (2 * d) * (m : ℝ) ^ p := by
     dsimp [p]
@@ -799,8 +805,9 @@ theorem cpqr_no_joint_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) :
         OrthogonalRows A ∧
         C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
           vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x := by
-  obtain ⟨m, hm, hpoly⟩ := exists_scale_beats_polynomial d hC
-  obtain ⟨A, x, hA, _, hset, hAx, hx⟩ := wide_adverse_family hm
+  obtain ⟨m, hm, hpoly⟩ := exists_scale_beats_polynomial d hC 0
+  have hm2 : 2 ≤ m := (le_max_right (0 : ℕ) 2).trans hm
+  obtain ⟨A, x, hA, _, hset, hAx, hx⟩ := wide_adverse_family hm2
   refine ⟨wideDim m, wideWidth m, A, ?_⟩
   rw [hset]
   refine ⟨x, hA, ?_⟩

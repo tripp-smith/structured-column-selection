@@ -351,6 +351,15 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Absolute incoherence does not restore a polynomial (2026-10-29)
+
+`milestoneE_incoherent_no_joint_polynomial` says that for every `ρ > 0`,
+some orthogonal-row frame with absolute off-diagonal inner products at
+most `ρ` still has a CPQR block beating `C (n + k + 1)^{2d}`. The
+outcome-2 columns have energy at most `1 / (2k)`. This predicate is not
+the normalized coherence ratio, and `ρ = 0` remains outside the family.
+This does not close outcome 3.
+
 ## Equal energy splits the third CPQR pivot (2026-10-29)
 
 `milestoneE_equal_energy_third_pivot_split` gives an orthogonal-row

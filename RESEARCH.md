@@ -1357,3 +1357,37 @@ outcome 3.
 
 Phase PR and verification receipt:
 [#38](https://github.com/tripp-smith/structured-column-selection/pull/38).
+
+## Phase Z absolute incoherence escape (2026-10-29, contract)
+
+Iteration Z. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase Y separates the CPQR path from the increment
+pivot on one equal-energy frame. That does not put the outcome-2 family
+inside a leverage-ratio class: the family leaves every fixed ratio.
+Absolute inner-product incoherence goes the other way. Every column
+energy of an outcome-2 frame is at most `1 / (2k)`, so Cauchy–Schwarz
+puts the frame in `ColumnIncoherent A ρ` once `k` is large. Success is
+`milestoneE_incoherent_no_joint_polynomial`: for every `ρ > 0`, every
+degree, and every positive coefficient, some frame in that class beats
+`C (n + k + 1)^{2d}`. Exit if some positive `ρ` excludes every outcome-2
+frame.
+
+Target in `StructuredColumnSelection/WideIncoherentEscape.lean`,
+re-exported as `milestoneE_incoherent_no_joint_polynomial`.
+
+Independent check: `tests/test_wide_incoherent_escape.py` recomputes the
+`m = 2` triangular entries from `wideAlpha`, `wideEps`, and `wideC`, and
+checks column energies and off-diagonal inner products against
+`1 / (2k)`. It also checks the filler cap `k / (32 k³)`. It does not
+call the repository CPQR code. It is not the theorem.
+
+Non-claims: no polynomial CPQR bound, and no closure of outcome 1 or
+outcome 3. `ColumnIncoherent` bounds absolute inner products. It is not
+the normalized coherence ratio in SPEC §10. Phase P still bounds the
+case `ρ = 0`, and phase Q still places the outcome-2 frame outside that
+case. Problem 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay
+outside outcome 3.
+
+Phase PR and verification receipt:
+[#39](https://github.com/tripp-smith/structured-column-selection/pull/39).

@@ -463,3 +463,14 @@ outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#38](https://github.com/tripp-smith/structured-column-selection/pull/38).
+
+Completed phase: **Z absolute incoherence escape**.
+`milestoneE_incoherent_no_joint_polynomial` says that for every `ρ > 0`,
+some orthogonal-row frame in `ColumnIncoherent A ρ` has a CPQR block whose
+inverse energy exceeds `C (n + k + 1)^{2d}`. The predicate bounds absolute
+inner products. The normalized coherence ratio is a different condition,
+and `ρ = 0` is unchanged. This does not close outcome 3. The contract is
+in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#39](https://github.com/tripp-smith/structured-column-selection/pull/39).

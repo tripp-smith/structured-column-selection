@@ -134,6 +134,15 @@ example (d : ℕ) {C : ℝ} (hC : 0 < C) :
           (∑ i, (selectedCols A (cpqrSet A) *ᵥ x) i ^ 2) < ∑ i, x i ^ 2 :=
   milestoneE_cpqr_no_joint_polynomial d hC
 
+example {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        OrthogonalRows A ∧
+        ColumnIncoherent A ρ ∧
+        C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
+  milestoneE_incoherent_no_joint_polynomial hρ d hC
+
 example :
     ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
       ∃ x : Fin (cpqrSet A).card → ℝ,

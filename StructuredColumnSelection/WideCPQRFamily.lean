@@ -150,7 +150,10 @@ theorem wide_frame_pivots {m : ℕ} (hm : 2 ≤ m) :
       OrthogonalRows A ∧
       (∀ i j : Fin (wideDim m),
         A i (j.castAdd (wideDim m * wideRepeats m)) = wideTriangular m i j) ∧
-      cpqrSet A = widePrefix (wideWidth m) (wideDim m) := by
+      cpqrSet A = widePrefix (wideWidth m) (wideDim m) ∧
+      ∀ j : Fin (wideDim m * wideRepeats m),
+        vecEnergy (fun i => A i (j.natAdd (wideDim m))) ≤
+          (wideDim m : ℝ) / (wideRepeats m : ℝ) := by
   have ht : 0 < wideRepeats m := by unfold wideRepeats; exact Nat.mul_pos (by norm_num) (pow_pos (wideDim_pos hm) _)
   obtain ⟨A,hA,hR,hC⟩ := wide_completion_orthogonal
     (wideTriangular m) (wideTriangular_frob_le hm) (wideRepeats m) ht
@@ -196,7 +199,7 @@ theorem wide_frame_pivots {m : ℕ} (hm : 2 ≤ m) :
       rw [hjq]
       exact (tailEnergy_le_energy p _).trans_lt
         ((hC q).trans_lt (wide_filler_lt_diag hm p))
-  refine ⟨A,hA,hR,?_⟩
+  refine ⟨A, hA, hR, ?_, hC⟩
   exact triangular_prefix_pivots hkn A hupper hdiag htail (wideDim m) (Nat.le_refl _)
 
 end StructuredColumnSelection
