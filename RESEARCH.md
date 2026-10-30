@@ -2860,3 +2860,4 @@ the majorant at `n = 2k` is not polynomial. Phase AV remains the square
 equality. The census did not prove this.
 
 Phase PR and verification receipt:
+[#62](https://github.com/tripp-smith/structured-column-selection/pull/62).

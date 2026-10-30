@@ -819,3 +819,4 @@ polynomial. Phase AV still says the square trace equals `k`. Outcome 3
 stays open. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
+[#62](https://github.com/tripp-smith/structured-column-selection/pull/62).
