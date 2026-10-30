@@ -72,6 +72,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Equal-energy three-row CPQR | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_cpqr_k3` |
 | Leverage-ratio pivot split | **PROVED** (does not close outcome 3) | `milestoneE_leverage_ratio_pivot_split` |
 | Orthogonal equal-energy block pivot | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_orthogonal_block_same_pivot` |
+| Equal-energy block pivot split | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_block_pivot_split` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

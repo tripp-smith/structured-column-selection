@@ -250,6 +250,15 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
     cpqrPivot A J = incrementPivot A J :=
   milestoneE_equal_energy_orthogonal_block_same_pivot A hA hE hk hn J horth
 
+example :
+    OrthogonalRows blockFrame ∧
+      (∀ i j : Fin 6, colInner blockFrame i i = colInner blockFrame j j) ∧
+        colInner blockFrame 0 1 ≠ 0 ∧
+          colInner blockFrame 0 5 = 0 ∧
+            cpqrPivot blockFrame blockJ = some 5 ∧
+              incrementPivot blockFrame blockJ = some 3 :=
+  milestoneE_equal_energy_block_pivot_split
+
 example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
     (hG : (selectedColGram A J).det ≠ 0)
     (hzero : ∀ j ∈ incrementCandidates A J,

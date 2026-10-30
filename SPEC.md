@@ -817,6 +817,13 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (equal-energy block split):
+`milestoneE_equal_energy_block_pivot_split` gives an orthogonal-row
+`3×6` frame with equal column energy on which a non-orthogonal block
+makes max-residual CPQR and the increment pivot take different next
+columns. Column `5` is orthogonal to column `0`. This does not say the
+CPQR set differs from the increment set. Outcome 3 stays open.
+
 Status note (orthogonal equal-energy block):
 `milestoneE_equal_energy_orthogonal_block_same_pivot` says that equal
 column energy and a pairwise-orthogonal selected block make the next

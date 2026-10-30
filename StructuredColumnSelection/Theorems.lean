@@ -5,6 +5,7 @@ import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
 import StructuredColumnSelection.LeverageRatioSplit
 import StructuredColumnSelection.OrthogonalBlockPivot
+import StructuredColumnSelection.EqualEnergyBlockSplit
 import StructuredColumnSelection.IncrementSet
 import StructuredColumnSelection.InvSpectralBound
 import StructuredColumnSelection.InvTraceInduction
@@ -698,6 +699,23 @@ theorem milestoneE_equal_energy_orthogonal_block_same_pivot {k n : ℕ}
     (horth : ∀ i ∈ J, ∀ j ∈ J, i ≠ j → colInner A i j = 0) :
     cpqrPivot A J = incrementPivot A J :=
   equal_energy_orthogonal_block_same_pivot A hA hE hk hn J horth
+
+/-- Equal column energy does not make every selected block agree.
+
+On `blockFrame`, every column energy is `1/2` and columns `0` and `1`
+have inner product `31/100`. After that block, max-residual CPQR takes
+column `5` and the increment pivot takes column `3`. Column `5` is
+orthogonal to column `0`. This block is not an orthogonal block, and the
+statement does not say `cpqrSet ≠ incrementSet`. It does not close
+outcome 3. -/
+theorem milestoneE_equal_energy_block_pivot_split :
+    OrthogonalRows blockFrame ∧
+      (∀ i j : Fin 6, colInner blockFrame i i = colInner blockFrame j j) ∧
+        colInner blockFrame 0 1 ≠ 0 ∧
+          colInner blockFrame 0 5 = 0 ∧
+            cpqrPivot blockFrame blockJ = some 5 ∧
+              incrementPivot blockFrame blockJ = some 3 :=
+  equal_energy_block_pivot_split
 
 /-- If every positive-residual unused column has coefficient zero, the
 increment pivot and max-residual CPQR return the same column.

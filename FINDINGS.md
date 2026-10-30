@@ -351,6 +351,16 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Equal energy does not make every block agree (2026-10-29)
+
+`milestoneE_equal_energy_block_pivot_split` gives an orthogonal-row
+`3×6` frame with column energy `1/2`. Columns `0` and `1` have inner
+product `31/100`. After that block, max-residual CPQR takes column `5`
+and the increment pivot takes column `3`. Column `5` is orthogonal to
+column `0`, so this block is not the two-column CPQR prefix. Equal
+energy still makes an orthogonal block agree. This does not close
+outcome 3.
+
 ## Orthogonal equal-energy block, same next pivot (2026-10-29)
 
 `milestoneE_equal_energy_orthogonal_block_same_pivot` says that equal

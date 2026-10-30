@@ -440,3 +440,12 @@ outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#36](https://github.com/tripp-smith/structured-column-selection/pull/36).
+
+Current phase: **X equal-energy block split** (in progress).
+`milestoneE_equal_energy_block_pivot_split` gives an orthogonal-row
+`3×6` frame with equal column energy `1/2` on which columns `0` and `1`
+have inner product `31/100`. After that block, max-residual CPQR takes
+column `5` and the increment pivot takes column `3`. Column `5` is
+orthogonal to column `0`. This does not say the CPQR set differs from
+the increment set, and it does not close outcome 3. The contract is in
+RESEARCH.md.
