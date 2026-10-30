@@ -351,6 +351,23 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Bounded coherence is not polynomial (2026-10-30)
+
+`milestoneE_bounded_coherence_no_polynomial` shows that the candidate
+class "normalized coherence at most `19/20`" still contains
+superpolynomial CPQR frames. For every degree `d` and every `C > 0`,
+the scaled triple-design frame at an `m ≥ 20` supplied by
+`exists_scale_beats_polynomial` has orthogonal rows, positive column
+energy, and normalized coherence at most `19/20`, while its CPQR inverse
+energy is strictly above `C (n+k+1)^{2d}`. The constant is the worst
+filler ratio at `ε = 45/6400`, namely `83830/88970 < 19/20`; leading
+pairs are at most `1/2 + 1/m ≤ 11/20`, and the leading–filler comparison
+uses `√14 > 37/10`. The constant `19/20` was not weakened. Any cap
+`ρ ≥ 19/20` is too weak, because coherence at most `19/20` implies
+coherence at most `ρ`. A stricter cap is not ruled out. This does not
+close outcome 1 or outcome 3. Problem 4.1 is not solved, and CPQR is not
+claimed to be polynomial on every orthogonal-row matrix.
+
 ## Leading–leading coherence (2026-10-30)
 
 `milestoneE_scaled_block_leading_coherence` gives, for every `m ≥ 2` and

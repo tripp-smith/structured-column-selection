@@ -277,6 +277,18 @@ example {m : ℕ} (hm : 2 ≤ m) {i j : Fin (wideDim m)} (hij : i ≠ j) :
           Real.sqrt (vecEnergy (fun row => scaledBlock m row j))) :=
   milestoneE_scaled_block_leading_coherence hm hij
 
+example (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        OrthogonalRows A ∧
+        (∀ j, 0 < residualSq A ∅ j) ∧
+        (∀ j1 j2, j1 ≠ j2 →
+          |colInner A j1 j2| ≤ (19 / 20) *
+            (Real.sqrt (residualSq A ∅ j1) * Real.sqrt (residualSq A ∅ j2))) ∧
+        C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
+  milestoneE_bounded_coherence_no_polynomial d hC
+
 example :
     ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
       ∃ x : Fin (cpqrSet A).card → ℝ,

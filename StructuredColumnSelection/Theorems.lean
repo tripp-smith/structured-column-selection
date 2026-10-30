@@ -8,6 +8,7 @@ import StructuredColumnSelection.TripleDesign
 import StructuredColumnSelection.ScaledDesignFrame
 import StructuredColumnSelection.FrameCoherence
 import StructuredColumnSelection.LeadingCoherence
+import StructuredColumnSelection.BoundedCoherence
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -1000,6 +1001,26 @@ theorem milestoneE_scaled_block_leading_coherence {m : ℕ} (hm : 2 ≤ m)
         (Real.sqrt (vecEnergy (fun row => scaledBlock m row i)) *
           Real.sqrt (vecEnergy (fun row => scaledBlock m row j))) :=
   leading_leading_ratio hm hij
+
+/-- Normalized coherence at most `19/20` does not restore a polynomial CPQR
+bound. For every degree and every positive coefficient, some orthogonal-row
+frame has positive column energy, normalized coherence at most `19/20`, and
+CPQR inverse energy strictly above `C (n + k + 1)^{2d}`. Any cap `ρ ≥ 19/20`
+is too weak for the same reason, since coherence at most `19/20` implies
+coherence at most `ρ`. This does not close outcome 3. It is not a polynomial
+bound for every orthogonal-row matrix. A stricter coherence cap is not ruled
+out. -/
+theorem milestoneE_bounded_coherence_no_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        OrthogonalRows A ∧
+        (∀ j, 0 < residualSq A ∅ j) ∧
+        (∀ j1 j2, j1 ≠ j2 →
+          |colInner A j1 j2| ≤ (19 / 20) *
+            (Real.sqrt (residualSq A ∅ j1) * Real.sqrt (residualSq A ∅ j2))) ∧
+        C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
+  bounded_coherence_no_polynomial d hC
 
 /-- Equal column energy makes the second CPQR pivot agree with the
 increment pivot, and the two-column inverse trace is at most

@@ -566,3 +566,14 @@ close outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#46](https://github.com/tripp-smith/structured-column-selection/pull/46).
+
+Completed phase: **AH bounded coherence is not polynomial**.
+`milestoneE_bounded_coherence_no_polynomial` shows that normalized
+coherence at most `19/20` does not restore a polynomial CPQR bound.
+For every degree `d` and every `C > 0`, the scaled triple-design frame
+at a large `m` has orthogonal rows, positive column energy, normalized
+coherence at most `19/20`, and CPQR inverse energy strictly above
+`C (n+k+1)^{2d}`. Any cap `ρ ≥ 19/20` is too weak for the same reason:
+coherence at most `19/20` implies coherence at most `ρ`. A stricter cap
+is not ruled out. The constant `19/20` was not weakened. This does not
+close outcome 3. The contract is in RESEARCH.md.

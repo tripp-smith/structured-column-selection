@@ -1479,6 +1479,76 @@ solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
 Phase PR and verification receipt:
 [#46](https://github.com/tripp-smith/structured-column-selection/pull/46).
 
+## Phase AH bounded coherence is not polynomial (2026-10-30, contract)
+
+Iteration AH. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phases AF and AG bound filler–filler, leading–filler, and
+leading–leading pairs of the scaled triple-design frame, but they do not
+put the whole frame under one normalized-coherence cap, and they do not
+compare that cap with the polynomial scale. For `m ≥ 20`, `k = m² ≥ 400`
+and `ε = 45/(16 k) ≤ 45/6400 < 1`. The filler ratio
+`(13/14 + ε)/(1 - ε)` increases in `ε`, so its worst value on this range is
+
+```
+(13/14 + 45/6400) / (1 - 45/6400) = 83830/88970 < 19/20,
+```
+
+because `83830 * 20 = 1676600 < 1690430 = 19 * 88970`. Leading pairs are at
+most `1/2 + 1/m ≤ 1/2 + 1/20 = 11/20 ≤ 19/20`. Leading–filler pairs are at
+most `(3(1 + 1/m)/√14 + ε)/√(1 - ε)`. Since `(37/10)² = 1369/100 < 14`,
+one has `√14 > 37/10`, hence `1/√14 < 10/37` and
+`3(1 + 1/20)/√14 < 63/74`. The squared comparison
+
+```
+(63/74 + 45/6400)² < (19/20)² * (1 - 45/6400)
+```
+
+then puts the mixed ratio strictly below `19/20`. Exit if `83830/88970`
+fails to sit under `19/20`, or if the squared comparison fails: either
+would mean the constant has to move.
+
+The same `m` is large enough for the polynomial. Call
+`exists_scale_beats_polynomial d (0 < 9 * C) 20`. The frame has
+`n = k + 4 k (k - 1) (k - 2)` columns, image energy `1`, and inverse
+energy at least `wideGrowthLower m ^ 2 / 9`. For `k ≥ 1`,
+`4 k (k - 1) (k - 2) ≤ 4 k³ ≤ 32 k⁴`, so
+`n + k + 1 ≤ wideWidth m + wideDim m + 1 = 2k + 32 k⁴ + 1`. Monotonicity
+of `t ↦ t^{2d}` on `[1, ∞)` transfers the strict inequality
+`9 C (wideWidth + wideDim + 1)^{2d} < wideGrowthLower m ^ 2` into
+`C (n + k + 1)^{2d} < wideGrowthLower m ^ 2 / 9 ≤ ‖x‖²`.
+
+Target in `StructuredColumnSelection/BoundedCoherence.lean`, re-exported
+as `milestoneE_bounded_coherence_no_polynomial`: for every `d : ℕ` and
+every `C : ℝ` with `0 < C`,
+
+```
+∃ k n, ∃ A : Matrix (Fin k) (Fin n) ℝ, ∃ x : Fin (cpqrSet A).card → ℝ,
+  OrthogonalRows A ∧
+  (∀ j, 0 < residualSq A ∅ j) ∧
+  (∀ j1 j2, j1 ≠ j2 →
+    |colInner A j1 j2| ≤ (19/20) *
+      (Real.sqrt (residualSq A ∅ j1) * Real.sqrt (residualSq A ∅ j2))) ∧
+  C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
+    vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x
+```
+
+Independent check: `tests/test_bounded_coherence.py` checks
+`83830/88970 < 19/20`, `1/2 + 1/20 ≤ 19/20`,
+`(63/74 + 45/6400)² < (19/20)² * (6355/6400)`, and `(37/10)² < 14`, in
+exact `fractions.Fraction` arithmetic. It does not call the repository
+CPQR code. It is not the theorem.
+
+Non-claims: this shows that normalized coherence `≤ 19/20` does not
+restore a polynomial CPQR bound. Any `ρ ≥ 19/20` is too weak for the
+same reason, because coherence `≤ 19/20` implies coherence `≤ ρ`. A
+smaller `ρ` is not ruled out. This does not close outcome 1 or outcome 3.
+It is not a polynomial bound for every orthogonal-row matrix. Problem 4.1
+is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+(pending)
+
 Phase PR and verification receipt:
 [#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
 
