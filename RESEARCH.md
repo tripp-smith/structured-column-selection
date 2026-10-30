@@ -1310,3 +1310,6 @@ orthogonal, so it is outside phase W, and column `5` being orthogonal
 to column `0` means `{0, 1}` is not the two-column CPQR prefix. Problem
 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
 outcome 3.
+
+Phase PR and verification receipt:
+[#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
