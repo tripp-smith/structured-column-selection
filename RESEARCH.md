@@ -2163,4 +2163,4 @@ The census did not prove this. Problem 4.1 is not solved. `MinDimLe`
 stays outside outcome 3.
 
 Phase PR and verification receipt:
-(pending)
+[#53](https://github.com/tripp-smith/structured-column-selection/pull/53).

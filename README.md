@@ -666,3 +666,6 @@ constant was not weakened. On the `3×3` identity the inverse trace is
 sharp. This is not a bound for general `k`. Fixing `k = 3` does not
 close outcome 3. It is not a polynomial bound for every orthogonal-row
 matrix. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#53](https://github.com/tripp-smith/structured-column-selection/pull/53).
