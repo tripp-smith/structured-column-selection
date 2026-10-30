@@ -483,3 +483,6 @@ normalized ratio to be at most some `ρ < 1` excludes this frame. The
 theorem does not give a polynomial CPQR bound on a stricter ratio.
 Absolute inner-product incoherence is a different predicate. This does
 not close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#40](https://github.com/tripp-smith/structured-column-selection/pull/40).
