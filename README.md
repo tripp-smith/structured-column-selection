@@ -509,3 +509,6 @@ Completed phase: **AC symmetric completion**.
 `(C + I)(C - I) = -R Rᵀ` and `C ⪰ 0`. No coherence bound on any frame
 is claimed. This does not close outcome 3. The contract is in
 RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#42](https://github.com/tripp-smith/structured-column-selection/pull/42).
