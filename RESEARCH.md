@@ -1354,3 +1354,6 @@ block agree, and phase X's `{0, 1}` split is a different block. The
 integer search that found this ordering is not the theorem. Problem
 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
 outcome 3.
+
+Phase PR and verification receipt:
+[#38](https://github.com/tripp-smith/structured-column-selection/pull/38).
