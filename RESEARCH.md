@@ -2698,3 +2698,76 @@ theorem for the equal-leverage class.
 
 Phase PR and verification receipt:
 [#60](https://github.com/tripp-smith/structured-column-selection/pull/60).
+
+## Phase AV square CPQR trace (2026-10-30, contract)
+
+Iteration AV. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AR (`milestoneE_joint_square_equal_trace`) is an
+inequality on a square equal-leverage matrix: the CPQR inverse trace is
+at most `(k : ℝ) - 2 + 2 / (1 - ρ ^ 2)`. At `ρ = 0` that upper bound
+equals `k`. This phase is the equality case, and it does not use a
+leverage hypothesis or a coherence hypothesis. It does not modify
+`milestoneE_joint_square_equal_trace`, `jointTraceBoundTight`, or the
+AT/AU majorant theorems. Phase AR stays an inequality. A square-only
+bound does not close outcome 3.
+
+Target in `StructuredColumnSelection/SquareOrthogonal.lean` as
+`square_cpqr_trace_eq`, re-exported as
+`milestoneE_square_cpqr_trace_eq`. The proof is not in
+`JointPairGram.lean`. Hypothesis: `OrthogonalRows A` for
+`A : Matrix (Fin k) (Fin k) ℝ`, so both dimensions are `Fin k`.
+
+Conclude:
+
+```text
+cpqrSet A = Finset.univ ∧
+selectedColGram A (cpqrSet A) = 1 ∧
+((selectedColGram A (cpqrSet A))⁻¹).trace = (k : ℝ) ∧
+∀ x : Fin (cpqrSet A).card → ℝ,
+  vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) = vecEnergy x
+```
+
+On a square orthogonal-row matrix the columns are orthonormal, the CPQR
+set is every column, and the selected Gram is the identity, so the
+inverse trace equals `k` exactly. Phase AR's upper bound
+`(k : ℝ) - 2 + 2 / (1 - ρ ^ 2)` is valid and equals `k` at `ρ = 0`,
+which is admissible because column inner products vanish. This is not a
+bound for rectangular matrices. It does not close outcome 3. It is not
+a polynomial theorem for every orthogonal-row matrix.
+
+Proof shape. `OrthogonalRows A` is `A * Aᵀ = 1`. For a square matrix,
+`mul_eq_one_comm.mp` gives `Aᵀ * A = 1`. `cpqrSet_card_eq` gives
+`(cpqrSet A).card = k`. `Fintype.card (Fin k) = k`, so
+`Finset.card_eq_iff_eq_univ` gives `cpqrSet A = univ`. Let `e` be
+`univ.orderEmbOfFin` at that card. `selectedCols A univ` is
+`A.submatrix id e`. The Gram entry `(i, j)` is the dot product of
+columns `e i` and `e j`, which is `(Aᵀ * A) (e i) (e j)`. Since
+`Aᵀ * A = 1`, that entry is `1` if `e i = e j` and `0` otherwise. `e`
+is injective, so the Gram is `1` on the diagonal and `0` off it. The
+argument is `ext` and `Matrix.one_apply`. There is no `simp` of a
+general Gram. `inv_one` says the inverse of `1` is `1`. `Matrix.trace_one`
+is the cardinality, coerced to `ℝ`, which is `(k : ℝ)`. The energy
+identity is `vecEnergy_eq_dot` and
+`(B *ᵥ x) ⬝ᵥ (B *ᵥ x) = (Bᵀ *ᵥ (B *ᵥ x)) ⬝ᵥ x`. With `Bᵀ * B = 1` this
+equals `x ⬝ᵥ x`. There is no leverage hypothesis, no coherence
+hypothesis, and no induction on pivots.
+
+Independent check: `tests/test_square_trace_eq.py`, in
+`fractions.Fraction`, calling `structselect.cpqr`. On the `k × k`
+identity, for `k = 2` and `k = 3`, the CPQR set has size `k` and the
+Gram inverse trace equals `k`. On the `2 × 2` rotation with rows
+`(3/5, -4/5)` and `(4/5, 3/5)`, the rows are orthonormal, the column
+inner product is `0`, the CPQR set has size `2`, and the Gram inverse
+trace equals `2`. This rational check is not the theorem. Square only.
+It does not close outcome 3.
+
+Non-claims: square only. The Gram is the identity. Not a bound for
+rectangular matrices. Not a polynomial theorem for every orthogonal-row
+matrix. Does not close outcome 3. Does not solve Problem 4.1. Does not
+say CPQR has a polynomial inverse-norm bound. Phase AR stays an
+inequality. The equal-leverage majorant at `n = 2k` is still not a
+polynomial. The census did not prove this.
+
+Phase PR and verification receipt:
+[#61](https://github.com/tripp-smith/structured-column-selection/pull/61).

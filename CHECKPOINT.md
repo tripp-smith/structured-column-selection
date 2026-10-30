@@ -96,6 +96,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Tight CPQR trace recurrence | **PROVED** (any prefix `2 ≤ t ≤ k`; iterates the tight step with no added copy of `B`; not a polynomial in `k`; when `n = k` the step is `B ↦ 1 + τ B`; does not close outcome 3) | `milestoneE_joint_cpqr_trace_bound_tight` |
 | Tight majorant growth | **PROVED** (lower bound on `jointTraceBoundTight` at `n = k`, `τ = 2`, `ρ = 0`; at least `2^{k+1}`; not a CPQR inverse trace; does not close outcome 3) | `milestoneE_joint_trace_majorant_not_polynomial` |
 | Equal-leverage majorant | **PROVED** (lower bound on `jointTraceBoundTight` at `n = 2k`, `τ = 1`, `ρ = 0`; at least `2^k / k`; not a CPQR inverse trace; does not close outcome 3) | `milestoneE_joint_equal_majorant_not_polynomial` |
+| Square CPQR trace | **PROVED** (square orthogonal-row matrices; `cpqrSet` is every column; `selectedColGram` is `1`; inverse trace equals `k`; does not close outcome 3) | `milestoneE_square_cpqr_trace_eq` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

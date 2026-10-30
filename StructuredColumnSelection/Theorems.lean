@@ -10,6 +10,7 @@ import StructuredColumnSelection.FrameCoherence
 import StructuredColumnSelection.LeadingCoherence
 import StructuredColumnSelection.BoundedCoherence
 import StructuredColumnSelection.JointPairGram
+import StructuredColumnSelection.SquareOrthogonal
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -1311,5 +1312,21 @@ theorem milestoneE_joint_equal_majorant_not_polynomial
       C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
         jointTraceBoundTight k (2 * k) (1 : ℝ) (0 : ℝ) k :=
   joint_equal_majorant_not_polynomial d hC
+
+/-- Square only. On a square orthogonal-row matrix, `cpqrSet` is every
+column, `selectedColGram` is `1`, and the inverse trace equals `k`. The
+selected columns preserve Euclidean energy. Phase AR's upper bound equals
+`k` at `ρ = 0`. This is not a bound for rectangular matrices. It does not
+close outcome 3. It is not a polynomial theorem for every orthogonal-row
+matrix. -/
+theorem milestoneE_square_cpqr_trace_eq {k : ℕ}
+    (A : Matrix (Fin k) (Fin k) ℝ) (hA : OrthogonalRows A) :
+    cpqrSet A = Finset.univ ∧
+      selectedColGram A (cpqrSet A) = 1 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace = (k : ℝ) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) =
+          vecEnergy x :=
+  square_cpqr_trace_eq A hA
 
 end StructuredColumnSelection

@@ -555,6 +555,14 @@ That quantity beats every `C (3k + 1)^{2d}`. At `k = 4` the majorant is
 square bound at `n = k` and `τ = 1` stays polynomial. Outcome 1 and
 outcome 3 stay open.
 
+Status note (square CPQR trace): `milestoneE_square_cpqr_trace_eq` is
+the equality case on a square orthogonal-row matrix. `cpqrSet` is every
+column, `selectedColGram` is `1`, and the inverse trace equals `k`. The
+selected columns preserve Euclidean energy. Phase AR's bound equals this
+value at `ρ = 0`. Rectangular matrices are not included. The
+equal-leverage majorant at `n = 2k` is still not a polynomial. A
+square-only bound does not close outcome 3. Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

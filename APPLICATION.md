@@ -362,6 +362,17 @@ on this majorant is not a matrix counterexample, and this majorant is
 not a polynomial theorem for the equal-leverage class. It does not
 change the sampler.
 
+`tests/test_square_trace_eq.py` runs `structselect.cpqr` on square
+orthogonal-row matrices with `fractions.Fraction`. For the `k × k`
+identity at `k = 2` and `k = 3`, the CPQR set has size `k` and the Gram
+inverse trace equals `k`. For the `2 × 2` rotation with rows
+`(3/5, -4/5)` and `(4/5, 3/5)`, the rows are orthonormal, the column
+inner product is `0`, the CPQR set has size `2`, and the Gram inverse
+trace equals `2`. This rational check is not the theorem. Square only.
+The Gram is the identity. Rectangular matrices are not included. The
+equal-leverage majorant at `n = 2k` is still not a polynomial. It does
+not close outcome 3. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler
