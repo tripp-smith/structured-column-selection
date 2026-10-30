@@ -1471,3 +1471,38 @@ stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#41](https://github.com/tripp-smith/structured-column-selection/pull/41).
+
+## Phase AC symmetric completion (2026-10-30, contract)
+
+Iteration AC. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AB lets the filler block be `C W` for any
+completion `C` and any tight design `W`. The normalized coherence of two
+filler columns is `|⟨C w_a, C w_b⟩| / (‖C w_a‖ ‖C w_b‖)`, and of a
+leading column with a filler is `|⟨r_j, C w_a⟩| / (‖r_j‖ ‖C w_a‖)`.
+Both need `C` to act almost like the identity. The existential
+completion of `exists_gram_completion` carries no such control. The
+symmetric positive semidefinite square root `C = (1 - R Rᵀ)^{1/2}` does:
+with `ε = ‖R‖_F²`, `⟨C w, C v⟩ = ⟨w, v⟩ - ⟨Rᵀ w, Rᵀ v⟩`,
+`(1 - ε) ‖w‖² ≤ ‖C w‖² ≤ ‖w‖²`, and `‖(C - I) v‖² ≤ ε² ‖v‖²`. The last
+bound uses `(C + I)(C - I) = -R Rᵀ` and `‖(C + I) u‖² ≥ ‖u‖²` for
+`C ⪰ 0`; no spectral decomposition is needed. Success is
+`milestoneE_symmetric_completion`. Downstream consumer: the normalized
+coherence bounds of the design frame in a later phase. Exit if the
+square root is not available as a symmetric matrix in the current
+mathlib.
+
+Target in `StructuredColumnSelection/SymmetricCompletion.lean`,
+re-exported as `milestoneE_symmetric_completion`: for every `R` with
+`‖R‖_F² ≤ 1` there is `C` with `Cᵀ = C`, `R Rᵀ + C Cᵀ = 1`, the inner
+product identity, the energy sandwich, and the perturbation bound.
+
+Independent check: `tests/test_symmetric_completion.py` checks the
+three bounds on two rational pairs `(R, C)` with `Cᵀ = C` and
+`C² = I - R Rᵀ`: a diagonal pair with `‖R‖_F² = 9/25`, and a rank-one
+projection pair. It does not call the repository CPQR code. It is not
+the theorem.
+
+Non-claims: no coherence bound on any frame is proved in this phase; no
+polynomial CPQR bound; no closure of outcome 1 or outcome 3. Problem 4.1
+is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.

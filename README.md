@@ -499,3 +499,13 @@ RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#41](https://github.com/tripp-smith/structured-column-selection/pull/41).
+
+Completed phase: **AC symmetric completion**.
+`milestoneE_symmetric_completion` gives, for every `R` with
+`‖R‖_F² ≤ 1`, a symmetric completion `R Rᵀ + C Cᵀ = 1` with
+`⟨C w, C v⟩ = ⟨w, v⟩ - ⟨Rᵀ w, Rᵀ v⟩`,
+`(1 - ‖R‖_F²) ‖w‖² ≤ ‖C w‖² ≤ ‖w‖²`, and
+`‖(C - I) v‖² ≤ ‖R‖_F⁴ ‖v‖²`. The perturbation bound uses
+`(C + I)(C - I) = -R Rᵀ` and `C ⪰ 0`. No coherence bound on any frame
+is claimed. This does not close outcome 3. The contract is in
+RESEARCH.md.
