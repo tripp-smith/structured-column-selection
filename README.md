@@ -764,3 +764,4 @@ unchanged. Phase AR remains the square equal-leverage closed form. The
 contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
+[#58](https://github.com/tripp-smith/structured-column-selection/pull/58).

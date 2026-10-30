@@ -2543,3 +2543,4 @@ equal-leverage closed form. The census did not prove this. `MinDimLe`,
 `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
+[#58](https://github.com/tripp-smith/structured-column-selection/pull/58).
