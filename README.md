@@ -638,3 +638,18 @@ RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#51](https://github.com/tripp-smith/structured-column-selection/pull/51).
+
+Completed phase: **AM joint third CPQR pivot**.
+`milestoneE_joint_cpqr_three_trace` bounds the inverse trace of
+`selectedColGram A (cpqrIterate A 3)` under the joint leverage-ratio and
+coherence hypothesis, plus `3 ≤ k`. The bound is
+`2 τ^2 n / (k (1 - ρ^2)) + (1 + 2 τ^3 / (1 - ρ^2)) · (n - 2) / (k - 2)`.
+The constant was not weakened. On the `3×3` identity the inverse trace
+is `3` and the formula at `τ = 1`, `ρ = 0`, `k = 3`, `n = 3` equals `5`.
+The bound is not sharp. This does not bound pivots after the third.
+A 3-column prefix is not a bound for general `k`. This does not close
+outcome 3. It is not a polynomial bound for every orthogonal-row matrix.
+The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#52](https://github.com/tripp-smith/structured-column-selection/pull/52).

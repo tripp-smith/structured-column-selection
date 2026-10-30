@@ -2038,3 +2038,67 @@ is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#51](https://github.com/tripp-smith/structured-column-selection/pull/51).
+
+## Phase AM joint third pivot (2026-10-30, contract)
+
+Iteration AM. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AL gives the Rayleigh coefficient
+`μ = k (1 - ρ^2) / (2 τ^2 n)` on the length-2 CPQR prefix, the reciprocal
+of `B = 2 τ^2 n / (k (1 - ρ^2))`. This phase adds the third CPQR pivot
+by the same control flow as `equal_energy_cpqr_three_trace`, with those
+joint bounds in place of equal column energy.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_cpqr_three_trace`. Hypotheses of
+`joint_cpqr_prefix_trace`, with `3 ≤ k` in place of `2 ≤ k`. `3 ≤ n`
+follows from `orthogonalRows_le`.
+
+Conclude:
+
+```text
+(selectedColGram A (cpqrIterate A 3)).det ≠ 0 ∧
+((selectedColGram A (cpqrIterate A 3))⁻¹).trace ≤
+  (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) +
+    (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) *
+      (((n : ℝ) - 2) / ((k : ℝ) - 2))
+```
+
+The constant is that expression. It is not replaced by a looser one.
+It is not claimed sharp: on the `3×3` identity the inverse trace is `3`
+and the formula at `τ = 1`, `ρ = 0`, `k = 3`, `n = 3` equals `5`.
+
+Proof shape. `cpqrIterate_invariant` gives `(cpqrIterate A 2).card = 2`
+and invertibility of that Gram, and invertibility of the length-3 Gram.
+`joint_cpqr_prefix_trace` gives trace at most `B`. The first two pivots
+are not rebuilt. `joint_cpqr_prefix_rayleigh` is the quadratic lower
+bound with coefficient `μ`. `nextResidual_ge` still gives
+`maxResidual A J ≥ (k - 2) / (n - 2)`. The third column energy is not
+`k / n`. `milestoneE_leverage_sum` gives `n · min ≤ k`, so
+`min ≤ k / n`, and the leverage hypothesis gives `max ≤ τ · min`. The
+Schur residual is nonnegative (`residualSq_eq_schur`), so
+`q ≤ ℓ_j ≤ τ k / n`. `inv_norm_sq_le_of_quad_lower` gives
+`c ≤ q / μ`, hence `c ≤ (τ k / n) / μ = 2 τ^3 / (1 - ρ^2)`. `field_simp`
+cancels `n` and `k`. The increment is at most
+`(1 + 2 τ^3 / (1 - ρ^2)) · (n - 2) / (k - 2)`.
+`append_inv_trace_increment`, `append_inv_trace_eq_insert`, and
+`appendColumn_gram_det_eq_insert` are the lemmas used for the
+equal-energy third step.
+
+Independent check: `tests/test_joint_three.py`, in
+`fractions.Fraction`, calling `structselect.cpqr`. On the `3×3`
+identity, CPQR returns three columns, the Gram inverse trace is `3`,
+the formula at `τ = 1`, `ρ = 0`, `k = 3`, `n = 3` equals `5`, and
+`3 ≤ 5`. The test does not assert that the trace equals `5`. It is not
+the theorem.
+
+Non-claims: this is the third CPQR pivot under the joint leverage-ratio
+and coherence hypothesis. It does not bound pivots after the third.
+A 3-column prefix is not a bound for general `k`. It does not close
+outcome 3. It is not a polynomial bound for every orthogonal-row matrix.
+The constant is not claimed sharp. The census did not prove this.
+Problem 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3.
+
+Phase PR and verification receipt:
+[#52](https://github.com/tripp-smith/structured-column-selection/pull/52).
