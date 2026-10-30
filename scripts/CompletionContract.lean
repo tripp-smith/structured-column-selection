@@ -155,6 +155,22 @@ example (d : ℕ) {C : ℝ} (hC : 0 < C) :
           vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
   milestoneE_normalized_coherence_one d hC
 
+example {m : ℕ} (hm : 2 ≤ m) {N : ℕ}
+    (C : Matrix (Fin (wideDim m)) (Fin (wideDim m)) ℝ)
+    (hCC : wideTriangular m * (wideTriangular m)ᵀ + C * Cᵀ = 1)
+    (W : Matrix (Fin (wideDim m)) (Fin N) ℝ) (hW : W * Wᵀ = 1)
+    (hcol : ∀ j : Fin N, (∑ q, W q j ^ 2) ≤ 1 / (wideRepeats m : ℝ)) :
+    ∃ A : Matrix (Fin (wideDim m)) (Fin (wideDim m + N)) ℝ,
+      ∃ x : Fin (widePrefix (wideDim m + N) (wideDim m)).card → ℝ,
+        A * Aᵀ = 1 ∧
+        (∀ i j : Fin (wideDim m), A i (j.castAdd N) = wideTriangular m i j) ∧
+        (∀ (i : Fin (wideDim m)) (j : Fin N),
+          A i (j.natAdd (wideDim m)) = (C * W) i j) ∧
+        cpqrSet A = widePrefix (wideDim m + N) (wideDim m) ∧
+        (∑ i, (selectedCols A (widePrefix (wideDim m + N) (wideDim m)) *ᵥ x) i ^ 2) = 1 ∧
+        ((2 * (m : ℝ) / 3) * ((4 : ℝ) / 3) ^ (m - 1)) ^ 2 ≤ ∑ i, x i ^ 2 :=
+  milestoneE_design_adverse_family hm C hCC W hW hcol
+
 example :
     ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
       ∃ x : Fin (cpqrSet A).card → ℝ,

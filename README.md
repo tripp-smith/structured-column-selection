@@ -486,3 +486,13 @@ not close outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#40](https://github.com/tripp-smith/structured-column-selection/pull/40).
+
+Completed phase: **AB design-padded adverse family**.
+`milestoneE_design_adverse_family` replaces the repeated filler block of
+the outcome-2 frame by an arbitrary tight design `W` with `W Wᵀ = 1` and
+column energy at most `1 / wideRepeats m`. For every completion `C` of
+the triangular block, `[R | C W]` has orthogonal rows, CPQR takes the
+leading prefix, the image energy is `1`, and the inverse energy is at
+least `wideGrowthLower m ^ 2`. No coherence bound on the resulting
+columns is claimed. This does not close outcome 3. The contract is in
+RESEARCH.md.

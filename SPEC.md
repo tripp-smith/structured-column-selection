@@ -817,6 +817,14 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (design-padded adverse family):
+`milestoneE_design_adverse_family` replaces the repeated filler block of
+the outcome-2 frame by any tight design `W` with `W Wᵀ = 1` and column
+energy at most `1 / wideRepeats m`, with any completion `C`. The frame
+`[R | C W]` has orthogonal rows, the CPQR prefix, image energy `1`, and
+inverse energy at least `wideGrowthLower m ^ 2`. No coherence bound on
+its columns is claimed. Outcome 3 stays open.
+
 Status note (normalized coherence):
 `milestoneE_normalized_coherence_one` says that the outcome-2 frame has
 two equal positive columns, so their normalized coherence is `1`, and

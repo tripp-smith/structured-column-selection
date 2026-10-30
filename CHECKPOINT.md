@@ -76,6 +76,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Equal-energy third CPQR pivot | **PROVED** (does not close outcome 3) | `milestoneE_equal_energy_third_pivot_split` |
 | Absolute incoherence escape | **PROVED** (does not close outcome 3) | `milestoneE_incoherent_no_joint_polynomial` |
 | Normalized coherence of the outcome-2 frame | **PROVED** (does not close outcome 3) | `milestoneE_normalized_coherence_one` |
+| Design-padded adverse family | **PROVED** (does not close outcome 3) | `milestoneE_design_adverse_family` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.
