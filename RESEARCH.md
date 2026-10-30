@@ -2770,3 +2770,4 @@ inequality. The equal-leverage majorant at `n = 2k` is still not a
 polynomial. The census did not prove this.
 
 Phase PR and verification receipt:
+[#61](https://github.com/tripp-smith/structured-column-selection/pull/61).

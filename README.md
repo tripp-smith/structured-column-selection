@@ -806,3 +806,4 @@ close outcome 1. Problem 4.1 is not solved. The contract is in
 RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
+[#61](https://github.com/tripp-smith/structured-column-selection/pull/61).
