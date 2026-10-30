@@ -373,6 +373,16 @@ The Gram is the identity. Rectangular matrices are not included. The
 equal-leverage majorant at `n = 2k` is still not a polynomial. It does
 not close outcome 3. It does not change the sampler.
 
+`tests/test_codim_one.py` evaluates the tight majorant at `n = k + 1`,
+`τ = 1`, and `ρ = 0` with `fractions.Fraction`. At `k = 2` the value is
+`3` and the bound is `16`. At `k = 3` the values are `8/3` then `6`, and
+the bound is `26`. At `k = 4` the value at `t = 4` is at most `38`. This
+rational check is not the theorem. It bounds the majorant at `n = k + 1`.
+It is not a CPQR inverse trace by itself. This is one extra column, not
+a general `n`. Phase AU still says the majorant at `n = 2k` is not
+polynomial. Phase AV still says the square trace equals `k`. It does not
+close outcome 3. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

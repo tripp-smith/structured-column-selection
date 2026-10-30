@@ -563,6 +563,17 @@ value at `ρ = 0`. Rectangular matrices are not included. The
 equal-leverage majorant at `n = 2k` is still not a polynomial. A
 square-only bound does not close outcome 3. Outcome 3 stays open.
 
+Status note (codimension-one CPQR trace):
+`milestoneE_joint_codim_one_trace` is `n = k + 1` with equal column
+energies. The CPQR inverse trace is at most
+`(k + 1)(k + 2) + 2k / (1 - ρ ^ 2)`, and the same factor bounds the
+Rayleigh form. At `ρ = 0` the majorant values are `3` for `k = 2` and
+`6` for `k = 3`; the bounds are `16` and `26`. This is one extra column,
+not a general `n`. It is a polynomial in `k` and in `1 / (1 - ρ ^ 2)`,
+not a polynomial theorem for general `n`. Phase AU still says the
+majorant at `n = 2k` is not polynomial. Phase AV still says the square
+trace equals `k`. Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

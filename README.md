@@ -807,3 +807,16 @@ RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#61](https://github.com/tripp-smith/structured-column-selection/pull/61).
+
+Completed phase: **AW codimension-one CPQR trace**.
+Under equal column energies and coherence at most `ρ < 1`, an
+orthogonal-row `k × (k + 1)` matrix has CPQR inverse trace at most
+`(k + 1)(k + 2) + 2k / (1 - ρ ^ 2)`, and the same factor bounds the
+Rayleigh form. At `ρ = 0` the majorant values are `3` for `k = 2` and
+`6` for `k = 3`; the bounds are `16` and `26`. This is one extra column,
+not a general `n`. Phase AU still says the majorant at `n = 2k` is not
+polynomial. Phase AV still says the square trace equals `k`. Outcome 3
+stays open. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#62](https://github.com/tripp-smith/structured-column-selection/pull/62).
