@@ -563,3 +563,6 @@ normalized coherence at most `1/2 + 1/m`. The constant was not weakened.
 This does not bound filler pairs, and a leading–leading ratio
 `≤ 1/2 + 1/m` is not a coherence bound on the whole frame. This does not
 close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#46](https://github.com/tripp-smith/structured-column-selection/pull/46).
