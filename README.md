@@ -431,9 +431,12 @@ close outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#35](https://github.com/tripp-smith/structured-column-selection/pull/35).
 
-Current phase: **W orthogonal equal-energy block** (in progress).
+Completed phase: **W orthogonal equal-energy block**.
 `milestoneE_equal_energy_orthogonal_block_same_pivot` says that equal
 column energy and a pairwise-orthogonal selected block make the next
 CPQR pivot agree with the increment pivot. A one-column block is the
 agreement half of the equal-energy second pivot. This does not close
 outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#36](https://github.com/tripp-smith/structured-column-selection/pull/36).

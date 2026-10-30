@@ -1263,3 +1263,6 @@ is not the SPEC §10 class `ColumnIncoherent A 0`, which asks every pair
 of columns to be orthogonal and is already phase P. This theorem does
 not say every equal-energy CPQR prefix is orthogonal. Problem 4.1 is
 not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#36](https://github.com/tripp-smith/structured-column-selection/pull/36).
