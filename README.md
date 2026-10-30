@@ -780,3 +780,17 @@ Problem 4.1 is not solved. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#59](https://github.com/tripp-smith/structured-column-selection/pull/59).
+
+Completed phase: **AU equal-leverage majorant**.
+`milestoneE_joint_equal_majorant_not_polynomial` lower-bounds
+`jointTraceBoundTight` at `τ = 1`, `ρ = 0`, and `n = 2k`. The tight
+majorant is at least `2^k / k`, which beats every `C (3k + 1)^{2d}`.
+At `k = 4` the majorant is `55/2` and `2^4 / 4 = 4`. This is not a CPQR
+trace. Phase AR's square bound is unchanged and still polynomial.
+Outcome 3 stays open: a lower bound on this majorant is not a matrix
+counterexample, and this majorant is not a polynomial theorem for the
+equal-leverage class. This does not close outcome 1. Problem 4.1 is not
+solved. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#60](https://github.com/tripp-smith/structured-column-selection/pull/60).

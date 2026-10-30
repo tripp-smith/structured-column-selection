@@ -2618,3 +2618,83 @@ untouched.
 
 Phase PR and verification receipt:
 [#59](https://github.com/tripp-smith/structured-column-selection/pull/59).
+
+## Phase AU equal-leverage majorant (2026-10-30, contract)
+
+Iteration AU. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AT lower-bounds `jointTraceBoundTight` along
+`n = k`, `τ = 2`, `ρ = 0`. This phase lower-bounds the same function
+along `n = 2k`, `τ = 1`, `ρ = 0`. It does not modify `jointTraceBound`,
+`jointTraceBoundTight`, `joint_cpqr_trace_bound_tight`,
+`milestoneE_joint_trace_majorant_not_polynomial`, or
+`exists_two_pow_beats_polynomial`. It calls
+`exists_two_pow_beats_polynomial`. It does not place a matrix in the
+joint class. It does not close outcome 1 or outcome 3. Phase AR remains
+the positive square result: at `n = k` and `τ = 1` the CPQR inverse
+trace is at most `(k : ℝ) - 2 + 2 / (1 - ρ ^ 2)`. A rectangular lower
+bound on the majorant does not contradict that theorem.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_equal_majorant_not_polynomial`:
+
+```text
+(d : ℕ) {C : ℝ} (hC : 0 < C) :
+∃ k : ℕ, 2 ≤ k ∧
+  C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+    jointTraceBoundTight k (2 * k) (1 : ℝ) (0 : ℝ) k
+```
+
+`n = 2k`, so `n + k + 1 = 3k + 1 = 2k + k + 1`. `τ = 1`, `ρ = 0`.
+The majorant beats every polynomial `C (n + k + 1) ^ (2d)` along this
+ray. This is the equal-leverage ratio on a rectangle of aspect 2.
+
+`jointTraceBoundTight_equal_rect_ge` is the lower bound
+`(2 : ℝ) ^ k / (k : ℝ) ≤ jointTraceBoundTight k (2 * k) (1 : ℝ) 0 k`
+for `2 ≤ k`. There is no matrix and no Gram in the argument.
+`jointTraceBoundTight_two` gives
+`2 * 1 ^ 2 * (2k) / (k * (1 - 0)) = 4`. For `2 ≤ s < k`,
+`jointTraceBoundTight_succ` gives
+`(1 + (k / (2k)) B) (2k - s) / (k - s)`, and
+`1 + (1/2) B ≥ (1/2) B` when `B ≥ 0`. Nonnegativity is
+`jointTraceBoundTight_nonneg`. The product of the aspect factors is the
+binomial `(Nat.choose (2 * k - 2) (k - 2) : ℝ)`. The central binomial
+bound `(Nat.choose (2 * m) m : ℝ) ≥ 4 ^ m / (2 * m + 1)` and the index
+shift `m = k - 1` give `2 ^ k / k`. At `k = 2` the bound is `4`, and
+`2 ^ 2 / 2 = 2 ≤ 4`. At `k = 4`, `n = 8`, the values are `4`, then `9`,
+then `55/2`, and `2 ^ 4 / 4 = 4 ≤ 55/2`.
+
+`exists_two_pow_beats_polynomial` is called at degree `d + 1` with
+constant `C * 2 ^ (2 * d + 1)`. For that `k`,
+`(3k + 1) ≤ 2 (2k + 1)` and `k ≤ 2k + 1`, so
+`k (3k + 1) ^ (2d) ≤ 2 ^ (2d) (2k + 1) ^ (2d + 2)`. Clearing the
+denominator `k` produces `C (3k + 1) ^ (2d) < 2 ^ k / k`. Then
+`2k + k + 1 = 3k + 1` and `jointTraceBoundTight_equal_rect_ge` replace
+`2 ^ k / k` by the majorant.
+
+This is a lower bound on `jointTraceBoundTight`, not on
+`trace((selectedColGram A J)⁻¹)` for any matrix. It does not place any
+matrix in the joint class. The square `τ = 1` CPQR bound of phase AR
+stays polynomial and is a different regime (`n = k`). The majorant at
+aspect 2 cannot be used as an outcome-3 polynomial.
+
+Independent check: `tests/test_equal_majorant.py`, in
+`fractions.Fraction`. For `τ = 1`, `ρ = 0`, `n = 2k`, the value at
+`t = 2` is `2 * n / k = 4` and the successor is
+`(1 + (k / n) B) (n - (t - 1)) / (k - (t - 1))`. At `k = 4` the value
+at `4` is `55/2` and `2 ^ 4 / 4 = 4 ≤ 55/2`. At `k = 2` the value is
+`4` and `2 ^ 2 / 2 ≤ 4`. This rational check is not the theorem. It
+lower-bounds the majorant only. It is not a CPQR inverse trace. It does
+not close outcome 3. The square `τ = 1` regime is a different statement.
+
+Non-claims: a lower bound on `jointTraceBoundTight` only. Not a CPQR
+inverse trace. Not a matrix in the joint class. Not a claim that
+equal-leverage matrices are adverse. Not a claim that the joint class
+fails. Does not close outcome 1 or outcome 3. Does not solve
+Problem 4.1. Does not say CPQR has a polynomial inverse-norm bound, and
+does not say CPQR is polynomial on orthogonal-row matrices. Phase AR's
+square bound is unchanged. The majorant at aspect 2 is not a polynomial
+theorem for the equal-leverage class.
+
+Phase PR and verification receipt:
+[#60](https://github.com/tripp-smith/structured-column-selection/pull/60).

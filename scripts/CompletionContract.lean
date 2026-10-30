@@ -663,6 +663,12 @@ example (d : ℕ) {C : ℝ} (hC : 0 < C) :
         jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) k :=
   milestoneE_joint_trace_majorant_not_polynomial d hC
 
+example (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+        jointTraceBoundTight k (2 * k) (1 : ℝ) (0 : ℝ) k :=
+  milestoneE_joint_equal_majorant_not_polynomial d hC
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

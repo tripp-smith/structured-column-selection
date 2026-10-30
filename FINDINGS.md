@@ -351,6 +351,27 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Equal-leverage majorant (2026-10-30)
+
+`milestoneE_joint_equal_majorant_not_polynomial` lower-bounds
+`jointTraceBoundTight` at `τ = 1`, `ρ = 0`, and `n = 2k`. For every
+degree `d` and every `C > 0`, some `k ≥ 2` has
+`C (3k + 1)^{2d} < jointTraceBoundTight k (2k) 1 0 k`. The majorant is
+at least `2^k / k`. At `k = 4` the values are `4`, then `9`, then
+`55/2`, and `2^4 / 4 = 4 ≤ 55/2`.
+
+`tests/test_equal_majorant.py` checks those rationals with
+`fractions.Fraction`. The check is not the theorem. It lower-bounds the
+majorant only. It is not a CPQR inverse trace.
+
+Phase AR's square bound at `n = k` and `τ = 1` is unchanged and still
+polynomial. This does not place any matrix in the joint class. Outcome 3
+stays open: a lower bound on this majorant is not a matrix
+counterexample, and this majorant is not a polynomial theorem for the
+equal-leverage class. This does not close outcome 1. Problem 4.1 is not
+solved, and this phase does not claim that CPQR is polynomial on
+orthogonal-row matrices.
+
 ## Tight majorant growth (2026-10-30)
 
 `milestoneE_joint_trace_majorant_not_polynomial` lower-bounds

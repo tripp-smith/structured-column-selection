@@ -351,6 +351,17 @@ Outcome 3 stays open because a lower bound on this majorant is not a
 matrix counterexample inside the joint class, and the majorant is not a
 polynomial theorem. It does not change the sampler.
 
+`tests/test_equal_majorant.py` evaluates `jointTraceBoundTight` at
+`n = 2k`, `τ = 1`, `ρ = 0` with `fractions.Fraction`. The value at
+`t = 2` is `4` and the successor is `(1 + (k / n) B) (n - (t - 1)) / (k - (t - 1))`.
+At `k = 4` the value is `55/2` and `2^4 / 4 = 4`. At `k = 2` the value
+is `4`. This rational check is not the theorem. It lower-bounds the
+majorant only. It is not a CPQR inverse trace. Phase AR's square bound
+is unchanged and still polynomial. Outcome 3 stays open: a lower bound
+on this majorant is not a matrix counterexample, and this majorant is
+not a polynomial theorem for the equal-leverage class. It does not
+change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

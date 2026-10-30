@@ -547,6 +547,14 @@ That power beats every `C (2k + 1)^{2d}`. At `k = 4` the majorant is
 `r_CPQR` growth. The loose majorant is untouched. Outcome 1 and
 outcome 3 stay open.
 
+Status note (equal-leverage majorant):
+`milestoneE_joint_equal_majorant_not_polynomial` lower-bounds
+`jointTraceBoundTight` at `τ = 1`, `ρ = 0`, `n = 2k` by `2^k / k`.
+That quantity beats every `C (3k + 1)^{2d}`. At `k = 4` the majorant is
+`55/2` and `2^4 / 4 = 4`. This is not a CPQR inverse trace. Phase AR's
+square bound at `n = k` and `τ = 1` stays polynomial. Outcome 1 and
+outcome 3 stay open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.
