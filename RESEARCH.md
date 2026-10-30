@@ -1987,3 +1987,54 @@ The census did not prove this. Problem 4.1 is not solved. `MinDimLe`,
 
 Phase PR and verification receipt:
 [#50](https://github.com/tripp-smith/structured-column-selection/pull/50).
+
+## Phase AL joint CPQR Rayleigh (2026-10-30, contract)
+
+Iteration AL. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AK bounds the inverse trace of the length-2 CPQR
+Gram by `B = 2 τ^2 n / (k (1 - ρ^2))`. This phase turns that trace bound
+into a Rayleigh lower bound on the same prefix. The coefficient is `1/B`.
+It is not replaced by a smaller one.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_cpqr_prefix_rayleigh`. Same hypotheses as
+`joint_cpqr_prefix_trace`. For every
+`x : Fin (cpqrIterate A 2).card → ℝ`,
+
+```text
+((k : ℝ) * (1 - ρ ^ 2)) / ((2 : ℝ) * τ ^ 2 * (n : ℝ)) * vecEnergy x ≤
+  vecEnergy (selectedCols A (cpqrIterate A 2) *ᵥ x)
+```
+
+Proof shape. The prefix theorem gives `J = cpqrIterate A 2` of card 2,
+invertible `G = selectedColGram A J`, and `(G⁻¹).trace ≤ B`.
+`vecEnergy_selectedCols` is the Gram identity
+`vecEnergy (selectedCols A J *ᵥ x) = x ⬝ᵥ (G *ᵥ x)`. For
+`H = !![a, c; c, b]` with `0 < a`, `0 < b`, and `0 < a * b - c ^ 2`, the
+numerator of `(a + b) (xᵀ H⁻¹ x) - ‖x‖²` is
+`(b x₁ - c x₂)² + (a x₂ - c x₁)²`. Apply that to `H = G⁻¹`, transported
+from `Fin J.card` to `Fin 2` by `finCongr` because `J.card = 2`. The
+diagonal energies of the Gram and the positive determinant from
+`joint_pair_inv_trace` give `0 < a`, `0 < b`, and `0 < det`. The proof
+does not unfold `cpqrPivot`. Then
+`‖x‖² ≤ (G⁻¹).trace · ‖A_J x‖² ≤ B · ‖A_J x‖²`.
+
+On the `2×2` identity the coefficient is `1/2` and the Rayleigh quotient
+is `1`, because `λ_max ≤ trace`. The bound is not sharp.
+
+Independent check: `tests/test_joint_rayleigh.py`, in
+`fractions.Fraction`, calling `structselect.cpqr`. On the `2×2`
+identity, CPQR returns both columns, `‖A_J x‖² = ‖x‖²` for `x = (1, 0)`,
+the coefficient at `τ = 1`, `ρ = 0`, `k = 2`, `n = 2` equals `1/2`, and
+`1/2 · ‖x‖² ≤ ‖A_J x‖²`. The test does not assert equality of the two
+sides. It is not the theorem.
+
+Non-claims: this is the Rayleigh form of the length-2 CPQR prefix. It
+does not bound later pivots. A 2-column CPQR prefix is not a `k`-set for
+`k > 2`. It does not close outcome 3. It is not a polynomial bound for
+every orthogonal-row matrix. The census did not prove this. Problem 4.1
+is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#51](https://github.com/tripp-smith/structured-column-selection/pull/51).

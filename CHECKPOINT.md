@@ -86,6 +86,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Joint leverage-coherence census | **NUMERICALLY OBSERVED** (not a theorem) | `experiments/census_joint_seed1.json` |
 | Joint pair Gram | **PROVED** (2-column bound; does not close outcome 3) | `milestoneE_joint_pair_inv_trace` |
 | Joint CPQR prefix | **PROVED** (length-2 CPQR prefix; does not close outcome 3) | `milestoneE_joint_cpqr_prefix_trace` |
+| Joint CPQR Rayleigh | **PROVED** (length-2 CPQR prefix; does not close outcome 3) | `milestoneE_joint_cpqr_prefix_rayleigh` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

@@ -351,6 +351,38 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Joint CPQR Rayleigh (2026-10-30)
+
+`milestoneE_joint_cpqr_prefix_rayleigh` is the Rayleigh form of the length-2
+CPQR prefix under the same hypotheses as
+`milestoneE_joint_cpqr_prefix_trace`. For every
+`x : Fin (cpqrIterate A 2).card → ℝ`,
+
+```text
+k (1 - ρ^2) / (2 τ^2 n) * vecEnergy x ≤
+  vecEnergy (selectedCols A (cpqrIterate A 2) *ᵥ x).
+```
+
+The coefficient is the reciprocal of the inverse-trace bound
+`2 τ^2 n / (k (1 - ρ^2))`. It was not weakened. The argument is the
+coordinate identity for a `2×2` symmetric positive-definite matrix: the
+numerator of `(a + b) (xᵀ H⁻¹ x) - ‖x‖²` is a sum of squares, so
+`‖x‖² ≤ tr(H) · (xᵀ H⁻¹ x)` with `H = G⁻¹`. The Gram diagonal energies
+and the positive determinant from `joint_pair_inv_trace` supply
+`0 < a`, `0 < b`, and `0 < det`. Then `tr(G⁻¹) ≤ B` gives the stated
+coefficient.
+
+`tests/test_joint_rayleigh.py` runs `structselect.cpqr` on the `2×2`
+identity. CPQR returns both columns. For `x = (1, 0)`, `‖A_J x‖² = ‖x‖²`.
+The coefficient at `τ = 1`, `ρ = 0`, `k = 2`, `n = 2` is `1/2`, and
+`1/2 · ‖x‖² ≤ ‖A_J x‖²`. The Rayleigh quotient on that vector is `1`,
+because `λ_max ≤ trace`. The bound is not sharp. The check is not the
+theorem.
+
+This does not bound later pivots. A length-2 CPQR prefix is not a `k`-set
+for `k > 2`. Outcome 3 stays open. Problem 4.1 is not solved, and CPQR is
+not claimed to be polynomial on every orthogonal-row matrix.
+
 ## Joint CPQR prefix (2026-10-30)
 
 `milestoneE_joint_cpqr_prefix_trace` is the CPQR prefix of length 2 under

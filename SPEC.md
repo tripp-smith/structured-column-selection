@@ -470,6 +470,12 @@ and coherence hypothesis, with the same inverse-trace bound. This does
 not bound later pivots. It is not a `k`-column bound. Outcome 3 stays
 open.
 
+Status note (joint CPQR Rayleigh): the same length-2 prefix satisfies
+`k (1 - ρ^2) / (2 τ^2 n) · ‖x‖² ≤ ‖A_J x‖²`. The coefficient is the
+reciprocal of the inverse-trace bound and was not weakened. It is not
+sharp. This does not bound later pivots. It is not a `k`-column bound.
+Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

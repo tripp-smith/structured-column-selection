@@ -540,6 +540,18 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
         (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) :=
   milestoneE_joint_cpqr_prefix_trace A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hn : 2 ≤ n) (τ ρ : ℝ) (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ)
+    (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j))
+    (x : Fin (cpqrIterate A 2).card → ℝ) :
+    ((k : ℝ) * (1 - ρ ^ 2)) / ((2 : ℝ) * τ ^ 2 * (n : ℝ)) * vecEnergy x ≤
+      vecEnergy (selectedCols A (cpqrIterate A 2) *ᵥ x) :=
+  milestoneE_joint_cpqr_prefix_rayleigh A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh x
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/
