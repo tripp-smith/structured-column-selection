@@ -496,3 +496,6 @@ leading prefix, the image energy is `1`, and the inverse energy is at
 least `wideGrowthLower m ^ 2`. No coherence bound on the resulting
 columns is claimed. This does not close outcome 3. The contract is in
 RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#41](https://github.com/tripp-smith/structured-column-selection/pull/41).
