@@ -1388,3 +1388,6 @@ the normalized coherence ratio in SPEC §10. Phase P still bounds the
 case `ρ = 0`, and phase Q still places the outcome-2 frame outside that
 case. Problem 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay
 outside outcome 3.
+
+Phase PR and verification receipt:
+[#39](https://github.com/tripp-smith/structured-column-selection/pull/39).
