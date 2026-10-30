@@ -104,3 +104,4 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_equal_energy_cpqr_three_trace
 #print axioms StructuredColumnSelection.milestoneE_equal_energy_cpqr_k3
 #print axioms StructuredColumnSelection.milestoneE_joint_pair_inv_trace
+#print axioms StructuredColumnSelection.milestoneE_joint_cpqr_prefix_trace

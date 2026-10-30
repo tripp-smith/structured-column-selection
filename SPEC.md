@@ -464,6 +464,12 @@ coherence at most `ρ` with `0 ≤ ρ < 1`, every 2-column Gram is invertible
 and its inverse trace is at most `2 τ^2 n / (k (1 - ρ^2))`. This is a
 2-column bound. It is not a `k`-column bound. Outcome 3 stays open.
 
+Status note (joint CPQR prefix): the length-2 CPQR prefix
+`cpqrIterate A 2` is one 2-column Gram under that same leverage-ratio
+and coherence hypothesis, with the same inverse-trace bound. This does
+not bound later pivots. It is not a `k`-column bound. Outcome 3 stays
+open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

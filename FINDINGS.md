@@ -351,6 +351,29 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Joint CPQR prefix (2026-10-30)
+
+`milestoneE_joint_cpqr_prefix_trace` is the CPQR prefix of length 2 under
+the joint leverage-ratio and coherence hypothesis. The hypotheses are
+those of `milestoneE_joint_pair_inv_trace`, plus `2 ≤ n`. Empty residuals
+sum to `k`, so some column energy is positive and `cpqrPivot` returns a
+first column `j0`. After that column, every other column has positive
+Schur residual, because the two-column Gram determinant is nonzero and
+the selected energy is positive. The second pivot `j1` is therefore
+distinct from `j0`, and `cpqrIterate A 2 = {j0, j1}`. The inverse trace
+of `selectedColGram A (cpqrIterate A 2)` is at most
+`2 τ^2 n / (k (1 - ρ^2))`. The constant was not weakened. `j0` is not
+identified with index 0.
+
+`tests/test_joint_cpqr_prefix.py` runs the repository CPQR code on the
+`2×2` identity. Both columns are returned, and the inverse trace is `2`,
+equal to the formula at `τ = 1`, `ρ = 0`, `k = 2`, `n = 2`. That check
+is not the theorem.
+
+This does not bound later pivots. A 2-column CPQR prefix is not a `k`-set
+for `k > 2`. Outcome 3 stays open. Problem 4.1 is not solved, and CPQR is
+not claimed to be polynomial on every orthogonal-row matrix.
+
 ## Joint pair Gram (2026-10-30)
 
 `milestoneE_joint_pair_inv_trace` bounds every two-column Gram of an
