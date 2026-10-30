@@ -1868,4 +1868,4 @@ theorem on the joint class. The sample does not prove the class is safe
 and does not prove it grows.
 
 Phase PR and verification receipt:
-(pending)
+[#48](https://github.com/tripp-smith/structured-column-selection/pull/48).

@@ -594,3 +594,6 @@ triple-design frame is leverage-unbalanced and is not in the sample.
 The coherence cap `19/20` does not exclude this class, because that
 family has wildly unbalanced leverages. This does not close outcome 3.
 The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#48](https://github.com/tripp-smith/structured-column-selection/pull/48).
