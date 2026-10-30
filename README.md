@@ -650,3 +650,6 @@ The bound is not sharp. This does not bound pivots after the third.
 A 3-column prefix is not a bound for general `k`. This does not close
 outcome 3. It is not a polynomial bound for every orthogonal-row matrix.
 The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#52](https://github.com/tripp-smith/structured-column-selection/pull/52).
