@@ -2313,3 +2313,68 @@ outcome 3. `k = 3` was already proved and is not re-opened here.
 
 Phase PR and verification receipt:
 [#55](https://github.com/tripp-smith/structured-column-selection/pull/55).
+
+## Phase AQ tighter CPQR step (2026-10-30, contract)
+
+Iteration AQ. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AO bounds one CPQR pivot step by
+`B + (1 + (τ k / n) B) (n - t) / (k - t)`. The added copy of `B` is an
+artifact of using `q ≤ ℓ`. This phase removes that copy. The old step
+stays. This is one tighter step, not an iteration. It does not close
+outcome 3.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_cpqr_step_tight`. Same hypotheses as
+`milestoneE_joint_cpqr_step`: `OrthogonalRows A`, `1 ≤ t`, `t < k`,
+`t < n`, `1 ≤ τ`, `0 ≤ B`,
+`∀ i j, residualSq A ∅ i ≤ τ * residualSq A ∅ j`, and
+`((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤ B`.
+Coherence is not a hypothesis.
+
+Conclude:
+
+```text
+(selectedColGram A (cpqrIterate A (t + 1))).det ≠ 0 ∧
+((selectedColGram A (cpqrIterate A (t + 1)))⁻¹).trace ≤
+  (1 + (τ * (k : ℝ) / (n : ℝ)) * B) * (((n : ℝ) - t) / ((k : ℝ) - t))
+```
+
+There is no standalone `B +` in front. The constant is that expression.
+It is not replaced by a looser one. It is not called sharp in general.
+On the `3×3` identity the length-2 Gram is `I₂` with inverse trace `2`.
+At `B = 2`, `τ = 1`, `k = n = 3`, `t = 2` the new bound equals `3` and
+the old one equals `5`. The length-3 inverse trace is `3`. The identity
+trace is `3`.
+
+Proof shape. The argument follows `joint_cpqr_step` through
+`c ≤ q * T`. Then `q = ℓ - residual` with `ℓ = v ⬝ᵥ v` and
+`residual = ℓ - q`, so `c ≤ T * (ℓ - residual)`. Hence
+`1 + c ≤ 1 + T * ℓ - T * residual` and
+`(1 + c) / residual ≤ (1 + T * ℓ) / residual - T`. Adding the current
+trace cancels `T`:
+`T + (1 + c) / residual ≤ (1 + T * ℓ) / residual`.
+Since `residual ≥ r_min > 0` with `r_min = (k - t) / (n - t)` and
+`1 + T * ℓ ≥ 0`, this is at most `(1 + T * ℓ) / r_min`. Then `T ≤ B`
+and `ℓ ≤ τ k / n` give
+`(1 + (τ k / n) * B) * (n - t) / (k - t)`.
+The proof does not return to `q ≤ ℓ`. `append_inv_trace_increment`,
+`append_inv_trace_eq_insert`, and the determinant stay as in
+`joint_cpqr_step`. The final addition of `T` and the ratio is the
+cancelled form, not `B` plus the ratio.
+
+Independent check: `tests/test_cpqr_step_tight.py`, in
+`fractions.Fraction`, calling `structselect.cpqr`. On the `3×3`
+identity, the length-2 inverse trace is `2`. The tight bound at
+`B = 2`, `τ = 1`, `k = n = 3`, `t = 2` equals `3`. The length-3
+inverse trace equals `3`. The old bound `2 + (1 + 2) * 1` equals `5`,
+and `3 < 5`. The test is not the theorem.
+
+Non-claims: tighter than `milestoneE_joint_cpqr_step` by one copy of
+the current trace. Still one step. Not an iteration. Not a polynomial
+bound. Does not close outcome 3. Coherence is not used. The recurrence
+is not iterated here. The census did not prove this. Problem 4.1 is
+not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#56](https://github.com/tripp-smith/structured-column-selection/pull/56).

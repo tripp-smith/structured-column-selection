@@ -309,6 +309,13 @@ the inverse trace is `4 ≤ 11`. Equality of the trace and the bound is
 asserted only for the `2×2` identity. It is not the theorem. It does not
 change the sampler.
 
+`tests/test_cpqr_step_tight.py` runs `structselect.cpqr` on the `3×3`
+identity. The length-2 inverse trace is `2`. The tight bound at
+`B = 2`, `τ = 1`, `k = n = 3`, `t = 2` equals `3`. The length-3
+inverse trace equals `3`. The old bound `2 + (1 + 2) · 1` equals `5`,
+and `3 < 5`. The check is not the theorem. The new bound is not claimed
+sharp in general. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

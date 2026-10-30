@@ -597,6 +597,17 @@ example {k n t : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
   milestoneE_joint_cpqr_step A hA ht1 htk htn τ B hτ hB hlev htr
 
 example {k n t : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (ht1 : 1 ≤ t) (htk : t < k) (htn : t < n) (τ B : ℝ)
+    (hτ : 1 ≤ τ) (hB : 0 ≤ B)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (htr : ((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤ B) :
+    (selectedColGram A (cpqrIterate A (t + 1))).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A (t + 1)))⁻¹).trace ≤
+        (1 + (τ * (k : ℝ) / (n : ℝ)) * B) *
+          (((n : ℝ) - t) / ((k : ℝ) - t)) :=
+  milestoneE_joint_cpqr_step_tight A hA ht1 htk htn τ B hτ hB hlev htr
+
+example {k n t : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
     (hk : 2 ≤ k) (hn : 2 ≤ n) (τ ρ : ℝ) (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ)
     (hρ : ρ < 1)
     (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)

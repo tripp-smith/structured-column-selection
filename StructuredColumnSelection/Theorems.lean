@@ -1205,6 +1205,21 @@ theorem milestoneE_joint_cpqr_step {k n t : ℕ}
           (((n : ℝ) - t) / ((k : ℝ) - t)) :=
   joint_cpqr_step A hA ht1 htk htn τ B hτ hB hlev htr
 
+/-- Tighter than `milestoneE_joint_cpqr_step` by one copy of the current
+trace. Still one step. Not an iteration. Not a polynomial bound. Does
+not close outcome 3. -/
+theorem milestoneE_joint_cpqr_step_tight {k n t : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (ht1 : 1 ≤ t) (htk : t < k) (htn : t < n) (τ B : ℝ)
+    (hτ : 1 ≤ τ) (hB : 0 ≤ B)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (htr : ((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤ B) :
+    (selectedColGram A (cpqrIterate A (t + 1))).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A (t + 1)))⁻¹).trace ≤
+        (1 + (τ * (k : ℝ) / (n : ℝ)) * B) *
+          (((n : ℝ) - t) / ((k : ℝ) - t)) :=
+  joint_cpqr_step_tight A hA ht1 htk htn τ B hτ hB hlev htr
+
 /-- For every prefix length `2 ≤ t ≤ k`, the CPQR Gram inverse trace is at
 most `jointTraceBound`. The same bound controls the Rayleigh comparison.
 This is not a polynomial in `k`. It does not close outcome 3. It is not a
