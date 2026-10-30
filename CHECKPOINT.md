@@ -91,6 +91,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Joint three-row CPQR | **PROVED** (full CPQR set at `k = 3`; does not close outcome 3) | `milestoneE_joint_cpqr_k3` |
 | CPQR trace step | **PROVED** (one prefix step; does not close outcome 3) | `milestoneE_joint_cpqr_step` |
 | CPQR trace recurrence | **PROVED** (any prefix `2 ≤ t ≤ k`; not a polynomial in `k`; does not close outcome 3) | `milestoneE_joint_cpqr_trace_bound` |
+| Tighter CPQR trace step | **PROVED** (one prefix step; the added copy of `B` is removed; does not close outcome 3) | `milestoneE_joint_cpqr_step_tight` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

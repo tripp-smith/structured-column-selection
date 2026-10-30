@@ -351,6 +351,29 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Tighter CPQR trace step (2026-10-30)
+
+`milestoneE_joint_cpqr_step_tight` has the same hypotheses as
+`milestoneE_joint_cpqr_step`. The next inverse trace is at most
+`(1 + (τ k / n) B) · (n - t) / (k - t)`, with no standalone `B +`.
+The proof keeps `c ≤ q · T`, writes `q = ℓ - residual`, and cancels
+the current trace `T` against `-T` in `(1 + c) / residual`. It does
+not return to `q ≤ ℓ`.
+
+On the `3×3` identity the new bound at `B = 2`, `τ = 1`, `k = n = 3`,
+`t = 2` equals `3` and the old bound equals `5`. The length-2 inverse
+trace is `2`. The length-3 inverse trace is `3`. The identity trace is
+`3`. The new bound is not claimed sharp in general.
+
+`tests/test_cpqr_step_tight.py` checks those rationals with
+`structselect.cpqr`. The check is not the theorem.
+
+This is tighter than `milestoneE_joint_cpqr_step` by one copy of the
+current trace. It is still one step. It is not an iteration. It is not
+a polynomial bound. It does not close outcome 3. Problem 4.1 is not
+solved, and this phase does not claim that CPQR is polynomial on
+orthogonal-row matrices.
+
 ## CPQR trace recurrence (2026-10-30)
 
 `milestoneE_joint_cpqr_trace_bound` iterates `milestoneE_joint_cpqr_step`

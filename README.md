@@ -710,3 +710,18 @@ is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#55](https://github.com/tripp-smith/structured-column-selection/pull/55).
+
+Completed phase: **AQ tighter CPQR step**.
+`milestoneE_joint_cpqr_step_tight` is the same one CPQR pivot step as
+`milestoneE_joint_cpqr_step`, with the added copy of the current trace
+removed. If the inverse trace of `selectedColGram A (cpqrIterate A t)`
+is at most `B`, then `selectedColGram A (cpqrIterate A (t + 1))` is
+invertible and its inverse trace is at most
+`(1 + (τ k / n) B) · (n - t) / (k - t)`.
+There is no standalone `B +` in front. On the `3×3` identity the new
+bound at `B = 2`, `τ = 1`, `k = n = 3`, `t = 2` equals `3` and the old
+bound equals `5`. The length-2 inverse trace is `2`. The length-3
+inverse trace is `3`, and the identity trace is `3`. The new bound is
+not claimed sharp in general. This is still one step. It is not an
+iteration. It is not a polynomial bound. It does not close outcome 3.
+The earlier step is unchanged. The contract is in RESEARCH.md.

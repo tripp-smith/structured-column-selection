@@ -506,6 +506,15 @@ iterates that one-step increment from the length-2 prefix up to any
 `1 + (τ k / n) (n - s) / (k - s)`, which is `O(τ k)` near the last pivot.
 The recurrence is not a polynomial in `k`. Outcome 3 stays open.
 
+Status note (tighter CPQR trace step): `milestoneE_joint_cpqr_step_tight`
+is the same one pivot from `cpqrIterate A t` to `cpqrIterate A (t + 1)`,
+with the next inverse trace at most
+`(1 + (τ k / n) B) · (n - t) / (k - t)`. There is no standalone `B +`.
+It is tighter than `milestoneE_joint_cpqr_step` by one copy of the
+current trace. It is still one step, not an iteration, and not a
+polynomial bound. The new bound is not claimed sharp in general.
+Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.
