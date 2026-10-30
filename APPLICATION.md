@@ -383,6 +383,16 @@ a general `n`. Phase AU still says the majorant at `n = 2k` is not
 polynomial. Phase AV still says the square trace equals `k`. It does not
 close outcome 3. It does not change the sampler.
 
+`tests/test_codim_two.py` evaluates the tight majorant at `n = k + 2`,
+`τ = 1`, and `ρ = 0` with `fractions.Fraction`. At `k = 2` the value
+and the bound are both `4`. At `k = 3` the value at `t = 3` is `9` and
+the bound is `13`. At `k = 4` the value at `t = 4` is `15` and the
+bound is `27`. This rational check is not the theorem. It bounds the
+majorant at `n = k + 2`. It is not itself a CPQR inverse trace. This is
+two extra columns, not a general `n`. One extra column stays phase AW.
+The aspect-2 majorant stays non-polynomial. The square trace stays
+exactly `k`. It does not close outcome 3. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

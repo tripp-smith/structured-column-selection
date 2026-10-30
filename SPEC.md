@@ -574,6 +574,19 @@ not a polynomial theorem for general `n`. Phase AU still says the
 majorant at `n = 2k` is not polynomial. Phase AV still says the square
 trace equals `k`. Outcome 3 stays open.
 
+Status note (two-extra-column CPQR trace):
+`milestoneE_joint_codim_two_trace` is `n = k + 2` with equal column
+energies. The CPQR inverse trace is at most
+`(k - 1)(k + 2) / (1 - ρ ^ 2) + (k - 1) k (k + 1) / 6 - 1`, and the
+same factor bounds the Rayleigh form. At `ρ = 0` and `k = 2` both sides
+equal `4`; at `k = 3` the majorant is `9` and the bound is `13`; at
+`k = 4` the majorant is `15` and the bound is `27`. This is two extra
+columns, not a general `n`. It is a polynomial in `k` and in
+`1 / (1 - ρ ^ 2)`, not a polynomial theorem for general `n`. One extra
+column stays phase AW. Phase AU still says the majorant at `n = 2k` is
+not polynomial. Phase AV still says the square trace equals `k`.
+Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

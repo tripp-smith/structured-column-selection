@@ -98,6 +98,16 @@ and in `1 / (1 - ρ ^ 2)`, not a polynomial theorem for general `n`.
 Phase AU remains the statement that the same majorant at `n = 2k` is not
 polynomial. Phase AV remains the square equality (trace exactly `k`).
 This does not close outcome 3.
+
+`joint_codim_two_trace` is `n = k + 2` only, with equal column energies.
+The CPQR inverse trace is at most
+`(k - 1) (k + 2) / (1 - ρ ^ 2) + (k - 1) k (k + 1) / 6 - 1`,
+and the same factor bounds the Rayleigh form. It is a polynomial in `k`
+and in `1 / (1 - ρ ^ 2)`, not a polynomial theorem for general `n`.
+Phase AW remains the one-extra-column bound. Phase AU remains the
+statement that the same majorant at `n = 2k` is not polynomial. Phase AV
+remains the square equality (trace exactly `k`). This does not close
+outcome 3.
 -/
 
 namespace StructuredColumnSelection
@@ -3103,6 +3113,410 @@ theorem joint_codim_one_trace {k : ℕ}
     joint_cpqr_trace_bound_tight A hA hk hn (1 : ℝ) ρ le_rfl hρ0 hρ hlev1 hcoh
       hk le_rfl
   have hmaj := jointTraceBoundTight_codim_one_le k hk ρ hρ0 hρ
+  refine ⟨htight.1, htight.2.1.trans hmaj, ?_⟩
+  intro x
+  exact (htight.2.2 x).trans (mul_le_mul_of_nonneg_left hmaj (vecEnergy_nonneg _))
+
+/-- `∑_{m=1}^{N} (m + 1) (m + 2) = (N + 1) (N + 2) (N + 3) / 3 - 2`.
+The `N = 0` sum is empty. -/
+lemma sum_succ_pair_closed (N : ℕ) :
+    ∑ m ∈ Icc 1 N, ((m : ℝ) + 1) * ((m : ℝ) + 2) =
+      ((N : ℝ) + 1) * ((N : ℝ) + 2) * ((N : ℝ) + 3) / 3 - 2 := by
+  induction N with
+  | zero =>
+    rw [Icc_eq_empty_of_lt (by omega : (0 : ℕ) < 1), sum_empty]
+    norm_num
+  | succ N ih =>
+    rw [sum_Icc_succ_top (by omega : (1 : ℕ) ≤ N + 1), ih]
+    push_cast
+    field_simp
+    ring
+
+/-- Reindex `s ↦ k - s` on the codimension-two tail. Empty at `k = 2`. -/
+lemma codimTwo_sum_reindex (k : ℕ) (_hk : 2 ≤ k) :
+    ∑ s ∈ Ico 2 k, ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) =
+      ∑ m ∈ Icc 1 (k - 2), ((m : ℝ) + 1) * ((m : ℝ) + 2) := by
+  refine sum_nbij' (fun s => k - s) (fun m => k - m) ?_ ?_ ?_ ?_ ?_
+  · intro s hs
+    have hs2 : 2 ≤ s := (mem_Ico.mp hs).1
+    have hsk : s < k := (mem_Ico.mp hs).2
+    exact mem_Icc.mpr ⟨by omega, by omega⟩
+  · intro m hm
+    have hm1 : 1 ≤ m := (mem_Icc.mp hm).1
+    have hm2 : m ≤ k - 2 := (mem_Icc.mp hm).2
+    exact mem_Ico.mpr ⟨by omega, by omega⟩
+  · intro s hs
+    have hsk : s < k := (mem_Ico.mp hs).2
+    omega
+  · intro m hm
+    have hm1 : 1 ≤ m := (mem_Icc.mp hm).1
+    have hm2 : m ≤ k - 2 := (mem_Icc.mp hm).2
+    omega
+  · intro s hs
+    have hsk : s ≤ k := le_of_lt (mem_Ico.mp hs).2
+    have hcast : ((k - s : ℕ) : ℝ) = (k : ℝ) - (s : ℝ) := Nat.cast_sub hsk
+    rw [hcast]
+
+/-- `D(t) = ((k : ℝ) - t + 1) ((k : ℝ) - t + 2) M(t)` for the
+codimension-two majorant `M`. -/
+noncomputable def codimTwoScaled (k : ℕ) (ρ : ℝ) (t : ℕ) : ℝ :=
+  ((k : ℝ) - (t : ℕ) + 1) * ((k : ℝ) - (t : ℕ) + 2) *
+    jointTraceBoundTight k (k + 2) (1 : ℝ) ρ t
+
+lemma codimTwoScaled_two (k : ℕ) (hk : 2 ≤ k) (ρ : ℝ)
+    (hρ0 : 0 ≤ ρ) (hρ : ρ < 1) :
+    codimTwoScaled k ρ 2 =
+      (2 : ℝ) * ((k : ℝ) - 1) * ((k : ℝ) + 2) / (1 - ρ ^ 2) := by
+  have hM :
+      jointTraceBoundTight k (k + 2) (1 : ℝ) ρ 2 =
+        (2 : ℝ) * ((k : ℝ) + 2) / ((k : ℝ) * (1 - ρ ^ 2)) := by
+    rw [jointTraceBoundTight_two]
+    simp only [one_pow, mul_one, Nat.cast_add, Nat.cast_ofNat]
+  have h1 : (k : ℝ) - (2 : ℕ) + 1 = (k : ℝ) - 1 := by
+    push_cast
+    ring
+  have h2 : (k : ℝ) - (2 : ℕ) + 2 = (k : ℝ) := by
+    push_cast
+    ring
+  have hk0 : (k : ℝ) ≠ 0 := by exact_mod_cast (show k ≠ 0 by omega)
+  have hδ0 : (1 : ℝ) - ρ ^ 2 ≠ 0 := by
+    have : ρ ^ 2 < 1 := (sq_lt_one_iff₀ hρ0).2 hρ
+    linarith
+  unfold codimTwoScaled
+  rw [h1, h2, hM]
+  field_simp [hk0, hδ0]
+
+lemma codimTwoScaled_succ {k s : ℕ} (hs : 2 ≤ s) (hsk : s < k) (ρ : ℝ) :
+    codimTwoScaled k ρ (s + 1) =
+      ((k : ℝ) / ((k : ℝ) + 2)) * codimTwoScaled k ρ s +
+        ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) := by
+  have hsucc :=
+    jointTraceBoundTight_succ (k := k) (n := k + 2) (τ := (1 : ℝ)) (ρ := ρ) hs
+  simp only [one_mul, Nat.cast_add, Nat.cast_ofNat] at hsucc
+  set α : ℝ := (k : ℝ) / ((k : ℝ) + 2)
+  have hfront1 : (k : ℝ) - ((s + 1) : ℕ) + 1 = (k : ℝ) - (s : ℕ) := by
+    push_cast
+    ring
+  have hfront2 : (k : ℝ) - ((s + 1) : ℕ) + 2 = (k : ℝ) - (s : ℕ) + 1 := by
+    push_cast
+    ring
+  have hden : (k : ℝ) - (s : ℕ) ≠ 0 :=
+    sub_ne_zero.mpr (ne_of_gt (by exact_mod_cast hsk))
+  have hshift : (k : ℝ) + 2 - (s : ℕ) = (k : ℝ) - (s : ℕ) + 2 := by
+    ring
+  unfold codimTwoScaled
+  rw [hfront1, hfront2, hsucc]
+  calc
+    ((k : ℝ) - (s : ℕ)) * ((k : ℝ) - (s : ℕ) + 1) *
+        ((1 + α * jointTraceBoundTight k (k + 2) (1 : ℝ) ρ s) *
+          (((k : ℝ) + 2 - (s : ℕ)) / ((k : ℝ) - (s : ℕ))))
+        = ((k : ℝ) - (s : ℕ) + 1) *
+            (1 + α * jointTraceBoundTight k (k + 2) (1 : ℝ) ρ s) *
+            ((((k : ℝ) + 2 - (s : ℕ)) / ((k : ℝ) - (s : ℕ))) *
+              ((k : ℝ) - (s : ℕ))) := by
+          ring
+    _ = ((k : ℝ) - (s : ℕ) + 1) *
+          (1 + α * jointTraceBoundTight k (k + 2) (1 : ℝ) ρ s) *
+          ((k : ℝ) + 2 - (s : ℕ)) := by
+          rw [div_mul_cancel₀ _ hden]
+    _ = ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+          (1 + α * jointTraceBoundTight k (k + 2) (1 : ℝ) ρ s) := by
+          rw [hshift]
+          ring
+    _ = α * (((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+            jointTraceBoundTight k (k + 2) (1 : ℝ) ρ s) +
+          ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) := by
+          ring
+
+/-- For `2 ≤ t ≤ k`,
+`D(t) = α ^ (t - 2) D(2) + ∑_{s=2}^{t-1} c(s) α ^ (t - s - 1)`. -/
+lemma codimTwoScaled_unrolled (k : ℕ) (_hk : 2 ≤ k) (ρ : ℝ)
+    (t : ℕ) (ht2 : 2 ≤ t) (htk : t ≤ k) :
+    codimTwoScaled k ρ t =
+      ((k : ℝ) / ((k : ℝ) + 2)) ^ (t - 2) * codimTwoScaled k ρ 2 +
+        ∑ s ∈ Ico 2 t,
+          ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+            ((k : ℝ) / ((k : ℝ) + 2)) ^ (t - s - 1) := by
+  set α : ℝ := (k : ℝ) / ((k : ℝ) + 2)
+  induction t, ht2 using Nat.le_induction with
+  | base =>
+    rw [Ico_self, sum_empty, pow_zero, one_mul, add_zero]
+  | succ u hu ih =>
+    have huk : u < k := Nat.lt_of_succ_le htk
+    have ihP := ih (Nat.le_of_succ_le htk)
+    have hstep := codimTwoScaled_succ (k := k) (s := u) hu huk ρ
+    have hpow :
+        α * (α ^ (u - 2) * codimTwoScaled k ρ 2) =
+          α ^ (u - 1) * codimTwoScaled k ρ 2 := by
+      have hexp : (u - 2) + 1 = u - 1 := by omega
+      calc
+        α * (α ^ (u - 2) * codimTwoScaled k ρ 2)
+            = (α * α ^ (u - 2)) * codimTwoScaled k ρ 2 := by
+              ring
+        _ = α ^ ((u - 2) + 1) * codimTwoScaled k ρ 2 := by
+              rw [← pow_succ']
+        _ = α ^ (u - 1) * codimTwoScaled k ρ 2 := by
+              rw [hexp]
+    have hexpT : (u + 1) - 2 = u - 1 := by omega
+    have hsumα :
+        α * ∑ s ∈ Ico 2 u,
+            ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+              α ^ (u - s - 1) =
+          ∑ s ∈ Ico 2 u,
+            ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+              α ^ (u - s) := by
+      rw [Finset.mul_sum]
+      refine sum_congr rfl ?_
+      intro s hs
+      have hsu : s < u := (mem_Ico.mp hs).2
+      have hexp : (u - s - 1) + 1 = u - s := by omega
+      calc
+        α * (((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+              α ^ (u - s - 1))
+            = ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                (α * α ^ (u - s - 1)) := by
+              ring
+        _ = ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+              α ^ ((u - s - 1) + 1) := by
+              rw [← pow_succ']
+        _ = ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+              α ^ (u - s) := by
+              rw [hexp]
+    have hendpoint :
+        ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2) * α ^ (u - u) =
+          ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2) := by
+      rw [Nat.sub_self, pow_zero, mul_one]
+    have hsplit := sum_Ico_succ_top hu
+      (fun s => ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+        α ^ (u - s))
+    have hsumEq :
+        α * ∑ s ∈ Ico 2 u,
+            ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+              α ^ (u - s - 1) +
+          ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2) =
+        ∑ s ∈ Ico 2 (u + 1),
+          ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+            α ^ ((u + 1) - s - 1) := by
+      have hrew :
+          ∑ s ∈ Ico 2 (u + 1),
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                α ^ ((u + 1) - s - 1) =
+            ∑ s ∈ Ico 2 (u + 1),
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                α ^ (u - s) := by
+        refine sum_congr rfl ?_
+        intro s hs
+        have hexp : (u + 1) - s - 1 = u - s := by
+          have hsu : s < u + 1 := (mem_Ico.mp hs).2
+          omega
+        rw [hexp]
+      calc
+        α * ∑ s ∈ Ico 2 u,
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                α ^ (u - s - 1) +
+            ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2)
+            = (∑ s ∈ Ico 2 u,
+                ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                  α ^ (u - s)) +
+              ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2) := by
+              rw [hsumα]
+        _ = (∑ s ∈ Ico 2 u,
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                α ^ (u - s)) +
+            ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2) *
+              α ^ (u - u) := by
+              conv_lhs => rw [← hendpoint]
+        _ = ∑ s ∈ Ico 2 (u + 1),
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                α ^ (u - s) := by
+              rw [← hsplit]
+        _ = ∑ s ∈ Ico 2 (u + 1),
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                α ^ ((u + 1) - s - 1) := by
+              rw [← hrew]
+    calc
+      codimTwoScaled k ρ (u + 1)
+          = α * codimTwoScaled k ρ u +
+              ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2) := hstep
+      _ = α * (α ^ (u - 2) * codimTwoScaled k ρ 2 +
+            ∑ s ∈ Ico 2 u,
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                α ^ (u - s - 1)) +
+            ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2) := by
+            rw [ihP]
+      _ = α * (α ^ (u - 2) * codimTwoScaled k ρ 2) +
+            (α * ∑ s ∈ Ico 2 u,
+                ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                  α ^ (u - s - 1) +
+              ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2)) := by
+            ring
+      _ = α ^ (u - 1) * codimTwoScaled k ρ 2 +
+            (α * ∑ s ∈ Ico 2 u,
+                ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                  α ^ (u - s - 1) +
+              ((k : ℝ) - (u : ℕ) + 1) * ((k : ℝ) - (u : ℕ) + 2)) := by
+            rw [hpow]
+      _ = α ^ ((u + 1) - 2) * codimTwoScaled k ρ 2 +
+            ∑ s ∈ Ico 2 (u + 1),
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                α ^ ((u + 1) - s - 1) := by
+            rw [hexpT, hsumEq]
+
+lemma jointTraceBoundTight_codim_two_le (k : ℕ) (hk : 2 ≤ k) (ρ : ℝ)
+    (hρ0 : 0 ≤ ρ) (hρ : ρ < 1) :
+    jointTraceBoundTight k (k + 2) (1 : ℝ) ρ k ≤
+      ((k : ℝ) - 1) * ((k : ℝ) + 2) / (1 - ρ ^ 2) +
+        ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 6 - 1 := by
+  set α : ℝ := (k : ℝ) / ((k : ℝ) + 2) with hα
+  have hk0 : (0 : ℝ) < k := by exact_mod_cast (show 0 < k by omega)
+  have hk2 : (0 : ℝ) < (k : ℝ) + 2 := by linarith
+  have hα0 : 0 ≤ α := by
+    rw [hα]
+    exact div_nonneg hk0.le hk2.le
+  have hαle : α ≤ 1 := by
+    rw [hα, div_le_one hk2]
+    linarith
+  have hδ : 0 < (1 : ℝ) - ρ ^ 2 := by
+    have : ρ ^ 2 < 1 := (sq_lt_one_iff₀ hρ0).2 hρ
+    linarith
+  have hD2 := codimTwoScaled_two k hk ρ hρ0 hρ
+  have hkm1 : 0 ≤ (k : ℝ) - 1 := by
+    have : (1 : ℕ) ≤ k := by omega
+    exact sub_nonneg.mpr (by exact_mod_cast this)
+  have hD2nn : 0 ≤ codimTwoScaled k ρ 2 := by
+    rw [hD2]
+    exact div_nonneg (mul_nonneg (mul_nonneg (by norm_num) hkm1) (by positivity)) hδ.le
+  have hunroll := codimTwoScaled_unrolled k hk ρ k hk le_rfl
+  have hpow : α ^ (k - 2) ≤ 1 := pow_le_one₀ hα0 hαle
+  have hhead :
+      α ^ (k - 2) * codimTwoScaled k ρ 2 ≤ codimTwoScaled k ρ 2 := by
+    simpa [one_mul] using mul_le_mul_of_nonneg_right hpow hD2nn
+  have hsumle :
+      ∑ s ∈ Ico 2 k,
+          ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+            α ^ (k - s - 1) ≤
+        ∑ s ∈ Ico 2 k,
+          ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) := by
+    refine sum_le_sum ?_
+    intro s hs
+    have hsk : s < k := (mem_Ico.mp hs).2
+    have hc1 : 0 ≤ (k : ℝ) - (s : ℕ) + 1 := by
+      have hle : (s : ℝ) + 1 ≤ (k : ℝ) := by
+        exact_mod_cast (show s + 1 ≤ k by omega)
+      linarith
+    have hc2 : 0 ≤ (k : ℝ) - (s : ℕ) + 2 := by
+      linarith
+    simpa [mul_one] using
+      mul_le_mul_of_nonneg_left (pow_le_one₀ hα0 hαle) (mul_nonneg hc1 hc2)
+  have hDle :
+      codimTwoScaled k ρ k ≤
+        codimTwoScaled k ρ 2 +
+          ∑ s ∈ Ico 2 k,
+            ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) := by
+    calc
+      codimTwoScaled k ρ k
+          = α ^ (k - 2) * codimTwoScaled k ρ 2 +
+              ∑ s ∈ Ico 2 k,
+                ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) *
+                  α ^ (k - s - 1) := by
+            simpa [hα] using hunroll
+      _ ≤ codimTwoScaled k ρ 2 +
+            ∑ s ∈ Ico 2 k,
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) :=
+            add_le_add hhead hsumle
+  have hsumId :
+      ∑ s ∈ Ico 2 k,
+          ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) =
+        ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 3 - 2 := by
+    rw [codimTwo_sum_reindex k hk, sum_succ_pair_closed (k - 2)]
+    have hN1 : ((k - 2 : ℕ) : ℝ) + 1 = (k : ℝ) - 1 := by
+      rw [Nat.cast_sub hk, Nat.cast_ofNat]
+      ring
+    have hN2 : ((k - 2 : ℕ) : ℝ) + 2 = (k : ℝ) := by
+      rw [Nat.cast_sub hk, Nat.cast_ofNat]
+      ring
+    have hN3 : ((k - 2 : ℕ) : ℝ) + 3 = (k : ℝ) + 1 := by
+      rw [Nat.cast_sub hk, Nat.cast_ofNat]
+      ring
+    rw [hN1, hN2, hN3]
+  have hDk :
+      codimTwoScaled k ρ k =
+        2 * jointTraceBoundTight k (k + 2) (1 : ℝ) ρ k := by
+    have h1 : (k : ℝ) - (k : ℕ) + 1 = 1 := by
+      ring
+    have h2 : (k : ℝ) - (k : ℕ) + 2 = 2 := by
+      ring
+    unfold codimTwoScaled
+    rw [h1, h2]
+    ring
+  have htwo : (0 : ℝ) < 2 := by norm_num
+  have hhalfD :
+      codimTwoScaled k ρ 2 / 2 =
+        ((k : ℝ) - 1) * ((k : ℝ) + 2) / (1 - ρ ^ 2) := by
+    rw [hD2]
+    field_simp [hδ.ne']
+  have hsplit :
+      (codimTwoScaled k ρ 2 +
+          (((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 3 - 2)) / 2 =
+        codimTwoScaled k ρ 2 / 2 +
+          ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 6 - 1 := by
+    field_simp
+    ring
+  have hbound :
+      2 * jointTraceBoundTight k (k + 2) (1 : ℝ) ρ k ≤
+        codimTwoScaled k ρ 2 +
+          (((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 3 - 2) := by
+    calc
+      2 * jointTraceBoundTight k (k + 2) (1 : ℝ) ρ k
+          = codimTwoScaled k ρ k := hDk.symm
+      _ ≤ codimTwoScaled k ρ 2 +
+            ∑ s ∈ Ico 2 k,
+              ((k : ℝ) - (s : ℕ) + 1) * ((k : ℝ) - (s : ℕ) + 2) := hDle
+      _ = codimTwoScaled k ρ 2 +
+            (((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 3 - 2) := by
+            rw [hsumId]
+  calc
+    jointTraceBoundTight k (k + 2) (1 : ℝ) ρ k
+        ≤ (codimTwoScaled k ρ 2 +
+            (((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 3 - 2)) / 2 := by
+          rw [le_div_iff₀ htwo, mul_comm]
+          exact hbound
+    _ = codimTwoScaled k ρ 2 / 2 +
+          ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 6 - 1 := hsplit
+    _ = ((k : ℝ) - 1) * ((k : ℝ) + 2) / (1 - ρ ^ 2) +
+          ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 6 - 1 := by
+          rw [hhalfD]
+
+/-- Two extra columns only. Polynomial in `k` and in `1 / (1 - ρ ^ 2)`.
+Not a bound for general `n`. Phase AW is the one-extra-column bound.
+Phase AU is the statement that `n = 2k` is not polynomial. Phase AV is
+the square equality. This does not close outcome 3. -/
+theorem joint_codim_two_trace {k : ℕ}
+    (A : Matrix (Fin k) (Fin (k + 2)) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (ρ : ℝ)
+    (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin (k + 2), residualSq A ∅ i ≤ residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin (k + 2), i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        ((k : ℝ) - 1) * ((k : ℝ) + 2) / (1 - ρ ^ 2) +
+          ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 6 - 1 ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            (((k : ℝ) - 1) * ((k : ℝ) + 2) / (1 - ρ ^ 2) +
+              ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 6 - 1) := by
+  have hn : 2 ≤ k + 2 := by omega
+  have hlev1 : ∀ i j : Fin (k + 2),
+      residualSq A ∅ i ≤ (1 : ℝ) * residualSq A ∅ j := by
+    intro i j
+    simpa [one_mul] using hlev i j
+  have htight :=
+    joint_cpqr_trace_bound_tight A hA hk hn (1 : ℝ) ρ le_rfl hρ0 hρ hlev1 hcoh
+      hk le_rfl
+  have hmaj := jointTraceBoundTight_codim_two_le k hk ρ hρ0 hρ
   refine ⟨htight.1, htight.2.1.trans hmaj, ?_⟩
   intro x
   exact (htight.2.2 x).trans (mul_le_mul_of_nonneg_left hmaj (vecEnergy_nonneg _))

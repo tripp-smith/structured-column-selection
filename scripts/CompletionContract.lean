@@ -697,6 +697,25 @@ example {k : ℕ}
               2 * (k : ℝ) / (1 - ρ ^ 2)) :=
   milestoneE_joint_codim_one_trace A hA hk ρ hρ0 hρ hlev hcoh
 
+example {k : ℕ}
+    (A : Matrix (Fin k) (Fin (k + 2)) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (ρ : ℝ)
+    (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin (k + 2), residualSq A ∅ i ≤ residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin (k + 2), i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        ((k : ℝ) - 1) * ((k : ℝ) + 2) / (1 - ρ ^ 2) +
+          ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 6 - 1 ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            (((k : ℝ) - 1) * ((k : ℝ) + 2) / (1 - ρ ^ 2) +
+              ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 6 - 1) :=
+  milestoneE_joint_codim_two_trace A hA hk ρ hρ0 hρ hlev hcoh
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

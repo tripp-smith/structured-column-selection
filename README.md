@@ -820,3 +820,16 @@ stays open. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#62](https://github.com/tripp-smith/structured-column-selection/pull/62).
+
+Completed phase: **AX two-extra-column CPQR trace**.
+Under equal column energies and coherence at most `ρ < 1`, an
+orthogonal-row `k × (k + 2)` matrix has CPQR inverse trace at most
+`(k - 1)(k + 2) / (1 - ρ ^ 2) + (k - 1) k (k + 1) / 6 - 1`. At `ρ = 0`
+and `k = 2` both sides equal `4`; at `k = 3` the majorant is `9` and
+the bound is `13`; at `k = 4` the majorant is `15` and the bound is
+`27`. Two extra columns, not general `n`. One extra column stays phase
+AW. The aspect-2 majorant stays non-polynomial. The square trace stays
+exactly `k`. Outcome 3 stays open. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#63](https://github.com/tripp-smith/structured-column-selection/pull/63).

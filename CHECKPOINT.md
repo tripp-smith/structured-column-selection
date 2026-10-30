@@ -98,6 +98,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Equal-leverage majorant | **PROVED** (lower bound on `jointTraceBoundTight` at `n = 2k`, `τ = 1`, `ρ = 0`; at least `2^k / k`; not a CPQR inverse trace; does not close outcome 3) | `milestoneE_joint_equal_majorant_not_polynomial` |
 | Square CPQR trace | **PROVED** (square orthogonal-row matrices; `cpqrSet` is every column; `selectedColGram` is `1`; inverse trace equals `k`; does not close outcome 3) | `milestoneE_square_cpqr_trace_eq` |
 | Codimension-one CPQR trace | **PROVED** (`n = k + 1` and equal column energies only; inverse trace at most `(k + 1)(k + 2) + 2k / (1 - ρ ^ 2)`; not a polynomial theorem for general `n`; does not close outcome 3) | `milestoneE_joint_codim_one_trace` |
+| Two-extra-column CPQR trace | **PROVED** (`n = k + 2` and equal column energies only; inverse trace at most `(k - 1)(k + 2) / (1 - ρ ^ 2) + (k - 1) k (k + 1) / 6 - 1`; not a polynomial theorem for general `n`; does not close outcome 3) | `milestoneE_joint_codim_two_trace` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.
