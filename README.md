@@ -580,3 +580,5 @@ close outcome 3. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#47](https://github.com/tripp-smith/structured-column-selection/pull/47).
+
+In progress: **Phase AI joint leverage-coherence census**. A float sample of orthogonal-row frames with leverage ratio at most `τ ∈ {2, 4, 8}` and normalized coherence at most `ρ ∈ {0.5, 0.7, 0.9}`, for `k = 2..8` and `n ≤ 16`. This is not a theorem and does not close outcome 3.
