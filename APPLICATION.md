@@ -340,6 +340,17 @@ does not close outcome 3. The loose recurrence is unchanged. Phase AR
 remains the square equal-leverage closed form. It does not change the
 sampler.
 
+`tests/test_majorant_growth.py` evaluates `jointTraceBoundTight` at
+`n = k`, `τ = 2`, `ρ = 0` with `fractions.Fraction`. The value at
+`t = 2` is `8` and the successor is `(1 + 2 B)`. At `k = 4` the value
+is `35` and `2^5 = 32`. At `k = 6` the value is at least `2^7`. This
+rational check is not the theorem. It lower-bounds the majorant only.
+It is not a CPQR inverse trace. The identity at `τ = 1` still has
+inverse trace `k`. The phase-AI census did not see `r_CPQR` growth.
+Outcome 3 stays open because a lower bound on this majorant is not a
+matrix counterexample inside the joint class, and the majorant is not a
+polynomial theorem. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

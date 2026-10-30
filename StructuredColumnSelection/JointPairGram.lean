@@ -3,6 +3,7 @@ import Mathlib.Algebra.GroupWithZero.Units.Basic
 import Mathlib.Analysis.Real.Sqrt
 import Mathlib.LinearAlgebra.Matrix.Adjugate
 import Mathlib.Data.Finset.Max
+import Mathlib.Algebra.Order.Archimedean.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity
@@ -73,6 +74,12 @@ equal column energies. The inverse trace is at most
 polynomial bound for rectangular or `τ > 1` matrices. Does not close
 outcome 3. Not claimed sharp for `ρ > 0`. On the identity at `ρ = 0`
 the bound equals `k`, and the inverse trace equals `k`.
+
+`joint_trace_majorant_not_polynomial` lower-bounds `jointTraceBoundTight`
+along `n = k`, `τ = 2`, and `ρ = 0` by `2^(k+1)`. That power beats every
+`C (2k + 1)^(2d)`. This is a lower bound on the majorant, not on a CPQR
+inverse trace. It does not place a matrix in the joint class. It does not
+close outcome 3. The loose majorant is untouched.
 -/
 
 namespace StructuredColumnSelection
@@ -1805,5 +1812,310 @@ theorem joint_square_equal_trace {k : ℕ}
   have henergy :=
     selectedCols_energy_mul_inv_trace_ge A (cpqrSet A) hdet x
   exact henergy.trans (mul_le_mul_of_nonneg_left htr (vecEnergy_nonneg _))
+
+lemma nat_le_two_pow (n : ℕ) : n ≤ 2 ^ n := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    have h1 : 1 ≤ 2 ^ n := by
+      cases n with
+      | zero => simp
+      | succ m =>
+        exact le_trans (Nat.succ_le_succ (Nat.zero_le m)) ih
+    calc
+      n + 1 ≤ 2 ^ n + 1 := Nat.add_le_add_right ih 1
+      _ ≤ 2 ^ n + 2 ^ n := Nat.add_le_add_left h1 (2 ^ n)
+      _ = 2 * 2 ^ n := (two_mul _).symm
+      _ = 2 ^ (n + 1) := by
+        rw [pow_succ, mul_comm]
+
+lemma natCast_le_two_pow (n : ℕ) : (n : ℝ) ≤ (2 : ℝ) ^ n := by
+  calc
+    (n : ℝ) ≤ ((2 ^ n : ℕ) : ℝ) := by exact_mod_cast nat_le_two_pow n
+    _ = (2 : ℝ) ^ n := by norm_cast
+
+/-- For `2 ≤ k`, `jointTraceBoundTight k k 2 0` is at least `2^(k+1)`. -/
+lemma jointTraceBoundTight_square_two_ge (k : ℕ) (hk : 2 ≤ k) :
+    (2 : ℝ) ^ (k + 1) ≤ jointTraceBoundTight k k (2 : ℝ) 0 k := by
+  have hstep : ∀ t, 2 ≤ t → t ≤ k →
+      (2 : ℝ) ^ (t + 1) ≤ jointTraceBoundTight k k (2 : ℝ) 0 t := by
+    intro t ht2 htk
+    induction t with
+    | zero => omega
+    | succ s ih =>
+      by_cases htwo : s + 1 = 2
+      · rw [htwo]
+        apply le_of_eq
+        rw [jointTraceBoundTight_two]
+        have hkpos : (0 : ℝ) < (k : ℝ) := by exact_mod_cast (by omega : 0 < k)
+        have hpow : (2 : ℝ) ^ 2 = 4 := by norm_num
+        have hzero : (0 : ℝ) ^ 2 = 0 := by norm_num
+        calc
+          (2 : ℝ) ^ (2 + 1) = 8 := by norm_num
+          _ = (2 : ℝ) * 4 * (k : ℝ) / (k : ℝ) := by
+            field_simp [hkpos.ne']
+            ring
+          _ = (2 : ℝ) * (2 : ℝ) ^ 2 * (k : ℝ) /
+                ((k : ℝ) * (1 - (0 : ℝ) ^ 2)) := by
+            rw [hpow, hzero]
+            norm_num
+      · have hs2 : 2 ≤ s := by omega
+        have hsk : s < k := by omega
+        have hslek : s ≤ k := le_of_lt hsk
+        have hBle : (2 : ℝ) ^ (s + 1) ≤
+            jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) s := ih hs2 hslek
+        rw [jointTraceBoundTight_succ hs2]
+        have hkpos : (0 : ℝ) < (k : ℝ) := by exact_mod_cast (by omega : 0 < k)
+        have hquotτ : (2 : ℝ) * (k : ℝ) / (k : ℝ) = 2 :=
+          mul_div_cancel_right₀ (2 : ℝ) hkpos.ne'
+        have hs_lt : (s : ℝ) < (k : ℝ) := by exact_mod_cast hsk
+        have hden : (k : ℝ) - (s : ℝ) ≠ 0 := sub_ne_zero.mpr hs_lt.ne.symm
+        have hquot : ((k : ℝ) - (s : ℝ)) / ((k : ℝ) - (s : ℝ)) = 1 :=
+          div_self hden
+        have hpow : (2 : ℝ) ^ ((s + 1) + 1) = 2 * (2 : ℝ) ^ (s + 1) := by
+          rw [pow_succ]
+          ring
+        calc
+          (2 : ℝ) ^ ((s + 1) + 1) = 2 * (2 : ℝ) ^ (s + 1) := hpow
+          _ ≤ 2 * jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) s :=
+            mul_le_mul_of_nonneg_left hBle (by norm_num)
+          _ ≤ 1 + 2 * jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) s := by
+            linarith
+          _ = (1 + ((2 : ℝ) * (k : ℝ) / (k : ℝ)) *
+                jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) s) *
+                (((k : ℝ) - (s : ℝ)) / ((k : ℝ) - (s : ℝ))) := by
+            rw [hquotτ, hquot]
+            ring
+  exact hstep k hk le_rfl
+
+lemma two_k_add_one_poly_le {k p : ℕ} (hk : 1 ≤ k) {C : ℝ} (hC : 0 ≤ C) :
+    C * ((2 * k + 1 : ℕ) : ℝ) ^ p ≤ (C * (3 : ℝ) ^ p) * (k : ℝ) ^ p := by
+  have hwidth : ((2 * k + 1 : ℕ) : ℝ) ≤ 3 * (k : ℝ) := by
+    have hcast : ((2 * k + 1 : ℕ) : ℝ) = 2 * (k : ℝ) + 1 := by norm_cast
+    have hone : (1 : ℝ) ≤ (k : ℝ) := by exact_mod_cast hk
+    linarith
+  have hpow : ((2 * k + 1 : ℕ) : ℝ) ^ p ≤ (3 * (k : ℝ)) ^ p :=
+    pow_le_pow_left₀ (Nat.cast_nonneg _) hwidth p
+  calc
+    C * ((2 * k + 1 : ℕ) : ℝ) ^ p ≤ C * (3 * (k : ℝ)) ^ p :=
+      mul_le_mul_of_nonneg_left hpow hC
+    _ = C * ((3 : ℝ) ^ p * (k : ℝ) ^ p) := by rw [mul_pow]
+    _ = (C * (3 : ℝ) ^ p) * (k : ℝ) ^ p := by ring
+
+/-- For `n ≥ 8p` and `p ≥ 1`, the base-`2` ratio grows by at least `3/2`. -/
+lemma two_pow_ratio_step {p n : ℕ} (hp : 1 ≤ p) (hn : 8 * p ≤ n) :
+    (2 : ℝ) ^ (n + 1) / ((n + 1 : ℕ) : ℝ) ^ p ≥
+      ((3 : ℝ) / 2) * ((2 : ℝ) ^ n / (n : ℝ) ^ p) := by
+  rw [ge_iff_le]
+  have _hp : 1 ≤ p := hp
+  have hn0 : 0 < n := by omega
+  have _hn : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn0
+  have hn1 : (0 : ℝ) < ((n + 1 : ℕ) : ℝ) := by positivity
+  have hden : 8 * p < n + 1 := by omega
+  have hfrac : (p : ℝ) / ((n + 1 : ℕ) : ℝ) < (1 : ℝ) / 8 := by
+    rw [div_lt_div_iff₀ hn1 (by norm_num : (0 : ℝ) < 8)]
+    have h8 : (8 : ℝ) * (p : ℝ) < ((n + 1 : ℕ) : ℝ) := by exact_mod_cast hden
+    linarith
+  have ha : (-2 : ℝ) ≤ -1 / ((n + 1 : ℕ) : ℝ) := by
+    have hle : (1 : ℝ) ≤ ((n + 1 : ℕ) : ℝ) := by
+      exact_mod_cast (show 1 ≤ n + 1 by omega)
+    calc
+      (-2 : ℝ) ≤ -1 := by norm_num
+      _ ≤ -(1 / ((n + 1 : ℕ) : ℝ)) := by
+        apply neg_le_neg
+        rw [div_le_one hn1]
+        exact hle
+      _ = -1 / ((n + 1 : ℕ) : ℝ) := by ring
+  have hber := one_add_mul_le_pow (a := -1 / ((n + 1 : ℕ) : ℝ)) ha p
+  have hbase : (1 : ℝ) + -1 / ((n + 1 : ℕ) : ℝ) =
+      (n : ℝ) / ((n + 1 : ℕ) : ℝ) := by
+    field_simp [hn1.ne']
+    norm_cast
+    omega
+  have hlin : (1 : ℝ) - (p : ℝ) / ((n + 1 : ℕ) : ℝ) ≤
+      ((n : ℝ) / ((n + 1 : ℕ) : ℝ)) ^ p := by
+    have hre : (1 : ℝ) + (p : ℝ) * (-1 / ((n + 1 : ℕ) : ℝ)) =
+        (1 : ℝ) - (p : ℝ) / ((n + 1 : ℕ) : ℝ) := by ring
+    rw [← hre, ← hbase]
+    exact hber
+  have h78 : (7 : ℝ) / 8 < (1 : ℝ) - (p : ℝ) / ((n + 1 : ℕ) : ℝ) := by
+    linarith
+  have hpowgt : (7 : ℝ) / 8 < ((n : ℝ) / ((n + 1 : ℕ) : ℝ)) ^ p :=
+    lt_of_lt_of_le h78 hlin
+  have h34 : (3 : ℝ) / 4 < ((n : ℝ) / ((n + 1 : ℕ) : ℝ)) ^ p :=
+    lt_trans (by norm_num : (3 : ℝ) / 4 < (7 : ℝ) / 8) hpowgt
+  have hnp : (0 : ℝ) < (n : ℝ) ^ p := by positivity
+  have hnp1 : (0 : ℝ) < ((n + 1 : ℕ) : ℝ) ^ p := by positivity
+  have hcross : ((3 : ℝ) / 2) * ((n + 1 : ℕ) : ℝ) ^ p ≤ (2 : ℝ) * (n : ℝ) ^ p := by
+    have h34mul : ((3 : ℝ) / 4) * ((n + 1 : ℕ) : ℝ) ^ p < (n : ℝ) ^ p := by
+      have hratio := h34
+      rw [div_pow] at hratio
+      rwa [lt_div_iff₀ hnp1] at hratio
+    calc
+      ((3 : ℝ) / 2) * ((n + 1 : ℕ) : ℝ) ^ p
+          = 2 * (((3 : ℝ) / 4) * ((n + 1 : ℕ) : ℝ) ^ p) := by ring
+      _ ≤ 2 * (n : ℝ) ^ p :=
+        mul_le_mul_of_nonneg_left (le_of_lt h34mul) (by norm_num)
+  have h2n : (0 : ℝ) < (2 : ℝ) ^ n := by positivity
+  have hsucc : (2 : ℝ) ^ (n + 1) = 2 * (2 : ℝ) ^ n := by
+    rw [pow_succ]
+    ring
+  have heq : ((3 : ℝ) / 2) * ((2 : ℝ) ^ n / (n : ℝ) ^ p) =
+      (((3 : ℝ) / 2) * (2 : ℝ) ^ n) / (n : ℝ) ^ p := by
+    field_simp [hnp.ne']
+  rw [heq, div_le_div_iff₀ hnp hnp1, hsucc]
+  have hleft :
+      ((3 : ℝ) / 2) * (2 : ℝ) ^ n * ((n + 1 : ℕ) : ℝ) ^ p =
+        (2 : ℝ) ^ n * (((3 : ℝ) / 2) * ((n + 1 : ℕ) : ℝ) ^ p) := by ring
+  have hright : 2 * (2 : ℝ) ^ n * (n : ℝ) ^ p =
+      (2 : ℝ) ^ n * (2 * (n : ℝ) ^ p) := by ring
+  rw [hleft, hright]
+  exact (mul_le_mul_iff_right₀ h2n).mpr hcross
+
+lemma two_pow_geometric_growth (p t : ℕ) (hp : 1 ≤ p) :
+    let M := max (8 * p) 2
+    (2 : ℝ) ^ (M + t) / ((M + t : ℕ) : ℝ) ^ p ≥
+      (2 : ℝ) ^ M / (M : ℝ) ^ p * ((3 : ℝ) / 2) ^ t := by
+  intro M
+  induction t with
+  | zero =>
+    simp [M]
+  | succ t ih =>
+    have hstep := two_pow_ratio_step (p := p) (n := M + t) hp (by
+      dsimp [M]
+      omega)
+    calc
+      (2 : ℝ) ^ (M + (t + 1)) / ((M + (t + 1) : ℕ) : ℝ) ^ p
+          = (2 : ℝ) ^ ((M + t) + 1) / (((M + t) + 1 : ℕ) : ℝ) ^ p := rfl
+      _ ≥ ((3 : ℝ) / 2) * ((2 : ℝ) ^ (M + t) / ((M + t : ℕ) : ℝ) ^ p) := hstep
+      _ ≥ ((3 : ℝ) / 2) *
+            ((2 : ℝ) ^ M / (M : ℝ) ^ p * ((3 : ℝ) / 2) ^ t) :=
+        mul_le_mul_of_nonneg_left ih (by norm_num)
+      _ = (2 : ℝ) ^ M / (M : ℝ) ^ p * ((3 : ℝ) / 2) ^ (t + 1) := by
+        rw [pow_succ]
+        ring
+
+lemma exists_two_pow_beats_polynomial (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d) < (2 : ℝ) ^ (k + 1) := by
+  let p : ℕ := 2 * d
+  let K : ℝ := C * (3 : ℝ) ^ p / 2
+  have hK : 0 < K := by
+    dsimp [K]
+    positivity
+  have h2K : 2 * K = C * (3 : ℝ) ^ p := by
+    dsimp [K]
+    field_simp
+  by_cases hp : p = 0
+  · obtain ⟨n, hn⟩ := exists_nat_gt K
+    let k := max n 2
+    have hk2 : 2 ≤ k := le_max_right _ _
+    have hnk : n ≤ k := le_max_left _ _
+    have hmono : (2 : ℝ) ^ n ≤ (2 : ℝ) ^ k :=
+      pow_le_pow_right₀ (by norm_num : (1 : ℝ) ≤ 2) hnk
+    have hKk : K < (2 : ℝ) ^ k :=
+      lt_of_lt_of_le (lt_of_lt_of_le hn (natCast_le_two_pow n)) hmono
+    have hone : (k : ℝ) ^ p = 1 := by simp [hp]
+    have hle := two_k_add_one_poly_le (k := k) (p := p) (by omega) hC.le
+    have hgoal : C * ((2 * k + 1 : ℕ) : ℝ) ^ p < (2 : ℝ) ^ (k + 1) := by
+      have hscaled : (C * (3 : ℝ) ^ p) * (k : ℝ) ^ p < (2 : ℝ) ^ (k + 1) := by
+        rw [hone, ← h2K]
+        calc
+          (2 * K) * 1 = 2 * K := by ring
+          _ < 2 * (2 : ℝ) ^ k :=
+            mul_lt_mul_of_pos_left hKk (by norm_num)
+          _ = (2 : ℝ) ^ (k + 1) := by
+            rw [pow_succ]
+            ring
+      exact lt_of_le_of_lt hle hscaled
+    refine ⟨k, hk2, ?_⟩
+    simpa only [p] using hgoal
+  · have hp1 : 1 ≤ p := by omega
+    let M := max (8 * p) 2
+    have hM2 : 2 ≤ M := le_max_right _ _
+    let Q := K * (M : ℝ) ^ p * ((1 : ℝ) / 2) ^ M
+    have hQ : 0 < Q := by
+      dsimp [Q]
+      positivity
+    obtain ⟨t, ht⟩ := exists_nat_gt (Q * 2)
+    have hgeom_pow : Q < ((3 : ℝ) / 2) ^ t := by
+      have hber := one_add_mul_le_pow (a := (1 : ℝ) / 2) (by norm_num) t
+      have hlin : Q < 1 + (t : ℝ) * (1 / 2) := by
+        have hmul : Q < (t : ℝ) * (1 / 2) := by
+          have ht' : Q * 2 < (t : ℝ) := ht
+          nlinarith
+        linarith
+      have hbase : (1 : ℝ) + (1 : ℝ) / 2 = (3 : ℝ) / 2 := by norm_num
+      have hpow : 1 + (t : ℝ) * ((1 : ℝ) / 2) ≤ ((3 : ℝ) / 2) ^ t := by
+        calc
+          1 + (t : ℝ) * ((1 : ℝ) / 2) ≤ ((1 : ℝ) + (1 : ℝ) / 2) ^ t := hber
+          _ = ((3 : ℝ) / 2) ^ t := by rw [hbase]
+      exact lt_of_lt_of_le hlin hpow
+    let k := M + t
+    have hk2 : 2 ≤ k := le_trans hM2 (Nat.le_add_right _ _)
+    have hgrowth := two_pow_geometric_growth p t hp1
+    have hKlt : K < (2 : ℝ) ^ k / (k : ℝ) ^ p := by
+      have hlower := hgrowth
+      dsimp [M] at hlower
+      have hpos : 0 < (2 : ℝ) ^ M / (M : ℝ) ^ p := by positivity
+      have hmul : (2 : ℝ) ^ M / (M : ℝ) ^ p * Q <
+          (2 : ℝ) ^ M / (M : ℝ) ^ p * ((3 : ℝ) / 2) ^ t :=
+        mul_lt_mul_of_pos_left hgeom_pow hpos
+      have hcancel : (2 : ℝ) ^ M * ((1 : ℝ) / 2) ^ M = 1 := by
+        rw [← mul_pow]
+        norm_num
+      have hMp : (M : ℝ) ^ p ≠ 0 := by positivity
+      have hQeq : (2 : ℝ) ^ M / (M : ℝ) ^ p * Q = K := by
+        dsimp [Q]
+        calc
+          (2 : ℝ) ^ M / (M : ℝ) ^ p *
+              (K * (M : ℝ) ^ p * ((1 : ℝ) / 2) ^ M)
+            = K * ((2 : ℝ) ^ M * ((1 : ℝ) / 2) ^ M) *
+                ((M : ℝ) ^ p / (M : ℝ) ^ p) := by
+              field_simp [hMp]
+          _ = K := by
+            rw [hcancel, div_self hMp]
+            ring
+      have hge : (2 : ℝ) ^ M / (M : ℝ) ^ p * ((3 : ℝ) / 2) ^ t ≤
+          (2 : ℝ) ^ k / (k : ℝ) ^ p := by
+        simpa [k, M] using hlower
+      linarith
+    have hpowK : K * (k : ℝ) ^ p < (2 : ℝ) ^ k := by
+      have hkpos : (0 : ℝ) < (k : ℝ) ^ p := by positivity
+      rw [lt_div_iff₀ hkpos] at hKlt
+      exact hKlt
+    have hle := two_k_add_one_poly_le (k := k) (p := p) (by omega) hC.le
+    have hgoal : C * ((2 * k + 1 : ℕ) : ℝ) ^ p < (2 : ℝ) ^ (k + 1) := by
+      have hscaled : (C * (3 : ℝ) ^ p) * (k : ℝ) ^ p < (2 : ℝ) ^ (k + 1) := by
+        rw [← h2K]
+        calc
+          (2 * K) * (k : ℝ) ^ p = 2 * (K * (k : ℝ) ^ p) := by ring
+          _ < 2 * (2 : ℝ) ^ k :=
+            mul_lt_mul_of_pos_left hpowK (by norm_num)
+          _ = (2 : ℝ) ^ (k + 1) := by
+            rw [pow_succ]
+            ring
+      exact lt_of_le_of_lt hle hscaled
+    refine ⟨k, hk2, ?_⟩
+    simpa only [p] using hgoal
+
+/-- Lower bound on `jointTraceBoundTight`, not on a CPQR inverse trace.
+This does not place any matrix in the joint class. It does not close
+outcome 3. The majorant cannot be used as an outcome-3 polynomial. The
+loose majorant is untouched. -/
+theorem joint_trace_majorant_not_polynomial
+    (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+        jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) k := by
+  obtain ⟨k, hk, hpoly⟩ := exists_two_pow_beats_polynomial d hC
+  have hmaj := jointTraceBoundTight_square_two_ge k hk
+  have hsum : k + k + 1 = 2 * k + 1 := by omega
+  refine ⟨k, hk, ?_⟩
+  calc
+    C * ((k + k + 1 : ℕ) : ℝ) ^ (2 * d)
+        = C * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d) := by rw [hsum]
+    _ < (2 : ℝ) ^ (k + 1) := hpoly
+    _ ≤ jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) k := hmaj
 
 end StructuredColumnSelection

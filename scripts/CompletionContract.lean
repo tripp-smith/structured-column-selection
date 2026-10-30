@@ -657,6 +657,12 @@ example {k : ℕ} (A : Matrix (Fin k) (Fin k) ℝ) (hA : OrthogonalRows A)
             ((k : ℝ) - 2 + 2 / (1 - ρ ^ 2)) :=
   milestoneE_joint_square_equal_trace A hA hk ρ hρ0 hρ hlev hcoh
 
+example (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+        jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) k :=
+  milestoneE_joint_trace_majorant_not_polynomial d hC
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

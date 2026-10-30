@@ -765,3 +765,17 @@ contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#58](https://github.com/tripp-smith/structured-column-selection/pull/58).
+
+Completed phase: **AT majorant growth**.
+`milestoneE_joint_trace_majorant_not_polynomial` lower-bounds
+`jointTraceBoundTight` along `n = k`, `τ = 2`, `ρ = 0`. The tight
+majorant is at least `2^{k+1}`, which beats every `C (2k + 1)^{2d}`.
+At `k = 4` the majorant is `35` and `2^5 = 32`. This is not a CPQR
+trace. The identity at `τ = 1` still has inverse trace `k`. The
+phase-AI census did not see `r_CPQR` growth. Outcome 3 stays open
+because a lower bound on this majorant is not a matrix counterexample
+inside the joint class, and the majorant is not a polynomial theorem.
+The loose majorant is untouched. This does not close outcome 1.
+Problem 4.1 is not solved. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:

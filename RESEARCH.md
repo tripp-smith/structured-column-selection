@@ -2544,3 +2544,76 @@ equal-leverage closed form. The census did not prove this. `MinDimLe`,
 
 Phase PR and verification receipt:
 [#58](https://github.com/tripp-smith/structured-column-selection/pull/58).
+
+## Phase AT tight majorant growth (2026-10-30, contract)
+
+Iteration AT. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AS iterates `jointTraceBoundTight`. This phase
+lower-bounds that function along `n = k`, `τ = 2`, `ρ = 0`. It does not
+modify `jointTraceBound`, `jointTraceBoundTight`,
+`joint_cpqr_trace_bound_tight`, or any earlier public theorem. It does
+not place a matrix in the joint class. It does not close outcome 1 or
+outcome 3.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_trace_majorant_not_polynomial`:
+
+```text
+(d : ℕ) {C : ℝ} (hC : 0 < C) :
+∃ k : ℕ, 2 ≤ k ∧
+  C * ((k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+    jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) k
+```
+
+Along `n = k`, `τ = 2`, `ρ = 0`, the majorant is at least `2 ^ (k + 1)`,
+and `2 ^ (k + 1)` beats every `C (n + k + 1) ^ (2 d)`. With `n = k` the
+polynomial is `C (2k + 1) ^ (2 d)`, and `k + k + 1 = 2 * k + 1`.
+
+`jointTraceBoundTight_square_two_ge` is the lower bound
+`(2 : ℝ) ^ (k + 1) ≤ jointTraceBoundTight k k (2 : ℝ) 0 k` for `2 ≤ k`.
+The argument is an induction: for `2 ≤ t ≤ k`,
+`2 ^ (t + 1) ≤ jointTraceBoundTight k k (2 : ℝ) 0 t`. At `t = 2`,
+`jointTraceBoundTight_two` gives
+`2 * 2 ^ 2 * k / (k * (1 - 0 ^ 2)) = 8`, and `2 ^ 3 = 8`. The successor
+at `n = k` and `τ = 2` is `1 + 2 B`, because both quotients
+`(2 * k) / k` and `(k - s) / (k - s)` equal `1`. That is at least `2 B`,
+so a lower bound `2 ^ (s + 1)` doubles to `2 ^ (s + 2)`. There is no
+matrix and no Gram in the argument. At `k = 4` the values are `8`, then
+`17`, then `35`, and `2 ^ 5 = 32 ≤ 35`.
+
+`exists_two_pow_beats_polynomial` produces `k ≥ 2` with
+`C (2k + 1) ^ (2 d) < 2 ^ (k + 1)`. For `k ≥ 1`,
+`(2k + 1) ≤ 3k`, so the polynomial is at most `(C * 3 ^ (2 d)) k ^ (2 d)`.
+The comparison `K k ^ p < 2 ^ k` with `K = C * 3 ^ p / 2` and `p = 2 d`
+is the degree-zero bound `n ≤ 2 ^ n` when `d = 0`, and a base-`2` ratio
+step with factor `3 / 2` when `p ≥ 1`. The public theorem is that lemma
+plus `jointTraceBoundTight_square_two_ge`.
+
+This is a lower bound on `jointTraceBoundTight`, not on
+`trace((selectedColGram A J)⁻¹)` for any matrix. It does not place any
+matrix in the joint class. The square identity at `τ = 1` has inverse
+trace `k`. The phase-AI census did not see `r_CPQR` growth. The majorant
+cannot be used as an outcome-3 polynomial. The loose majorant
+`jointTraceBound` is untouched.
+
+Independent check: `tests/test_majorant_growth.py`, in
+`fractions.Fraction`. For `τ = 2`, `ρ = 0`, `n = k`, the value at `t = 2`
+is `8` and the successor is `(1 + 2 B) * 1`. At `k = 4` the value at `4`
+is `35` and `2 ^ 5 = 32 ≤ 35`. At `k = 6` the value at `6` is at least
+`2 ^ 7`. This rational check is not the theorem. It lower-bounds the
+majorant only. It is not a CPQR inverse trace. It does not close
+outcome 3.
+
+Non-claims: a lower bound on `jointTraceBoundTight` only. Not a CPQR
+inverse trace. Not a claim that the joint leverage-coherence class fails.
+Not a claim that CPQR inverse traces grow like this majorant. Does not
+close outcome 1 or outcome 3. Does not solve Problem 4.1. Does not say
+CPQR has a polynomial inverse-norm bound, and does not say CPQR is
+polynomial on orthogonal-row matrices. Does not modify `jointTraceBound`,
+`jointTraceBoundTight`, `joint_cpqr_trace_bound_tight`, or any earlier
+public theorem. The identity at `τ = 1` still has inverse trace `k`. The
+phase-AI census did not see `r_CPQR` growth. The loose majorant is
+untouched.
+
+Phase PR and verification receipt:

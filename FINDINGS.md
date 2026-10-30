@@ -351,6 +351,27 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Tight majorant growth (2026-10-30)
+
+`milestoneE_joint_trace_majorant_not_polynomial` lower-bounds
+`jointTraceBoundTight` along `n = k`, `τ = 2`, `ρ = 0`. For every
+degree `d` and every `C > 0`, some `k ≥ 2` has
+`C (2k + 1)^{2d} < jointTraceBoundTight k k 2 0 k`. The majorant is at
+least `2^{k+1}`. At `k = 4` the values are `8`, then `17`, then `35`,
+and `2^5 = 32 ≤ 35`.
+
+`tests/test_majorant_growth.py` checks those rationals with
+`fractions.Fraction`. The check is not the theorem. It lower-bounds the
+majorant only. It is not a CPQR inverse trace.
+
+The square identity at `τ = 1` has inverse trace `k`. The phase-AI
+census did not see `r_CPQR` growth. This does not place any matrix in
+the joint class. Outcome 3 stays open because a lower bound on this
+majorant is not a matrix counterexample inside the joint class, and the
+majorant is not a polynomial theorem. The loose majorant is untouched.
+This does not close outcome 1. Problem 4.1 is not solved, and this phase
+does not claim that CPQR is polynomial on orthogonal-row matrices.
+
 ## Tight CPQR trace recurrence (2026-10-30)
 
 `milestoneE_joint_cpqr_trace_bound_tight` iterates `joint_cpqr_step_tight`,

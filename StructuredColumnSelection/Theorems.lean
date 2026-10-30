@@ -1289,4 +1289,15 @@ theorem milestoneE_joint_square_equal_trace {k : ℕ}
             ((k : ℝ) - 2 + 2 / (1 - ρ ^ 2)) :=
   joint_square_equal_trace A hA hk ρ hρ0 hρ hlev hcoh
 
+/-- Lower bound on `jointTraceBoundTight`, not on a CPQR inverse trace.
+This does not place any matrix in the joint class. It does not close
+outcome 3. The majorant cannot be used as an outcome-3 polynomial. The
+loose majorant is untouched. -/
+theorem milestoneE_joint_trace_majorant_not_polynomial
+    (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+        jointTraceBoundTight k k (2 : ℝ) (0 : ℝ) k :=
+  joint_trace_majorant_not_polynomial d hC
+
 end StructuredColumnSelection
