@@ -4,6 +4,7 @@ import StructuredColumnSelection.WideIncoherentEscape
 import StructuredColumnSelection.NormalizedCoherence
 import StructuredColumnSelection.DesignFrame
 import StructuredColumnSelection.SymmetricCompletion
+import StructuredColumnSelection.TripleDesign
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -869,6 +870,26 @@ theorem milestoneE_symmetric_completion {k : ℕ} (R : Matrix (Fin k) (Fin k) �
           vecEnergy (C *ᵥ w) ≤ vecEnergy w) ∧
       ∀ v : Fin k → ℝ, vecEnergy ((C - 1) *ᵥ v) ≤ frobEnergy R ^ 2 * vecEnergy v :=
   symmetric_completion R hR
+
+/-- The weighted signed triple design: for every `n`, a tight design
+`W Wᵀ = 1` in `ℝ^(n+3)` with `4 (n+3)(n+2)(n+1)` columns, every column of
+energy `1 / (4 (n+2)(n+1))`, and every pair of distinct columns at
+normalized inner product at most `13/14`.
+
+This is the explicit design a later phase feeds into the design frame.
+Its column energy is above the `1 / wideRepeats` cap of
+`milestoneE_design_adverse_family`, so no adverse frame is built here.
+No coherence bound on any orthogonal-row frame is claimed. This does
+not close outcome 1 or outcome 3. -/
+theorem milestoneE_triple_design (n : ℕ) :
+    ∃ W : Matrix (Fin (n + 3)) (Fin (4 * ((n + 3) * (n + 2) * (n + 1)))) ℝ,
+      W * Wᵀ = 1 ∧
+      (∀ j, vecEnergy (fun i => W i j) = 1 / (4 * (((n : ℝ) + 2) * ((n : ℝ) + 1)))) ∧
+      ∀ a b, a ≠ b →
+        |∑ i, W i a * W i b| ≤
+          13 / 14 * (Real.sqrt (vecEnergy (fun i => W i a)) *
+            Real.sqrt (vecEnergy (fun i => W i b))) :=
+  triple_design n
 
 /-- Equal column energy makes the second CPQR pivot agree with the
 increment pivot, and the two-column inverse trace is at most

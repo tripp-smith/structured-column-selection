@@ -351,6 +351,24 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Weighted signed triple design (2026-10-30)
+
+`milestoneE_triple_design` gives, for every `n`, an explicit tight design
+`W Wᵀ = I` in `ℝ^(n+3)` with `4 (n+3)(n+2)(n+1)` columns, every column of
+energy `1 / (4 (n+2)(n+1))`, and every pair of distinct columns at
+normalized inner product at most `13/14`. Columns are
+`(e_p + 2σ e_{q'} + 3τ e_{r'}) / √(56 (n+2)(n+1))` over distinct
+coordinates `p, q', r'` chosen through `Fin.succAbove`; sign sums kill
+every cross term in the row Gram matrix, and the coherence bound is an
+integer argument (an inner product of two integer columns of squared
+length `14` is an integer, and `±14` forces equal or opposite columns).
+The constant `13/14` is attained by swapping the weights `1` and `2`.
+The design is pairwise non-parallel, unlike the repeated filler block
+of the outcome-2 frame. Its column energy is above the `1 / wideRepeats`
+cap of `milestoneE_design_adverse_family`, so no adverse frame is built
+from it in this phase, and no coherence bound on any orthogonal-row
+frame is claimed. This does not close outcome 3.
+
 ## Symmetric completion bounds (2026-10-30)
 
 `milestoneE_symmetric_completion` says that every `R` with `‖R‖_F² ≤ 1`

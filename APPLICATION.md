@@ -222,6 +222,12 @@ the energy sandwich `(1 - ‖R‖_F²) ‖w‖² ≤ ‖C w‖² ≤ ‖w‖²`,
 perturbation bound `‖(C - I) v‖² ≤ ‖R‖_F⁴ ‖v‖²`. It does not change the
 sampler.
 
+`tests/test_triple_design.py` builds the weighted signed triple design
+for `k = 3, 4, 5, 6` in exact integers and checks `V Vᵀ = 56 (n+2)(n+1) I`,
+squared column length `14`, pairwise distinct columns, and the integer
+inner-product bound `13` (normalized coherence `13/14`, attained). It
+does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

@@ -183,6 +183,15 @@ example {k : ℕ} (R : Matrix (Fin k) (Fin k) ℝ) (hR : (∑ i, ∑ j, R i j ^ 
         (∑ i, ((C - 1) *ᵥ v) i ^ 2) ≤ (∑ i, ∑ j, R i j ^ 2) ^ 2 * ∑ i, v i ^ 2 :=
   milestoneE_symmetric_completion R hR
 
+example (n : ℕ) :
+    ∃ W : Matrix (Fin (n + 3)) (Fin (4 * ((n + 3) * (n + 2) * (n + 1)))) ℝ,
+      W * Wᵀ = 1 ∧
+      (∀ j, (∑ i, W i j ^ 2) = 1 / (4 * (((n : ℝ) + 2) * ((n : ℝ) + 1)))) ∧
+      ∀ a b, a ≠ b →
+        |∑ i, W i a * W i b| ≤
+          13 / 14 * (Real.sqrt (∑ i, W i a ^ 2) * Real.sqrt (∑ i, W i b ^ 2)) :=
+  milestoneE_triple_design n
+
 example :
     ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
       ∃ x : Fin (cpqrSet A).card → ℝ,

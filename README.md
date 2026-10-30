@@ -512,3 +512,17 @@ RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#42](https://github.com/tripp-smith/structured-column-selection/pull/42).
+
+Completed phase: **AD weighted signed triple design**.
+`milestoneE_triple_design` gives, for every `n`, an explicit tight
+design `W Wᵀ = 1` in `ℝ^(n+3)` with `4 (n+3)(n+2)(n+1)` columns, equal
+column energy `1 / (4 (n+2)(n+1))`, and pairwise normalized inner
+product at most `13/14` (attained). Columns are
+`e_p + 2σ e_{q'} + 3τ e_{r'}` over distinct coordinates, normalized by
+`√(56 (n+2)(n+1))`. The column energy is above the `1 / wideRepeats`
+cap of `milestoneE_design_adverse_family`, so no adverse frame and no
+coherence bound on any orthogonal-row frame is claimed. This does not
+close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#43](https://github.com/tripp-smith/structured-column-selection/pull/43).
