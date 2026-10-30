@@ -351,6 +351,31 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Fixed-codimension CPQR trace (2026-10-30)
+
+`milestoneE_joint_fixed_codim_trace` is equal column energies, coherence
+at most `ρ < 1`, and exactly `r` extra columns (`n = k + r`, `r ≥ 1`).
+The CPQR inverse trace is at most
+`(2 (k + r) ^ (r + 1) / (1 - ρ ^ 2) + k (k + r) ^ r) / r!`, and the
+same factor bounds the Rayleigh form. At `ρ = 0` the majorant is `3` for
+`r = 1`, `k = 2`; `4` for `r = 2`, `k = 2`; and `15` for `r = 2`,
+`k = 4`. The bound is loose on purpose, so one argument covers every
+`r ≥ 1`.
+
+`tests/test_fixed_codim.py` checks those rationals with
+`fractions.Fraction`. The check is not the theorem. It bounds the
+majorant for a fixed number of extra columns. It is not itself a CPQR
+inverse trace.
+
+For fixed `r` this is a polynomial in `k`. It is not a polynomial in
+`n` and `k` together. When `r` grows with `k`, the estimate still has
+`(k + r) ^ r / r!`. The `r = 1` and `r = 2` bounds from phases AW and AX
+are smaller. Phase AU still says the majorant at `n = 2k` is not
+polynomial. Phase AV still says the square trace equals `k`. Outcome 3
+stays open. This does not close outcome 1. Problem 4.1 is not solved,
+and this phase does not claim that CPQR is polynomial on orthogonal-row
+matrices, or on every equal-leverage matrix.
+
 ## Two-extra-column CPQR trace (2026-10-30)
 
 `milestoneE_joint_codim_two_trace` is `n = k + 2` only. Under equal

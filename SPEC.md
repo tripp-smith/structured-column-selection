@@ -587,6 +587,16 @@ column stays phase AW. Phase AU still says the majorant at `n = 2k` is
 not polynomial. Phase AV still says the square trace equals `k`.
 Outcome 3 stays open.
 
+Status note (fixed-codimension CPQR trace):
+`milestoneE_joint_fixed_codim_trace` is equal column energies, coherence
+at most `ρ < 1`, and `n = k + r` with `r ≥ 1`. The CPQR inverse trace is
+at most `(2 (k + r) ^ (r + 1) / (1 - ρ ^ 2) + k (k + r) ^ r) / r!`, and
+the same factor bounds the Rayleigh form. For fixed `r` this is a
+polynomial in `k`. It is not a polynomial in `n` and `k` together. The
+`r = 1` and `r = 2` bounds from phases AW and AX are smaller. Phase AU
+still says the majorant at `n = 2k` is not polynomial. Outcome 3 stays
+open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

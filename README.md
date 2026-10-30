@@ -833,3 +833,16 @@ exactly `k`. Outcome 3 stays open. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#63](https://github.com/tripp-smith/structured-column-selection/pull/63).
+
+Completed phase: **AY fixed-codimension CPQR trace**.
+For equal column energies, coherence at most `ρ < 1`, and `n = k + r`
+with `r ≥ 1`, the CPQR inverse trace is at most
+`(2 (k + r) ^ (r + 1) / (1 - ρ ^ 2) + k (k + r) ^ r) / r!`. The same
+factor bounds the Rayleigh form. For fixed `r` this is a polynomial in
+`k`. It is not a polynomial in `n` and `k` together. The `r = 1` and
+`r = 2` bounds from phases AW and AX are smaller. The majorant at
+`n = 2k` is still not polynomial. Outcome 3 stays open. The contract is
+in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#64](https://github.com/tripp-smith/structured-column-selection/pull/64).

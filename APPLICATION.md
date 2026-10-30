@@ -393,6 +393,16 @@ two extra columns, not a general `n`. One extra column stays phase AW.
 The aspect-2 majorant stays non-polynomial. The square trace stays
 exactly `k`. It does not close outcome 3. It does not change the sampler.
 
+`tests/test_fixed_codim.py` evaluates the tight majorant at `n = k + r`,
+`τ = 1`, and `ρ = 0` with `fractions.Fraction`. The value at `t = k` is
+at most `(2 (k + r) ^ (r + 1) + k (k + r) ^ r) / r!`. At `r = 1`, `k = 2`
+the value is `3`. At `r = 2`, `k = 2` the value is `4`. At `r = 2`,
+`k = 4` the value is `15`. This rational check is not the theorem. The
+bound is uniform in `r` and looser than the phase-AW and phase-AX bounds.
+For fixed `r` it is a polynomial in `k`. It is not a joint polynomial in
+`n` and `k`. The majorant at `n = 2k` is still not polynomial. It does
+not close outcome 3. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler
