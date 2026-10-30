@@ -484,6 +484,14 @@ The constant was not weakened. It is not claimed sharp. This does not
 bound pivots after the third. A 3-column prefix is not a bound for
 general `k`. Outcome 3 stays open.
 
+Status note (joint three-row CPQR): `milestoneE_joint_cpqr_k3` says that
+when `k = 3`, the same leverage-ratio and coherence hypothesis bounds the
+full CPQR set by
+`2 τ^2 n / (3 (1 - ρ^2)) + (1 + 2 τ^3 / (1 - ρ^2)) · (n - 2)` in inverse
+trace and in inverse energy. The constant was not weakened. It is not
+claimed sharp. This is not a bound for general `k`. Fixing `k = 3` does
+not close outcome 3.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

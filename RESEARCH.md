@@ -2102,3 +2102,65 @@ outcome 3.
 
 Phase PR and verification receipt:
 [#52](https://github.com/tripp-smith/structured-column-selection/pull/52).
+
+## Phase AN joint three-row CPQR (2026-10-30, contract)
+
+Iteration AN. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AM bounds the inverse trace of the length-3 CPQR
+prefix `cpqrIterate A 3`. When `k = 3`, that prefix is the full CPQR set.
+This phase records that specialization. It copies the shape of
+`equal_energy_cpqr_k3`.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_cpqr_k3`. Hypotheses: `OrthogonalRows A`, `k = 3`,
+`0 < n`, `1 ≤ τ`, `0 ≤ ρ < 1`, and the same leverage comparison and
+coherence bound as `milestoneE_joint_cpqr_three_trace`.
+
+Conclude:
+
+```text
+(cpqrSet A).card = 3 ∧
+(selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+((selectedColGram A (cpqrSet A))⁻¹).trace ≤ B ∧
+∀ x : Fin (cpqrSet A).card → ℝ,
+  vecEnergy x ≤ vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) * B
+```
+
+where `B` is
+
+```text
+(2 : ℝ) * τ ^ 2 * (n : ℝ) / ((3 : ℝ) * (1 - ρ ^ 2)) +
+  (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) * ((n : ℝ) - 2)
+```
+
+The constant is that expression. It is not replaced by a looser one.
+`k - 2 = 1`, so the last factor of the three-pivot bound is `(n - 2)`.
+It is not claimed sharp: on the `3×3` identity the inverse trace is `3`
+and the formula at `τ = 1`, `ρ = 0`, `n = 3` equals `5`.
+
+Proof shape. `orthogonalRows_le` gives `3 ≤ n` from `k = 3`.
+`cpqrSet A = cpqrIterate A 3`. `milestoneE_joint_cpqr_three_trace` gives
+`det ≠ 0` and trace at most the unspecialized bound; its signature takes
+`2 ≤ n`, and `3 ≤ n` supplies that. Rewriting `k = 3` produces `B`.
+`cpqrIterate_invariant` gives card 3. The Rayleigh conjunct is
+`selectedCols_energy_mul_inv_trace_ge`: multiply by the trace bound.
+That quadratic form is not re-proved.
+
+Independent check: `tests/test_joint_k3.py`, in `fractions.Fraction`,
+calling `structselect.cpqr`. On the `3×3` identity, CPQR returns three
+columns, the Gram inverse trace is `3`, `B` at `τ = 1`, `ρ = 0`, `n = 3`
+equals `5`, and for `x = (1, 0, 0)` one has `‖x‖² ≤ 5 ‖A_J x‖²`. The
+test does not assert that the trace equals `5`. It is not the theorem.
+
+Non-claims: for three rows, the joint leverage-ratio and coherence
+hypothesis bounds the full CPQR set, not only a prefix. This is not a
+bound for general `k`. It does not close outcome 3. Outcome 3 needs a
+polynomial theorem for a static class at general `k`. Fixing `k = 3`
+does not count, just as `k = 1` and `k = 2` do not count. It is not
+sharp. It is not a polynomial bound for every orthogonal-row matrix.
+The census did not prove this. Problem 4.1 is not solved. `MinDimLe`
+stays outside outcome 3.
+
+Phase PR and verification receipt:
+[#53](https://github.com/tripp-smith/structured-column-selection/pull/53).

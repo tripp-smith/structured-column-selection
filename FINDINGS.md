@@ -351,6 +351,31 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Joint three-row CPQR (2026-10-30)
+
+`milestoneE_joint_cpqr_k3` specializes `milestoneE_joint_cpqr_three_trace`
+to `k = 3`. Then `cpqrSet A = cpqrIterate A 3`, so the length-3 prefix is
+the full CPQR set. `orthogonalRows_le` gives `3 ≤ n`. Because `k - 2 = 1`,
+the last factor of the three-pivot bound is `(n - 2)`. The inverse trace
+and the inverse energy are at most
+
+`2 τ^2 n / (3 (1 - ρ^2)) + (1 + 2 τ^3 / (1 - ρ^2)) · (n - 2)`.
+
+The constant was not weakened. The Rayleigh conjunct is
+`selectedCols_energy_mul_inv_trace_ge`.
+
+`tests/test_joint_k3.py` runs `structselect.cpqr` on the `3×3` identity.
+CPQR returns three columns. The Gram inverse trace is `3`. The bound at
+`τ = 1`, `ρ = 0`, `n = 3` equals `5`, and for `x = (1, 0, 0)` one has
+`‖x‖² ≤ 5 ‖A_J x‖²`. The check does not assert that the trace equals `5`.
+On that matrix the inverse trace is `3` and the bound is `5`. The constant
+is not claimed sharp. The check is not the theorem.
+
+This is not a bound for general `k`. Fixing `k = 3` does not close
+outcome 3. Outcome 3 needs a polynomial theorem for a static class at
+general `k`. Problem 4.1 is not solved, and this phase does not claim a
+polynomial CPQR bound on every orthogonal-row matrix.
+
 ## Joint third CPQR pivot (2026-10-30)
 
 `milestoneE_joint_cpqr_three_trace` is the third CPQR pivot under the

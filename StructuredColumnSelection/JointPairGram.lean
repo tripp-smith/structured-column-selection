@@ -34,6 +34,10 @@ is not a polynomial bound for every orthogonal-row matrix.
 hypothesis, plus `3 ≤ k`. It does not bound pivots after the third. It
 does not close outcome 3. It is not a polynomial bound for every
 orthogonal-row matrix. The constant is not claimed sharp.
+
+`joint_cpqr_k3` specializes that length-3 prefix to the full CPQR set
+when `k = 3`. It is not a bound for general `k`. It does not close
+outcome 3. It is not sharp.
 -/
 
 namespace StructuredColumnSelection
@@ -834,5 +838,61 @@ theorem joint_cpqr_three_trace {k n : ℕ}
     rw [hP]
   rw [h3, ← hinsert, hinc, hfrac]
   exact add_le_add htr2 hratio'
+
+/-- For three rows, the joint leverage-ratio and coherence hypothesis bounds
+the full CPQR set, not only a prefix. This is not a bound for general `k`.
+It does not close outcome 3. It is not sharp. -/
+theorem joint_cpqr_k3 {k n : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : k = 3) (hn : 0 < n) (τ ρ : ℝ)
+    (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    (cpqrSet A).card = 3 ∧
+      (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((3 : ℝ) * (1 - ρ ^ 2)) +
+          (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) * ((n : ℝ) - 2) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            ((2 : ℝ) * τ ^ 2 * (n : ℝ) / ((3 : ℝ) * (1 - ρ ^ 2)) +
+              (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) * ((n : ℝ) - 2)) := by
+  have hk3 : 3 ≤ k := by omega
+  have hn3 : 3 ≤ n := by
+    have hkn := orthogonalRows_le A hA
+    omega
+  have hn2 : 2 ≤ n := by omega
+  have hpre := joint_cpqr_three_trace A hA hk3 hn2 τ ρ hτ hρ0 hρ hlev hcoh
+  have hset : cpqrSet A = cpqrIterate A 3 := by
+    simp [cpqrSet, hk]
+  have hcard : (cpqrSet A).card = 3 := by
+    rw [hset]
+    exact (cpqrIterate_invariant A hA 3 hk3).1
+  have hdet : (selectedColGram A (cpqrSet A)).det ≠ 0 := by
+    rw [hset]
+    exact hpre.1
+  have hnum :
+      (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) +
+        (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) *
+          (((n : ℝ) - 2) / ((k : ℝ) - 2)) =
+        (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((3 : ℝ) * (1 - ρ ^ 2)) +
+          (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) * ((n : ℝ) - 2) := by
+    rw [hk]
+    have hcast : ((3 : ℕ) : ℝ) = (3 : ℝ) := by norm_num
+    rw [hcast]
+    have hone : ((3 : ℝ) - 2) = 1 := by norm_num
+    rw [hone, div_one]
+  have htr : ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+      (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((3 : ℝ) * (1 - ρ ^ 2)) +
+        (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) * ((n : ℝ) - 2) := by
+    rw [hset]
+    exact hpre.2.trans (le_of_eq hnum)
+  refine ⟨hcard, hdet, htr, ?_⟩
+  intro x
+  have henergy := selectedCols_energy_mul_inv_trace_ge A (cpqrSet A) hdet x
+  exact henergy.trans (mul_le_mul_of_nonneg_left htr (vecEnergy_nonneg _))
 
 end StructuredColumnSelection

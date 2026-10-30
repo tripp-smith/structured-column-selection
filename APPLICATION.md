@@ -289,6 +289,12 @@ The formula at `τ = 1`, `ρ = 0`, `k = 3`, `n = 3` equals `5`, and
 `3 ≤ 5`. The check does not assert that the trace equals `5`. It is not
 the theorem. It does not change the sampler.
 
+`tests/test_joint_k3.py` runs `structselect.cpqr` on the `3×3` identity.
+CPQR returns three columns, and the Gram inverse trace is `3`. The bound
+at `τ = 1`, `ρ = 0`, `n = 3` equals `5`, and for `x = (1, 0, 0)` one has
+`‖x‖² ≤ 5 ‖A_J x‖²`. The check does not assert that the trace equals `5`.
+It is not the theorem. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler
