@@ -669,3 +669,21 @@ matrix. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#53](https://github.com/tripp-smith/structured-column-selection/pull/53).
+
+Completed phase: **AO CPQR trace step**.
+`milestoneE_joint_cpqr_step` is one CPQR pivot step under a leverage-ratio
+bound, assuming a trace bound on the current prefix. If the inverse trace
+of `selectedColGram A (cpqrIterate A t)` is at most `B`, then
+`selectedColGram A (cpqrIterate A (t + 1))` is invertible and its inverse
+trace is at most
+`B + (1 + (τ k / n) B) · (n - t) / (k - t)`.
+The constant was not weakened. On the `3×3` identity the length-2 Gram is
+`I₂` with inverse trace `2`. At `B = 2`, `τ = 1`, `k = 3`, `n = 3`,
+`t = 2` the step bound equals `5`, and the length-3 inverse trace is `3`,
+so `3 ≤ 5`. The check does not assert equality. This is one step from
+length `t` to length `t + 1`. The recurrence is not iterated here. This
+is not a bound on the full `k`-set. It is not a polynomial bound. It does
+not close outcome 3. Coherence is not used. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#54](https://github.com/tripp-smith/structured-column-selection/pull/54).

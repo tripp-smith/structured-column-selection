@@ -108,3 +108,4 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_joint_cpqr_prefix_rayleigh
 #print axioms StructuredColumnSelection.milestoneE_joint_cpqr_three_trace
 #print axioms StructuredColumnSelection.milestoneE_joint_cpqr_k3
+#print axioms StructuredColumnSelection.milestoneE_joint_cpqr_step

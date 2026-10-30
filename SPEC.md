@@ -492,6 +492,14 @@ trace and in inverse energy. The constant was not weakened. It is not
 claimed sharp. This is not a bound for general `k`. Fixing `k = 3` does
 not close outcome 3.
 
+Status note (CPQR trace step): `milestoneE_joint_cpqr_step` is one pivot
+from `cpqrIterate A t` to `cpqrIterate A (t + 1)`. A leverage ratio at
+most `τ` and a prefix inverse-trace bound `B` give the next inverse trace
+at most `B + (1 + (τ k / n) B) · (n - t) / (k - t)`. The constant was not
+weakened. The recurrence is not iterated here. This is not a bound on the
+full `k`-set and not a polynomial bound. Coherence is not used. Outcome 3
+stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.
