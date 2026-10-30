@@ -351,6 +351,35 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Joint third CPQR pivot (2026-10-30)
+
+`milestoneE_joint_cpqr_three_trace` is the third CPQR pivot under the
+joint leverage-ratio and coherence hypothesis, plus `3 ≤ k`. The
+length-2 prefix still has inverse trace at most
+`B = 2 τ^2 n / (k (1 - ρ^2))`. One more pivot adds at most
+`(1 + 2 τ^3 / (1 - ρ^2)) · (n - 2) / (k - 2)`. The coefficient
+`2 τ^3 / (1 - ρ^2)` is `(τ k / n) / μ`, where
+`μ = k (1 - ρ^2) / (2 τ^2 n)` is the length-2 Rayleigh coefficient.
+`n` and `k` cancel. The constant was not weakened.
+
+The length-2 card and invertibility come from `cpqrIterate_invariant`.
+The trace bound is the length-2 prefix theorem. The third column energy
+is at most `τ k / n`: `milestoneE_leverage_sum` gives `n · min ≤ k`, the
+leverage hypothesis gives `max ≤ τ · min`, and the Schur residual is
+nonnegative, so the quadratic term `q` is at most that energy.
+`nextResidual_ge` still supplies the residual floor `(k - 2) / (n - 2)`.
+
+`tests/test_joint_three.py` runs `structselect.cpqr` on the `3×3`
+identity. CPQR returns three columns. The Gram inverse trace is `3`.
+The formula at `τ = 1`, `ρ = 0`, `k = 3`, `n = 3` equals `5`, and
+`3 ≤ 5`. The check does not assert that the trace equals `5`. On that
+matrix the inverse trace is `3` and the bound is `5`. The constant is
+not claimed sharp. The check is not the theorem.
+
+This does not bound pivots after the third. A 3-column prefix is not a
+bound for general `k`. Outcome 3 stays open. Problem 4.1 is not solved,
+and CPQR is not claimed to be polynomial on every orthogonal-row matrix.
+
 ## Joint CPQR Rayleigh (2026-10-30)
 
 `milestoneE_joint_cpqr_prefix_rayleigh` is the Rayleigh form of the length-2

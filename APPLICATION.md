@@ -283,6 +283,12 @@ is `2`, matching `2 τ^2 n / (k (1 - ρ^2))` at `τ = 1`, `ρ = 0`, `k = 2`,
 The check does not assert that the coefficient meets the quotient. It is
 not the theorem. It does not change the sampler.
 
+`tests/test_joint_three.py` runs `structselect.cpqr` on the `3×3`
+identity. CPQR returns three columns, and the Gram inverse trace is `3`.
+The formula at `τ = 1`, `ρ = 0`, `k = 3`, `n = 3` equals `5`, and
+`3 ≤ 5`. The check does not assert that the trace equals `5`. It is not
+the theorem. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

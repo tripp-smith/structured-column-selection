@@ -87,6 +87,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Joint pair Gram | **PROVED** (2-column bound; does not close outcome 3) | `milestoneE_joint_pair_inv_trace` |
 | Joint CPQR prefix | **PROVED** (length-2 CPQR prefix; does not close outcome 3) | `milestoneE_joint_cpqr_prefix_trace` |
 | Joint CPQR Rayleigh | **PROVED** (length-2 CPQR prefix; does not close outcome 3) | `milestoneE_joint_cpqr_prefix_rayleigh` |
+| Joint third CPQR pivot | **PROVED** (length-3 CPQR prefix; does not close outcome 3) | `milestoneE_joint_cpqr_three_trace` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

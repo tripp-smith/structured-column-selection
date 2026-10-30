@@ -552,6 +552,20 @@ example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
       vecEnergy (selectedCols A (cpqrIterate A 2) *ᵥ x) :=
   milestoneE_joint_cpqr_prefix_rayleigh A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh x
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 3 ≤ k) (hn : 2 ≤ n) (τ ρ : ℝ) (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ)
+    (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    (selectedColGram A (cpqrIterate A 3)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A 3))⁻¹).trace ≤
+        (2 : ℝ) * τ ^ 2 * (n : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) +
+          (1 + (2 : ℝ) * τ ^ 3 / (1 - ρ ^ 2)) *
+            (((n : ℝ) - 2) / ((k : ℝ) - 2)) :=
+  milestoneE_joint_cpqr_three_trace A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

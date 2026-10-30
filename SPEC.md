@@ -476,6 +476,14 @@ reciprocal of the inverse-trace bound and was not weakened. It is not
 sharp. This does not bound later pivots. It is not a `k`-column bound.
 Outcome 3 stays open.
 
+Status note (joint third CPQR pivot): `milestoneE_joint_cpqr_three_trace`
+bounds the inverse trace of `selectedColGram A (cpqrIterate A 3)` by
+`2 τ^2 n / (k (1 - ρ^2)) + (1 + 2 τ^3 / (1 - ρ^2)) · (n - 2) / (k - 2)`
+under the joint leverage-ratio and coherence hypothesis, plus `3 ≤ k`.
+The constant was not weakened. It is not claimed sharp. This does not
+bound pivots after the third. A 3-column prefix is not a bound for
+general `k`. Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.
