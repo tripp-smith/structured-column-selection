@@ -2771,3 +2771,92 @@ polynomial. The census did not prove this.
 
 Phase PR and verification receipt:
 [#61](https://github.com/tripp-smith/structured-column-selection/pull/61).
+
+## Phase AW codimension-one CPQR trace (2026-10-30, contract)
+
+Iteration AW. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AU shows the tight majorant at `n = 2k` and
+`τ = 1` beats every polynomial. Phase AV is the square equality: the
+CPQR inverse trace equals `k`. This phase is only `n = k + 1`. It calls
+`joint_cpqr_trace_bound_tight`. It does not modify `jointTraceBoundTight`,
+`milestoneE_joint_cpqr_trace_bound_tight`,
+`milestoneE_square_cpqr_trace_eq`, or the AT/AU theorems. A
+fixed-codimension restriction is not a class for general `n`. It does
+not close outcome 3.
+
+Target in `StructuredColumnSelection/JointPairGram.lean` as
+`joint_codim_one_trace`, re-exported as
+`milestoneE_joint_codim_one_trace`. Equal column energies (`τ = 1`) and
+one extra column (`n = k + 1`). Hypothesis: `OrthogonalRows A` for
+`A : Matrix (Fin k) (Fin (k + 1)) ℝ`, `2 ≤ k`, `0 ≤ ρ < 1`, column
+energies comparable with multiplier `1`, and normalized coherence at
+most `ρ`.
+
+Conclude:
+
+```text
+(selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+  ((k : ℝ) + 1) * ((k : ℝ) + 2) + 2 * (k : ℝ) / (1 - ρ ^ 2) ∧
+∀ x : Fin (cpqrSet A).card → ℝ,
+  vecEnergy x ≤
+    vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+      (((k : ℝ) + 1) * ((k : ℝ) + 2) +
+        2 * (k : ℝ) / (1 - ρ ^ 2))
+```
+
+`cpqrSet A = cpqrIterate A k`. The bound is
+`((k : ℝ) + 1) * ((k : ℝ) + 2) + 2 * (k : ℝ) / (1 - ρ ^ 2)`. It is a
+polynomial in `k` and in `1 / (1 - ρ ^ 2)`. It is not a polynomial
+theorem for general `n`. Phase AU remains the statement that the same
+majorant at `n = 2k` is not polynomial. Phase AV remains the square
+equality (trace exactly `k`). This does not close outcome 3.
+
+Proof shape. Apply `joint_cpqr_trace_bound_tight` at `t = k`,
+`n = k + 1`, `τ = 1`. The leverage comparison uses multiplier `1` via
+`one_mul`, and the coherence hypothesis is the one given. That yields
+inverse trace and Rayleigh factor at most
+`jointTraceBoundTight k (k + 1) 1 ρ k`, plus `det ≠ 0`.
+
+The majorant inequality has no matrix:
+
+```text
+jointTraceBoundTight k (k + 1) (1 : ℝ) ρ k ≤
+  ((k : ℝ) + 1) * ((k : ℝ) + 2) + 2 * (k : ℝ) / (1 - ρ ^ 2)
+```
+
+Let `α = (k : ℝ) / (k + 1 : ℝ)`. For `k ≥ 2`, `0 < α < 1` and
+`1 - α = 1 / (k + 1)`. The length-2 value is
+`M(2) = 2 * (k + 1) / (k * (1 - ρ ^ 2))`. The successor is
+`(1 + α * M(s)) * ((k + 1 - s) / (k - s))`. For `2 ≤ t ≤ k`,
+
+```text
+((k : ℝ) - t + 1) * M(t)
+  = M(2) * α ^ (t - 2) * ((k : ℝ) - 1)
+    + ∑_{j=2}^{t-1} ((k : ℝ) + 1 - j) * α ^ (t - 1 - j)
+```
+
+At `t = k` the front factor is `1`. `α ^ (k - 2) ≤ 1` bounds the first
+term by `2 * k / (1 - ρ ^ 2)`. The sum, reindexed by `r = k - 1 - j`,
+is `∑_{r=0}^{k-3} (r + 2) α ^ r`, which is at most
+`(2 - α) / (1 - α) ^ 2 = (k + 1) * (k + 2)`. The Rayleigh form replaces
+`M(k)` by this closed bound using the nonnegative image energy.
+
+Independent check: `tests/test_codim_one.py`, in `fractions.Fraction`.
+At `ρ = 0` the recurrence is `3` for `k = 2` and `8/3` then `6` for
+`k = 3`. The closed bounds are `16` and `26`. At `k = 4` the value at
+`t = 4` is at most `38`. This rational check is not the theorem. It
+bounds the majorant at `n = k + 1`. It is not a CPQR inverse trace by
+itself. It does not close outcome 3. The `n = 2k` majorant is a
+different statement and is not polynomial.
+
+Non-claims: `n = k + 1` only, with equal column energies. A polynomial
+in `k` and in `1 / (1 - ρ ^ 2)`, not a polynomial theorem for general
+`n`. Does not close outcome 3. Does not close outcome 1. Does not solve
+Problem 4.1. Does not say CPQR is polynomial on orthogonal-row matrices,
+or on every equal-leverage matrix. Phase AU remains the statement that
+the majorant at `n = 2k` is not polynomial. Phase AV remains the square
+equality. The census did not prove this.
+
+Phase PR and verification receipt:
