@@ -243,6 +243,13 @@ example :
         incrementSet A ≠ cpqrSet A :=
   milestoneE_leverage_ratio_pivot_split
 
+example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hE : ∀ i j : Fin n, colInner A i i = colInner A j j)
+    (hk : 0 < k) (hn : 0 < n) (J : Finset (Fin n))
+    (horth : ∀ i ∈ J, ∀ j ∈ J, i ≠ j → colInner A i j = 0) :
+    cpqrPivot A J = incrementPivot A J :=
+  milestoneE_equal_energy_orthogonal_block_same_pivot A hA hE hk hn J horth
+
 example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
     (hG : (selectedColGram A J).det ≠ 0)
     (hzero : ∀ j ∈ incrementCandidates A J,

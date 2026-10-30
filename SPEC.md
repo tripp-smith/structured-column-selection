@@ -817,6 +817,12 @@ orthonormal factor `Q`. Both state
 `‖A - A_J T‖ ≤ (1 + ‖Q_J⁻¹‖₂) ‖E‖`, with `T = (Q_Jᵀ)⁻¹ Qᵀ`, the left-hand
 norm spectral or Frobenius, and the coefficient spectral in both.
 
+Status note (orthogonal equal-energy block):
+`milestoneE_equal_energy_orthogonal_block_same_pivot` says that equal
+column energy and a pairwise-orthogonal selected block make the next
+CPQR pivot agree with the increment pivot. A one-column block is the
+agreement half of the equal-energy second pivot. Outcome 3 stays open.
+
 Status note (leverage-ratio pivot split):
 `milestoneE_leverage_ratio_pivot_split` gives an orthogonal-row `2×5`
 frame with column energies in `[13/50, 16/25]`, leverage ratio `32/13`,

@@ -216,6 +216,11 @@ the sampler.
 that three-column expression at `k = 3` and that the identity satisfies
 `‖x‖² ≤ 5 ‖A_J x‖²`. It does not change the sampler.
 
+`tests/test_orthogonal_block_pivot.py` checks that the `3×3` identity
+ratio matches `(2e - r) / (e r)` and that `13/8 > 37/24` at `k = 3`,
+`n = 6`, and `λ_min = 2/5`. That comparison is a failed estimate. It
+does not change the sampler.
+
 `tests/test_leverage_ratio_split.py` checks that the integer `2×5`
 columns have energy ratio `32/13`, common residual `1/4`, and that the
 second increment pivot is column `2` while the max residual is column
