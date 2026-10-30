@@ -1,6 +1,7 @@
 import StructuredColumnSelection.EqualEnergyPivot
 import StructuredColumnSelection.WideIncoherent
 import StructuredColumnSelection.WideIncoherentEscape
+import StructuredColumnSelection.NormalizedCoherence
 import StructuredColumnSelection.OrthogonalColumns
 import StructuredColumnSelection.ZeroCoeffPivot
 import StructuredColumnSelection.PivotSplit
@@ -802,6 +803,26 @@ theorem milestoneE_incoherent_no_joint_polynomial {ρ : ℝ} (hρ : 0 < ρ) (d :
         C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
           vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
   incoherent_no_joint_polynomial hρ d hC
+
+/-- The outcome-2 frame repeats a positive completion column, so two
+distinct columns are equal and their normalized coherence is `1`.
+
+That same frame beats every polynomial `C (n + k + 1)^{2d}`. A class
+that requires every normalized ratio to be at most some `ρ < 1`
+excludes the frame. This does not prove a polynomial CPQR bound on the
+matrices that meet a stricter ratio. Absolute inner-product incoherence
+is a different predicate. This does not close outcome 1 or outcome 3. -/
+theorem milestoneE_normalized_coherence_one (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        OrthogonalRows A ∧
+        (∃ j1 j2 : Fin n, j1 ≠ j2 ∧ (∀ i, A i j1 = A i j2) ∧
+          0 < residualSq A ∅ j1 ∧
+          |colInner A j1 j2| /
+            (Real.sqrt (residualSq A ∅ j1) * Real.sqrt (residualSq A ∅ j2)) = 1) ∧
+        C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
+  normalized_coherence_one d hC
 
 /-- Equal column energy makes the second CPQR pivot agree with the
 increment pivot, and the two-column inverse trace is at most

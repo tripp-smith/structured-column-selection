@@ -1391,3 +1391,35 @@ outside outcome 3.
 
 Phase PR and verification receipt:
 [#39](https://github.com/tripp-smith/structured-column-selection/pull/39).
+
+## Phase AA normalized coherence (2026-10-29, contract)
+
+Iteration AA. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase Z places the outcome-2 frame inside absolute
+inner-product incoherence `ColumnIncoherent A ρ` for every `ρ > 0`.
+The remaining named SPEC §10 candidate is the normalized ratio
+`|⟨a_i, a_j⟩| / (|a_i| |a_j|)`. The padded frame repeats each completion
+column at least twice. The triangular block has Frobenius energy at most
+`1` and `k ≥ 2`, so the completion has positive Frobenius energy and some
+repeated column is nonzero. Two copies are identical, so the ratio of
+that pair is `1`. Success is `milestoneE_normalized_coherence_one`. Exit
+if every repeated completion column has energy `0`.
+
+Target in `StructuredColumnSelection/NormalizedCoherence.lean`,
+re-exported as `milestoneE_normalized_coherence_one`.
+
+Independent check: `tests/test_normalized_coherence.py` checks that two
+copies of one nonzero rational column have ratio `1`, and that the
+`m = 2` triangular Frobenius energy is at most `1/4` while `k` exceeds
+that energy and `32 k³ ≥ 2`. It does not call the repository CPQR code.
+It is not the theorem.
+
+Non-claims: no polynomial CPQR bound on matrices whose normalized
+coherence is strictly below `1`, and no closure of outcome 1 or
+outcome 3. The proved pair has ratio `1`. A bound at ratio `1` is the
+Cauchy–Schwarz ceiling for nonzero columns. `ColumnIncoherent` still
+bounds absolute inner products, and phase Z still places the family
+inside every `ρ > 0`. Phase P still bounds the case `ρ = 0`, and phase Q
+still places the outcome-2 frame outside that case. Problem 4.1 is not
+solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.

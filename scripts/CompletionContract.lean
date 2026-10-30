@@ -143,6 +143,18 @@ example {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) {C : ℝ} (hC : 0 < C) :
           vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
   milestoneE_incoherent_no_joint_polynomial hρ d hC
 
+example (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
+      ∃ x : Fin (cpqrSet A).card → ℝ,
+        OrthogonalRows A ∧
+        (∃ j1 j2 : Fin n, j1 ≠ j2 ∧ (∀ i, A i j1 = A i j2) ∧
+          0 < residualSq A ∅ j1 ∧
+          |colInner A j1 j2| /
+            (Real.sqrt (residualSq A ∅ j1) * Real.sqrt (residualSq A ∅ j2)) = 1) ∧
+        C * ((n + k + 1 : ℕ) : ℝ) ^ (2 * d) *
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) < vecEnergy x :=
+  milestoneE_normalized_coherence_one d hC
+
 example :
     ∃ k n : ℕ, ∃ A : Matrix (Fin k) (Fin n) ℝ,
       ∃ x : Fin (cpqrSet A).card → ℝ,

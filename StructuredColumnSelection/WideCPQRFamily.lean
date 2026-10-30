@@ -151,12 +151,26 @@ theorem wide_frame_pivots {m : ℕ} (hm : 2 ≤ m) :
       (∀ i j : Fin (wideDim m),
         A i (j.castAdd (wideDim m * wideRepeats m)) = wideTriangular m i j) ∧
       cpqrSet A = widePrefix (wideWidth m) (wideDim m) ∧
-      ∀ j : Fin (wideDim m * wideRepeats m),
+      (∀ j : Fin (wideDim m * wideRepeats m),
         vecEnergy (fun i => A i (j.natAdd (wideDim m))) ≤
-          (wideDim m : ℝ) / (wideRepeats m : ℝ) := by
-  have ht : 0 < wideRepeats m := by unfold wideRepeats; exact Nat.mul_pos (by norm_num) (pow_pos (wideDim_pos hm) _)
-  obtain ⟨A,hA,hR,hC⟩ := wide_completion_orthogonal
-    (wideTriangular m) (wideTriangular_frob_le hm) (wideRepeats m) ht
+          (wideDim m : ℝ) / (wideRepeats m : ℝ)) ∧
+      ∃ j1 j2 : Fin (wideWidth m),
+        j1 ≠ j2 ∧ (∀ i, A i j1 = A i j2) ∧
+          0 < vecEnergy (fun i => A i j1) := by
+  have ht : 0 < wideRepeats m := by
+    unfold wideRepeats
+    exact Nat.mul_pos (by norm_num) (pow_pos (wideDim_pos hm) _)
+  have ht2 : 2 ≤ wideRepeats m := by
+    have hpow : 1 ≤ wideDim m ^ 3 := Nat.one_le_pow 3 _ (wideDim_pos hm)
+    have hmul : 32 ≤ 32 * wideDim m ^ 3 := Nat.mul_le_mul_left 32 hpow
+    have h2 : 2 ≤ 32 := by norm_num
+    exact h2.trans (by simpa [wideRepeats] using hmul)
+  obtain ⟨A, hA, hR, hC, hDup⟩ := wide_completion_with_repeat
+    (wideTriangular m) (wideTriangular_frob_le hm) (wideRepeats m) ht2
+    (by
+      unfold wideDim
+      have hmul := Nat.mul_le_mul hm hm
+      omega)
   have hkn : wideDim m ≤ wideWidth m := Nat.le_add_right _ _
   have hcast (j : Fin (wideDim m)) :
       Fin.castLE hkn j = j.castAdd (wideDim m * wideRepeats m) := by rfl
@@ -199,7 +213,7 @@ theorem wide_frame_pivots {m : ℕ} (hm : 2 ≤ m) :
       rw [hjq]
       exact (tailEnergy_le_energy p _).trans_lt
         ((hC q).trans_lt (wide_filler_lt_diag hm p))
-  refine ⟨A, hA, hR, ?_, hC⟩
+  refine ⟨A, hA, hR, ?_, hC, hDup⟩
   exact triangular_prefix_pivots hkn A hupper hdiag htail (wideDim m) (Nat.le_refl _)
 
 end StructuredColumnSelection
