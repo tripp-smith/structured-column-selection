@@ -259,6 +259,19 @@ example :
               incrementPivot blockFrame blockJ = some 3 :=
   milestoneE_equal_energy_block_pivot_split
 
+example :
+    OrthogonalRows pathFrame ∧
+      (∀ i j : Fin 6, colInner pathFrame i i = colInner pathFrame j j) ∧
+        colInner pathFrame 0 2 ≠ 0 ∧
+          cpqrPivot pathFrame ∅ = some 0 ∧
+            incrementPivot pathFrame ∅ = some 0 ∧
+              cpqrPivot pathFrame ({0} : Finset (Fin 6)) = some 2 ∧
+                incrementPivot pathFrame ({0} : Finset (Fin 6)) = some 2 ∧
+                  cpqrPivot pathFrame pathJ = some 3 ∧
+                    incrementPivot pathFrame pathJ = some 5 ∧
+                      cpqrSet pathFrame ≠ incrementSet pathFrame :=
+  milestoneE_equal_energy_third_pivot_split
+
 example {k n : ℕ} (A : Matrix (Fin k) (Fin n) ℝ) (J : Finset (Fin n))
     (hG : (selectedColGram A J).det ≠ 0)
     (hzero : ∀ j ∈ incrementCandidates A J,

@@ -6,6 +6,7 @@ import StructuredColumnSelection.PivotSplit
 import StructuredColumnSelection.LeverageRatioSplit
 import StructuredColumnSelection.OrthogonalBlockPivot
 import StructuredColumnSelection.EqualEnergyBlockSplit
+import StructuredColumnSelection.EqualEnergyThirdPivot
 import StructuredColumnSelection.IncrementSet
 import StructuredColumnSelection.InvSpectralBound
 import StructuredColumnSelection.InvTraceInduction
@@ -716,6 +717,27 @@ theorem milestoneE_equal_energy_block_pivot_split :
             cpqrPivot blockFrame blockJ = some 5 ∧
               incrementPivot blockFrame blockJ = some 3 :=
   equal_energy_block_pivot_split
+
+/-- Equal column energy does not make the third CPQR pivot agree with
+the increment pivot.
+
+On this orthogonal-row `3×6` frame every column energy is `1/2`. Both
+rules take column `0` and then column `2`. After `{0, 2}`, max-residual
+CPQR takes column `3` and the increment pivot takes column `5`, so the
+three-column sets differ. Columns `0` and `2` are not orthogonal. This
+does not close outcome 1 or outcome 3. -/
+theorem milestoneE_equal_energy_third_pivot_split :
+    OrthogonalRows pathFrame ∧
+      (∀ i j : Fin 6, colInner pathFrame i i = colInner pathFrame j j) ∧
+        colInner pathFrame 0 2 ≠ 0 ∧
+          cpqrPivot pathFrame ∅ = some 0 ∧
+            incrementPivot pathFrame ∅ = some 0 ∧
+              cpqrPivot pathFrame ({0} : Finset (Fin 6)) = some 2 ∧
+                incrementPivot pathFrame ({0} : Finset (Fin 6)) = some 2 ∧
+                  cpqrPivot pathFrame pathJ = some 3 ∧
+                    incrementPivot pathFrame pathJ = some 5 ∧
+                      cpqrSet pathFrame ≠ incrementSet pathFrame :=
+  equal_energy_third_pivot_split
 
 /-- If every positive-residual unused column has coefficient zero, the
 increment pivot and max-residual CPQR return the same column.
