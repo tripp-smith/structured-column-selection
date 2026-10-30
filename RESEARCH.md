@@ -1803,3 +1803,69 @@ instantiated here; no coherence bound on any orthogonal-row frame; no
 polynomial CPQR bound; no closure of outcome 1 or outcome 3. Problem
 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
 outcome 3.
+
+## Phase AI joint leverage-coherence census (2026-10-30, contract)
+
+Iteration AI. Outcomes 1 and 3 stay open. This phase is Python only.
+There is no new public Lean declaration, and `Theorems.lean` is unchanged.
+
+Route checkpoint. `milestoneE_bounded_coherence_no_polynomial` shows that
+normalized coherence at most `19/20` does not restore a polynomial CPQR
+bound. The frame in that theorem is the scaled triple-design frame. Its
+column leverages are wildly unbalanced, so the theorem does not exclude
+the joint class in this census. The joint class is matrices with
+orthogonal rows (`A Aᵀ = I`, float tolerance) such that the leverage
+ratio `max_j ℓ_j / min_j ℓ_j` is at most `τ` and the normalized coherence
+
+```
+max_{i≠j} |⟨col i, col j⟩| / (‖col i‖ ‖col j‖)
+```
+
+is at most `ρ`, where `ℓ_j = ‖column j‖²`. A frame with measured leverage
+ratio `L` and normalized coherence `c` belongs to every cell with
+`τ ≥ L` and `ρ ≥ c`. The census asks what `r_CPQR` does on a finite
+sample of that class. It does not prove the class is safe, and it does
+not prove the class grows.
+
+`r_CPQR` is `‖A_J⁻¹‖₂ / √(k(n-k+1))`, taken from `evaluate`. The
+named-polynomial comparison is `named_poly_scale`. `normalized_coherence`
+is a separate function. `max_abs_col_inner` stays the absolute
+off-diagonal column inner product.
+
+Grid: `τ ∈ {2, 4, 8}`, `ρ ∈ {0.5, 0.7, 0.9}`, `k = 2..8`, `n ≤ 16`.
+Hadamard, Fourier, leverage-skew, near-duplicate, and Kahan-like frames
+are built for every such `k` and every `n` in
+`{k+1, min(2k, 16)}` together with the powers of two satisfying
+`k < n ≤ 16`. ETF, clustered, and block frames use the constructors
+already in `structselect/census.py` whose shapes lie in this range.
+The Haar sample uses seed 1 and 20 draws for each `(k, n)` with
+`n ∈ {k+1, min(2k, 16)}`. A tried frame is accepted when every leverage
+is finite and positive, `aat_err < 1e-8`, `r_CPQR` is finite, CPQR
+returns `k` columns, and at least one cell contains the frame. Zero
+columns are rejected. The scaled triple-design frame is not rerun: its
+row count is `m² ≥ 9`, outside this census.
+
+Artifact: `experiments/census_joint_seed1.json`, written through
+`require_clean_worktree`. `closes_milestone_e` is false. Evidence is
+numeric. A recorded ratio is not a theorem. An empty cell stays empty.
+
+Non-claims: this does not close §8 or §10; outcome 3 stays open; no
+polynomial CPQR bound; Problem 4.1 is not solved. `MinDimLe`, `k = 1`,
+and `k = 2` stay outside outcome 3. The search is finite.
+
+Reading of `experiments/census_joint_seed1.json` (seed 1, revision
+`5d41fd9b7a41ddf87e1a17248861724fd621a2a3`). 428 frames were tried and
+228 were accepted. All nine cells are nonempty. The largest recorded
+`r_CPQR` is `0.866025403784439`, on the `2×3` simplex ETF, in every
+cell with `ρ ≥ 0.7`. The `ρ = 0.5` maxima are `0.8164965809277263`,
+on the `3×4` simplex ETF. Measured coherence of the `2×3` equiangular
+frames sits one unit in the last place above `1/2`, so those frames
+are outside the `ρ = 0.5` cells. Inside every cell, the per-`k`
+maximum does not increase with `k`. No accepted frame has `r_CPQR > 1`,
+and none meets `named_poly_scale`. Hypothesis, not a theorem: no growth
+was observed on this finite search, so a later phase may try a positive
+theorem on the joint class. The sample does not prove the class is safe
+and does not prove it grows.
+
+Phase PR and verification receipt:
+[#48](https://github.com/tripp-smith/structured-column-selection/pull/48).

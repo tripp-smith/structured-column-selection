@@ -452,6 +452,13 @@ bound. The scaled triple-design frame for large `m` lies in that class
 and beats every `C (n+k+1)^{2d}`. This does not close outcome 3. A
 stricter cap is not ruled out.
 
+Status note (joint leverage-coherence census): `experiments/census_joint_seed1.json`
+is a float census of orthogonal-row frames with leverage ratio at most
+`8` and normalized coherence at most `0.9`, on `k = 2..8` and `n ≤ 16`.
+The largest recorded `r_CPQR` is `0.866025403784439`. This census does
+not close §8 or §10, and it does not close outcome 3. A recorded ratio
+is not a theorem.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.
