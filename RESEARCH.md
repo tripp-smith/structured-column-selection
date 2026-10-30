@@ -2617,3 +2617,4 @@ phase-AI census did not see `r_CPQR` growth. The loose majorant is
 untouched.
 
 Phase PR and verification receipt:
+[#59](https://github.com/tripp-smith/structured-column-selection/pull/59).
