@@ -1314,6 +1314,60 @@ outcome 3.
 Phase PR and verification receipt:
 [#43](https://github.com/tripp-smith/structured-column-selection/pull/43).
 
+## Phase AE scaled leading block (2026-10-30, contract)
+
+Iteration AE. Outcomes 1 and 3 stay open.
+
+Route checkpoint. The triple design of phase AD has column energy
+`1 / (4 (k-1)(k-2))`, and the design-frame pivot theorem of phase AB
+needs filler energy below `1 / (32 k³)`. The gap closes by scaling the
+leading block: with `R = s R₀` for `R₀ = wideTriangular m` and a
+constant `s`, every leading residual is at least `s² α² / 4 = s² / (16 k²)`
+while the total filler energy stays below `k`. Two facts make the scale
+affordable. First, the entry bound `|R₀ i j| ≤ α` used so far gives
+`‖R₀‖_F² ≤ 1/4`; the row structure (one diagonal `≤ α`, at most `k`
+off-diagonal entries `≤ c α`, and `k c² < 1/4`) gives
+`‖R₀‖_F² ≤ 5 / (16 k)`, so `‖3 R₀‖_F² ≤ 45 / (16 k) ≤ 1` for `k ≥ 3` and
+the symmetric completion of phase AC applies. Second, that completion
+contracts, `‖C w‖² ≤ ‖w‖²`, so the filler energy is at most the design
+column energy, with no factor `k`. With `s = 3` the requirement
+`1 / (4 (k-1)(k-2)) ≤ 9 / (16 k²)` holds for `k ≥ 5`, so for every
+`m ≥ 3` the frame `[3 R₀ | C W]` with the triple design `W` has
+orthogonal rows, CPQR set equal to the leading prefix, and inverse
+growth at least `((2m/3)(4/3)^(m-1))² / 9`.
+
+Targets in `StructuredColumnSelection/ScaledDesignFrame.lean`:
+`wideTriangular_frob_le_sharp` (`‖R₀‖_F² ≤ 5 / (16 k)`),
+`wide_scaled_design_pivots` (parametric in `s > 0`, the completion
+`C` with `(s R₀)(s R₀)ᵀ + C Cᵀ = 1` and `‖C w‖² ≤ ‖w‖²`, and a tight
+design with column energy `≤ s² / (16 k²)`: orthogonal rows and CPQR
+set equal to the prefix), `wide_scaled_design_adverse` (the same with a
+witness `x`, `‖A_J x‖² = 1`, `‖x‖² ≥ G² / s²`), a row-reindexing lemma
+for designs, and the instantiation `scaled_triple_frame`: for every
+`m ≥ 3` there are `A`, `C`, `W`, `x` with `A Aᵀ = 1`, leading block
+`3 R₀`, filler block `C W`, `Cᵀ = C`, `(3 R₀)(3 R₀)ᵀ + C Cᵀ = 1`,
+`‖3 R₀‖_F² ≤ 45 / (16 k)`, `W Wᵀ = 1`, every design column of energy
+`1 / (4 (k-1)(k-2))`, design coherence at most `13/14`, CPQR set equal
+to the prefix, `‖A_J x‖² = 1`, and `G² / 9 ≤ ‖x‖²`. Re-exported as
+`milestoneE_scaled_triple_frame`.
+
+Independent check: `tests/test_scaled_block.py` builds `R₀` for
+`m = 2, 3, 4` in exact rationals, checks `‖R₀‖_F² ≤ 5 / (16 k)`, checks
+`1 / (4 (k-1)(k-2)) ≤ 9 / (16 k²)` for `5 ≤ k ≤ 200`, and checks on the
+`m = 3` instance with a floating completion `C = (I - R Rᵀ)^{1/2}` that
+every filler energy is below every leading residual threshold and that
+the greedy pivots are the leading prefix. It does not call the
+repository CPQR code. It is not the theorem.
+
+Non-claims: no coherence bound on the frame `[3 R₀ | C W]` is proved in
+this phase (the design coherence `13/14` is a statement about `W`, not
+about `C W` or about the leading columns); no polynomial CPQR bound; no
+closure of outcome 1 or outcome 3. Problem 4.1 is not solved.
+`MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:
+[#44](https://github.com/tripp-smith/structured-column-selection/pull/44).
+
 Phase PR and verification receipt:
 [#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
 

@@ -351,6 +351,24 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Scaled leading block and the triple-design frame (2026-10-30)
+
+`milestoneE_scaled_triple_frame` gives, for every `m ≥ 3`, the frame
+`A = [3 R₀ | C W]` with `R₀ = wideTriangular m`, `C` the symmetric
+completion of `3 R₀`, and `W` the triple design reindexed to `k = m²`
+rows: `A Aᵀ = I`, CPQR set equal to the leading prefix, image energy `1`,
+and inverse energy at least `((2m/3)(4/3)^(m-1))² / 9`. Two inputs made
+the triple design usable despite its column energy `1 / (4 (k-1)(k-2))`:
+the row-structure bound `‖R₀‖_F² ≤ 5 / (16 k)` (so `‖3 R₀‖_F² ≤ 1` for
+`k ≥ 3` and the completion exists), and the contraction `‖C w‖² ≤ ‖w‖²`
+(so fillers inherit the design energy without the factor `k` of the
+generic completion bound). The scaled threshold is `9 / (16 k²)`, met
+for `k ≥ 5`. The filler columns are `C w_a` for pairwise non-parallel
+`w_a`, unlike the repeated block of the outcome-2 frame, and the
+statement records every completion identity of `C` and design property
+of `W`. No coherence bound on the columns of `A` is proved here. This
+does not close outcome 3.
+
 ## Weighted signed triple design (2026-10-30)
 
 `milestoneE_triple_design` gives, for every `n`, an explicit tight design

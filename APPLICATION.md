@@ -228,6 +228,15 @@ squared column length `14`, pairwise distinct columns, and the integer
 inner-product bound `13` (normalized coherence `13/14`, attained). It
 does not change the sampler.
 
+`tests/test_scaled_block.py` checks the row-structure bound
+`‖wideTriangular m‖_F² ≤ 5 / (16 k)` in exact rationals for
+`m = 2, 3, 4`, the threshold inequality `1 / (4 (k-1)(k-2)) ≤ 9 / (16 k²)`
+for `5 ≤ k ≤ 200`, and, on the `m = 3` instance with a floating
+completion `C = (I - 9 R₀ R₀ᵀ)^{1/2}` and the triple design, that every
+filler energy is below every scaled leading residual and that greedy
+residual pivoting returns the leading prefix. It does not change the
+sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler
