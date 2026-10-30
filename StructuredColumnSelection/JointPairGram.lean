@@ -56,6 +56,13 @@ general.
 factor is `O(τ k)` near the last pivot. The bound is not a polynomial in
 `k`. `joint_cpqr_trace_bound` records the iteration. It does not close
 outcome 3. Coherence is used only at length 2.
+
+`joint_square_equal_trace` is the full CPQR set on a square matrix with
+equal column energies. The inverse trace is at most
+`(k : ℝ) - 2 + 2 / (1 - ρ ^ 2)`. Square equal-leverage only. Not a
+polynomial bound for rectangular or `τ > 1` matrices. Does not close
+outcome 3. Not claimed sharp for `ρ > 0`. On the identity at `ρ = 0`
+the bound equals `k`, and the inverse trace equals `k`.
 -/
 
 namespace StructuredColumnSelection
@@ -1535,5 +1542,120 @@ theorem joint_cpqr_trace_bound {k n t : ℕ}
       have henergy :=
         selectedCols_energy_mul_inv_trace_ge A (cpqrIterate A (s + 1)) hstep.1 x
       exact henergy.trans (mul_le_mul_of_nonneg_left htrb (vecEnergy_nonneg _))
+
+/-- Prefix inverse-trace bound for square equal-leverage CPQR. Not a
+public theorem. Square equal-leverage only. Not a polynomial bound for
+rectangular or `τ > 1` matrices. Does not close outcome 3. -/
+lemma joint_square_equal_prefix {k : ℕ}
+    (A : Matrix (Fin k) (Fin k) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (ρ : ℝ)
+    (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin k, residualSq A ∅ i ≤ residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin k, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j))
+    (t : ℕ) (ht2 : 2 ≤ t) :
+    t ≤ k →
+      (selectedColGram A (cpqrIterate A t)).det ≠ 0 ∧
+        ((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤
+          (t : ℝ) - 2 + 2 / (1 - ρ ^ 2) := by
+  have hlev1 : ∀ i j : Fin k, residualSq A ∅ i ≤ (1 : ℝ) * residualSq A ∅ j := by
+    intro i j
+    simpa [one_mul] using hlev i j
+  have hδ : 0 < (1 : ℝ) - ρ ^ 2 := by
+    have : ρ ^ 2 < 1 := (sq_lt_one_iff₀ hρ0).2 hρ
+    linarith
+  induction t, ht2 using Nat.le_induction with
+  | base =>
+    intro _
+    obtain ⟨_, _, _, _, hdet, htr⟩ :=
+      joint_cpqr_prefix_trace A hA hk hk (1 : ℝ) ρ le_rfl hρ0 hρ hlev1 hcoh
+    have hprefix_eq :
+        (2 : ℝ) * (1 : ℝ) ^ 2 * (k : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) =
+          (2 : ℝ) / (1 - ρ ^ 2) := by
+      have hk0 : (k : ℝ) ≠ 0 := by exact_mod_cast (show k ≠ 0 by omega)
+      have hδ0 : (1 : ℝ) - ρ ^ 2 ≠ 0 := ne_of_gt hδ
+      field_simp [hk0, hδ0]
+    have htwo_eq :
+        (2 : ℝ) - 2 + 2 / (1 - ρ ^ 2) = (2 : ℝ) / (1 - ρ ^ 2) := by
+      have : (2 : ℝ) - 2 = 0 := by norm_num
+      rw [this, zero_add]
+    refine ⟨hdet, ?_⟩
+    calc
+      ((selectedColGram A (cpqrIterate A 2))⁻¹).trace
+          ≤ (2 : ℝ) * (1 : ℝ) ^ 2 * (k : ℝ) / ((k : ℝ) * (1 - ρ ^ 2)) := htr
+      _ = (2 : ℝ) / (1 - ρ ^ 2) := hprefix_eq
+      _ = (2 : ℝ) - 2 + 2 / (1 - ρ ^ 2) := htwo_eq.symm
+  | succ m hm ih =>
+    intro hmk
+    have ihP := ih (Nat.le_of_succ_le hmk)
+    have hmlt : m < k := Nat.lt_of_succ_le hmk
+    have hm1 : 1 ≤ m := le_trans one_le_two hm
+    let B : ℝ := (m : ℝ) - 2 + 2 / (1 - ρ ^ 2)
+    have hBnn : 0 ≤ B := by
+      have hsub : 0 ≤ (m : ℝ) - 2 := sub_nonneg.mpr (by exact_mod_cast hm)
+      have hpos : 0 ≤ (2 : ℝ) / (1 - ρ ^ 2) :=
+        le_of_lt (div_pos (by norm_num) hδ)
+      exact add_nonneg hsub hpos
+    have htrB : ((selectedColGram A (cpqrIterate A m))⁻¹).trace ≤ B := ihP.2
+    have hstep :=
+      joint_cpqr_step_tight A hA hm1 hmlt hmlt (1 : ℝ) B le_rfl hBnn hlev1 htrB
+    have hk0 : (k : ℝ) ≠ 0 := by exact_mod_cast (show k ≠ 0 by omega)
+    have hcoeff : (1 : ℝ) * (k : ℝ) / (k : ℝ) = 1 :=
+      mul_div_cancel_right₀ (1 : ℝ) hk0
+    have hquot : ((k : ℝ) - (m : ℝ)) / ((k : ℝ) - (m : ℝ)) = 1 := by
+      have hmkl : (m : ℝ) < (k : ℝ) := by exact_mod_cast hmlt
+      exact div_self (sub_ne_zero.mpr (ne_of_gt hmkl))
+    have hstep_eq :
+        (1 + ((1 : ℝ) * (k : ℝ) / (k : ℝ)) * B) *
+            (((k : ℝ) - (m : ℝ)) / ((k : ℝ) - (m : ℝ))) =
+          (1 : ℝ) + B := by
+      rw [hcoeff, hquot, one_mul, mul_one]
+    have hnext :
+        (1 : ℝ) + B = ((m + 1 : ℕ) : ℝ) - 2 + 2 / (1 - ρ ^ 2) := by
+      unfold B
+      rw [Nat.cast_succ]
+      abel
+    have htr := hstep.2
+    rw [hstep_eq, hnext] at htr
+    exact ⟨hstep.1, htr⟩
+
+/-- Square equal-leverage only. Not a polynomial bound for rectangular or
+`τ > 1` matrices. Does not close outcome 3. Not claimed sharp for `ρ > 0`.
+On the identity at `ρ = 0` the bound equals `k`, and the inverse trace
+equals `k`. -/
+theorem joint_square_equal_trace {k : ℕ}
+    (A : Matrix (Fin k) (Fin k) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (ρ : ℝ)
+    (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin k, residualSq A ∅ i ≤ residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin k, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    (cpqrSet A).card = k ∧
+      (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (k : ℝ) - 2 + 2 / (1 - ρ ^ 2) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            ((k : ℝ) - 2 + 2 / (1 - ρ ^ 2)) := by
+  have hpre :=
+    joint_square_equal_prefix A hA hk ρ hρ0 hρ hlev hcoh k hk le_rfl
+  have hcard : (cpqrSet A).card = k := cpqrSet_card_eq A hA
+  have hset : cpqrSet A = cpqrIterate A k := rfl
+  have hdet : (selectedColGram A (cpqrSet A)).det ≠ 0 := by
+    rw [hset]
+    exact hpre.1
+  have htr :
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (k : ℝ) - 2 + 2 / (1 - ρ ^ 2) := by
+    rw [hset]
+    exact hpre.2
+  refine ⟨hcard, hdet, htr, ?_⟩
+  intro x
+  have henergy :=
+    selectedCols_energy_mul_inv_trace_ge A (cpqrSet A) hdet x
+  exact henergy.trans (mul_le_mul_of_nonneg_left htr (vecEnergy_nonneg _))
 
 end StructuredColumnSelection

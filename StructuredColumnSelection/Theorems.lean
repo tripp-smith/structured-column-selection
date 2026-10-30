@@ -1242,4 +1242,26 @@ theorem milestoneE_joint_cpqr_trace_bound {k n t : ℕ}
             jointTraceBound k n τ ρ t :=
   joint_cpqr_trace_bound A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh ht2 htk
 
+/-- Square equal-leverage only. Not a polynomial bound for rectangular or
+`τ > 1` matrices. Does not close outcome 3. Not claimed sharp for `ρ > 0`.
+On the identity at `ρ = 0` the bound equals `k`, and the inverse trace
+equals `k`. -/
+theorem milestoneE_joint_square_equal_trace {k : ℕ}
+    (A : Matrix (Fin k) (Fin k) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (ρ : ℝ)
+    (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin k, residualSq A ∅ i ≤ residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin k, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    (cpqrSet A).card = k ∧
+      (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (k : ℝ) - 2 + 2 / (1 - ρ ^ 2) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            ((k : ℝ) - 2 + 2 / (1 - ρ ^ 2)) :=
+  joint_square_equal_trace A hA hk ρ hρ0 hρ hlev hcoh
+
 end StructuredColumnSelection

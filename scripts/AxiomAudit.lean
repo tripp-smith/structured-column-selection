@@ -110,4 +110,5 @@ Public structural theorems may depend only on `propext`,
 #print axioms StructuredColumnSelection.milestoneE_joint_cpqr_k3
 #print axioms StructuredColumnSelection.milestoneE_joint_cpqr_step
 #print axioms StructuredColumnSelection.milestoneE_joint_cpqr_step_tight
+#print axioms StructuredColumnSelection.milestoneE_joint_square_equal_trace
 #print axioms StructuredColumnSelection.milestoneE_joint_cpqr_trace_bound

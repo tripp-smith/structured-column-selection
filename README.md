@@ -728,3 +728,22 @@ The earlier step is unchanged. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#56](https://github.com/tripp-smith/structured-column-selection/pull/56).
+
+Completed phase: **AR square equal-leverage CPQR trace**.
+`milestoneE_joint_square_equal_trace` bounds the CPQR set of a square
+orthogonal-row matrix whose column energies are equal. The leverage
+comparison is with ratio `1`. For coherence `ρ` in `[0, 1)`, the inverse
+trace of `selectedColGram A (cpqrSet A)` is at most
+`(k : ℝ) - 2 + 2 / (1 - ρ ^ 2)`, and the same factor bounds the Rayleigh
+form. Both dimensions are `Fin k`, so `n = k`. Coherence is used for the
+length-2 base `2 / (1 - ρ ^ 2)`, and the tight step then adds `1` per
+pivot. At `ρ = 0` on the identity the bound equals `k`, and the inverse
+trace equals `k` for `k = 3` and `k = 4`. This is not a bound for
+rectangular matrices or for `τ > 1`. It is not a polynomial bound for
+every orthogonal-row matrix. For leverage ratio `τ > 1` the recurrence
+`T ↦ 1 + τ T` is still exponential, and the wide adverse family is
+outside this class. A square-only bound does not close outcome 3. The
+bound is not claimed sharp for `ρ > 0`. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#57](https://github.com/tripp-smith/structured-column-selection/pull/57).

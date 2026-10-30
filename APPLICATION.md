@@ -316,6 +316,16 @@ inverse trace equals `3`. The old bound `2 + (1 + 2) · 1` equals `5`,
 and `3 < 5`. The check is not the theorem. The new bound is not claimed
 sharp in general. It does not change the sampler.
 
+`tests/test_square_equal_trace.py` runs `structselect.cpqr` on the
+`k × k` identity at `ρ = 0`. For `k = 3` the bound and the inverse
+trace are both `3`. For `k = 4` they are both `4`. Column energies are
+equal, so the leverage ratio is `1`, and off-diagonal inner products
+are `0`. The check is not the theorem. The Lean statement is square
+and equal-leverage only. It is not a polynomial bound for rectangular
+matrices or for `τ > 1`. For `τ > 1` the recurrence `T ↦ 1 + τ T` is
+still exponential. The wide adverse family is outside this class. It
+does not close outcome 3. It does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler
