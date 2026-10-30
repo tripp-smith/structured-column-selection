@@ -351,6 +351,53 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Joint leverage-coherence census (2026-10-30)
+
+`experiments/census_joint_seed1.json` is a float census, not a theorem.
+The sample uses orthogonal-row frames with `k = 2..8` and `n ≤ 16`.
+A frame with measured leverage ratio `L` and normalized coherence `c`
+is counted in every cell with `τ ≥ L` and `ρ ≥ c`, for
+`τ ∈ {2, 4, 8}` and `ρ ∈ {0.5, 0.7, 0.9}`. Of 428 tried frames, 228
+were accepted. Leverage-skew, Kahan-like, near-duplicate, and the Paley
+frames in the run missed the loosest cell. The scaled triple-design
+frame was not rerun. Its leverages are wildly unbalanced, so the
+`19/20` coherence theorem does not put that family in this class, and
+it does not exclude the class.
+
+No cell was empty. The recorded maxima of `r_CPQR` are:
+
+| τ | ρ | frames in the cell | max `r_CPQR` | argmax |
+| --- | --- | --- | --- | --- |
+| 2 | 0.5 | 52 | 0.8164965809277263 | simplex ETF, `3×4` |
+| 2 | 0.7 | 85 | 0.866025403784439 | simplex ETF, `2×3` |
+| 2 | 0.9 | 100 | 0.866025403784439 | simplex ETF, `2×3` |
+| 4 | 0.5 | 56 | 0.8164965809277263 | simplex ETF, `3×4` |
+| 4 | 0.7 | 120 | 0.866025403784439 | simplex ETF, `2×3` |
+| 4 | 0.9 | 178 | 0.866025403784439 | simplex ETF, `2×3` |
+| 8 | 0.5 | 56 | 0.8164965809277263 | simplex ETF, `3×4` |
+| 8 | 0.7 | 126 | 0.866025403784439 | simplex ETF, `2×3` |
+| 8 | 0.9 | 228 | 0.866025403784439 | simplex ETF, `2×3` |
+
+The largest value in the file is `0.866025403784439`. The `ρ = 0.5`
+cells do not contain the `2×3` equiangular frames: their measured
+normalized coherence is one unit in the last place above `1/2`, so
+those frames sit in the cells with `ρ ≥ 0.7`. Inside every populated
+cell, the maximum `r_CPQR` at the values of `k` that occur does not
+increase with `k`. For `ρ ≥ 0.7` those per-`k` maxima are
+`0.866025403784439`, `0.8164965809277263`, `0.790569415042095`,
+`0.7745966692414834`, `0.7637626158259734`, `0.7559289460184545`,
+`0.7500000000000001` at `k = 2..8`. For `ρ = 0.5` the same list starts
+at `k = 3`. No accepted frame has `r_CPQR > 1`, and none reaches the
+named polynomial yardstick.
+
+Hypothesis. No growth was observed, so a later phase may try a positive
+theorem on the joint class. The search was finite: `k ≤ 8`, `n ≤ 16`,
+and 20 Haar draws at each sampled width. This census does not prove
+that theorem. It does not prove the joint class is safe, and it does
+not prove the class grows. Outcome 3 stays open. Problem 4.1 is not
+solved, and CPQR is not claimed to be polynomial on every orthogonal-row
+matrix.
+
 ## Bounded coherence is not polynomial (2026-10-30)
 
 `milestoneE_bounded_coherence_no_polynomial` shows that the candidate

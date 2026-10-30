@@ -1852,3 +1852,20 @@ numeric. A recorded ratio is not a theorem. An empty cell stays empty.
 Non-claims: this does not close §8 or §10; outcome 3 stays open; no
 polynomial CPQR bound; Problem 4.1 is not solved. `MinDimLe`, `k = 1`,
 and `k = 2` stay outside outcome 3. The search is finite.
+
+Reading of `experiments/census_joint_seed1.json` (seed 1, revision
+`5d41fd9b7a41ddf87e1a17248861724fd621a2a3`). 428 frames were tried and
+228 were accepted. All nine cells are nonempty. The largest recorded
+`r_CPQR` is `0.866025403784439`, on the `2×3` simplex ETF, in every
+cell with `ρ ≥ 0.7`. The `ρ = 0.5` maxima are `0.8164965809277263`,
+on the `3×4` simplex ETF. Measured coherence of the `2×3` equiangular
+frames sits one unit in the last place above `1/2`, so those frames
+are outside the `ρ = 0.5` cells. Inside every cell, the per-`k`
+maximum does not increase with `k`. No accepted frame has `r_CPQR > 1`,
+and none meets `named_poly_scale`. Hypothesis, not a theorem: no growth
+was observed on this finite search, so a later phase may try a positive
+theorem on the joint class. The sample does not prove the class is safe
+and does not prove it grows.
+
+Phase PR and verification receipt:
+(pending)

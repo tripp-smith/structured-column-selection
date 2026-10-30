@@ -581,4 +581,16 @@ close outcome 3. The contract is in RESEARCH.md.
 Phase PR and canonical verification/delivery receipt:
 [#47](https://github.com/tripp-smith/structured-column-selection/pull/47).
 
-In progress: **Phase AI joint leverage-coherence census**. A float sample of orthogonal-row frames with leverage ratio at most `τ ∈ {2, 4, 8}` and normalized coherence at most `ρ ∈ {0.5, 0.7, 0.9}`, for `k = 2..8` and `n ≤ 16`. This is not a theorem and does not close outcome 3.
+Completed phase: **AI joint leverage-coherence census**.
+`experiments/census_joint_seed1.json` is a float census, seed 1, of
+orthogonal-row frames with leverage ratio at most `8` and normalized
+coherence at most `0.9`, for `k = 2..8` and `n ≤ 16`. The largest
+recorded `r_CPQR` is `0.866025403784439`, on the `2×3` simplex ETF.
+Every cell of `τ ∈ {2, 4, 8}` and `ρ ∈ {0.5, 0.7, 0.9}` was populated.
+Inside each populated cell the per-`k` maximum did not increase with
+`k`. No accepted frame had `r_CPQR > 1`. The sample does not prove the
+joint class is safe and does not prove it grows. The scaled
+triple-design frame is leverage-unbalanced and is not in the sample.
+The coherence cap `19/20` does not exclude this class, because that
+family has wildly unbalanced leverages. This does not close outcome 3.
+The contract is in RESEARCH.md.

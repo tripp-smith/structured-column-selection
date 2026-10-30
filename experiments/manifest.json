@@ -114,6 +114,18 @@
         "frame38_inv_norm_lb"
       ],
       "closes_milestone_e": false
+    },
+    {
+      "path": "experiments/census_joint_seed1.json",
+      "kind": "census",
+      "evidence": "numeric",
+      "container": "object",
+      "provenance": "recorded_revision",
+      "seed": 1,
+      "revision": "5d41fd9b7a41ddf87e1a17248861724fd621a2a3",
+      "any_above_named_poly": false,
+      "any_r_gt_1": false,
+      "closes_milestone_e": false
     }
   ]
 }

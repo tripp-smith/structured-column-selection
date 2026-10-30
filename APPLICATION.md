@@ -258,6 +258,12 @@ same comparison for `3 * wideTriangular m`. It does not change the sampler.
 `19/20`. The check is not a theorem and it does not run CPQR. It does
 not change the sampler.
 
+`experiments/census_joint_seed1.json` is a seed-1 float census of
+orthogonal-row frames with leverage ratio at most 8 and normalized
+coherence at most 0.9. The largest recorded `r_CPQR` is
+`0.866025403784439`. The file is numeric. It does not close Milestone E,
+and it does not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

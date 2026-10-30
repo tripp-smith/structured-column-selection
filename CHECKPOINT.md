@@ -83,6 +83,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Frame coherence, filler pairs | **PROVED** (does not close outcome 3) | `milestoneE_scaled_triple_frame_filler_coherence` |
 | Leading–leading coherence | **PROVED** (does not close outcome 3) | `milestoneE_scaled_block_leading_coherence` |
 | Bounded coherence `≤ 19/20` is not polynomial | **PROVED** (does not close outcome 3) | `milestoneE_bounded_coherence_no_polynomial` |
+| Joint leverage-coherence census | **NUMERICALLY OBSERVED** (not a theorem) | `experiments/census_joint_seed1.json` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.
