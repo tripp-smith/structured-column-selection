@@ -1422,6 +1422,9 @@ Problem 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
 outcome 3.
 
 Phase PR and verification receipt:
+[#45](https://github.com/tripp-smith/structured-column-selection/pull/45).
+
+Phase PR and verification receipt:
 [#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
 
 ## Phase Y equal-energy third pivot (2026-10-29, contract)

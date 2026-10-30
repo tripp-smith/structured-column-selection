@@ -552,3 +552,6 @@ most `(3(1 + 1/m)/√14 + ε)/√(1 - ε)`, where `ε = 45/(16 k)`.
 Leading–leading pairs are not bounded, and no coherence bound on the
 whole frame is claimed. This does not close outcome 3. The contract is
 in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#45](https://github.com/tripp-smith/structured-column-selection/pull/45).
