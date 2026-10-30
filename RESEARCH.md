@@ -2453,3 +2453,93 @@ The census did not prove this. Problem 4.1 is not solved.
 
 Phase PR and verification receipt:
 [#57](https://github.com/tripp-smith/structured-column-selection/pull/57).
+
+## Phase AS tight CPQR trace recurrence (2026-10-30, contract)
+
+Iteration AS. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AQ is one tight CPQR pivot step. Phase AR
+(`milestoneE_joint_square_equal_trace`) is the closed form of the special
+case `n = k`, `τ = 1`. This phase iterates the tight step from the
+length-2 bound up to any `2 ≤ t ≤ k`. The resulting recurrence is not a
+polynomial in `k`. It does not close outcome 3. Phase AR is not reproved
+and is not replaced. The loose recurrence `jointTraceBound` is unchanged.
+
+Target in `StructuredColumnSelection/JointPairGram.lean` as
+`joint_cpqr_trace_bound_tight`, re-exported as
+`milestoneE_joint_cpqr_trace_bound_tight`. `jointTraceBoundTight` is the
+iterated majorant. Hypotheses match `milestoneE_joint_cpqr_trace_bound`:
+`OrthogonalRows A`, `2 ≤ k`, `2 ≤ n`, `1 ≤ τ`, `0 ≤ ρ < 1`, the leverage
+comparison `residualSq A ∅ i ≤ τ * residualSq A ∅ j` for all `i, j`, the
+coherence bound
+`|colInner A i j| ≤ ρ * sqrt(residualSq A ∅ i) * sqrt(residualSq A ∅ j)`
+for `i ≠ j`, and `2 ≤ t ≤ k`. `orthogonalRows_le` gives `k ≤ n`, hence
+`t ≤ n`. `k ≤ n` is not an extra hypothesis.
+
+Conclude:
+
+```text
+(selectedColGram A (cpqrIterate A t)).det ≠ 0 ∧
+((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤
+  jointTraceBoundTight k n τ ρ t ∧
+∀ x : Fin (cpqrIterate A t).card → ℝ,
+  vecEnergy x ≤
+    vecEnergy (selectedCols A (cpqrIterate A t) *ᵥ x) *
+      jointTraceBoundTight k n τ ρ t
+```
+
+The constant is `jointTraceBoundTight`. It is not replaced by a looser
+one. At `2` it is `2 τ^2 n / (k (1 - ρ^2))`, the same length-2 value as
+`jointTraceBound`. The successor at `s + 1`, for `s ≥ 2`, is
+
+```text
+(1 + (τ * k / n) * B) * ((n - s) / (k - s))
+```
+
+with `B = jointTraceBoundTight k n τ ρ s`. There is no added copy of `B`.
+That is the bound in `joint_cpqr_step_tight`. When `n = k`, each tight
+step sends `B` to `1 + τ B`, so `τ > 1` is still exponential in the
+number of pivots. When `n > k`, the factor `(n - s) / (k - s)` is not a
+polynomial bound. The recurrence is not a polynomial in `k`.
+
+It is not claimed sharp in general. On the identity at `τ = 1`, `ρ = 0`,
+`n = k`, the tight values are `2, 3, 4, ...` while the loose values are
+`2, 5, 11, ...`. At `k = n = 3` the tight bounds are `2` then `3` and the
+prefix inverse traces are `2` and `3`. The loose successor at `t = 3` is
+`5`, and `3 < 5`. At `k = n = 4` the tight bounds are `2`, `3`, `4` and
+the inverse traces equal those numbers. The loose value at `t = 4` is
+`11`, and `4 < 11`. Equality of trace and bound is asserted only for
+those identity checks, not in general.
+
+Proof shape. The argument is `joint_cpqr_trace_bound` with the tight
+majorant. The inductive step calls `joint_cpqr_step_tight`, not
+`joint_cpqr_step`. After `jointTraceBoundTight_succ`, the goal is the
+conclusion of the tight step. There is no extra `B +`. The base
+`s + 1 = 2` is `joint_cpqr_prefix_trace` and `jointTraceBoundTight_two`.
+Coherence is used only there. `orthogonalRows_le` gives `k ≤ n`, and
+`s < k` gives `s < n`. The Rayleigh closing is
+`selectedCols_energy_mul_inv_trace_ge`, multiplying the trace inequality
+by the nonnegative image energy. `jointTraceBound`,
+`joint_cpqr_trace_bound`, `joint_cpqr_step`, and `joint_cpqr_step_tight`
+stay as they are. Phase AR is not reproved.
+
+Independent check: `tests/test_cpqr_recurrence_tight.py`, in
+`fractions.Fraction`, calling `structselect.cpqr`. On the square identity
+at `τ = 1` and `ρ = 0`, column energies are equal and off-diagonal inner
+products are `0`. At `k = n = 3` the tight bounds and the prefix inverse
+traces are `2` then `3`, and `3 < 5`. At `k = n = 4` the tight bounds and
+the inverse traces are `2`, `3`, `4`, and `4 < 11`. This rational check
+is not the theorem.
+
+Non-claims: this iterates the tight step. It is not a polynomial in `k`.
+It does not close outcome 3. It does not solve Problem 4.1. It does not
+say CPQR has a polynomial inverse-norm bound. It is not a bound outside
+the leverage-ratio and coherence hypotheses. Coherence is used only at
+length 2. When `n = k` and `τ > 1`, the step `B ↦ 1 + τ B` is still
+exponential in the number of pivots. When `n > k`, the factor
+`(n - s) / (k - s)` is not a polynomial bound. The loose recurrence
+`jointTraceBound` is unchanged. Phase AR remains the square
+equal-leverage closed form. The census did not prove this. `MinDimLe`,
+`k = 1`, and `k = 2` stay outside outcome 3.
+
+Phase PR and verification receipt:

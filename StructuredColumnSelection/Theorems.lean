@@ -1242,6 +1242,31 @@ theorem milestoneE_joint_cpqr_trace_bound {k n t : ℕ}
             jointTraceBound k n τ ρ t :=
   joint_cpqr_trace_bound A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh ht2 htk
 
+/-- Iterates `joint_cpqr_step_tight`, not the loose step. Not a polynomial
+in `k`. Does not close outcome 3. Not a bound outside the leverage-ratio
+and coherence hypotheses. Coherence is used only at length 2. The loose
+recurrence `jointTraceBound` is unchanged. On the identity at `τ = 1`,
+`ρ = 0`, `n = k`, the tight values are `2, 3, 4, ...` while the loose
+values are `2, 5, 11, ...`. Equality of trace and bound is asserted only
+for those identity checks, not in general. -/
+theorem milestoneE_joint_cpqr_trace_bound_tight {k n t : ℕ}
+    (A : Matrix (Fin k) (Fin n) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hn : 2 ≤ n) (τ ρ : ℝ)
+    (hτ : 1 ≤ τ) (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin n, residualSq A ∅ i ≤ τ * residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin n, i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j))
+    (ht2 : 2 ≤ t) (htk : t ≤ k) :
+    (selectedColGram A (cpqrIterate A t)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤
+        jointTraceBoundTight k n τ ρ t ∧
+      ∀ x : Fin (cpqrIterate A t).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrIterate A t) *ᵥ x) *
+            jointTraceBoundTight k n τ ρ t :=
+  joint_cpqr_trace_bound_tight A hA hk hn τ ρ hτ hρ0 hρ hlev hcoh ht2 htk
+
 /-- Square equal-leverage only. Not a polynomial bound for rectangular or
 `τ > 1` matrices. Does not close outcome 3. Not claimed sharp for `ρ > 0`.
 On the identity at `ρ = 0` the bound equals `k`, and the inverse trace
