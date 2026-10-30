@@ -1313,3 +1313,47 @@ outcome 3.
 
 Phase PR and verification receipt:
 [#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
+
+## Phase Y equal-energy third pivot (2026-10-29, contract)
+
+Iteration Y. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase X separates the two rules on a non-orthogonal
+equal-energy block that CPQR does not choose. The open question is
+whether they still agree along the CPQR path. Success is a certified
+split of that path:
+`milestoneE_equal_energy_third_pivot_split`. Exit if the third pivots
+on `{0, 2}` agree, or if the second pivots on `{0}` differ.
+
+Target in `StructuredColumnSelection/EqualEnergyThirdPivot.lean`,
+re-exported as `milestoneE_equal_energy_third_pivot_split`: the columns
+
+```
+(-3, -4, -2, -2, -1,  0),
+(-2, -1,  2,  3,  0, -4),
+(-2,  0,  3, -2,  4,  1)
+```
+
+divided by `√34` have orthogonal rows and column energy `1/2`. Both
+rules take column `0` and then column `2`. After `{0, 2}`, CPQR takes
+column `3` and the increment pivot takes column `5`. The sets are
+`{0, 2, 3}` and `{0, 2, 5}`. Columns `0` and `2` have inner product
+`-2/17`.
+
+Independent check: `tests/test_equal_energy_third_pivot.py` recomputes
+the integer row Gram `34 I`, the common squared length `17`, the second
+pivot tie at residual `273/578`, and the `2×2` inverse residuals and
+ratios after `{0, 2}`. It does not call the repository CPQR code. It is
+not the theorem.
+
+Non-claims: no polynomial CPQR bound on equal-energy matrices, and no
+closure of outcome 1 or outcome 3. Equal energy is stricter than the
+weakest SPEC §10 class. The bound is for this `k = 3` frame; the
+outcome-2 family has `k = m² ≥ 4`. Phase W still makes an orthogonal
+block agree, and phase X's `{0, 1}` split is a different block. The
+integer search that found this ordering is not the theorem. Problem
+4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3.
+
+Phase PR and verification receipt:
+[#38](https://github.com/tripp-smith/structured-column-selection/pull/38).

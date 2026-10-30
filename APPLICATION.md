@@ -216,6 +216,12 @@ the sampler.
 that three-column expression at `k = 3` and that the identity satisfies
 `‖x‖² ≤ 5 ‖A_J x‖²`. It does not change the sampler.
 
+`tests/test_equal_energy_third_pivot.py` checks that the integer `3×6`
+columns have row Gram `34 I` and squared length `17`, that columns `2`
+and `3` tie for the second residual, and that the `2×2` inverse after
+`{0, 2}` sends the max residual to column `3` and the min ratio to
+column `5`. It does not change the sampler.
+
 `tests/test_equal_energy_block_split.py` checks that the integer `3×6`
 columns have row Gram `100 I`, energy ratio `1`, block inner product
 `31`, and that the `2×2` inverse sends the max residual to column `5`

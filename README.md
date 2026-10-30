@@ -452,3 +452,14 @@ RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
+
+Completed phase: **Y equal-energy third pivot**.
+`milestoneE_equal_energy_third_pivot_split` gives an orthogonal-row
+`3×6` frame with equal column energy `1/2`. Both rules take column `0`
+and then column `2`. After `{0, 2}`, max-residual CPQR takes column `3`
+and the increment pivot takes column `5`, so the three-column sets
+differ. Columns `0` and `2` are not orthogonal. This does not close
+outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#38](https://github.com/tripp-smith/structured-column-selection/pull/38).
