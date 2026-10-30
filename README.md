@@ -832,3 +832,4 @@ AW. The aspect-2 majorant stays non-polynomial. The square trace stays
 exactly `k`. Outcome 3 stays open. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
+[#63](https://github.com/tripp-smith/structured-column-selection/pull/63).
