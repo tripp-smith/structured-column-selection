@@ -2233,3 +2233,83 @@ census did not prove this. Problem 4.1 is not solved. `MinDimLe`,
 
 Phase PR and verification receipt:
 [#54](https://github.com/tripp-smith/structured-column-selection/pull/54).
+
+## Phase AP CPQR trace recurrence (2026-10-30, contract)
+
+Iteration AP. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AO is one step from a prefix of length `t` to
+length `t + 1`. This phase iterates that step from the length-2 bound up
+to any `2 ≤ t ≤ k`. No closed product is derived. The bound is not a
+polynomial in `k`. This does not close outcome 3.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_cpqr_trace_bound`. `jointTraceBound` is the iterated
+majorant. Hypotheses: `OrthogonalRows A`, `2 ≤ k`, `2 ≤ n`, `1 ≤ τ`,
+`0 ≤ ρ`, `ρ < 1`, the leverage comparison
+`residualSq A ∅ i ≤ τ * residualSq A ∅ j` for all `i, j`, the coherence
+bound
+`|colInner A i j| ≤ ρ * sqrt(residualSq A ∅ i) * sqrt(residualSq A ∅ j)`
+for `i ≠ j`, and `2 ≤ t ≤ k`. `orthogonalRows_le` gives `k ≤ n`, hence
+`t ≤ n`. `k ≤ n` is not an extra hypothesis.
+
+Conclude:
+
+```text
+(selectedColGram A (cpqrIterate A t)).det ≠ 0 ∧
+((selectedColGram A (cpqrIterate A t))⁻¹).trace ≤ jointTraceBound k n τ ρ t ∧
+∀ x : Fin (cpqrIterate A t).card → ℝ,
+  vecEnergy x ≤
+    vecEnergy (selectedCols A (cpqrIterate A t) *ᵥ x) * jointTraceBound k n τ ρ t
+```
+
+The constant is `jointTraceBound`. It is not replaced by a looser one.
+At `2` it is `2 τ^2 n / (k (1 - ρ^2))`. The successor at `s + 1`, for
+`s ≥ 2`, is
+
+```text
+B + (1 + (τ * k / n) * B) * ((n - s) / (k - s))
+```
+
+with `B = jointTraceBound k n τ ρ s`. That is the increment in
+`milestoneE_joint_cpqr_step`. Each step multiplies the previous bound by
+`1 + (τ k / n) (n - s) / (k - s)` and adds `(n - s) / (k - s)`. That
+factor is `O(τ k)` near the last pivot. The resulting bound is not a
+polynomial in `k`. No closed product is derived.
+
+It is not claimed sharp. On the identity at `τ = 1` and `ρ = 0`, the
+bound at `k = n = 2` equals `2` and the inverse trace is `2`. At
+`k = n = 3` the bounds are `2` then `5` and the inverse trace is `3 ≤ 5`.
+At `k = n = 4` the bounds are `2`, `5`, then `11` and the inverse trace
+is `4 ≤ 11`.
+
+Proof shape. Induction on `t`. The base `t = 2` is
+`milestoneE_joint_cpqr_prefix_trace`, which gives `det ≠ 0` and the
+length-2 trace bound. Coherence is used only there. If `2 ≤ s < k` and
+the statement holds at `s`, then `s < n`, `1 ≤ s`, and
+`0 ≤ jointTraceBound … s`. The length-2 value is nonnegative, and each
+increment has a nonnegative coefficient when `s < k` and `s < n`.
+`milestoneE_joint_cpqr_step` with `B = jointTraceBound … s` is the
+successor clause. `selectedCols_energy_mul_inv_trace_ge` gives
+`‖x‖² ≤ trace · ‖A_J x‖²`, and the trace is replaced by the bound.
+That quadratic form is not re-proved. There is no separate `k = 3`
+corollary. That case is already `milestoneE_joint_cpqr_k3`.
+
+Independent check: `tests/test_cpqr_recurrence.py`, in
+`fractions.Fraction`, calling `structselect.cpqr`. On identities with
+`τ = 1` and `ρ = 0`, the `2×2` bound and inverse trace are both `2`. At
+`k = n = 3` the bounds are `2` then `5` and the inverse trace is `3 ≤ 5`.
+At `k = n = 4` the bounds are `2`, `5`, then `11` and the inverse trace
+is `4 ≤ 11`. Equality of the trace and the bound is asserted only for the
+`2×2` identity. The test is not the theorem.
+
+Non-claims: for every prefix length `2 ≤ t ≤ k`, the CPQR Gram inverse
+trace is at most `jointTraceBound`. This is not a polynomial in `k`. It
+does not close outcome 3. It is not a bound for matrices outside the
+leverage-ratio and coherence hypotheses. Outcome 3 needs a polynomial
+theorem for a static class at general `k`. The census did not prove this.
+Problem 4.1 is not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside
+outcome 3. `k = 3` was already proved and is not re-opened here.
+
+Phase PR and verification receipt:
+[#55](https://github.com/tripp-smith/structured-column-selection/pull/55).

@@ -301,6 +301,14 @@ The length-2 Gram is `I₂` and its inverse trace is `2`. At `B = 2`,
 length-3 inverse trace is `3`, and `3 ≤ 5`. The check does not assert
 equality. It is not the theorem. It does not change the sampler.
 
+`tests/test_cpqr_recurrence.py` runs `structselect.cpqr` on identities
+with `τ = 1` and `ρ = 0`. At `k = n = 2` the bound and the inverse trace
+are both `2`. At `k = n = 3` the bounds are `2` then `5`, and the inverse
+trace is `3 ≤ 5`. At `k = n = 4` the bounds are `2`, `5`, then `11`, and
+the inverse trace is `4 ≤ 11`. Equality of the trace and the bound is
+asserted only for the `2×2` identity. It is not the theorem. It does not
+change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler

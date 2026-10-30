@@ -351,6 +351,38 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## CPQR trace recurrence (2026-10-30)
+
+`milestoneE_joint_cpqr_trace_bound` iterates `milestoneE_joint_cpqr_step`
+from the length-2 prefix up to any `2 ≤ t ≤ k`. Orthogonal rows, `2 ≤ k`,
+`2 ≤ n`, a leverage ratio at most `τ`, and normalized coherence at most
+`ρ < 1` give an invertible Gram `selectedColGram A (cpqrIterate A t)`
+whose inverse trace is at most `jointTraceBound k n τ ρ t`, and
+`‖x‖² ≤ jointTraceBound k n τ ρ t · ‖selectedCols A (cpqrIterate A t) x‖²`.
+
+`orthogonalRows_le` supplies `k ≤ n`, hence `t ≤ n`. The length-2 case is
+`milestoneE_joint_cpqr_prefix_trace`. Coherence is used only there. If
+`2 ≤ s < k` and the inverse trace at `s` is at most `jointTraceBound … s`,
+then `s < n`, `1 ≤ s`, and that bound is nonnegative. The step theorem
+with `B = jointTraceBound … s` is the successor value. The Rayleigh
+conjunct is `selectedCols_energy_mul_inv_trace_ge`.
+
+Each step multiplies the previous bound by
+`1 + (τ k / n) (n - s) / (k - s)` and adds `(n - s) / (k - s)`. That factor
+is `O(τ k)` near the last pivot. The bound is not a polynomial in `k`.
+No closed product is derived.
+
+`tests/test_cpqr_recurrence.py` runs `structselect.cpqr` on identities
+with `τ = 1` and `ρ = 0`. At `k = n = 2` the bound and the inverse trace
+are both `2`. At `k = n = 3` the bounds are `2` then `5`, and the inverse
+trace is `3 ≤ 5`. At `k = n = 4` the bounds are `2`, `5`, then `11`, and
+the inverse trace is `4 ≤ 11`. Equality of the trace and the bound is
+asserted only for the `2×2` identity. The check is not the theorem.
+
+This does not close outcome 3. `k = 3` was already
+`milestoneE_joint_cpqr_k3`. Problem 4.1 is not solved, and this phase does
+not claim that CPQR is polynomial on orthogonal-row matrices.
+
 ## CPQR trace step (2026-10-30)
 
 `milestoneE_joint_cpqr_step` moves a CPQR prefix of length `t` to length
