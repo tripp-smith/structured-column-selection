@@ -2452,3 +2452,4 @@ adverse family is outside this class. Not claimed sharp for `ρ > 0`.
 The census did not prove this. Problem 4.1 is not solved.
 
 Phase PR and verification receipt:
+[#57](https://github.com/tripp-smith/structured-column-selection/pull/57).

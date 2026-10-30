@@ -746,3 +746,4 @@ outside this class. A square-only bound does not close outcome 3. The
 bound is not claimed sharp for `ρ > 0`. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
+[#57](https://github.com/tripp-smith/structured-column-selection/pull/57).
