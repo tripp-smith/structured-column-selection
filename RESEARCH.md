@@ -2697,3 +2697,4 @@ square bound is unchanged. The majorant at aspect 2 is not a polynomial
 theorem for the equal-leverage class.
 
 Phase PR and verification receipt:
+[#60](https://github.com/tripp-smith/structured-column-selection/pull/60).
