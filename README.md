@@ -539,3 +539,6 @@ the design energy `1 / (4 (k-1)(k-2))` under the scaled threshold
 identities of `C` and the design properties of `W`. No coherence bound
 on the columns of the frame is claimed. This does not close outcome 3.
 The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#44](https://github.com/tripp-smith/structured-column-selection/pull/44).
