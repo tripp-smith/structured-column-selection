@@ -515,6 +515,17 @@ current trace. It is still one step, not an iteration, and not a
 polynomial bound. The new bound is not claimed sharp in general.
 Outcome 3 stays open.
 
+Status note (square equal-leverage CPQR trace):
+`milestoneE_joint_square_equal_trace` is the full CPQR set on a square
+matrix with equal column energies. The inverse trace is at most
+`(k : ℝ) - 2 + 2 / (1 - ρ ^ 2)`. Coherence `ρ` in `[0, 1)` is used for
+the length-2 base `2 / (1 - ρ ^ 2)`; the tight step then adds `1` per
+pivot. At `ρ = 0` on the identity the bound equals `k`. This is not a
+bound for rectangular matrices or for `τ > 1`. For `τ > 1` the
+recurrence `T ↦ 1 + τ T` is still exponential. The wide adverse family
+is outside this class. A square-only bound does not close outcome 3.
+The bound is not claimed sharp for `ρ > 0`. Outcome 3 stays open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

@@ -92,6 +92,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | CPQR trace step | **PROVED** (one prefix step; does not close outcome 3) | `milestoneE_joint_cpqr_step` |
 | CPQR trace recurrence | **PROVED** (any prefix `2 ≤ t ≤ k`; not a polynomial in `k`; does not close outcome 3) | `milestoneE_joint_cpqr_trace_bound` |
 | Tighter CPQR trace step | **PROVED** (one prefix step; the added copy of `B` is removed; does not close outcome 3) | `milestoneE_joint_cpqr_step_tight` |
+| Square equal-leverage CPQR trace | **PROVED** (square `n = k` and equal column energies only; not a polynomial bound for rectangular matrices or for `τ > 1`; does not close outcome 3) | `milestoneE_joint_square_equal_trace` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

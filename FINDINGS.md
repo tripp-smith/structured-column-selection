@@ -351,6 +351,27 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Square equal-leverage CPQR trace (2026-10-30)
+
+`milestoneE_joint_square_equal_trace` is square and equal-leverage only.
+For an orthogonal-row `k × k` matrix with equal column energies and
+normalized coherence at most `ρ < 1`, the CPQR Gram inverse trace is at
+most `(k : ℝ) - 2 + 2 / (1 - ρ ^ 2)`, and the same factor bounds the
+Rayleigh form. The length-2 base is `2 / (1 - ρ ^ 2)`. Each later tight
+step adds `1`. At `ρ = 0` on the identity the bound equals `k`, and the
+inverse trace equals `k`.
+
+`tests/test_square_equal_trace.py` checks the `k = 3` and `k = 4`
+identities at `ρ = 0` with `structselect.cpqr`. The check is not the
+theorem.
+
+This is not a polynomial bound for rectangular matrices or for leverage
+ratio `τ > 1`. For `τ > 1` the recurrence `T ↦ 1 + τ T` is still
+exponential. The wide adverse family is outside this class. A square-only
+(`n = k`) bound does not close outcome 3. The bound is not claimed sharp
+for `ρ > 0`. Problem 4.1 is not solved, and this phase does not claim
+that CPQR is polynomial on orthogonal-row matrices.
+
 ## Tighter CPQR trace step (2026-10-30)
 
 `milestoneE_joint_cpqr_step_tight` has the same hypotheses as

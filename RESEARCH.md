@@ -2378,3 +2378,77 @@ not solved. `MinDimLe`, `k = 1`, and `k = 2` stay outside outcome 3.
 
 Phase PR and verification receipt:
 [#56](https://github.com/tripp-smith/structured-column-selection/pull/56).
+
+## Phase AR square equal-leverage CPQR trace (2026-10-30, contract)
+
+Iteration AR. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AQ removes one copy of the current trace from a
+single CPQR pivot step. For leverage ratio `τ > 1` the recurrence
+`T ↦ 1 + τ T` is still exponential. The wide adverse family is outside
+this class. This phase treats only square matrices (`n = k`) whose
+column energies are equal, so the leverage comparison uses ratio `1`.
+A `k = 3`-only or square-only (`n = k`) bound does not close outcome 3.
+
+Target in `StructuredColumnSelection/JointPairGram.lean` as
+`joint_square_equal_trace`, re-exported as
+`milestoneE_joint_square_equal_trace`. Hypotheses: `OrthogonalRows A`
+for `A : Matrix (Fin k) (Fin k) ℝ`, so `n = k` definitionally, `2 ≤ k`,
+`0 ≤ ρ < 1`, equal column energies
+`∀ i j, residualSq A ∅ i ≤ residualSq A ∅ j`, and normalized coherence
+`|colInner A i j| ≤ ρ √(residualSq A ∅ i) √(residualSq A ∅ j)` for
+`i ≠ j`.
+
+Conclude:
+
+```text
+(cpqrSet A).card = k ∧
+(selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+  (k : ℝ) - 2 + 2 / (1 - ρ ^ 2) ∧
+∀ x, vecEnergy x ≤
+  vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+    ((k : ℝ) - 2 + 2 / (1 - ρ ^ 2))
+```
+
+`cpqrSet A = cpqrIterate A k`. The coefficient is that expression. It
+is not `jointTraceBound`. It is not claimed sharp for `ρ > 0`. On the
+identity at `ρ = 0` the bound equals `k`, and the inverse trace equals
+`k`. For `k = 2` the bound is `2`. For `k = 3` it is `3`. For `k = 4`
+it is `4`.
+
+Proof shape. Induct on the prefix length with `Nat.le_induction` from
+`2`. For `2 ≤ t ≤ k`, `selectedColGram A (cpqrIterate A t)` is
+invertible and its inverse trace is at most
+`(t : ℝ) - 2 + 2 / (1 - ρ ^ 2)`. The length-2 case calls
+`joint_cpqr_prefix_trace` at `τ = 1` and `n = k`. Equal energies give
+`residualSq A ∅ i ≤ 1 * residualSq A ∅ j`. The prefix bound
+`2 * 1 ^ 2 * k / (k * (1 - ρ ^ 2))` equals `2 / (1 - ρ ^ 2)`, which is
+`(2 : ℝ) - 2 + 2 / (1 - ρ ^ 2)`. Each later step calls
+`joint_cpqr_step_tight` at `τ = 1` with that prefix bound `B`. Because
+`n = k` and `t < k`, the step factor
+`(1 + (1 * k / k) B) * ((k - t) / (k - t))` equals `1 + B`, which is
+the bound at length `t + 1`. For `ρ = 0` and `τ = 1` the tight step is
+`T ↦ 1 + T`, so `k - 2` steps from the length-2 bound `2` give `k`.
+Specialize at `t = k`. The card is `cpqrSet_card_eq`. The Rayleigh
+conjunct is `selectedCols_energy_mul_inv_trace_ge`, multiplying the
+trace inequality by the nonnegative image energy. `jointTraceBound`,
+`milestoneE_joint_cpqr_step`, and `milestoneE_joint_cpqr_step_tight`
+stay as they are. There is no general-`τ` closed form.
+
+Independent check: `tests/test_square_equal_trace.py`, in
+`fractions.Fraction`, calling `structselect.cpqr`. On the `k × k`
+identity at `ρ = 0`, the bound and the CPQR-set Gram inverse trace are
+both `3` when `k = 3` and both `4` when `k = 4`. Column energies of the
+identity are equal, so the leverage ratio is `1`, and off-diagonal
+inner products are `0`, so coherence `0` is admissible. The test is not
+the theorem.
+
+Non-claims: square and equal-leverage only. Not a polynomial bound for
+rectangular matrices or for leverage ratio `τ > 1`. Not a polynomial
+bound for every orthogonal-row matrix. Does not close outcome 3. For
+`τ > 1` the recurrence `T ↦ 1 + τ T` is still exponential. The wide
+adverse family is outside this class. Not claimed sharp for `ρ > 0`.
+The census did not prove this. Problem 4.1 is not solved.
+
+Phase PR and verification receipt:
