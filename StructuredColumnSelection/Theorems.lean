@@ -1376,4 +1376,31 @@ theorem milestoneE_joint_codim_two_trace {k : ℕ}
               ((k : ℝ) - 1) * (k : ℝ) * ((k : ℝ) + 1) / 6 - 1) :=
   joint_codim_two_trace A hA hk ρ hρ0 hρ hlev hcoh
 
+/-- Equal column energies, coherence at most `ρ < 1`, and exactly `r`
+extra columns. For fixed `r` the right-hand side is a polynomial in `k`.
+It is not a polynomial bound for general `n` in terms of `n` and `k`
+alone. Phases AW and AX give smaller bounds at `r = 1` and `r = 2`.
+Phase AU still says `n = 2k` is not polynomial. This does not close
+outcome 3. -/
+theorem milestoneE_joint_fixed_codim_trace {k r : ℕ}
+    (A : Matrix (Fin k) (Fin (k + r)) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hr : 1 ≤ r) (ρ : ℝ)
+    (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin (k + r), residualSq A ∅ i ≤ residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin (k + r), i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+            (k : ℝ) * ((k : ℝ) + r) ^ r) /
+          (Nat.factorial r : ℝ) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            ((2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+                (k : ℝ) * ((k : ℝ) + r) ^ r) /
+              (Nat.factorial r : ℝ)) :=
+  joint_fixed_codim_trace A hA hk hr ρ hρ0 hρ hlev hcoh
+
 end StructuredColumnSelection

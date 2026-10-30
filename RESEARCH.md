@@ -2978,3 +2978,118 @@ not prove this.
 
 Phase PR and verification receipt:
 [#63](https://github.com/tripp-smith/structured-column-selection/pull/63).
+
+## Phase AY fixed-codimension CPQR trace (2026-10-30, contract)
+
+Iteration AY. Outcomes 1 and 3 stay open.
+
+Route checkpoint. Phase AU shows the tight majorant at `n = 2k` and
+`τ = 1` beats every polynomial. Phase AV is the square equality: the
+CPQR inverse trace equals `k`. Phase AW is the one-extra-column bound
+(`n = k + 1`). Phase AX is the two-extra-column bound (`n = k + 2`).
+This phase is `n = k + r` for every `r ≥ 1`, with one argument. It calls
+`joint_cpqr_trace_bound_tight`. It does not modify `jointTraceBoundTight`,
+`milestoneE_joint_cpqr_trace_bound_tight`,
+`milestoneE_joint_codim_one_trace`, `milestoneE_joint_codim_two_trace`,
+`milestoneE_square_cpqr_trace_eq`, or the AT/AU theorems. A bound that
+depends on the number of extra columns is not a class for general `n`.
+It does not close outcome 3.
+
+Target in `StructuredColumnSelection/JointPairGram.lean` as
+`joint_fixed_codim_trace`, re-exported as
+`milestoneE_joint_fixed_codim_trace`. Equal column energies (`τ = 1`)
+and exactly `r` extra columns (`n = k + r`). Hypothesis:
+`OrthogonalRows A` for `A : Matrix (Fin k) (Fin (k + r)) ℝ`, `2 ≤ k`,
+`1 ≤ r`, `0 ≤ ρ < 1`, column energies comparable with multiplier `1`,
+and normalized coherence at most `ρ`.
+
+Conclude:
+
+```text
+(selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+  (2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+      (k : ℝ) * ((k : ℝ) + r) ^ r) /
+    (Nat.factorial r : ℝ) ∧
+∀ x : Fin (cpqrSet A).card → ℝ,
+  vecEnergy x ≤
+    vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+      ((2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+          (k : ℝ) * ((k : ℝ) + r) ^ r) /
+        (Nat.factorial r : ℝ))
+```
+
+The bound is loose on purpose so one argument covers every `r ≥ 1`.
+For each fixed `r` the right-hand side is a polynomial in `k`. It is
+not a polynomial in `n` and `k` together. When `r` grows with `k`, the
+estimate still has `(k + r) ^ r / r!`, which is not a joint polynomial.
+Phases AW and AX give smaller bounds at `r = 1` and `r = 2`. This bound
+does not match them. Phase AU remains the statement that the same
+majorant at `n = 2k` is not polynomial. Phase AV remains the square
+equality (trace exactly `k`). This does not close outcome 3.
+
+Proof shape. Apply `joint_cpqr_trace_bound_tight` at `t = k`,
+`n = k + r`, `τ = 1`. The leverage comparison uses multiplier `1` via
+`one_mul`. `2 ≤ k + r` follows from `2 ≤ k` and `1 ≤ r`. That yields
+`det ≠ 0`, inverse trace at most
+`jointTraceBoundTight k (k + r) 1 ρ k`, and the Rayleigh form with that
+majorant. The image energy is nonnegative, so the same closed bound
+replaces the majorant in the Rayleigh form.
+
+The majorant inequality has no matrix:
+
+```text
+jointTraceBoundTight k (k + r) (1 : ℝ) ρ k ≤
+  (2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+      (k : ℝ) * ((k : ℝ) + r) ^ r) /
+    (Nat.factorial r : ℝ)
+```
+
+Let `M(t) = jointTraceBoundTight k (k + r) 1 ρ t` and
+`α = (k : ℝ) / ((k : ℝ) + r)`. For `k ≥ 2` and `r ≥ 1`, `0 < α < 1`.
+Let `P(t) = ∏_{i=1}^{r} ((k : ℝ) - t + i)` and `D(t) = P(t) * M(t)`.
+Then `P(k) = ∏_{i=1}^{r} i = (Nat.factorial r : ℝ)`, so
+`D(k) = (Nat.factorial r : ℝ) * M(k)`. The length-2 value is
+`M(2) = 2 * ((k : ℝ) + r) / ((k : ℝ) * (1 - ρ ^ 2))`. For `2 ≤ s < k`,
+the tight successor and the product identity
+`P(s + 1) * ((k + r - s) / (k - s)) = P(s)` give
+`D(s + 1) = α * D(s) + P(s)`. The identity is checked on its own:
+`P(s + 1)` drops the factor `(k - s)`, and `P(s)` ends with
+`(k - s + r) = (k + r - s)`. Unrolling gives
+
+```text
+D(k) = α ^ (k - 2) * D(2) + ∑_{s=2}^{k-1} P(s) * α ^ (k - s - 1)
+```
+
+For `k = 2` the sum is empty. Since `0 ≤ α ≤ 1` and `P(s) ≥ 0`,
+`D(k) ≤ D(2) + ∑_{s=2}^{k-1} P(s)`. Each factor in `P(s)` for `2 ≤ s`
+is at most `(k : ℝ) + r`, and there are `r` factors, so
+`P(s) ≤ ((k : ℝ) + r) ^ r`. There are at most `k` summands
+(`k - 2 ≤ k`), so the sum is at most
+`(k : ℝ) * ((k : ℝ) + r) ^ r`. Also `P(2) ≤ ((k : ℝ) + r) ^ r`, hence
+`D(2) ≤ ((k : ℝ) + r) ^ r * 2 * ((k : ℝ) + r) / ((k : ℝ) * (1 - ρ ^ 2))`.
+Since `1 / (k : ℝ) ≤ 1`,
+`D(2) ≤ 2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2)`. Dividing by
+`(Nat.factorial r : ℝ) > 0` gives the closed bound.
+
+Independent check: `tests/test_fixed_codim.py`, in `fractions.Fraction`.
+At `ρ = 0` the recurrence is `3` for `r = 1`, `k = 2`; the `r = 1`,
+`k = 3` value is at most the bound; `4` for `r = 2`, `k = 2`; `15` for
+`r = 2`, `k = 4`; and the `r = 3`, `k = 3` value is at most the bound.
+The closed form at `ρ = 0` is
+`(2 * (k + r) ^ (r + 1) + k * (k + r) ^ r) / r!`. This rational check is
+not the theorem. The bound is uniform in `r` and looser than the
+phase-AW and phase-AX bounds. It does not close outcome 3. It is not a
+joint polynomial in `n` and `k`.
+
+Non-claims: equal column energies and exactly `r` extra columns. For
+fixed `r`, a polynomial in `k` and in `1 / (1 - ρ ^ 2)`. Not a
+polynomial in `n` and `k` together. Does not close outcome 3. Does not
+close outcome 1. Does not solve Problem 4.1. Does not say CPQR is
+polynomial on orthogonal-row matrices, or on every equal-leverage
+matrix. Phases AW and AX remain the smaller `r = 1` and `r = 2` bounds.
+Phase AU remains the statement that the majorant at `n = 2k` is not
+polynomial. Phase AV remains the square equality. The census did not
+prove this.
+
+Phase PR and verification receipt:

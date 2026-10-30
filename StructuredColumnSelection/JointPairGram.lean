@@ -6,6 +6,7 @@ import Mathlib.Data.Finset.Max
 import Mathlib.Algebra.Order.Archimedean.Real.Basic
 import Mathlib.Algebra.BigOperators.Intervals
 import Mathlib.Data.Nat.Choose.Basic
+import Mathlib.Order.Interval.Finset.Nat
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity
@@ -108,6 +109,13 @@ Phase AW remains the one-extra-column bound. Phase AU remains the
 statement that the same majorant at `n = 2k` is not polynomial. Phase AV
 remains the square equality (trace exactly `k`). This does not close
 outcome 3.
+
+`joint_fixed_codim_trace` is equal column energies, coherence at most
+`ρ < 1`, and exactly `r` extra columns. For fixed `r` the right-hand
+side is a polynomial in `k`. It is not a polynomial bound for general
+`n` in terms of `n` and `k` alone. Phases AW and AX give smaller bounds
+at `r = 1` and `r = 2`. Phase AU still says `n = 2k` is not polynomial.
+This does not close outcome 3.
 -/
 
 namespace StructuredColumnSelection
@@ -3517,6 +3525,426 @@ theorem joint_codim_two_trace {k : ℕ}
     joint_cpqr_trace_bound_tight A hA hk hn (1 : ℝ) ρ le_rfl hρ0 hρ hlev1 hcoh
       hk le_rfl
   have hmaj := jointTraceBoundTight_codim_two_le k hk ρ hρ0 hρ
+  refine ⟨htight.1, htight.2.1.trans hmaj, ?_⟩
+  intro x
+  exact (htight.2.2 x).trans (mul_le_mul_of_nonneg_left hmaj (vecEnergy_nonneg _))
+
+/-- `∏_{i=1}^{r} i = r!`. -/
+lemma prod_Icc_cast_eq_factorial (r : ℕ) :
+    ∏ i ∈ Icc 1 r, (i : ℝ) = (Nat.factorial r : ℝ) := by
+  induction r with
+  | zero =>
+    rw [Icc_eq_empty_of_lt (by omega : (0 : ℕ) < 1), prod_empty, Nat.factorial_zero]
+    simp
+  | succ r ih =>
+    rw [prod_Icc_succ_top (by omega : (1 : ℕ) ≤ r + 1), ih, Nat.factorial_succ,
+      Nat.cast_mul]
+    ring
+
+/-- `P(t) = ∏_{i=1}^{r} ((k : ℝ) - t + i)`. -/
+noncomputable def fixedCodimProd (k r t : ℕ) : ℝ :=
+  ∏ i ∈ Icc 1 r, ((k : ℝ) - (t : ℕ) + (i : ℕ))
+
+/-- `D(t) = P(t) * M(t)` for the fixed-codimension majorant. -/
+noncomputable def fixedCodimScaled (k r : ℕ) (ρ : ℝ) (t : ℕ) : ℝ :=
+  fixedCodimProd k r t * jointTraceBoundTight k (k + r) (1 : ℝ) ρ t
+
+lemma fixedCodimProd_at_k (k r : ℕ) :
+    fixedCodimProd k r k = (Nat.factorial r : ℝ) := by
+  unfold fixedCodimProd
+  have hterm : ∀ i ∈ Icc 1 r, ((k : ℝ) - (k : ℕ) + (i : ℕ)) = (i : ℝ) := by
+    intro i _
+    ring
+  rw [prod_congr rfl hterm, prod_Icc_cast_eq_factorial]
+
+/-- Factors stay nonnegative for `t ≤ k`. -/
+lemma fixedCodimProd_nonneg {k r t : ℕ} (htk : t ≤ k) :
+    0 ≤ fixedCodimProd k r t := by
+  unfold fixedCodimProd
+  refine prod_nonneg ?_
+  intro i hi
+  have hi1 : (1 : ℕ) ≤ i := (mem_Icc.mp hi).1
+  have htk' : (t : ℝ) ≤ k := by exact_mod_cast htk
+  have hi' : (1 : ℝ) ≤ i := by exact_mod_cast hi1
+  linarith
+
+/-- Each of the `r` factors is at most `(k : ℝ) + r` once `t ≥ 2`. -/
+lemma fixedCodimProd_le_pow {k r t : ℕ} (_hr : 1 ≤ r) (_ht2 : 2 ≤ t) (htk : t ≤ k) :
+    fixedCodimProd k r t ≤ ((k : ℝ) + r) ^ r := by
+  unfold fixedCodimProd
+  have hcard : #(Icc (1 : ℕ) r) = r := by
+    rw [Nat.card_Icc]
+    omega
+  have hprod :
+      ∏ i ∈ Icc 1 r, ((k : ℝ) - (t : ℕ) + (i : ℕ)) ≤
+        ∏ i ∈ Icc 1 r, ((k : ℝ) + r) := by
+    refine prod_le_prod ?_ ?_
+    · intro i hi
+      have hi1 : (1 : ℕ) ≤ i := (mem_Icc.mp hi).1
+      have htk' : (t : ℝ) ≤ k := by exact_mod_cast htk
+      have hi' : (1 : ℝ) ≤ i := by exact_mod_cast hi1
+      linarith
+    · intro i hi
+      have hir : i ≤ r := (mem_Icc.mp hi).2
+      have hir' : (i : ℝ) ≤ r := by exact_mod_cast hir
+      have ht0 : (0 : ℝ) ≤ t := by exact_mod_cast (show 0 ≤ t by omega)
+      linarith
+  calc
+    ∏ i ∈ Icc 1 r, ((k : ℝ) - (t : ℕ) + (i : ℕ))
+        ≤ ∏ i ∈ Icc 1 r, ((k : ℝ) + r) := hprod
+    _ = ((k : ℝ) + r) ^ #(Icc (1 : ℕ) r) := by rw [prod_const]
+    _ = ((k : ℝ) + r) ^ r := by rw [hcard]
+
+/-- `P(s + 1) * ((k + r - s) / (k - s)) = P(s)`.
+`P(s + 1)` drops `(k - s)`, and `P(s)` ends with `(k - s + r) = (k + r - s)`. -/
+lemma fixedCodimProd_shift {k r s : ℕ} (hr : 1 ≤ r) (hsk : s < k) :
+    fixedCodimProd k r (s + 1) *
+        ((((k : ℝ) + r) - (s : ℕ)) / ((k : ℝ) - (s : ℕ))) =
+      fixedCodimProd k r s := by
+  have hden : (k : ℝ) - (s : ℕ) ≠ 0 :=
+    sub_ne_zero.mpr (ne_of_gt (by exact_mod_cast hsk))
+  have hfront :
+      (k : ℝ) - ((s + 1) : ℕ) + (1 : ℕ) = (k : ℝ) - (s : ℕ) := by
+    push_cast
+    ring
+  have hlast :
+      (k : ℝ) - (s : ℕ) + (r : ℕ) = ((k : ℝ) + r) - (s : ℕ) := by
+    ring
+  set Q : ℝ := ∏ i ∈ Ico 1 r, ((k : ℝ) - (s : ℕ) + (i : ℕ)) with hQ
+  have hIccTail : Icc 1 (r - 1) = Ico 1 r := by
+    have hrw : r = (r - 1) + 1 := by omega
+    conv_rhs => rw [hrw]
+    exact (Ico_add_one_right_eq_Icc 1 (r - 1)).symm
+  have hPs : fixedCodimProd k r s = Q * (((k : ℝ) + r) - (s : ℕ)) := by
+    unfold fixedCodimProd
+    have hrw : r = (r - 1) + 1 := by omega
+    rw [hrw, prod_Icc_succ_top (by omega : (1 : ℕ) ≤ (r - 1) + 1)]
+    have hidx : (r - 1) + 1 = r := by omega
+    rw [hidx, hlast, hIccTail, hQ]
+  have htail :
+      ∏ i ∈ Ico 2 (r + 1), ((k : ℝ) - ((s + 1) : ℕ) + (i : ℕ)) = Q := by
+    have hadd :=
+      prod_Ico_add (fun i => (k : ℝ) - ((s + 1) : ℕ) + (i : ℕ)) 1 r (1 : ℕ)
+    rw [← hadd, hQ]
+    refine prod_congr rfl ?_
+    intro i _
+    push_cast
+    ring
+  have hPs1 : fixedCodimProd k r (s + 1) = ((k : ℝ) - (s : ℕ)) * Q := by
+    unfold fixedCodimProd
+    rw [← Ico_add_one_right_eq_Icc,
+      prod_eq_prod_Ico_succ_bot (by omega : (1 : ℕ) < r + 1), hfront, htail]
+  have hmul :
+      fixedCodimProd k r (s + 1) * (((k : ℝ) + r) - (s : ℕ)) =
+        fixedCodimProd k r s * ((k : ℝ) - (s : ℕ)) := by
+    rw [hPs1, hPs]
+    ring
+  calc
+    fixedCodimProd k r (s + 1) *
+          ((((k : ℝ) + r) - (s : ℕ)) / ((k : ℝ) - (s : ℕ)))
+        = fixedCodimProd k r (s + 1) * (((k : ℝ) + r) - (s : ℕ)) /
+            ((k : ℝ) - (s : ℕ)) := by ring
+    _ = fixedCodimProd k r s * ((k : ℝ) - (s : ℕ)) / ((k : ℝ) - (s : ℕ)) := by
+          rw [hmul]
+    _ = fixedCodimProd k r s := by
+          rw [mul_div_cancel_right₀ _ hden]
+
+lemma fixedCodimScaled_two (k r : ℕ) (_hk : 2 ≤ k) (_hr : 1 ≤ r) (ρ : ℝ) :
+    fixedCodimScaled k r ρ 2 =
+      fixedCodimProd k r 2 *
+        ((2 : ℝ) * ((k : ℝ) + r) / ((k : ℝ) * (1 - ρ ^ 2))) := by
+  have hM :
+      jointTraceBoundTight k (k + r) (1 : ℝ) ρ 2 =
+        (2 : ℝ) * ((k : ℝ) + r) / ((k : ℝ) * (1 - ρ ^ 2)) := by
+    rw [jointTraceBoundTight_two]
+    simp only [one_pow, mul_one, Nat.cast_add]
+  unfold fixedCodimScaled
+  rw [hM]
+
+/-- `D(s + 1) = α * D(s) + P(s)` for `2 ≤ s < k`. -/
+lemma fixedCodimScaled_succ {k r s : ℕ} (hs : 2 ≤ s) (hsk : s < k) (hr : 1 ≤ r)
+    (ρ : ℝ) :
+    fixedCodimScaled k r ρ (s + 1) =
+      ((k : ℝ) / ((k : ℝ) + r)) * fixedCodimScaled k r ρ s +
+        fixedCodimProd k r s := by
+  have hsucc :=
+    jointTraceBoundTight_succ (k := k) (n := k + r) (τ := (1 : ℝ)) (ρ := ρ) hs
+  simp only [one_mul, Nat.cast_add] at hsucc
+  set α : ℝ := (k : ℝ) / ((k : ℝ) + r)
+  have hshift := fixedCodimProd_shift (k := k) (r := r) (s := s) hr hsk
+  unfold fixedCodimScaled
+  rw [hsucc]
+  calc
+    fixedCodimProd k r (s + 1) *
+          ((1 + α * jointTraceBoundTight k (k + r) (1 : ℝ) ρ s) *
+            ((((k : ℝ) + r) - (s : ℕ)) / ((k : ℝ) - (s : ℕ))))
+        = (fixedCodimProd k r (s + 1) *
+            ((((k : ℝ) + r) - (s : ℕ)) / ((k : ℝ) - (s : ℕ)))) *
+          (1 + α * jointTraceBoundTight k (k + r) (1 : ℝ) ρ s) := by
+          ring
+    _ = fixedCodimProd k r s *
+          (1 + α * jointTraceBoundTight k (k + r) (1 : ℝ) ρ s) := by
+          rw [hshift]
+    _ = α * (fixedCodimProd k r s *
+            jointTraceBoundTight k (k + r) (1 : ℝ) ρ s) +
+          fixedCodimProd k r s := by
+          ring
+
+/-- For `2 ≤ t ≤ k`,
+`D(t) = α ^ (t - 2) D(2) + ∑_{s=2}^{t-1} P(s) α ^ (t - s - 1)`. -/
+lemma fixedCodimScaled_unrolled (k r : ℕ) (hr : 1 ≤ r) (ρ : ℝ)
+    (t : ℕ) (ht2 : 2 ≤ t) (htk : t ≤ k) :
+    fixedCodimScaled k r ρ t =
+      ((k : ℝ) / ((k : ℝ) + r)) ^ (t - 2) * fixedCodimScaled k r ρ 2 +
+        ∑ s ∈ Ico 2 t,
+          fixedCodimProd k r s *
+            ((k : ℝ) / ((k : ℝ) + r)) ^ (t - s - 1) := by
+  set α : ℝ := (k : ℝ) / ((k : ℝ) + r)
+  induction t, ht2 using Nat.le_induction with
+  | base =>
+    rw [Ico_self, sum_empty, pow_zero, one_mul, add_zero]
+  | succ u hu ih =>
+    have huk : u < k := Nat.lt_of_succ_le htk
+    have ihP := ih (Nat.le_of_succ_le htk)
+    have hstep := fixedCodimScaled_succ (k := k) (r := r) (s := u) hu huk hr ρ
+    have hpow :
+        α * (α ^ (u - 2) * fixedCodimScaled k r ρ 2) =
+          α ^ (u - 1) * fixedCodimScaled k r ρ 2 := by
+      have hexp : (u - 2) + 1 = u - 1 := by omega
+      calc
+        α * (α ^ (u - 2) * fixedCodimScaled k r ρ 2)
+            = (α * α ^ (u - 2)) * fixedCodimScaled k r ρ 2 := by
+              ring
+        _ = α ^ ((u - 2) + 1) * fixedCodimScaled k r ρ 2 := by
+              rw [← pow_succ']
+        _ = α ^ (u - 1) * fixedCodimScaled k r ρ 2 := by
+              rw [hexp]
+    have hexpT : (u + 1) - 2 = u - 1 := by omega
+    have hsumα :
+        α * ∑ s ∈ Ico 2 u, fixedCodimProd k r s * α ^ (u - s - 1) =
+          ∑ s ∈ Ico 2 u, fixedCodimProd k r s * α ^ (u - s) := by
+      rw [Finset.mul_sum]
+      refine sum_congr rfl ?_
+      intro s hs
+      have hsu : s < u := (mem_Ico.mp hs).2
+      have hexp : (u - s - 1) + 1 = u - s := by omega
+      calc
+        α * (fixedCodimProd k r s * α ^ (u - s - 1))
+            = fixedCodimProd k r s * (α * α ^ (u - s - 1)) := by
+              ring
+        _ = fixedCodimProd k r s * α ^ ((u - s - 1) + 1) := by
+              rw [← pow_succ']
+        _ = fixedCodimProd k r s * α ^ (u - s) := by
+              rw [hexp]
+    have hendpoint :
+        fixedCodimProd k r u * α ^ (u - u) = fixedCodimProd k r u := by
+      rw [Nat.sub_self, pow_zero, mul_one]
+    have hsplit := sum_Ico_succ_top hu
+      (fun s => fixedCodimProd k r s * α ^ (u - s))
+    have hsumEq :
+        α * ∑ s ∈ Ico 2 u, fixedCodimProd k r s * α ^ (u - s - 1) +
+            fixedCodimProd k r u =
+          ∑ s ∈ Ico 2 (u + 1),
+            fixedCodimProd k r s * α ^ ((u + 1) - s - 1) := by
+      have hrew :
+          ∑ s ∈ Ico 2 (u + 1),
+              fixedCodimProd k r s * α ^ ((u + 1) - s - 1) =
+            ∑ s ∈ Ico 2 (u + 1),
+              fixedCodimProd k r s * α ^ (u - s) := by
+        refine sum_congr rfl ?_
+        intro s hs
+        have hexp : (u + 1) - s - 1 = u - s := by
+          have hsu : s < u + 1 := (mem_Ico.mp hs).2
+          omega
+        rw [hexp]
+      calc
+        α * ∑ s ∈ Ico 2 u, fixedCodimProd k r s * α ^ (u - s - 1) +
+            fixedCodimProd k r u
+            = (∑ s ∈ Ico 2 u, fixedCodimProd k r s * α ^ (u - s)) +
+                fixedCodimProd k r u := by
+              rw [hsumα]
+        _ = (∑ s ∈ Ico 2 u, fixedCodimProd k r s * α ^ (u - s)) +
+              fixedCodimProd k r u * α ^ (u - u) := by
+              conv_lhs => rw [← hendpoint]
+        _ = ∑ s ∈ Ico 2 (u + 1), fixedCodimProd k r s * α ^ (u - s) := by
+              rw [← hsplit]
+        _ = ∑ s ∈ Ico 2 (u + 1),
+              fixedCodimProd k r s * α ^ ((u + 1) - s - 1) := by
+              rw [← hrew]
+    calc
+      fixedCodimScaled k r ρ (u + 1)
+          = α * fixedCodimScaled k r ρ u + fixedCodimProd k r u := hstep
+      _ = α * (α ^ (u - 2) * fixedCodimScaled k r ρ 2 +
+            ∑ s ∈ Ico 2 u, fixedCodimProd k r s * α ^ (u - s - 1)) +
+            fixedCodimProd k r u := by
+            rw [ihP]
+      _ = α * (α ^ (u - 2) * fixedCodimScaled k r ρ 2) +
+            (α * ∑ s ∈ Ico 2 u, fixedCodimProd k r s * α ^ (u - s - 1) +
+              fixedCodimProd k r u) := by
+            ring
+      _ = α ^ (u - 1) * fixedCodimScaled k r ρ 2 +
+            (α * ∑ s ∈ Ico 2 u, fixedCodimProd k r s * α ^ (u - s - 1) +
+              fixedCodimProd k r u) := by
+            rw [hpow]
+      _ = α ^ ((u + 1) - 2) * fixedCodimScaled k r ρ 2 +
+            ∑ s ∈ Ico 2 (u + 1),
+              fixedCodimProd k r s * α ^ ((u + 1) - s - 1) := by
+            rw [hexpT, hsumEq]
+
+lemma jointTraceBoundTight_fixed_codim_le {k r : ℕ} (hk : 2 ≤ k) (hr : 1 ≤ r)
+    {ρ : ℝ} (hρ0 : 0 ≤ ρ) (hρ : ρ < 1) :
+    jointTraceBoundTight k (k + r) (1 : ℝ) ρ k ≤
+      (2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+          (k : ℝ) * ((k : ℝ) + r) ^ r) /
+        (Nat.factorial r : ℝ) := by
+  set α : ℝ := (k : ℝ) / ((k : ℝ) + r) with hα
+  have hkpos : (0 : ℝ) < k := by exact_mod_cast (show 0 < k by omega)
+  have hnpos : (0 : ℝ) < (k : ℝ) + r := by positivity
+  have hαpos : 0 < α := by
+    rw [hα]
+    exact div_pos hkpos hnpos
+  have hαlt : α < 1 := by
+    rw [hα, div_lt_one hnpos]
+    have : (k : ℕ) < k + r := by omega
+    exact_mod_cast this
+  have hα0 : 0 ≤ α := hαpos.le
+  have hαle : α ≤ 1 := hαlt.le
+  have hδ : 0 < (1 : ℝ) - ρ ^ 2 := by
+    have : ρ ^ 2 < 1 := (sq_lt_one_iff₀ hρ0).2 hρ
+    linarith
+  have hD2eq := fixedCodimScaled_two k r hk hr ρ
+  have hP2le := fixedCodimProd_le_pow (k := k) (r := r) (t := 2) hr le_rfl hk
+  have hP2nn : 0 ≤ fixedCodimProd k r 2 := fixedCodimProd_nonneg hk
+  have hfracnn :
+      0 ≤ (2 : ℝ) * ((k : ℝ) + r) / ((k : ℝ) * (1 - ρ ^ 2)) :=
+    div_nonneg (mul_nonneg (by norm_num) hnpos.le) (mul_pos hkpos hδ).le
+  have hD2nn : 0 ≤ fixedCodimScaled k r ρ 2 := by
+    rw [hD2eq]
+    exact mul_nonneg hP2nn hfracnn
+  have hD2le :
+      fixedCodimScaled k r ρ 2 ≤
+        2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) := by
+    have hstep1 :
+        fixedCodimScaled k r ρ 2 ≤
+          ((k : ℝ) + r) ^ r *
+            ((2 : ℝ) * ((k : ℝ) + r) / ((k : ℝ) * (1 - ρ ^ 2))) := by
+      rw [hD2eq]
+      exact mul_le_mul_of_nonneg_right hP2le hfracnn
+    have hid :
+        ((k : ℝ) + r) ^ r *
+            ((2 : ℝ) * ((k : ℝ) + r) / ((k : ℝ) * (1 - ρ ^ 2))) =
+          2 * ((k : ℝ) + r) ^ (r + 1) / ((k : ℝ) * (1 - ρ ^ 2)) := by
+      field_simp [hkpos.ne', hδ.ne']
+      ring
+    have hdivk :
+        2 * ((k : ℝ) + r) ^ (r + 1) / ((k : ℝ) * (1 - ρ ^ 2)) =
+          (2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2)) * ((1 : ℝ) / (k : ℝ)) := by
+      field_simp [hkpos.ne', hδ.ne']
+    have hone : (1 : ℝ) / (k : ℝ) ≤ 1 := by
+      rw [div_le_one hkpos]
+      exact_mod_cast (show (1 : ℕ) ≤ k by omega)
+    have hnum :
+        0 ≤ 2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) :=
+      div_nonneg (mul_nonneg (by norm_num) (by positivity)) hδ.le
+    calc
+      fixedCodimScaled k r ρ 2
+          ≤ ((k : ℝ) + r) ^ r *
+              ((2 : ℝ) * ((k : ℝ) + r) / ((k : ℝ) * (1 - ρ ^ 2))) := hstep1
+      _ = 2 * ((k : ℝ) + r) ^ (r + 1) / ((k : ℝ) * (1 - ρ ^ 2)) := hid
+      _ = (2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2)) * ((1 : ℝ) / (k : ℝ)) :=
+            hdivk
+      _ ≤ (2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2)) * 1 :=
+            mul_le_mul_of_nonneg_left hone hnum
+      _ = 2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) := by ring
+  have hunroll := fixedCodimScaled_unrolled k r hr ρ k hk le_rfl
+  have hpow : α ^ (k - 2) ≤ 1 := pow_le_one₀ hα0 hαle
+  have hhead :
+      α ^ (k - 2) * fixedCodimScaled k r ρ 2 ≤ fixedCodimScaled k r ρ 2 := by
+    simpa [one_mul] using mul_le_mul_of_nonneg_right hpow hD2nn
+  have hsumα :
+      ∑ s ∈ Ico 2 k, fixedCodimProd k r s * α ^ (k - s - 1) ≤
+        ∑ s ∈ Ico 2 k, fixedCodimProd k r s := by
+    refine sum_le_sum ?_
+    intro s hs
+    have hsk : s < k := (mem_Ico.mp hs).2
+    have hPnn : 0 ≤ fixedCodimProd k r s := fixedCodimProd_nonneg (le_of_lt hsk)
+    simpa [mul_one] using
+      mul_le_mul_of_nonneg_left (pow_le_one₀ hα0 hαle) hPnn
+  have hsumP :
+      ∑ s ∈ Ico 2 k, fixedCodimProd k r s ≤
+        (k : ℝ) * ((k : ℝ) + r) ^ r := by
+    have hle : ∀ s ∈ Ico 2 k, fixedCodimProd k r s ≤ ((k : ℝ) + r) ^ r := by
+      intro s hs
+      exact fixedCodimProd_le_pow hr (mem_Ico.mp hs).1 (le_of_lt (mem_Ico.mp hs).2)
+    have hpow0 : 0 ≤ ((k : ℝ) + r) ^ r := by positivity
+    calc
+      ∑ s ∈ Ico 2 k, fixedCodimProd k r s
+          ≤ ∑ s ∈ Ico 2 k, ((k : ℝ) + r) ^ r := sum_le_sum hle
+      _ = #(Ico 2 k) • ((k : ℝ) + r) ^ r := sum_const _
+      _ = ((k - 2 : ℕ) : ℝ) * ((k : ℝ) + r) ^ r := by
+            rw [Nat.card_Ico, nsmul_eq_mul]
+      _ ≤ (k : ℝ) * ((k : ℝ) + r) ^ r :=
+            mul_le_mul_of_nonneg_right (by exact_mod_cast (show k - 2 ≤ k by omega)) hpow0
+  have hDle :
+      fixedCodimScaled k r ρ k ≤
+        2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+          (k : ℝ) * ((k : ℝ) + r) ^ r := by
+    calc
+      fixedCodimScaled k r ρ k
+          = α ^ (k - 2) * fixedCodimScaled k r ρ 2 +
+              ∑ s ∈ Ico 2 k, fixedCodimProd k r s * α ^ (k - s - 1) := by
+            simpa [hα] using hunroll
+      _ ≤ fixedCodimScaled k r ρ 2 + ∑ s ∈ Ico 2 k, fixedCodimProd k r s :=
+            add_le_add hhead hsumα
+      _ ≤ fixedCodimScaled k r ρ 2 + (k : ℝ) * ((k : ℝ) + r) ^ r :=
+            add_le_add le_rfl hsumP
+      _ ≤ 2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+            (k : ℝ) * ((k : ℝ) + r) ^ r :=
+            add_le_add hD2le le_rfl
+  have hDk :
+      fixedCodimScaled k r ρ k =
+        (Nat.factorial r : ℝ) * jointTraceBoundTight k (k + r) (1 : ℝ) ρ k := by
+    unfold fixedCodimScaled
+    rw [fixedCodimProd_at_k]
+  have hfact : (0 : ℝ) < (Nat.factorial r : ℝ) := by
+    exact_mod_cast Nat.factorial_pos r
+  rw [le_div_iff₀ hfact, mul_comm, ← hDk]
+  exact hDle
+
+/-- Equal column energies, coherence at most `ρ < 1`, and exactly `r`
+extra columns. For fixed `r` the right-hand side is a polynomial in `k`.
+It is not a polynomial bound for general `n` in terms of `n` and `k`
+alone. Phases AW and AX give smaller bounds at `r = 1` and `r = 2`.
+Phase AU still says `n = 2k` is not polynomial. This does not close
+outcome 3. -/
+theorem joint_fixed_codim_trace {k r : ℕ}
+    (A : Matrix (Fin k) (Fin (k + r)) ℝ) (hA : OrthogonalRows A)
+    (hk : 2 ≤ k) (hr : 1 ≤ r) (ρ : ℝ)
+    (hρ0 : 0 ≤ ρ) (hρ : ρ < 1)
+    (hlev : ∀ i j : Fin (k + r), residualSq A ∅ i ≤ residualSq A ∅ j)
+    (hcoh : ∀ i j : Fin (k + r), i ≠ j →
+      |colInner A i j| ≤
+        ρ * Real.sqrt (residualSq A ∅ i) * Real.sqrt (residualSq A ∅ j)) :
+    (selectedColGram A (cpqrSet A)).det ≠ 0 ∧
+      ((selectedColGram A (cpqrSet A))⁻¹).trace ≤
+        (2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+            (k : ℝ) * ((k : ℝ) + r) ^ r) /
+          (Nat.factorial r : ℝ) ∧
+      ∀ x : Fin (cpqrSet A).card → ℝ,
+        vecEnergy x ≤
+          vecEnergy (selectedCols A (cpqrSet A) *ᵥ x) *
+            ((2 * ((k : ℝ) + r) ^ (r + 1) / (1 - ρ ^ 2) +
+                (k : ℝ) * ((k : ℝ) + r) ^ r) /
+              (Nat.factorial r : ℝ)) := by
+  have hn : 2 ≤ k + r := by omega
+  have hlev1 : ∀ i j : Fin (k + r),
+      residualSq A ∅ i ≤ (1 : ℝ) * residualSq A ∅ j := by
+    intro i j
+    simpa [one_mul] using hlev i j
+  have htight :=
+    joint_cpqr_trace_bound_tight A hA hk hn (1 : ℝ) ρ le_rfl hρ0 hρ hlev1 hcoh
+      hk le_rfl
+  have hmaj := jointTraceBoundTight_fixed_codim_le hk hr hρ0 hρ
   refine ⟨htight.1, htight.2.1.trans hmaj, ?_⟩
   intro x
   exact (htight.2.2 x).trans (mul_le_mul_of_nonneg_left hmaj (vecEnergy_nonneg _))
