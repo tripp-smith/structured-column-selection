@@ -446,6 +446,12 @@ The additional assumption must satisfy three criteria:
 
 A theorem proved only under a condition equivalent to the desired conclusion does not count as solving this phase.
 
+Status note (bounded coherence `≤ 19/20`): normalized coherence at most
+`19/20`, and any cap `ρ ≥ 19/20`, does not restore a polynomial CPQR
+bound. The scaled triple-design frame for large `m` lies in that class
+and beats every `C (n+k+1)^{2d}`. This does not close outcome 3. A
+stricter cap is not ruled out.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

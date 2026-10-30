@@ -251,6 +251,13 @@ rationals for `m = 2, 3, 4` and checks every pair `i < j` by comparing
 squares, `inner^2 * 1 ≤ (1/2 + 1/m)^2 * energy_i * energy_j`, and the
 same comparison for `3 * wideTriangular m`. It does not change the sampler.
 
+`tests/test_bounded_coherence.py` checks, in exact rationals, that
+`83830/88970 < 19/20`, that `1/2 + 1/20 ≤ 19/20`, that
+`(63/74 + 45/6400)^2 < (19/20)^2 * (6355/6400)`, and that
+`(37/10)^2 < 14`. Those are the comparisons behind the coherence cap
+`19/20`. The check is not a theorem and it does not run CPQR. It does
+not change the sampler.
+
 `tests/test_design_frame.py` checks that a rational `2×2` leading block,
 a rational completion, and a design of four rational orthonormal bases
 scaled by `1/2` give `W Wᵀ = I`, `[R | C W] [R | C W]ᵀ = I`, filler
