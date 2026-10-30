@@ -523,3 +523,6 @@ product at most `13/14` (attained). Columns are
 cap of `milestoneE_design_adverse_family`, so no adverse frame and no
 coherence bound on any orthogonal-row frame is claimed. This does not
 close outcome 3. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#43](https://github.com/tripp-smith/structured-column-selection/pull/43).

@@ -1312,6 +1312,9 @@ to column `0` means `{0, 1}` is not the two-column CPQR prefix. Problem
 outcome 3.
 
 Phase PR and verification receipt:
+[#43](https://github.com/tripp-smith/structured-column-selection/pull/43).
+
+Phase PR and verification receipt:
 [#37](https://github.com/tripp-smith/structured-column-selection/pull/37).
 
 ## Phase Y equal-energy third pivot (2026-10-29, contract)
