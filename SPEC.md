@@ -597,6 +597,16 @@ polynomial in `k`. It is not a polynomial in `n` and `k` together. The
 still says the majorant at `n = 2k` is not polynomial. Outcome 3 stays
 open.
 
+Status note (fixed-codimension bound growth):
+`milestoneE_joint_fixed_codim_bound_not_polynomial` lower-bounds the
+phase-AY expression at `r = k` and `ρ = 0`. That expression is at least
+`2^{k+2}`, so along `n = 2k` it beats every `C (3k + 1)^{2d}`. At
+`k = 4` it equals `81920/24`, and `2^6 = 64`. This is not a CPQR inverse
+trace. It does not put a matrix in the joint class. For each fixed `r`
+the phase-AY upper bound remains a polynomial in `k`. The expression is
+not a joint polynomial in `n` and `k`. This is the last phase of the
+AB–AZ cadence. Outcomes 1 and 3 remain open.
+
 ## 11. CSSP bridge theorem
 
 A second important contribution should connect the orthogonal-row selection theorem to ordinary approximate-rank matrices.

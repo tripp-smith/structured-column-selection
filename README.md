@@ -846,3 +846,16 @@ in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
 [#64](https://github.com/tripp-smith/structured-column-selection/pull/64).
+
+Completed phase: **AZ fixed-codimension bound growth**.
+The phase-AY expression at `r = k` and `ρ = 0` is at least `2^{k+2}`, so
+along `n = 2k` it beats every `C (3k + 1)^{2d}`. At `k = 4` the
+expression equals `81920/24` and `2^6 = 64`. This is not a CPQR trace.
+For each fixed `r` the phase-AY upper bound remains a polynomial in `k`.
+Outcome 3 stays open: a lower bound on this expression is not a matrix
+counterexample, and the expression is not a joint polynomial in `n` and
+`k`. This is the last phase of the AB–AZ cadence. Outcomes 1 and 3
+remain open. The contract is in RESEARCH.md.
+
+Phase PR and canonical verification/delivery receipt:
+[#65](https://github.com/tripp-smith/structured-column-selection/pull/65).
