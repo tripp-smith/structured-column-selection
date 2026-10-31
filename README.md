@@ -858,3 +858,4 @@ counterexample, and the expression is not a joint polynomial in `n` and
 remain open. The contract is in RESEARCH.md.
 
 Phase PR and canonical verification/delivery receipt:
+[#65](https://github.com/tripp-smith/structured-column-selection/pull/65).

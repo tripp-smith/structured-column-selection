@@ -3181,3 +3181,4 @@ is polynomial on orthogonal-row matrices, or on every equal-leverage
 matrix.
 
 Phase PR and verification receipt:
+[#65](https://github.com/tripp-smith/structured-column-selection/pull/65).
