@@ -393,6 +393,17 @@ two extra columns, not a general `n`. One extra column stays phase AW.
 The aspect-2 majorant stays non-polynomial. The square trace stays
 exactly `k`. It does not close outcome 3. It does not change the sampler.
 
+`tests/test_fixed_codim_bound.py` evaluates
+`(2 * (2k)^(k + 1) + k * (2k)^k) / k!` with `fractions.Fraction`. At
+`k = 4` the value is `81920/24` and `2^6 = 64`. At `k = 6`, `2^8` is at
+most the value. This rational check is not the theorem. It lower-bounds
+the phase-AY expression at `r = k` and `ρ = 0`. It is not a CPQR inverse
+trace. For each fixed `r` the phase-AY upper bound remains a polynomial
+in `k`. Outcome 3 stays open: a lower bound on this expression is not a
+matrix counterexample, and the expression is not a joint polynomial in
+`n` and `k`. This is the last phase of the AB–AZ cadence. Outcomes 1
+and 3 remain open. It does not change the sampler.
+
 `tests/test_fixed_codim.py` evaluates the tight majorant at `n = k + r`,
 `τ = 1`, and `ρ = 0` with `fractions.Fraction`. The value at `t = k` is
 at most `(2 (k + r) ^ (r + 1) + k (k + r) ^ r) / r!`. At `r = 1`, `k = 2`

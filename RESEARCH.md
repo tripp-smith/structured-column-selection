@@ -3094,3 +3094,90 @@ prove this.
 
 Phase PR and verification receipt:
 [#64](https://github.com/tripp-smith/structured-column-selection/pull/64).
+
+## Phase AZ fixed-codimension bound growth (2026-10-30, contract)
+
+Iteration AZ. Outcomes 1 and 3 stay open. This is the last phase of the
+AB–AZ cadence.
+
+Route checkpoint. Phase AY upper-bounds the CPQR inverse trace at
+`n = k + r` by
+`(2 (k + r) ^ (r + 1) / (1 - ρ ^ 2) + k (k + r) ^ r) / r!`. For each
+fixed `r` that expression is a polynomial in `k`. This phase
+lower-bounds that same expression at `r = k` and `ρ = 0`. It does not
+modify `jointTraceBoundTight`, `milestoneE_joint_fixed_codim_trace`,
+`milestoneE_joint_codim_one_trace`, `milestoneE_joint_codim_two_trace`,
+`milestoneE_square_cpqr_trace_eq`, or `exists_two_pow_beats_polynomial`.
+It calls `exists_two_pow_beats_polynomial`. It does not place a matrix
+in the joint class. It does not close outcome 1 or outcome 3. The
+phase-AI census still did not see `r_CPQR` growth.
+
+Target in `StructuredColumnSelection/JointPairGram.lean`, re-exported as
+`milestoneE_joint_fixed_codim_bound_not_polynomial`:
+
+```text
+(d : ℕ) {C : ℝ} (hC : 0 < C) :
+∃ k : ℕ, 2 ≤ k ∧
+  C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+    (2 * ((k : ℝ) + k) ^ (k + 1) +
+        (k : ℝ) * ((k : ℝ) + k) ^ k) /
+      (Nat.factorial k : ℝ)
+```
+
+The right-hand side is the phase-AY numerator at `r = k` and `ρ = 0`,
+divided by `k!`. With `n = 2k`, `n + k + 1 = 3k + 1 = 2k + k + 1`.
+There is no matrix in the statement. This is a lower bound on the
+phase-AY expression, not on a CPQR inverse trace. The expression is not
+a joint polynomial in `n` and `k`. Phase AY remains an upper bound when
+`r` is fixed. Along `n = 2k`, with `r = k`, the expression beats every
+`C (n + k + 1) ^ (2d)`. It cannot be used as an outcome-3 polynomial.
+This does not close outcome 3.
+
+Proof shape. Lemma `fixedCodimBound_two_pow_ge`, not audited: for
+`1 ≤ k`,
+
+```text
+(2 : ℝ) ^ (k + 2) ≤
+  (2 * ((k : ℝ) + k) ^ (k + 1) + (k : ℝ) * ((k : ℝ) + k) ^ k) /
+    (Nat.factorial k : ℝ)
+```
+
+`(k : ℝ) + k = 2 * k`. The numerator is
+`(2k) ^ k * (4 * k + k) = 5 * k * (2k) ^ k`, so the quotient is
+`5 * k * (2k) ^ k / k!`. `(2k) ^ k = 2 ^ k * k ^ k`, and `k ^ k ≥ k!`
+for `k ≥ 1`. Thus
+`5 * k * (2k) ^ k / k! ≥ 5 * k * 2 ^ k ≥ 4 * 2 ^ k = 2 ^ (k + 2)`,
+using `k ≥ 1` so `5k ≥ 4`. For `k ≥ 2` the same holds.
+
+Then call `exists_two_pow_beats_polynomial` at this same `d` with
+positive constant `C * (2 : ℝ) ^ (2 * d)`. Its witness `k ≥ 2` satisfies
+`C * 2 ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d) < 2 ^ (k + 1)`.
+Chain, for that `k`: `(3 * k + 1 : ℝ) ≤ 2 * ((2 * k + 1 : ℕ) : ℝ)`,
+because `3k + 1 ≤ 4k + 2`, so
+`C * (3k + 1) ^ (2d) ≤ C * 2 ^ (2d) * (2k + 1) ^ (2d) < 2 ^ (k + 1) ≤ 2 ^ (k + 2)`.
+`2k + k + 1 = 3k + 1`. The lemma replaces `2 ^ (k + 2)` by the factorial
+expression. No Gram. No `simp` of a matrix.
+
+Numeric check, not a theorem: at `k = 4`, `2 ^ 6 = 64`, and
+`(2 * 8 ^ 5 + 4 * 8 ^ 4) / 24 = (2 * 32768 + 4 * 4096) / 24 = 81920 / 24`.
+`64 ≤ 81920 / 24`.
+
+Independent check: `tests/test_fixed_codim_bound.py`, in
+`fractions.Fraction`. At `k = 4`, `bound(4) = 81920/24` and
+`2 ^ 6 ≤ bound(4)`. At `k = 6`, `2 ^ 8 ≤ bound(6)`. This rational check
+is not the theorem. It lower-bounds the phase-AY expression at `r = k`
+and `ρ = 0`. It is not a CPQR inverse trace. It does not close
+outcome 3.
+
+Non-claims: this lower-bounds the phase-AY expression at `r = k` and
+`ρ = 0`. It is not a lower bound on any CPQR inverse trace. It does not
+put a matrix in the joint class. The phase-AI census still did not see
+`r_CPQR` growth. Phase AY remains a valid upper bound for each fixed
+`r`. This phase says that same expression, when `r` is allowed to grow
+as `r = k`, beats every `C (n + k + 1) ^ (2d)` along `n = 2k`. It
+cannot be used as an outcome-3 polynomial. Does not close outcome 1.
+Does not close outcome 3. Does not solve Problem 4.1. Does not say CPQR
+is polynomial on orthogonal-row matrices, or on every equal-leverage
+matrix.
+
+Phase PR and verification receipt:

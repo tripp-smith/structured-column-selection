@@ -100,6 +100,7 @@ Engineering playbook: `autonomous-implementation.md` (now on `main`).
 | Codimension-one CPQR trace | **PROVED** (`n = k + 1` and equal column energies only; inverse trace at most `(k + 1)(k + 2) + 2k / (1 - ρ ^ 2)`; not a polynomial theorem for general `n`; does not close outcome 3) | `milestoneE_joint_codim_one_trace` |
 | Two-extra-column CPQR trace | **PROVED** (`n = k + 2` and equal column energies only; inverse trace at most `(k - 1)(k + 2) / (1 - ρ ^ 2) + (k - 1) k (k + 1) / 6 - 1`; not a polynomial theorem for general `n`; does not close outcome 3) | `milestoneE_joint_codim_two_trace` |
 | Fixed-codimension CPQR trace | **PROVED** (`n = k + r` and equal column energies only; inverse trace at most `(2 (k + r) ^ (r + 1) / (1 - ρ ^ 2) + k (k + r) ^ r) / r!`; a polynomial in `k` for fixed `r`; not a joint polynomial in `n` and `k`; phases AW and AX are smaller at `r = 1` and `r = 2`; does not close outcome 3) | `milestoneE_joint_fixed_codim_trace` |
+| Fixed-codimension bound growth | **PROVED** (lower bound on the phase-AY expression at `r = k` and `ρ = 0`; at least `2^{k+2}`; beats every `C (3k + 1)^{2d}` along `n = 2k`; not a CPQR inverse trace; not a joint polynomial in `n` and `k`; phase AY stays polynomial for each fixed `r`; last phase of the AB–AZ cadence; does not close outcome 3) | `milestoneE_joint_fixed_codim_bound_not_polynomial` |
 
 Public structural theorems depend only on `propext`, `Classical.choice`,
 `Quot.sound`. Verify with `bash scripts/verify.sh`.

@@ -3949,4 +3949,107 @@ theorem joint_fixed_codim_trace {k r : ℕ}
   intro x
   exact (htight.2.2 x).trans (mul_le_mul_of_nonneg_left hmaj (vecEnergy_nonneg _))
 
+lemma factorial_le_self_pow (k : ℕ) : Nat.factorial k ≤ k ^ k := by
+  induction k with
+  | zero => simp
+  | succ k ih =>
+    calc
+      Nat.factorial (k + 1) = (k + 1) * Nat.factorial k := Nat.factorial_succ k
+      _ ≤ (k + 1) * k ^ k := Nat.mul_le_mul_left _ ih
+      _ ≤ (k + 1) * (k + 1) ^ k :=
+        Nat.mul_le_mul_left _ (Nat.pow_le_pow_left (Nat.le_succ k) k)
+      _ = (k + 1) ^ (k + 1) := by
+        rw [Nat.pow_succ, Nat.mul_comm]
+
+/-- `(2k)^k / k!` is at least `2^k`, so the phase-AY numerator at `r = k`
+and `ρ = 0`, divided by `k!`, is at least `2^{k+2}`. Not audited. -/
+lemma fixedCodimBound_two_pow_ge (k : ℕ) (hk : 1 ≤ k) :
+    (2 : ℝ) ^ (k + 2) ≤
+      (2 * ((k : ℝ) + k) ^ (k + 1) + (k : ℝ) * ((k : ℝ) + k) ^ k) /
+        (Nat.factorial k : ℝ) := by
+  have hfact : (0 : ℝ) < (Nat.factorial k : ℝ) := by
+    exact_mod_cast Nat.factorial_pos k
+  have htwo : ((k : ℝ) + k) = 2 * (k : ℝ) := by ring
+  have hsucc : (2 * (k : ℝ)) ^ (k + 1) = (2 * (k : ℝ)) ^ k * (2 * (k : ℝ)) := by
+    rw [pow_succ]
+  have hnum :
+      2 * ((k : ℝ) + k) ^ (k + 1) + (k : ℝ) * ((k : ℝ) + k) ^ k =
+        5 * (k : ℝ) * (2 * (k : ℝ)) ^ k := by
+    rw [htwo]
+    calc
+      2 * (2 * (k : ℝ)) ^ (k + 1) + (k : ℝ) * (2 * (k : ℝ)) ^ k
+          = 2 * ((2 * (k : ℝ)) ^ k * (2 * (k : ℝ))) +
+              (k : ℝ) * (2 * (k : ℝ)) ^ k := by rw [hsucc]
+      _ = (2 * (k : ℝ)) ^ k * (4 * (k : ℝ) + (k : ℝ)) := by ring
+      _ = (2 * (k : ℝ)) ^ k * (5 * (k : ℝ)) := by ring
+      _ = 5 * (k : ℝ) * (2 * (k : ℝ)) ^ k := by ring
+  have hsplit : (2 * (k : ℝ)) ^ k = (2 : ℝ) ^ k * (k : ℝ) ^ k := by
+    rw [mul_pow]
+  have hkk : (Nat.factorial k : ℝ) ≤ (k : ℝ) ^ k := by
+    exact_mod_cast factorial_le_self_pow k
+  have hpow_ge : (2 : ℝ) ^ k * (Nat.factorial k : ℝ) ≤ (2 * (k : ℝ)) ^ k := by
+    rw [hsplit]
+    exact mul_le_mul_of_nonneg_left hkk (pow_nonneg (by norm_num) _)
+  have h5 : (4 : ℝ) ≤ 5 * (k : ℝ) := by
+    have hk1 : (1 : ℝ) ≤ (k : ℝ) := by exact_mod_cast hk
+    linarith
+  have hfour : (2 : ℝ) ^ (k + 2) = 4 * (2 : ℝ) ^ k := by
+    rw [pow_add]
+    ring
+  rw [hnum, le_div_iff₀ hfact]
+  calc
+    (2 : ℝ) ^ (k + 2) * (Nat.factorial k : ℝ)
+        = (4 * (2 : ℝ) ^ k) * (Nat.factorial k : ℝ) := by rw [hfour]
+    _ = 4 * ((2 : ℝ) ^ k * (Nat.factorial k : ℝ)) := by ring
+    _ ≤ (5 * (k : ℝ)) * ((2 : ℝ) ^ k * (Nat.factorial k : ℝ)) := by
+      refine mul_le_mul_of_nonneg_right h5 ?_
+      exact mul_nonneg (pow_nonneg (by norm_num) _) (Nat.cast_nonneg _)
+    _ = 5 * (k : ℝ) * ((2 : ℝ) ^ k * (Nat.factorial k : ℝ)) := by ring
+    _ ≤ 5 * (k : ℝ) * (2 * (k : ℝ)) ^ k :=
+      mul_le_mul_of_nonneg_left hpow_ge (by positivity)
+
+/-- Lower bound on the phase-AY expression at `r = k` and `ρ = 0`, not on
+a CPQR inverse trace. The expression is not a joint polynomial in `n` and
+`k`. Phase AY remains an upper bound when `r` is fixed. This does not
+close outcome 3. -/
+theorem joint_fixed_codim_bound_not_polynomial
+    (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+        (2 * ((k : ℝ) + k) ^ (k + 1) +
+            (k : ℝ) * ((k : ℝ) + k) ^ k) /
+          (Nat.factorial k : ℝ) := by
+  have hC' : 0 < C * (2 : ℝ) ^ (2 * d) := by positivity
+  obtain ⟨k, hk, hpoly⟩ := exists_two_pow_beats_polynomial d hC'
+  have h3 : ((3 * k + 1 : ℕ) : ℝ) ≤ 2 * ((2 * k + 1 : ℕ) : ℝ) := by
+    have hleft : ((3 * k + 1 : ℕ) : ℝ) = 3 * (k : ℝ) + 1 := by norm_cast
+    have hright : ((2 * k + 1 : ℕ) : ℝ) = 2 * (k : ℝ) + 1 := by norm_cast
+    rw [hleft, hright]
+    linarith
+  have hsum : 2 * k + k + 1 = 3 * k + 1 := by omega
+  have hpow : ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) ≤
+      (2 * ((2 * k + 1 : ℕ) : ℝ)) ^ (2 * d) := by
+    rw [show ((2 * k + k + 1 : ℕ) : ℝ) = ((3 * k + 1 : ℕ) : ℝ) by
+      exact_mod_cast hsum]
+    exact pow_le_pow_left₀ (Nat.cast_nonneg _) h3 _
+  have hsplit : (2 * ((2 * k + 1 : ℕ) : ℝ)) ^ (2 * d) =
+      (2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d) := by
+    rw [mul_pow]
+  have hle : C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) ≤
+      C * (2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d) := by
+    calc
+      C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d)
+          ≤ C * (2 * ((2 * k + 1 : ℕ) : ℝ)) ^ (2 * d) :=
+            mul_le_mul_of_nonneg_left hpow hC.le
+      _ = C * ((2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d)) := by
+            rw [hsplit]
+      _ = C * (2 : ℝ) ^ (2 * d) * ((2 * k + 1 : ℕ) : ℝ) ^ (2 * d) := by ring
+  have hchain : C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) < (2 : ℝ) ^ (k + 1) :=
+    lt_of_le_of_lt hle hpoly
+  have hsucc : (2 : ℝ) ^ (k + 1) ≤ (2 : ℝ) ^ (k + 2) :=
+    pow_le_pow_right₀ (by norm_num : (1 : ℝ) ≤ 2) (by omega)
+  have hge := fixedCodimBound_two_pow_ge k (by omega)
+  refine ⟨k, hk, ?_⟩
+  exact lt_of_lt_of_le (lt_of_lt_of_le hchain hsucc) hge
+
 end StructuredColumnSelection

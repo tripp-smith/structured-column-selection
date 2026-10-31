@@ -1403,4 +1403,17 @@ theorem milestoneE_joint_fixed_codim_trace {k r : ℕ}
               (Nat.factorial r : ℝ)) :=
   joint_fixed_codim_trace A hA hk hr ρ hρ0 hρ hlev hcoh
 
+/-- Lower bound on the phase-AY expression at `r = k` and `ρ = 0`, not on
+a CPQR inverse trace. The expression is not a joint polynomial in `n` and
+`k`. Phase AY remains an upper bound when `r` is fixed. This does not
+close outcome 3. -/
+theorem milestoneE_joint_fixed_codim_bound_not_polynomial
+    (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+        (2 * ((k : ℝ) + k) ^ (k + 1) +
+            (k : ℝ) * ((k : ℝ) + k) ^ k) /
+          (Nat.factorial k : ℝ) :=
+  joint_fixed_codim_bound_not_polynomial d hC
+
 end StructuredColumnSelection

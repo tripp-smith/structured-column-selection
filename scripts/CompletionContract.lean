@@ -737,6 +737,14 @@ example {k r : ℕ}
               (Nat.factorial r : ℝ)) :=
   milestoneE_joint_fixed_codim_trace A hA hk hr ρ hρ0 hρ hlev hcoh
 
+example (d : ℕ) {C : ℝ} (hC : 0 < C) :
+    ∃ k : ℕ, 2 ≤ k ∧
+      C * ((2 * k + k + 1 : ℕ) : ℝ) ^ (2 * d) <
+        (2 * ((k : ℝ) + k) ^ (k + 1) +
+            (k : ℝ) * ((k : ℝ) + k) ^ k) /
+          (Nat.factorial k : ℝ) :=
+  milestoneE_joint_fixed_codim_bound_not_polynomial d hC
+
 /-!
 The consumers below keep extra hypotheses. They are not outcome 1.
 -/

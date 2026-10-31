@@ -351,6 +351,27 @@ comparison. That check is not the theorem. Outcomes 1 and 3 stay open.
 Problem 4.1 is not solved, and CPQR is not claimed to be polynomial on
 every orthogonal-row matrix.
 
+## Fixed-codimension bound growth (2026-10-30)
+
+`milestoneE_joint_fixed_codim_bound_not_polynomial` lower-bounds the
+phase-AY expression at `r = k` and `ρ = 0`. That expression is at least
+`2^{k+2}`, so along `n = 2k` it beats every `C (3k + 1)^{2d}`. At
+`k = 4` the expression equals `81920/24` and `2^6 = 64`.
+
+`tests/test_fixed_codim_bound.py` checks those rationals with
+`fractions.Fraction`. The check is not the theorem. It lower-bounds the
+phase-AY expression at `r = k` and `ρ = 0`. It is not a CPQR inverse
+trace. It does not put a matrix in the joint class. The phase-AI census
+still did not see `r_CPQR` growth.
+
+Phase AY remains a valid upper bound for each fixed `r`. When `r` grows
+as `r = k`, the same expression beats every `C (n + k + 1)^{2d}` along
+`n = 2k`. It cannot be used as an outcome-3 polynomial. Outcome 3 stays
+open. This does not close outcome 1. This is the last phase of the
+AB–AZ cadence. Outcomes 1 and 3 remain open. Problem 4.1 is not solved,
+and this phase does not claim that CPQR is polynomial on orthogonal-row
+matrices, or on every equal-leverage matrix.
+
 ## Fixed-codimension CPQR trace (2026-10-30)
 
 `milestoneE_joint_fixed_codim_trace` is equal column energies, coherence
